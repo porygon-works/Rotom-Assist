@@ -21,6 +21,8 @@ export const PROVIDERS: Record<string, Provider> = {
   "gemma-4-26b": { url: GEMINI, keyEnv: "GEMINI_API_KEY", model: "gemma-4-26b-a4b-it", extra: { reasoning_effort: "minimal" } },
   "gemini-3.8-flash": { url: GEMINI, keyEnv: "GEMINI_API_KEY", model: "gemini-3.8-flash", extra: { reasoning_effort: "none" } },
   "gemini-3.5-flash-lite": { url: GEMINI, keyEnv: "GEMINI_API_KEY", model: "gemini-3.5-flash-lite", extra: { reasoning_effort: "minimal" } },
+  // 2026-10-11 追加: 3.5 Flash-Lite の上限（1 日 500 回）に当たったため、別枠の Flash-Lite も試す
+  "gemini-3.1-flash-lite": { url: GEMINI, keyEnv: "GEMINI_API_KEY", model: "gemini-3.1-flash-lite", extra: { reasoning_effort: "none" } },
   "groq-gpt-oss-120b": { url: GROQ, keyEnv: "GROQ_API_KEY", model: "openai/gpt-oss-120b", extra: { reasoning_effort: "low" } },
   "groq-gpt-oss-20b": { url: GROQ, keyEnv: "GROQ_API_KEY", model: "openai/gpt-oss-20b", extra: { reasoning_effort: "low" } },
   "groq-qwen3.8-27b": { url: GROQ, keyEnv: "GROQ_API_KEY", model: "qwen/qwen3.8-27b" },
