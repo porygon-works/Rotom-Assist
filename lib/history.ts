@@ -18,9 +18,9 @@ export interface StoredHistory {
 
 /**
  * 1つのSupabaseプロジェクトを複数アプリで共有するため、アプリごとにスキーマを分ける。
- * 前提: Project Settings → Data API の「Exposed schemas」に rotom を追加済み（supabase/schema.sql 参照）。
+ * 前提: Project Settings → Data API の「Exposed schemas」に roas を追加済み（supabase/schema.sql 参照）。
  */
-const SCHEMA = "rotom";
+const SCHEMA = "roas";
 const TABLE = "history";
 
 function cfg() {

@@ -42,8 +42,8 @@ test("設定済みならSupabaseのRESTに保存・取得する（キーはサ�
   expect((calls[0].init!.headers as Record<string, string>).apikey).toBe("test-key");
   expect(calls[1].url).toContain(`device_id=eq.${ID}`);
   // スキーマ指定: 書き込みは Content-Profile、読み出しは Accept-Profile
-  expect((calls[0].init!.headers as Record<string, string>)["Content-Profile"]).toBe("rotom");
-  expect((calls[1].init!.headers as Record<string, string>)["Accept-Profile"]).toBe("rotom");
+  expect((calls[0].init!.headers as Record<string, string>)["Content-Profile"]).toBe("roas");
+  expect((calls[1].init!.headers as Record<string, string>)["Accept-Profile"]).toBe("roas");
   expect((await get("bad")).status).toBe(400);
 });
 

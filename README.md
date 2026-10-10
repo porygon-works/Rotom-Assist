@@ -39,8 +39,8 @@ https://calc.pokemonshowdown.com/ で Gen9・Lv50・性格補正なし・努力�
 
 ## 認識履歴の保存（Supabase・任意）
 設定しなくてもアプリは動く（履歴はその画面の中だけ）。保存したい場合:
-1. Supabase でプロジェクトを作り、SQL Editor で [`supabase/schema.sql`](supabase/schema.sql) を実行（`rotom` スキーマに `history` テーブルを作る。他のアプリと1つのプロジェクトを共有できるよう、アプリごとにスキーマを分けている）
-2. **Project Settings → Data API → Exposed schemas に `rotom` を追加**して保存（忘れると API が `The schema must be one of the following` のエラーを返す）
+1. Supabase でプロジェクトを作り、SQL Editor で [`supabase/schema.sql`](supabase/schema.sql) を実行（`roas` スキーマに `history` テーブルを作る。他のアプリと1つのプロジェクトを共有できるよう、アプリごとにスキーマを分けている）
+2. **Project Settings → Data API → Exposed schemas に `roas` を追加**して保存（忘れると API が `The schema must be one of the following` のエラーを返す）
 3. Vercel の Settings → Environment Variables に **2つ** 追加して再デプロイ（コード・Git には書かない）
    - `SUPABASE_URL`：Project Settings → API の Project URL
    - `SUPABASE_SERVICE_ROLE_KEY`：同じ画面の `service_role`（または Secret）キー。**`NEXT_PUBLIC_` は付けない**
