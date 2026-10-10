@@ -35,6 +35,8 @@ function speak(text: string) {
 
 export default function Home() {
   const [shown, setShown] = useState<Shown | null>(null);
+  const [log, setLog] = useState<Shown[]>([]);
+  const shownRef = useRef<Shown | null>(null);
   const [busy, setBusy] = useState(false);
   const [text, setText] = useState("");
   const [tapMode, setTapMode] = useState(false);
@@ -60,7 +62,11 @@ export default function Home() {
           return;
         }
         if (r.extraction) last.current = { user: q, extraction: r.extraction };
-        setShown({ ...r, question: q, ms: performance.now() - t0 });
+        const item = { ...r, question: q, ms: performance.now() - t0 };
+        const prev = shownRef.current;
+        if (prev && prev.intent !== "error") setLog((l) => [prev, ...l].slice(0, 5));
+        shownRef.current = item;
+        setShown(item);
         if (!mute) speak(r.speech);
       } catch {
         const msg = "通信に失敗したロト";
@@ -130,6 +136,9 @@ export default function Home() {
           <p className="small">聞き取り: 「{shown.question}」</p>
           <h2>{shown.title}</h2>
           <p className="speech" data-testid="speech">{shown.speech}</p>
+          <p className="small">
+            {shown.diagnostics?.provider === "rules" ? "ルールで即答" : shown.diagnostics?.provider ? `AI（${shown.diagnostics.provider}）` : ""} {Math.round(shown.ms)} ms
+          </p>
           {shown.lines.length > 0 && (
             <ul className="lines">
               {shown.lines.map((l, i) => (
@@ -150,6 +159,19 @@ export default function Home() {
               <li>解釈: <code>{JSON.stringify(shown.extraction)}</code></li>
             </ul>
           </details>
+        </section>
+      )}
+
+      {log.length > 0 && (
+        <section aria-label="さっきの質問">
+          <h2 className="small">さっきの質問</h2>
+          <ul className="history">
+            {log.map((h, i) => (
+              <li key={i} className="small">
+                「{h.question}」→ {h.speech}
+              </li>
+            ))}
+          </ul>
         </section>
       )}
 
