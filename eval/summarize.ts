@@ -52,7 +52,7 @@ for (const f of readdirSync("eval/results").filter((f) => f.endsWith(".json")).s
   const failed = d.rows.filter((r: any) => r.status !== 200).length;
   const retries = d.rows.reduce((s: number, r: any) => s + r.retries429, 0);
 
-  console.log(`## ${d.name}（${d.model}）${d.stopped ? ` ※${d.stopped}` : ""}`);
+  console.log(`## ${d.name}［指示文 ${d.prompt ?? "v1"}］（${d.model}）${d.stopped ? ` ※${d.stopped}` : ""}`);
   console.log(`- 取り出し正確さ: ${pct(ok(extract), extract.length)}`);
   console.log(`- 後回し機能の判別: ${pct(ok(deferred), deferred.length)}`);
   console.log(`- 聞き返し: ${pct(ok(clar), clar.length)}`);

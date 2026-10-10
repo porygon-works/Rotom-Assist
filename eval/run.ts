@@ -1,9 +1,9 @@
 // AI 比較テスト（docs/eval-plan.md）。全候補を OpenAI 互換の窓口で呼ぶ（要件 N8）。
-// 使い方: npx tsx eval/run.ts <候補名> [--repeat 3] [--only 1,2,3] [--no-burst]
-// キーは環境変数 GEMINI_API_KEY / GROQ_API_KEY から読む。結果は eval/results/<候補名>.json に書く。
+// 使い方: npx tsx eval/run.ts <候補名> [--prompt v1] [--repeat 3] [--only 1,2,3] [--no-burst]
+// キーは環境変数 GEMINI_API_KEY / GROQ_API_KEY から読む。結果は eval/results/<候補名>[-<指示文>].json に書く（v1 は接尾辞なし）。
 import { mkdirSync, writeFileSync } from "node:fs";
 import { CASES, canonical, fabrication, type Case, type Out } from "./cases";
-import { SYSTEM } from "./prompt";
+import { PROMPTS } from "./prompt";
 
 interface Provider {
   url: string;
@@ -36,6 +36,8 @@ interface Call {
 }
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+let SYSTEM = PROMPTS.v1;
 
 async function call(p: Provider, c: Case): Promise<Call> {
   const messages = [
@@ -135,6 +137,9 @@ async function main() {
   const p = PROVIDERS[name];
   if (!p) throw new Error(`候補名: ${Object.keys(PROVIDERS).join(" / ")}`);
   if (!process.env[p.keyEnv]) throw new Error(`${p.keyEnv} が未設定`);
+  const promptName = args.includes("--prompt") ? args[args.indexOf("--prompt") + 1] : "v1";
+  if (!PROMPTS[promptName]) throw new Error(`指示文: ${Object.keys(PROMPTS).join(" / ")}`);
+  SYSTEM = PROMPTS[promptName];
   const repeat = Number(args[args.indexOf("--repeat") + 1]) || 3;
   const only = args.includes("--only") ? args[args.indexOf("--only") + 1].split(",").map(Number) : null;
   const cases = only ? CASES.filter((c) => only.includes(c.id)) : CASES;
@@ -158,7 +163,8 @@ async function main() {
     bursts = await burst(p);
   }
   mkdirSync("eval/results", { recursive: true });
-  writeFileSync(`eval/results/${name}.json`, JSON.stringify({ name, model: p.model, extra: p.extra, date: new Date().toISOString(), stopped, rows, bursts }, null, 2));
+  const file = promptName === "v1" ? name : `${name}-${promptName}`;
+  writeFileSync(`eval/results/${file}.json`, JSON.stringify({ name, prompt: promptName, model: p.model, extra: p.extra, date: new Date().toISOString(), stopped, rows, bursts }, null, 2));
   console.error(`done ${name}${stopped ? ` (${stopped})` : ""}`);
 }
 
