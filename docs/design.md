@@ -1,6 +1,6 @@
 # ロトムアシスト 設計書
 
-> **注記**：本書は試作版（第1段階）の設計記録。現在、再設計中のため、方針は [requirements.md](requirements.md)（目的と要件）と [eval-plan.md](eval-plan.md)（AI 比較テスト計画）を優先する。
+> **注記**：本書は試作版（第1段階）の設計記録。**新しい設計の正本は [architecture.md](architecture.md)**（実装の現状は同 15 章）。方針は [requirements.md](requirements.md) と [eval-plan.md](eval-plan.md) を優先する。画面は 2026-10-11 に「押して話す」方式（`/api/ask`）へ作り替えた。合言葉方式の `app/useVoiceAssistant.ts` と `/api/calc` は残しているが、画面からは使っていない
 
 - 対象: ポケモン対戦ダメージ計算・音声アシスタント（略称 `roas` = Rotom Assist）
 - 状態: 第1段階（音声 → ダメージ計算 → 表示・読み上げ）。実装は本書と一致させる。食い違ったら本書かコードを直す

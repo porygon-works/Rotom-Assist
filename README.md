@@ -1,32 +1,50 @@
 # Rotom-Assist
-ポケモン対戦のダメージ計算・音声アシスタント（最小版）。方針は [CLAUDE.md](CLAUDE.md)。
+ポケモン対戦（ポケモンチャンピオンズ）のダメージ計算・音声アシスタント（v1 初期版）。方針は [CLAUDE.md](CLAUDE.md)。
 
 ## 使い方
 ```bash
 npm install
-npm run dev        # http://localhost:3000 （マイクは https か localhost のみ）
+# AI のキー（どちらか一方でも動く。両方あると、上限に当たったとき自動で切り替える）
+export GEMINI_API_KEY=...   # Google AI Studio で作る（無料）
+export GROQ_API_KEY=...     # Groq のコンソールで作る（無料）
+npm run dev                 # http://localhost:3000 （マイクは https か localhost のみ）
 ```
-1. 「開始」を押す（押すまでマイクは動かない）。Chrome / Edge / Safari で開く
-2. 「**ダメ計** ガブリアスにミミッキュのじゃれつく」と話す
-   - 「ダメ計」だけ言った場合は、次の発話（15秒以内）を質問として受け付ける
-   - 「Xの…」＝攻撃側、「Xに…」＝防御側。語順は不問
-3. 画面にダメージ範囲・確定数・前提条件が出て、同じ内容が読み上げられる
+Vercel では Settings → Environment Variables に同じ名前で登録する（コード・Git には書かない）。
 
-画面を閉じる／別タブにすると認識を止め、戻ると（開始中だったときだけ）再開する。
+1. 大きなボタンを**押しながら**話して、離す（PC はスペースキー。「タップで開始／終了」にも切り替えられる）
+   - 例:「HB振りエンペルトのHP120残ってるんだけど、A特化ガブのじしん耐える？」
+   - 例:「S二段階上昇のイダイトウって最速メガルカリオZ抜ける？」「メガルカリオZがどこまで振ってたら負ける？」
+   - 例:「じゃあステロ込みだったら？」（直前の質問を引き継ぐ）
+2. 結論・ダメージ・確定数（または素早さ）が画面に出て、読み上げられる
+3. 音声が使えないときは、下の欄に文字で入力する
 
-## 構成
-- `lib/wakeword.ts` 合言葉（候補は `WAKE_WORDS`）／ `lib/parse.ts` 質問の解釈（簡易ルール）
-- `lib/calc.ts` @smogon/calc 呼び出し ／ `lib/validate.ts` APIの入力検証 ／ `lib/speech.ts` 読み上げ文
-- `app/api/calc/route.ts` `POST /api/calc` ／ `app/useVoiceAssistant.ts` 認識・自動再開・WakeLock・読み上げ
-- `data/ja-en.json` 日→英の対応表（ポケモン・わざは少数。足りない名前はここに追加）
-- `cli/` コマンドライン版と Claude API 版（`npm run calc`, `npm run ask`。後者は `ANTHROPIC_API_KEY` が必要）
+### 分かること
+| 質問 | 例 |
+|---|---|
+| ダメージ・確定数・耐えるか | 特化・H振り・性格・ランク・持ち物・特性・残りHP・ステロ込み・天候・フィールド・壁・急所 |
+| 素早さ | どっちが速いか、抜けるか、実数値、どこまで振ると抜かれるか（最速・準速・最遅・スカーフ・ランク） |
+| タイプ・弱点、種族値、わざの性能 | 「サーフゴーの弱点は？」「カイリューの種族値」「じゃれつくって何タイプ？」 |
+
+- 振り方を言わなかった側は**無振り**で計算し、「振り方しだいで〇〜〇%」の幅も言う
+- 「確定」と言うのは乱数の全範囲で倒せるときだけ。それ以外は「乱数」
+- 覚える技、自分のパーティ、雑談はまだ対応していない
+
+## 構成（詳しくは [docs/architecture.md](docs/architecture.md) 15 章）
+- `app/page.tsx`・`app/usePushToTalk.ts` 画面（押して話す、ブラウザの音声認識と読み上げ）
+- `app/api/ask/route.ts` `POST /api/ask` 1 往復の処理（`lib/ask.ts`）
+- `lib/llm.ts`・`lib/extractPrompt.ts` AI で質問の中身を取り出す（Gemini 3.5 Flash-Lite → 3.1 Flash-Lite → Groq の順に切り替え）
+- `lib/resolve.ts` 名前の解決（正式名・あだ名・聞き間違い）。データは `data/names.json`（`scripts/build-names.ts` で生成）と `data/aliases.json`（手入力）
+- `lib/battle.ts` @smogon/calc 第0世代（チャンピオンズ）で計算 ／ `lib/answer.ts` ロトム口調の回答文
+- `eval/` AI の比較テストと再生テスト（[docs/eval-plan.md](docs/eval-plan.md)）
 
 ## API
-`POST /api/calc` `{ "attacker": "Mimikyu", "defender": "Garchomp", "move": "Play Rough", "gen": 9 }`（英語名。`gen` は省略で9）
-→ `{ min, max, minPercent, maxPercent, hp, ko, koText, assumptions, description }`。不正入力は 400 `{ error }`。
+`POST /api/ask` `{ "text": "ガブにミミッキュのじゃれつく", "history": [{ "user": "前の質問", "extraction": {…} }] }`
+→ `{ speech, title, lines, intent, extraction, diagnostics }`。`history` は任意（直前の 1 件だけ使う）。
+
+試作版の `POST /api/calc`（英語名・第9世代）も残している（画面からは使っていない）。
 
 ## テスト
-`npm test`（単体＋API）／ `npm run typecheck` ／ `npm run build`
+`npm test`（単体＋API）／ `npm run typecheck` ／ `npm run build` ／ `npx tsx eval/replay.ts`（保存済みの AI の出力でアプリの回答を一覧にする。AI は呼ばない）
 
 ### Showdown との照合（手動・未実施）
 計算エンジンは Showdown と同じ @smogon/calc だが、画面での突き合わせは未実施。
