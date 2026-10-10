@@ -14,8 +14,15 @@ export const STATUS_LABEL = {
   calculating: "計算中",
 } as const;
 
-export interface HistoryItem {
+export type Engine = "off" | "listening" | "hearing";
+export type SaveState = "unknown" | "unconfigured" | "ok" | "error";
+export interface DiagItem {
   id: number;
+  time: string;
+  text: string;
+}
+export interface HistoryItem {
+  id: number | string;
   time: string;
   text: string;
   note: string;
@@ -35,6 +42,12 @@ interface Rec {
   onresult: ((e: { resultIndex: number; results: ArrayLike<{ isFinal: boolean; 0: { transcript: string } }> }) => void) | null;
   onerror: ((e: { error: string }) => void) | null;
   onend: (() => void) | null;
+  onstart: (() => void) | null;
+  onaudiostart: (() => void) | null;
+  onsoundstart: (() => void) | null;
+  onspeechstart: (() => void) | null;
+  onspeechend: (() => void) | null;
+  onnomatch: (() => void) | null;
   start(): void;
   abort(): void;
 }
@@ -47,6 +60,21 @@ const getCtor = (): RecCtor | undefined => {
 
 const QUESTION_TIMEOUT_MS = 15000;
 
+let memoryId: string | null = null;
+/** 端末ごとの匿名ID。履歴の保存・取得はこのIDで絞る（ログインはなし）。 */
+function deviceId(): string {
+  try {
+    let v = localStorage.getItem("rotom-device-id");
+    if (!v) {
+      v = crypto.randomUUID();
+      localStorage.setItem("rotom-device-id", v);
+    }
+    return v;
+  } catch {
+    return (memoryId ??= crypto.randomUUID());
+  }
+}
+
 export function useVoiceAssistant() {
   const [running, setRunning] = useState(false);
   const [phase, setPhase] = useState<Phase>("wake");
@@ -54,6 +82,9 @@ export function useVoiceAssistant() {
   const [shown, setShown] = useState<ShownResult | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [supported, setSupported] = useState(true);
+  const [engine, setEngine] = useState<Engine>("off");
+  const [diag, setDiag] = useState<DiagItem[]>([]);
+  const [saveState, setSaveState] = useState<SaveState>("unknown");
 
   const wantRef = useRef(false); // ユーザーが「開始」して、まだ「停止」していない
   const recRef = useRef<Rec | null>(null);
@@ -69,8 +100,29 @@ export function useVoiceAssistant() {
     setPhase(p);
   }, []);
 
-  const addHistory = (text: string, note: string) =>
+  const persist = (kind: "utterance" | "event", text: string, note: string) => {
+    fetch("/api/history", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ device_id: deviceId(), kind, text, note }),
+    })
+      .then(async (r) => {
+        const d = await r.json().catch(() => ({}));
+        setSaveState(r.ok && d.saved ? "ok" : d.configured === false ? "unconfigured" : "error");
+      })
+      .catch(() => setSaveState("error"));
+  };
+
+  const addHistory = (text: string, note: string) => {
     setHistory((h) => [{ id: ++histId.current, time: new Date().toLocaleTimeString("ja-JP"), text, note }, ...h].slice(0, 50));
+    persist("utterance", text, note);
+  };
+
+  /** 認識エンジンの動きを画面に出す（反応しない原因の切り分け用）。エラーだけ保存する。 */
+  const log = (text: string, save = false) => {
+    setDiag((d) => [{ id: ++histId.current, time: new Date().toLocaleTimeString("ja-JP"), text }, ...d].slice(0, 30));
+    if (save) persist("event", text, "");
+  };
 
   const stopSpeech = () => {
     if (typeof speechSynthesis !== "undefined") speechSynthesis.cancel();
@@ -78,9 +130,13 @@ export function useVoiceAssistant() {
   const speak = (text: string) => {
     if (typeof speechSynthesis === "undefined") return;
     stopSpeech(); // 読み上げ中に次の質問が来たら止めてから読む
-    const u = new SpeechSynthesisUtterance(text);
-    u.lang = "ja-JP";
-    speechSynthesis.speak(u);
+    try {
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = "ja-JP";
+      speechSynthesis.speak(u);
+    } catch {
+      /* 読み上げに失敗しても、画面の結果はそのまま残す */
+    }
   };
 
   const clearQTimer = () => {
@@ -182,19 +238,45 @@ export function useVoiceAssistant() {
     r.interimResults = false;
     r.onresult = (e) => {
       for (let i = e.resultIndex; i < e.results.length; i++) {
-        if (e.results[i].isFinal) handleRef.current(e.results[i][0].transcript.trim());
+        if (e.results[i].isFinal) {
+          const t = e.results[i][0].transcript.trim();
+          log(`認識結果: ${t}`);
+          handleRef.current(t);
+        }
       }
     };
+    r.onstart = () => {
+      setEngine("listening");
+      log("認識エンジン起動");
+    };
+    r.onaudiostart = () => log("マイク入力を開始");
+    r.onsoundstart = () => log("音を検出");
+    r.onspeechstart = () => {
+      setEngine("hearing");
+      log("話し声を検出");
+    };
+    r.onspeechend = () => {
+      setEngine("listening");
+      log("話し声が止まった（認識結果を待っています）");
+    };
+    r.onnomatch = () => log("聞き取れませんでした（候補なし）");
     r.onerror = (e) => {
+      log(`エラー: ${e.error}`, e.error !== "no-speech" && e.error !== "aborted");
       if (e.error === "not-allowed" || e.error === "service-not-allowed") {
         wantRef.current = false; // マイク拒否は再開しない
         setRunning(false);
         setError("マイクの使用が許可されていません。ブラウザの設定で許可してください。");
+      } else if (e.error === "network") {
+        setError("音声認識サーバに接続できません（ネットワークを確認してください）。");
+      } else if (e.error === "audio-capture") {
+        setError("マイクが見つかりません。");
       }
       // no-speech / network / aborted などは onend から自動再開する
     };
     r.onend = () => {
       recRef.current = null;
+      setEngine("off");
+      log("認識エンジン終了" + (wantRef.current && !document.hidden ? "（自動で再開します）" : ""));
       if (!wantRef.current || document.hidden) return;
       const quick = Date.now() - lastStart.current < 1000; // 即終了が続くときは間を空ける
       setTimeout(() => {
@@ -227,6 +309,7 @@ export function useVoiceAssistant() {
     reqRef.current++; // 進行中の計算結果は捨てる
     recRef.current?.abort();
     recRef.current = null;
+    setEngine("off");
     releaseWakeLock();
     stopSpeech();
     setPhaseBoth("wake");
@@ -234,6 +317,20 @@ export function useVoiceAssistant() {
 
   useEffect(() => {
     setSupported(!!getCtor());
+    fetch(`/api/history?device_id=${encodeURIComponent(deviceId())}`)
+      .then((r) => r.json())
+      .then((d: { configured?: boolean; items?: { id: number; text: string; note: string; created_at: string }[] }) => {
+        if (d.configured === false) return setSaveState("unconfigured");
+        const items = (d.items ?? []).map((x) => ({
+          id: `s${x.id}`,
+          time: new Date(x.created_at).toLocaleString("ja-JP"),
+          text: x.text,
+          note: x.note,
+        }));
+        setHistory((h) => [...h, ...items].slice(0, 50));
+        setSaveState("ok");
+      })
+      .catch(() => setSaveState("error"));
     // 画面が隠れたら認識を止め、戻ってきたら（開始中だったときだけ）再開する
     const onVis = () => {
       if (document.hidden) {
@@ -265,7 +362,7 @@ export function useVoiceAssistant() {
   }, [startRecognition]);
 
   const status: keyof typeof STATUS_LABEL = !running ? "idle" : phase;
-  return { running, status, history, shown, error, supported, start, stop };
+  return { running, status, history, shown, error, supported, engine, diag, saveState, start, stop };
 }
 
 export type { Named };

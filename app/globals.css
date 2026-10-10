@@ -9,7 +9,7 @@ h1 { font-size: 1.4rem; margin: .4em 0; } h2 { font-size: 1.05rem; margin: 1em 0
 button { font:inherit; padding:8px 20px; border-radius:8px; border:1px solid var(--accent); background:var(--accent); color:#fff; cursor:pointer; }
 button:disabled { opacity:.4; cursor:default; }
 .badge { padding:4px 12px; border-radius:999px; background:var(--card); font-weight:600; }
-.badge.question { background:var(--accent); color:#fff; } .badge.calculating { outline:2px solid var(--accent); }
+.badge.question, .badge.hearing { background:var(--accent); color:#fff; } .badge.calculating { outline:2px solid var(--accent); }
 .card { background:var(--card); border-radius:12px; padding:4px 16px 12px; }
 dt { color:var(--muted); font-size:.85rem; margin-top:.6em; } dd { margin:0; } dd ul { margin:0; padding-left:1.2em; }
 .err { color:var(--warn); }

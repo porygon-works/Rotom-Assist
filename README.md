@@ -37,8 +37,30 @@ https://calc.pokemonshowdown.com/ で Gen9・Lv50・性格補正なし・努力�
 | Archaludon | Flash Cannon | Flutter Mane | `npm run calc -- ブリジュラス ラスターカノン ハバタクカミ` で確認 |
 | Gouging Fire | Earthquake | Charizard | ダメージなし（ひこう） |
 
+## 認識履歴の保存（Supabase・任意）
+設定しなくてもアプリは動く（履歴はその画面の中だけ）。保存したい場合:
+1. Supabase でプロジェクトを作り、SQL Editor で [`supabase/schema.sql`](supabase/schema.sql) を実行
+2. Vercel の Settings → Environment Variables に **2つ** 追加して再デプロイ（コード・Git には書かない）
+   - `SUPABASE_URL`：Project Settings → API の Project URL
+   - `SUPABASE_SERVICE_ROLE_KEY`：同じ画面の `service_role`（または Secret）キー。**`NEXT_PUBLIC_` は付けない**
+3. 画面の「診断」に「Supabaseに保存中」と出れば成功
+
+- 書き込み・読み出しはサーバ（`/api/history`）だけが行う。テーブルは RLS 有効・ポリシーなしで、ブラウザから直接は触れない
+- 履歴は端末ごとの匿名ID（localStorage）で絞って返す。ログインはないので、**IDを知らない他人には見えないが、端末を変える／ブラウザのデータを消すと過去の履歴は見えなくなる**
+- 発話の文字起こしが保存される。公開URLを他人に共有する場合は注意
+
+## 音声認識が反応しないとき
+画面下の「診断」を開き、上から順に確認する。
+| 診断の表示 | 意味と対処 |
+|---|---|
+| 何も出ない／「認識エンジン起動」が出ない | 「開始」が押せていない、またはブラウザ非対応（iPhone の Safari は不安定。Android の Chrome 推奨） |
+| 「エラー: not-allowed」 | マイク未許可。ブラウザのサイト設定で許可 |
+| 「エラー: network」 | 音声認識サーバに接続できない（Chrome は音声を外部サーバに送る） |
+| 「話し声を検出」まで出るが「認識結果」が出ない | 声が小さい／周囲が騒がしい。マイクに近づく |
+| 「認識結果: …」が出るが履歴が「合言葉なし（無視）」 | 「ダメ計」が別の表記になっている。その表記を `lib/wakeword.ts` の `WAKE_WORDS` に追加 |
+
 ## Vercel
-そのままデプロイ可（環境変数は不要）。
+そのままデプロイ可。環境変数は上記の Supabase 用（任意）のみ。
 
 ## 未確認・制限
 - Gen9 データを使用。**ポケモンチャンピオンズ固有の仕様は未反映／未検証**。実測ダメージとのズレ確認が必要

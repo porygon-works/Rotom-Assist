@@ -1,9 +1,17 @@
 "use client";
 
-import { STATUS_LABEL, useVoiceAssistant } from "./useVoiceAssistant";
+import { STATUS_LABEL, useVoiceAssistant, type Engine, type SaveState } from "./useVoiceAssistant";
+
+const ENGINE_LABEL: Record<Engine, string> = { off: "停止中", listening: "聞いています", hearing: "話し声を検出" };
+const SAVE_LABEL: Record<SaveState, string> = {
+  unknown: "確認中",
+  unconfigured: "未設定（この端末の画面内のみ）",
+  ok: "Supabaseに保存中",
+  error: "保存に失敗",
+};
 
 export default function Home() {
-  const { running, status, history, shown, error, supported, start, stop } = useVoiceAssistant();
+  const { running, status, history, shown, error, supported, engine, diag, saveState, start, stop } = useVoiceAssistant();
   const r = shown?.result;
 
   return (
@@ -22,6 +30,7 @@ export default function Home() {
         <span className={`badge ${status}`} role="status" aria-live="polite" data-testid="status">
           {STATUS_LABEL[status]}
         </span>
+        <span className={`badge ${engine}`} data-testid="engine">マイク: {ENGINE_LABEL[engine]}</span>
       </div>
 
       {shown && (
@@ -62,6 +71,20 @@ export default function Home() {
           </ul>
         )}
       </section>
+
+      <details>
+        <summary>診断（反応しないとき）</summary>
+        <p className="small">履歴の保存: <span data-testid="save">{SAVE_LABEL[saveState]}</span></p>
+        {diag.length === 0 ? (
+          <p className="small">「開始」を押すとここに認識エンジンの動きが出ます。</p>
+        ) : (
+          <ul className="history small">
+            {diag.map((d) => (
+              <li key={d.id}>{d.time} {d.text}</li>
+            ))}
+          </ul>
+        )}
+      </details>
 
       <p className="small">世代9のデータで計算しています。ポケモンチャンピオンズ固有の仕様は未検証です。</p>
     </main>
