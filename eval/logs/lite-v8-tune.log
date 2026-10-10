@@ -1,0 +1,26 @@
+gemini-3.5-flash-lite run1 #111 921ms ○ 
+gemini-3.5-flash-lite run1 #112 737ms ○ 
+gemini-3.5-flash-lite run1 #114 704ms ○ 
+gemini-3.5-flash-lite run1 #115 717ms ○ 
+gemini-3.5-flash-lite run1 #117 760ms ○ 
+gemini-3.5-flash-lite run1 #118 587ms ○ 
+gemini-3.5-flash-lite run1 #120 662ms ○ 
+gemini-3.5-flash-lite run1 #121 952ms ○ 
+gemini-3.5-flash-lite run1 #123 621ms ○ 
+gemini-3.5-flash-lite run1 #124 648ms ○ 
+gemini-3.5-flash-lite run1 #126 826ms ○ 
+gemini-3.5-flash-lite run1 #127 646ms ○ 
+gemini-3.5-flash-lite run1 #129 650ms ○ 
+gemini-3.5-flash-lite run1 #130 634ms × attacker=undefined（正解 イダイトウ）
+gemini-3.5-flash-lite run1 #132 681ms ○ 
+gemini-3.5-flash-lite run1 #133 637ms ○ 
+  #135 429（1 回目）→ 20s 待つ
+gemini-3.5-flash-lite run1 #135 1357ms ○ 
+  #136 429（1 回目）→ 20s 待つ
+gemini-3.5-flash-lite run1 #136 852ms ○ 
+gemini-3.5-flash-lite run1 #138 574ms ○ 
+gemini-3.5-flash-lite run1 #139 939ms ○ 
+gemini-3.5-flash-lite run1 #141 676ms ○ 
+gemini-3.5-flash-lite run1 #143 790ms ○ 
+gemini-3.5-flash-lite run1 #145 695ms ○ 
+done gemini-3.5-flash-lite

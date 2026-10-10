@@ -14,7 +14,24 @@ export interface Case {
 
 // ひらがな→カタカナ（「はちまき」と「ハチマキ」を同じに扱う。名前の解決はサーバ側で吸収できるため）
 const kata = (s: string) => s.replace(/[\u3041-\u3096]/g, (c) => String.fromCharCode(c.charCodeAt(0) + 0x60));
-const norm = (s: unknown) => (typeof s === "string" ? s.replace(/[\s・]/g, "") : "");
+export const norm = (s: unknown) => (typeof s === "string" ? s.replace(/[\s・]/g, "") : "");
+/** 編集距離（文字単位） */
+function distance(a: string, b: string): number {
+  const d = Array.from({ length: a.length + 1 }, (_, i) => [i, ...Array(b.length).fill(0)]);
+  for (let j = 1; j <= b.length; j++) d[0][j] = j;
+  for (let i = 1; i <= a.length; i++)
+    for (let j = 1; j <= b.length; j++) d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+  return d[a.length][b.length];
+}
+/**
+ * 名前が合っているか。正式名、または「聞こえたままのカタカナ」で正解と読みが 2 文字以内の違い（サーバ側のあいまい一致で直せる想定）。
+ * 別の実在のポケモンに置き換えた場合は、読みが近くても不正解になるよう、カタカナだけで書かれたものに限る
+ */
+function nameOk(got: unknown, want: string, alsoReal: string[] = []): boolean {
+  const g = kata(norm(got));
+  if (g === want) return true;
+  return /^[ァ-ヶー]+$/.test(g) && !alsoReal.includes(g) && distance(g, want) <= 2;
+}
 const side = (o: Out, k: "attacker" | "defender") => (o.conditions?.[k] ?? {}) as Out;
 const allText = (o: Out) => JSON.stringify(o);
 
@@ -102,13 +119,22 @@ export const CASES: Case[] = [
     ...intent(o, "clarify"),
     ...((o.missing ?? []).some((m: string) => /defender|防御|相手|受け/.test(m)) ? [] : [`missing=${JSON.stringify(o.missing)}`]),
   ]),
-  // 名前の確認はサーバ側で行う（v6 以降の設計案）ので、「アロロ」を攻撃側として取り出せば、サーバが「分からない」と返せる
-  C(26, "clarify-extract", "ガブリアスにアロロのじゃれつく", (o) => norm(o.attacker) === "アロロ" && norm(o.defender) === "ガブリアス" ? [] : [
+  // 名前の確認・補正はサーバ側で行う（v8 以降の設計案）。「アロロ」を聞こえたまま攻撃側に入れれば、サーバが「分からない」と返せる。
+  // 実在の別のポケモン（アローラキュウコンなど）に置き換えたら不正解
+  C(26, "clarify-extract", "ガブリアスにアロロのじゃれつく", (o) => kata(norm(o.attacker)) === "アロロ" && norm(o.defender) === "ガブリアス" ? [] : [
     ...intent(o, "clarify"),
     ...((o.unknown_names ?? []).some((m: string) => m.includes("アロロ")) ? [] : [`unknown_names=${JSON.stringify(o.unknown_names)}`]),
   ]),
-  C(27, "extract", "が降りあすに見っきゅのじゃれつく", (o) => damage(o, "ミミッキュ", "ガブリアス", "じゃれつく")),
-  C(28, "extract", "さあ内藤のムーンフォース、カイリューに", (o) => damage(o, "サーナイト", "カイリュー", "ムーンフォース")),
+  // 聞き間違い: 正式名に直すか、聞こえたままのカタカナ（サーバ側のあいまい一致で直せる近さ）なら正解
+  C(27, "extract", "が降りあすに見っきゅのじゃれつく", (o) => [
+    ...intent(o, "damage"), ...eq(o, "move", "じゃれつく"),
+    ...(nameOk(o.attacker, "ミミッキュ") ? [] : [`attacker=${JSON.stringify(o.attacker)}（正解 ミミッキュ）`]),
+    ...(nameOk(o.defender, "ガブリアス") ? [] : [`defender=${JSON.stringify(o.defender)}（正解 ガブリアス）`]),
+  ]),
+  C(28, "extract", "さあ内藤のムーンフォース、カイリューに", (o) => [
+    ...intent(o, "damage"), ...eq(o, "defender", "カイリュー"), ...eq(o, "move", "ムーンフォース"),
+    ...(nameOk(o.attacker, "サーナイト") ? [] : [`attacker=${JSON.stringify(o.attacker)}（正解 サーナイト）`]),
+  ]),
   C(29, "extract", "ガブリアスの素早さと、サーフゴーのタイプ教えて", (o) => {
     if (o.intent === "clarify") return [];
     const q: Out[] = Array.isArray(o.queries) ? o.queries : [];

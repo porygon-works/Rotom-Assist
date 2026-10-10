@@ -1,0 +1,221 @@
+{
+  "name": "gemini-3.5-flash-lite",
+  "prompt": "v8",
+  "set": "holdout",
+  "tag": "",
+  "model": "gemini-3.5-flash-lite",
+  "extra": {
+    "reasoning_effort": "minimal"
+  },
+  "date": "2026-10-10T16:46:03.188Z",
+  "stopped": "1 日の上限に達した（run1 #122）",
+  "rows": [
+    {
+      "id": 101,
+      "group": "extract",
+      "run": 1,
+      "ms": 1106,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "attacker": "ガブリアス",
+        "defender": "エンペルト",
+        "move": "じしん",
+        "conditions": {
+          "attacker": {
+            "ability": "サメハダー",
+            "nature_up": "atk",
+            "sp": {
+              "atk": 32
+            }
+          },
+          "defender": {
+            "nature_up": "def",
+            "sp": {
+              "hp": 32,
+              "def": 32
+            },
+            "hp_left": 120
+          }
+        },
+        "uses_context": false,
+        "missing": [],
+        "intent": "damage"
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 169,
+        "prompt_tokens": 1934,
+        "total_tokens": 2103
+      }
+    },
+    {
+      "id": 102,
+      "group": "extract",
+      "run": 1,
+      "ms": 690,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "attacker": "イダイトウ",
+        "defender": "メガルカリオZ",
+        "conditions": {
+          "attacker": {
+            "boosts": {
+              "spe": 2
+            }
+          },
+          "defender": {
+            "nature_up": "spe",
+            "sp": {
+              "spe": 32
+            }
+          }
+        },
+        "uses_context": false,
+        "missing": [],
+        "ask": "compare",
+        "intent": "speed"
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 128,
+        "prompt_tokens": 1928,
+        "total_tokens": 2056
+      }
+    },
+    {
+      "id": 103,
+      "group": "extract",
+      "run": 1,
+      "ms": 676,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "attacker": "イダイトウ",
+        "defender": "メガルカリオZ",
+        "conditions": {
+          "attacker": {
+            "boosts": {
+              "spe": 2
+            }
+          }
+        },
+        "uses_context": false,
+        "missing": [],
+        "ask": "threshold",
+        "intent": "speed"
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 92,
+        "prompt_tokens": 1936,
+        "total_tokens": 2028
+      }
+    },
+    {
+      "id": 113,
+      "group": "extract",
+      "run": 1,
+      "ms": 614,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "attacker": "ミミッキュ",
+        "defender": "リザードン",
+        "move": "じゃれつく",
+        "conditions": {
+          "defender": {
+            "stealth_rock": true
+          }
+        },
+        "uses_context": false,
+        "intent": "damage"
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 79,
+        "prompt_tokens": 1929,
+        "total_tokens": 2008
+      }
+    },
+    {
+      "id": 116,
+      "group": "extract",
+      "run": 1,
+      "ms": 595,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "attacker": "ガブリアス",
+        "defender": "ドドゲザン",
+        "move": "じしん",
+        "conditions": {
+          "field": {
+            "weather": "砂嵐"
+          }
+        },
+        "uses_context": false,
+        "missing": [],
+        "intent": "damage"
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 85,
+        "prompt_tokens": 1927,
+        "total_tokens": 2012
+      }
+    },
+    {
+      "id": 119,
+      "group": "extract",
+      "run": 1,
+      "ms": 687,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "attacker": "ガブリアス",
+        "defender": "カイリュー",
+        "move": "げきりん",
+        "conditions": {
+          "attacker": {
+            "boosts": {
+              "atk": -1
+            }
+          }
+        },
+        "uses_context": false,
+        "missing": [],
+        "intent": "damage"
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 91,
+        "prompt_tokens": 1925,
+        "total_tokens": 2016
+      }
+    },
+    {
+      "id": 122,
+      "group": "extract",
+      "run": 1,
+      "ms": 111,
+      "status": 429,
+      "retries429": 0,
+      "output": null,
+      "raw": "[{\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 500, model: gemini-3.5-flash-lite\\nPlease retry in 7h13m56.770983283s.\",\n    \"status\": \"RESOURCE_EXHAUSTED\",\n    \"details\": [\n      {\n        \"@type\": \"type.googleapis.com/google.rpc.Help\",\n        \"lin",
+      "errors": [
+        "HTTP 429: [{\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-"
+      ],
+      "fabricated": [],
+      "daily": true
+    }
+  ],
+  "bursts": null
+}
