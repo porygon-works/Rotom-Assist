@@ -1,5 +1,7 @@
 # ロトムアシスト 設計書
 
+> **注記**：本書は試作版（第1段階）の設計記録。現在、再設計中のため、方針は [requirements.md](requirements.md)（目的と要件）と [eval-plan.md](eval-plan.md)（AI 比較テスト計画）を優先する。
+
 - 対象: ポケモン対戦ダメージ計算・音声アシスタント（略称 `roas` = Rotom Assist）
 - 状態: 第1段階（音声 → ダメージ計算 → 表示・読み上げ）。実装は本書と一致させる。食い違ったら本書かコードを直す
 - 方針の要約は [CLAUDE.md](../CLAUDE.md)、使い方は [README.md](../README.md)
