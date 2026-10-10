@@ -39,11 +39,12 @@ https://calc.pokemonshowdown.com/ で Gen9・Lv50・性格補正なし・努力�
 
 ## 認識履歴の保存（Supabase・任意）
 設定しなくてもアプリは動く（履歴はその画面の中だけ）。保存したい場合:
-1. Supabase でプロジェクトを作り、SQL Editor で [`supabase/schema.sql`](supabase/schema.sql) を実行（テーブル名は `rotom_history`。他のアプリと1つのプロジェクトを共有できるよう接頭辞を付けている）
-2. Vercel の Settings → Environment Variables に **2つ** 追加して再デプロイ（コード・Git には書かない）
+1. Supabase でプロジェクトを作り、SQL Editor で [`supabase/schema.sql`](supabase/schema.sql) を実行（`rotom` スキーマに `history` テーブルを作る。他のアプリと1つのプロジェクトを共有できるよう、アプリごとにスキーマを分けている）
+2. **Project Settings → Data API → Exposed schemas に `rotom` を追加**して保存（忘れると API が `The schema must be one of the following` のエラーを返す）
+3. Vercel の Settings → Environment Variables に **2つ** 追加して再デプロイ（コード・Git には書かない）
    - `SUPABASE_URL`：Project Settings → API の Project URL
    - `SUPABASE_SERVICE_ROLE_KEY`：同じ画面の `service_role`（または Secret）キー。**`NEXT_PUBLIC_` は付けない**
-3. 画面の「診断」に「Supabaseに保存中」と出れば成功
+4. 画面の「診断」に「Supabaseに保存中」と出れば成功
 
 - 書き込み・読み出しはサーバ（`/api/history`）だけが行う。テーブルは RLS 有効・ポリシーなしで、ブラウザから直接は触れない
 - 履歴は端末ごとの匿名ID（localStorage）で絞って返す。ログインはないので、**IDを知らない他人には見えないが、端末を変える／ブラウザのデータを消すと過去の履歴は見えなくなる**
