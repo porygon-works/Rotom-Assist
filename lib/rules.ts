@@ -31,6 +31,7 @@ type Tok =
   | { k: "move"; ja: string }
   | { k: "item"; ja: string }
   | { k: "nature"; ja: string }
+  | { k: "ability"; ja: string } // 特性（直後のポケモン）
   | { k: "weather"; v: string }
   | { k: "terrain"; v: string }
   | { k: "spread"; sp: Partial<Record<Stat, number>>; up?: Stat; down?: Stat; both?: boolean } // both: 「準速同士」
@@ -67,6 +68,8 @@ function dictionary(): [string, Tok][] {
   // チャンピオンズにない持ち物（ハチマキなど）も持ち物として拾い、回答で「ないロト」と言わせる
   for (const [al, ja] of Object.entries(a.items)) add(al, { k: "item", ja });
   for (const ja of Object.keys(n.natures)) add(ja, { k: "nature", ja });
+  // 特性（名前の前に付けて言う形:「マルチスケイルのカイリュー」）。わざ・ポケモンと同じ名前なら、そちらを優先（並べ替えで先に入れたものが勝つ）
+  for (const ja of Object.keys(n.abilities)) add(ja, { k: "ability", ja });
   for (const [w, v] of Object.entries(a.weather)) add(w, { k: "weather", v: w });
   for (const [t] of Object.entries(a.terrain)) add(t, { k: "terrain", v: t });
   // 助詞・区切り
@@ -174,6 +177,10 @@ export function tokenize(text: string): Tok[] | null {
           const mm = s.slice(i).match(/^(持チ|モチ)/);
           if (mm) i += mm[0].length;
         }
+        if (t.k === "ability") {
+          const mm = s.slice(i).match(/^(込ミ|コミ|持チ|アリ)/);
+          if (mm) i += mm[0].length;
+        }
         continue outer;
       }
     }
@@ -198,6 +205,7 @@ function applyMods(cond: Obj, mods: Tok[]) {
     else if (t.k === "nature") cond.nature = t.ja;
     else if (t.k === "boost") cond.boosts = { ...(cond.boosts as Obj | undefined), [t.stat]: t.n };
     else if (t.k === "status") cond.status = t.v;
+    else if (t.k === "ability") cond.ability = t.ja;
     else if (t.k === "hp") {
       if (t.percent !== undefined) cond.hp_left_percent = t.percent;
       if (t.value !== undefined) cond.hp_left = t.value;
@@ -259,7 +267,7 @@ export function parseRules(raw: string): Obj | null {
       last.particle = next?.k === "p" ? next.v : undefined;
       continue;
     }
-    if (t.k === "spread" || t.k === "item" || t.k === "nature" || t.k === "boost" || t.k === "hp" || t.k === "status") {
+    if (t.k === "spread" || t.k === "item" || t.k === "nature" || t.k === "boost" || t.k === "hp" || t.k === "status" || t.k === "ability") {
       mods.push(t);
       continue;
     }

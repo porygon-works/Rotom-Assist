@@ -72,6 +72,10 @@ describe("続きの質問（直前の解釈に条件を足す）", () => {
     expect(parseRules("c特化サザンドラのあくのはどう、サーフゴーに")).toMatchObject({ conditions: { attacker: { nature_up: "spa" } } });
     expect(parseRules("エースバーンのとびひざげり、ガブに")).toMatchObject({ attacker: "エースバーン" }); // 「エー」を A にしない
   });
+  it("特性を名前の前に付ける言い方", () => {
+    expect(parseRules("マルチスケイルのカイリューにガブのげきりん")).toMatchObject({ conditions: { defender: { ability: "マルチスケイル" } } });
+    expect(parseRules("フェアリースキンのニンフィアのハイパーボイス、ガブに")).toMatchObject({ conditions: { attacker: { ability: "フェアリースキン" } } });
+  });
   it("状態異常・無振り", () => {
     expect(parseRules("やけどのガブのじしん、ドドゲザンに")).toMatchObject({ conditions: { attacker: { status: "やけど" } } });
     expect(parseRules("まひしたドラパルトと無振りガブリアスどっちが速い？")).toMatchObject({ conditions: { attacker: { status: "まひ" }, defender: { sp: { spe: 0 } } } });
