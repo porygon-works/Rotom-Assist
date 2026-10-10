@@ -1,5 +1,5 @@
 import { expect, test } from "vitest";
-import { ask, runTool } from "../src/assistant.js";
+import { ask, runTool } from "../cli/assistant";
 
 test("ツール実行：不正な名前はエラーJSONで返る", () => {
   expect(JSON.parse(runTool("calc_damage", { attacker: { pokemon: "Nope" }, defender: { pokemon: "Charizard" }, move: "Flash Cannon" })).error).toBeTruthy();

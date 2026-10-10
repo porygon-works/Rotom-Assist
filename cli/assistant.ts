@@ -1,5 +1,5 @@
 import Anthropic from "@anthropic-ai/sdk";
-import { calc, type CalcInput } from "./calc.js";
+import { calc, type CalcInput } from "../lib/calc";
 
 export const MODEL = process.env.ROTOM_MODEL ?? "claude-haiku-5-5";
 
@@ -51,8 +51,7 @@ export function runTool(name: string, input: unknown): string {
   if (name !== "calc_damage") return JSON.stringify({ error: `unknown tool ${name}` });
   try {
     const r = calc(input as CalcInput);
-    const { speech: _s, ...rest } = r;
-    return JSON.stringify(rest);
+    return JSON.stringify(r);
   } catch (e) {
     // 名前の誤りなどはモデルに返して言い直させる
     return JSON.stringify({ error: String((e as Error).message) });

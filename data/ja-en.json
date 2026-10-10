@@ -1,18 +1,29 @@
 {
   "pokemon": {
     "ブリジュラス": "Archaludon",
+    "ウガツホムラ": "Gouging Fire",
+    "ガブリアス": "Garchomp",
+    "ミミッキュ": "Mimikyu",
     "リザードン": "Charizard",
-    "ロトム": "Rotom",
     "ハバタクカミ": "Flutter Mane",
-    "テツノドクガ": "Iron Moth",
-    "テツノカイナ": "Iron Hands"
+    "テツノカイナ": "Iron Hands",
+    "テツノブジン": "Iron Valiant",
+    "サーフゴー": "Gholdengo",
+    "カイリュー": "Dragonite",
+    "ロトム": "Rotom"
   },
   "moves": {
     "ラスターカノン": "Flash Cannon",
     "ドラゴンテール": "Dragon Tail",
+    "じゃれつく": "Play Rough",
+    "じしん": "Earthquake",
+    "ドラゴンクロー": "Dragon Claw",
+    "かえんほうしゃ": "Flamethrower",
     "ねっぷう": "Heat Wave",
     "ムーンフォース": "Moonblast",
-    "じしん": "Earthquake"
+    "インファイト": "Close Combat",
+    "シャドーボール": "Shadow Ball",
+    "ゴールドラッシュ": "Make It Rain"
   },
   "items": {
     "いのちのたま": "Life Orb",
