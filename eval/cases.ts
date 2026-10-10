@@ -12,6 +12,8 @@ export interface Case {
   check: (o: Out) => string[]; // 合っていない点の一覧（空なら正解）
 }
 
+// ひらがな→カタカナ（「はちまき」と「ハチマキ」を同じに扱う。名前の解決はサーバ側で吸収できるため）
+const kata = (s: string) => s.replace(/[\u3041-\u3096]/g, (c) => String.fromCharCode(c.charCodeAt(0) + 0x60));
 const norm = (s: unknown) => (typeof s === "string" ? s.replace(/[\s・]/g, "") : "");
 const side = (o: Out, k: "attacker" | "defender") => (o.conditions?.[k] ?? {}) as Out;
 const allText = (o: Out) => JSON.stringify(o);
@@ -33,7 +35,7 @@ function damage(o: Out, atk: string, def: string, move: string): string[] {
   return [...intent(o, "damage"), ...eq(o, "attacker", atk), ...eq(o, "defender", def), ...eq(o, "move", move)];
 }
 function item(o: Out, k: "attacker" | "defender", re: RegExp): string[] {
-  return re.test(String(side(o, k).item ?? "")) ? [] : [`${k}.item=${JSON.stringify(side(o, k).item)}（正解 ${re}）`];
+  return re.test(kata(String(side(o, k).item ?? ""))) ? [] : [`${k}.item=${JSON.stringify(side(o, k).item)}（正解 ${re}）`];
 }
 function asks(o: Out, re: RegExp, label: string): string[] {
   return re.test(allText(o)) ? [] : [`${label} がない`];
@@ -51,7 +53,7 @@ export const CASES: Case[] = [
     ...damage(o, "ガブリアス", "サーフゴー", "じしん"), ...item(o, "attacker", /スカーフ/),
   ]),
   C(5, "extract", "いのちのたまリザードンのねっぷう、ハッサムに", (o) => [
-    ...damage(o, "リザードン", "ハッサム", "ねっぷう"), ...item(o, "attacker", /いのちのたま/),
+    ...damage(o, "リザードン", "ハッサム", "ねっぷう"), ...item(o, "attacker", /イノチノタマ/),
   ]),
   C(6, "extract", "相手のハッサムがハチマキだったら、バレットパンチでサーナイト落ちる？", (o) => [
     ...damage(o, "ハッサム", "サーナイト", "バレットパンチ"), ...item(o, "attacker", /ハチマキ/),

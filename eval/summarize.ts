@@ -1,7 +1,7 @@
 // eval/results/*.json を集計して、docs/eval-plan.md 7 章の表の形で出す
 // 使い方: npx tsx eval/summarize.ts
 import { readdirSync, readFileSync } from "node:fs";
-import { canonical } from "./cases";
+import { CASES, canonical } from "./cases";
 
 // 単価（USD / 100 万トークン、入力・出力）。null は不明（Gemma は無料枠のみ）
 // 2026-10-10 実施時は公式ページがネットワーク制限で開けず、検索結果（比較サイト）の値。要確認
@@ -22,7 +22,10 @@ const quantile = (xs: number[], q: number) => {
 
 for (const f of readdirSync("eval/results").filter((f) => f.endsWith(".json")).sort()) {
   const d = JSON.parse(readFileSync(`eval/results/${f}`, "utf8"));
-  const rows: any[] = d.rows.filter((r: any) => r.status === 200);
+  // 保存済みの出力を今の採点で付け直す（採点を直したときに AI を呼び直さなくて済むように）
+  const rows: any[] = d.rows
+    .filter((r: any) => r.status === 200)
+    .map((r: any) => ({ ...r, errors: r.output ? CASES.find((c) => c.id === r.id)!.check(r.output) : r.errors }));
   const by = (pred: (r: any) => boolean) => rows.filter(pred);
   const ok = (rs: any[]) => rs.filter((r) => r.errors.length === 0).length;
 
