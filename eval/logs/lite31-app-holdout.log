@@ -4,3 +4,14 @@ gemini-3.1-flash-lite run1 #103 11570ms ○
 gemini-3.1-flash-lite run1 #113 23046ms ○ 
 gemini-3.1-flash-lite run1 #116 20630ms ○ 
 gemini-3.1-flash-lite run1 #119 6428ms ○ 
+gemini-3.1-flash-lite run1 #122 13462ms × pokemon="メガルカリオ"（正解 メガルカリオZ）
+gemini-3.1-flash-lite run1 #125 15741ms ○ 
+gemini-3.1-flash-lite run1 #128 729ms ○ 
+gemini-3.1-flash-lite run1 #131 23301ms ○ 
+gemini-3.1-flash-lite run1 #134 10768ms ○ 
+gemini-3.1-flash-lite run1 #137 8902ms ○ 
+gemini-3.1-flash-lite run1 #140 10269ms ○ 
+gemini-3.1-flash-lite run1 #142 14507ms ○ 
+gemini-3.1-flash-lite run1 #144 14462ms ○ 
+gemini-3.1-flash-lite run1 #146 15076ms ○ 
+done gemini-3.1-flash-lite
