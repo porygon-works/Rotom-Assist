@@ -1,7 +1,17 @@
 // eval/results/*.json を集計して、docs/eval-plan.md 7 章の表の形で出す
-// 使い方: npx tsx eval/summarize.ts
+// 使い方: npx tsx eval/summarize.ts [ファイル名に含む文字列]
 import { readdirSync, readFileSync } from "node:fs";
-import { CASES, canonical } from "./cases";
+import { CASES, canonical, type Out } from "./cases";
+import { CASES2 } from "./cases2";
+
+const ALL = [...CASES, ...CASES2];
+
+/** サーバ側の補正（案）: clarify なのに足りないもの・知らない名前がなく、攻撃側・防御側・わざが揃っていれば damage として扱う */
+export function guard(o: Out): Out {
+  const empty = (v: unknown) => !Array.isArray(v) || v.length === 0;
+  if (o.intent === "clarify" && empty(o.missing) && empty(o.unknown_names) && o.attacker && o.defender && o.move) return { ...o, intent: "damage" };
+  return o;
+}
 
 // 単価（USD / 100 万トークン、入力・出力）。null は不明（Gemma は無料枠のみ）
 // 2026-10-10 実施時は公式ページがネットワーク制限で開けず、検索結果（比較サイト）の値。要確認
@@ -20,18 +30,22 @@ const quantile = (xs: number[], q: number) => {
   return s.length ? s[Math.min(s.length - 1, Math.ceil(q * s.length) - 1)] : NaN;
 };
 
-for (const f of readdirSync("eval/results").filter((f) => f.endsWith(".json")).sort()) {
+const filter = process.argv[2] ?? "";
+for (const f of readdirSync("eval/results").filter((f) => f.endsWith(".json") && f.includes(filter)).sort()) {
   const d = JSON.parse(readFileSync(`eval/results/${f}`, "utf8"));
   // 保存済みの出力を今の採点で付け直す（採点を直したときに AI を呼び直さなくて済むように）
   const rows: any[] = d.rows
     .filter((r: any) => r.status === 200)
-    .map((r: any) => ({ ...r, errors: r.output ? CASES.find((c) => c.id === r.id)!.check(r.output) : r.errors }));
+    .map((r: any) => {
+      const c = ALL.find((c) => c.id === r.id)!;
+      return { ...r, errors: r.output ? c.check(r.output) : r.errors, guarded: r.output ? c.check(guard(r.output)) : r.errors };
+    });
   const by = (pred: (r: any) => boolean) => rows.filter(pred);
   const ok = (rs: any[]) => rs.filter((r) => r.errors.length === 0).length;
 
   const extract = by((r) => r.group === "extract" || r.group === "clarify-extract");
   const deferred = by((r) => r.group === "deferred");
-  const clar = by((r) => [24, 25, 26].includes(r.id));
+  const clar = by((r) => r.group === "clarify-extract");
   const fab = rows.filter((r) => r.fabricated.length);
   const ms = rows.map((r) => r.ms);
 
@@ -52,8 +66,8 @@ for (const f of readdirSync("eval/results").filter((f) => f.endsWith(".json")).s
   const failed = d.rows.filter((r: any) => r.status !== 200).length;
   const retries = d.rows.reduce((s: number, r: any) => s + r.retries429, 0);
 
-  console.log(`## ${d.name}［指示文 ${d.prompt ?? "v1"}］（${d.model}）${d.stopped ? ` ※${d.stopped}` : ""}`);
-  console.log(`- 取り出し正確さ: ${pct(ok(extract), extract.length)}`);
+  console.log(`## ${d.name}［指示文 ${d.prompt ?? "v1"}・組 ${d.set ?? "base"}${d.tag ? `・${d.tag}` : ""}］（${d.model}）${d.stopped ? ` ※${d.stopped}` : ""}`);
+  console.log(`- 取り出し正確さ: ${pct(ok(extract), extract.length)}（サーバ側の補正込み ${pct(extract.filter((r) => r.guarded.length === 0).length, extract.length)}）`);
   console.log(`- 後回し機能の判別: ${pct(ok(deferred), deferred.length)}`);
   console.log(`- 聞き返し: ${pct(ok(clar), clar.length)}`);
   console.log(`- 捏造: ${fab.length} 件 ${fab.map((r) => `#${r.id}:${r.fabricated.join(",")}`).join(" ")}`);

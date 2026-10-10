@@ -77,7 +77,9 @@ export const CASES: Case[] = [
   ]),
   C(10, "extract", "ガブリアスとサーフゴーどっちが速い？", (o) => [...intent(o, "speed"), ...hasNames(o, "ガブリアス", "サーフゴー")]),
   C(11, "extract", "最速スカーフのガブリアスって、最速のドラパルト抜ける？", (o) => {
-    const maxCount = (allText(o).match(/"speed":"max"/g) ?? []).length;
+    // 最速は speed:"max" でも、S の SP 32 ＋ S 上昇の性格（v5 以降の形）でもよい
+    const sides = [o.conditions?.attacker ?? {}, o.conditions?.defender ?? {}];
+    const maxCount = sides.filter((x: Out) => x.speed === "max" || (x.sp?.spe === 32 && /^(spe|speed|s)$/i.test(String(x.nature_up ?? "")))).length;
     return [
       ...intent(o, "speed"), ...hasNames(o, "ガブリアス", "ドラパルト"),
       ...asks(o, /スカーフ/, "スカーフ"), ...(maxCount >= 2 ? [] : [`最速が ${maxCount} 体分`]),
@@ -100,7 +102,8 @@ export const CASES: Case[] = [
     ...intent(o, "clarify"),
     ...((o.missing ?? []).some((m: string) => /defender|防御|相手|受け/.test(m)) ? [] : [`missing=${JSON.stringify(o.missing)}`]),
   ]),
-  C(26, "clarify-extract", "ガブリアスにアロロのじゃれつく", (o) => [
+  // 名前の確認はサーバ側で行う（v6 以降の設計案）ので、「アロロ」を攻撃側として取り出せば、サーバが「分からない」と返せる
+  C(26, "clarify-extract", "ガブリアスにアロロのじゃれつく", (o) => norm(o.attacker) === "アロロ" && norm(o.defender) === "ガブリアス" ? [] : [
     ...intent(o, "clarify"),
     ...((o.unknown_names ?? []).some((m: string) => m.includes("アロロ")) ? [] : [`unknown_names=${JSON.stringify(o.unknown_names)}`]),
   ]),
@@ -124,10 +127,11 @@ export const CASES: Case[] = [
   }),
 ];
 
-/** 数値の捏造: SP・ランク以外の場所に数値がある、または「%」「ダメージ」付きの数字がある */
+/** 数値の捏造: SP・ランク・残り HP 以外の場所に数値がある、または「%」「ダメージ」付きの数字がある */
 export function fabrication(o: unknown, path: string[] = []): string[] {
   if (typeof o === "number") {
-    return path.some((p) => p === "sp" || p === "boosts") ? [] : [`${path.join(".")}=${o}`];
+    // SP・ランク・残り HP はユーザーが言った値なので数値でよい
+    return path.some((p) => ["sp", "boosts", "hp_left", "hp_left_percent"].includes(p)) ? [] : [`${path.join(".")}=${o}`];
   }
   if (typeof o === "string") return /\d+(\.\d+)?\s*(%|％|ダメージ|発)/.test(o) ? [`${path.join(".")}="${o}"`] : [];
   if (Array.isArray(o)) return o.flatMap((v, i) => fabrication(v, [...path, String(i)]));

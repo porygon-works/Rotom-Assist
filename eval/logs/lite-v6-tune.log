@@ -1,0 +1,27 @@
+gemini-3.5-flash-lite run1 #111 915ms × intent=clarify（正解 damage）
+gemini-3.5-flash-lite run1 #112 727ms ○ 
+gemini-3.5-flash-lite run1 #114 657ms ○ 
+gemini-3.5-flash-lite run1 #115 630ms ○ 
+gemini-3.5-flash-lite run1 #117 811ms ○ 
+gemini-3.5-flash-lite run1 #118 498ms ○ 
+gemini-3.5-flash-lite run1 #120 673ms × intent=clarify（正解 damage） / defender=undefined（正解 エンペルト）
+gemini-3.5-flash-lite run1 #121 700ms ○ 
+gemini-3.5-flash-lite run1 #123 626ms ○ 
+gemini-3.5-flash-lite run1 #124 689ms ○ 
+gemini-3.5-flash-lite run1 #126 650ms ○ 
+gemini-3.5-flash-lite run1 #127 607ms ○ 
+gemini-3.5-flash-lite run1 #129 698ms ○ 
+gemini-3.5-flash-lite run1 #130 550ms ○ 
+gemini-3.5-flash-lite run1 #132 849ms ○ 
+gemini-3.5-flash-lite run1 #133 691ms ○ 
+  #135 429（1 回目）→ 20s 待つ
+gemini-3.5-flash-lite run1 #135 618ms ○ 
+  #136 429（1 回目）→ 20s 待つ
+  #136 429（2 回目）→ 20s 待つ
+gemini-3.5-flash-lite run1 #136 839ms × intent=clarify（正解 damage） / defender=undefined（正解 カイリュー）
+gemini-3.5-flash-lite run1 #138 624ms ○ 
+gemini-3.5-flash-lite run1 #139 690ms × intent=damage（正解 clarify）
+gemini-3.5-flash-lite run1 #141 706ms ○ 
+gemini-3.5-flash-lite run1 #143 668ms ○ 
+gemini-3.5-flash-lite run1 #145 668ms ○ 
+done gemini-3.5-flash-lite

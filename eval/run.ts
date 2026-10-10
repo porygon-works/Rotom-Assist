@@ -1,8 +1,9 @@
 // AI 比較テスト（docs/eval-plan.md）。全候補を OpenAI 互換の窓口で呼ぶ（要件 N8）。
-// 使い方: npx tsx eval/run.ts <候補名> [--prompt v1] [--repeat 3] [--only 1,2,3] [--no-burst]
-// キーは環境変数 GEMINI_API_KEY / GROQ_API_KEY から読む。結果は eval/results/<候補名>[-<指示文>].json に書く（v1 は接尾辞なし）。
+// 使い方: npx tsx eval/run.ts <候補名> [--prompt v1] [--set base|tune|holdout] [--repeat 3] [--only 1,2,3] [--no-burst] [--tag 名前]
+// キーは環境変数 GEMINI_API_KEY / GROQ_API_KEY から読む。結果は eval/results/<候補名>[-<指示文>][-<組>][-<tag>].json に書く（v1・base は接尾辞なし）。
 import { mkdirSync, writeFileSync } from "node:fs";
 import { CASES, canonical, fabrication, type Case, type Out } from "./cases";
+import { SETS } from "./cases2";
 import { PROMPTS } from "./prompt";
 
 interface Provider {
@@ -142,7 +143,11 @@ async function main() {
   SYSTEM = PROMPTS[promptName];
   const repeat = Number(args[args.indexOf("--repeat") + 1]) || 3;
   const only = args.includes("--only") ? args[args.indexOf("--only") + 1].split(",").map(Number) : null;
-  const cases = only ? CASES.filter((c) => only.includes(c.id)) : CASES;
+  const setName = args.includes("--set") ? args[args.indexOf("--set") + 1] : "base";
+  const pool = setName === "base" ? CASES : SETS[setName];
+  if (!pool) throw new Error(`組: base / ${Object.keys(SETS).join(" / ")}`);
+  const cases = only ? pool.filter((c) => only.includes(c.id)) : pool;
+  const tag = args.includes("--tag") ? args[args.indexOf("--tag") + 1] : "";
 
   const rows: Row[] = [];
   let stopped: string | null = null;
@@ -163,8 +168,8 @@ async function main() {
     bursts = await burst(p);
   }
   mkdirSync("eval/results", { recursive: true });
-  const file = promptName === "v1" ? name : `${name}-${promptName}`;
-  writeFileSync(`eval/results/${file}.json`, JSON.stringify({ name, prompt: promptName, model: p.model, extra: p.extra, date: new Date().toISOString(), stopped, rows, bursts }, null, 2));
+  const file = [name, promptName === "v1" ? "" : promptName, setName === "base" ? "" : setName, tag].filter(Boolean).join("-");
+  writeFileSync(`eval/results/${file}.json`, JSON.stringify({ name, prompt: promptName, set: setName, tag, model: p.model, extra: p.extra, date: new Date().toISOString(), stopped, rows, bursts }, null, 2));
   console.error(`done ${name}${stopped ? ` (${stopped})` : ""}`);
 }
 

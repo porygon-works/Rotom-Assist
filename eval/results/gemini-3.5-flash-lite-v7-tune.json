@@ -1,0 +1,718 @@
+{
+  "name": "gemini-3.5-flash-lite",
+  "prompt": "v7",
+  "set": "tune",
+  "tag": "",
+  "model": "gemini-3.5-flash-lite",
+  "extra": {
+    "reasoning_effort": "minimal"
+  },
+  "date": "2026-10-10T16:40:58.792Z",
+  "stopped": null,
+  "rows": [
+    {
+      "id": 111,
+      "group": "extract",
+      "run": 1,
+      "ms": 1035,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "attacker": "ハバタクカミ",
+        "defender": "カイリュー",
+        "move": "ムーンフォース",
+        "conditions": {
+          "attacker": {
+            "nature_up": "spa",
+            "sp": {
+              "spa": 32
+            }
+          },
+          "defender": {
+            "sp": {
+              "hp": 32
+            }
+          }
+        },
+        "uses_context": false,
+        "missing": [],
+        "intent": "damage"
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 129,
+        "prompt_tokens": 1836,
+        "total_tokens": 1965
+      }
+    },
+    {
+      "id": 112,
+      "group": "extract",
+      "run": 1,
+      "ms": 669,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "attacker": "ガブリアス",
+        "defender": "ドラパルト",
+        "conditions": {
+          "attacker": {
+            "sp": {
+              "spe": 32
+            }
+          },
+          "defender": {
+            "nature_up": "spe",
+            "sp": {
+              "spe": 32
+            }
+          }
+        },
+        "uses_context": false,
+        "missing": [],
+        "ask": "compare",
+        "intent": "speed"
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 126,
+        "prompt_tokens": 1835,
+        "total_tokens": 1961
+      }
+    },
+    {
+      "id": 114,
+      "group": "extract",
+      "run": 1,
+      "ms": 484,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "attacker": "ウォッシュロトム",
+        "defender": "ガブリアス",
+        "move": "ハイドロポンプ",
+        "conditions": {
+          "field": {
+            "weather": "雨"
+          }
+        },
+        "uses_context": false,
+        "intent": "damage"
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 79,
+        "prompt_tokens": 1835,
+        "total_tokens": 1914
+      }
+    },
+    {
+      "id": 115,
+      "group": "extract",
+      "run": 1,
+      "ms": 592,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "attacker": "テツノカイナ",
+        "defender": "サーフゴー",
+        "move": "ワイルドボルト",
+        "conditions": {
+          "field": {
+            "terrain": "エレキフィールド"
+          }
+        },
+        "uses_context": false,
+        "missing": [],
+        "intent": "damage"
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 87,
+        "prompt_tokens": 1836,
+        "total_tokens": 1923
+      }
+    },
+    {
+      "id": 117,
+      "group": "extract",
+      "run": 1,
+      "ms": 612,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "attacker": "ガブリアス",
+        "defender": "サーフゴー",
+        "move": "じしん",
+        "conditions": {
+          "defender": {
+            "hp_left_percent": 50
+          }
+        },
+        "uses_context": false,
+        "intent": "damage"
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 81,
+        "prompt_tokens": 1834,
+        "total_tokens": 1915
+      }
+    },
+    {
+      "id": 118,
+      "group": "extract",
+      "run": 1,
+      "ms": 612,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "attacker": "ハバタクカミ",
+        "defender": "カイリュー",
+        "move": "ムーンフォース",
+        "conditions": {
+          "defender": {
+            "hp_left_percent": 30
+          }
+        },
+        "uses_context": false,
+        "intent": "damage"
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 82,
+        "prompt_tokens": 1835,
+        "total_tokens": 1917
+      }
+    },
+    {
+      "id": 120,
+      "group": "extract",
+      "run": 1,
+      "ms": 701,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "attacker": "ガブリアス",
+        "defender": "エンペルト",
+        "move": "じしん",
+        "conditions": {
+          "attacker": {
+            "nature": "いじっぱり",
+            "nature_up": "atk",
+            "nature_down": "spa"
+          }
+        },
+        "uses_context": false,
+        "missing": [],
+        "intent": "damage"
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 105,
+        "prompt_tokens": 1831,
+        "total_tokens": 1936
+      }
+    },
+    {
+      "id": 121,
+      "group": "extract",
+      "run": 1,
+      "ms": 722,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "attacker": "ガブリアス",
+        "defender": "ドラパルト",
+        "conditions": {
+          "attacker": {
+            "item": "こだわりスカーフ",
+            "sp": {
+              "spe": 32
+            }
+          },
+          "defender": {
+            "nature_up": "spe",
+            "sp": {
+              "spe": 32
+            }
+          }
+        },
+        "uses_context": false,
+        "ask": "compare",
+        "intent": "speed"
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 131,
+        "prompt_tokens": 1837,
+        "total_tokens": 1968
+      }
+    },
+    {
+      "id": 123,
+      "group": "extract",
+      "run": 1,
+      "ms": 662,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "attacker": "ガブリアス",
+        "defender": "カイリュー",
+        "move": "じしん",
+        "conditions": {
+          "field": {
+            "terrain": "グラスフィールド"
+          }
+        },
+        "uses_context": false,
+        "missing": [],
+        "intent": "damage"
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 83,
+        "prompt_tokens": 1829,
+        "total_tokens": 1912
+      }
+    },
+    {
+      "id": 124,
+      "group": "extract",
+      "run": 1,
+      "ms": 676,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "attacker": "ウォッシュロトム",
+        "defender": "リザードン",
+        "move": "ハイドロポンプ",
+        "conditions": {
+          "field": {
+            "weather": "晴れ"
+          }
+        },
+        "uses_context": false,
+        "missing": [],
+        "intent": "damage"
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 86,
+        "prompt_tokens": 1836,
+        "total_tokens": 1922
+      }
+    },
+    {
+      "id": 126,
+      "group": "extract",
+      "run": 1,
+      "ms": 915,
+      "status": 200,
+      "retries429": 1,
+      "output": {
+        "attacker": "ガブリアス",
+        "defender": "エンペルト",
+        "move": "じしん",
+        "conditions": {
+          "attacker": {
+            "ability": "さめはだ",
+            "nature": "いじっぱり",
+            "nature_up": "atk",
+            "nature_down": "spa",
+            "sp": {
+              "atk": 32
+            }
+          },
+          "defender": {
+            "sp": {
+              "hp": 32
+            }
+          }
+        },
+        "uses_context": false,
+        "intent": "damage"
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 153,
+        "prompt_tokens": 1835,
+        "total_tokens": 1988
+      }
+    },
+    {
+      "id": 127,
+      "group": "extract",
+      "run": 1,
+      "ms": 778,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "attacker": "ヒートロトム",
+        "defender": "ハッサム",
+        "move": "オーバーヒート",
+        "intent": "damage"
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 42,
+        "prompt_tokens": 1829,
+        "total_tokens": 1871
+      }
+    },
+    {
+      "id": 129,
+      "group": "extract",
+      "run": 1,
+      "ms": 745,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "attacker": "ガブリアス",
+        "defender": "ドラパルト",
+        "conditions": {
+          "attacker": {
+            "boosts": {
+              "spe": 1
+            }
+          },
+          "defender": {
+            "item": "こだわりスカーフ"
+          }
+        },
+        "uses_context": false,
+        "missing": [],
+        "ask": "compare",
+        "intent": "speed"
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 110,
+        "prompt_tokens": 1839,
+        "total_tokens": 1949
+      }
+    },
+    {
+      "id": 130,
+      "group": "extract",
+      "run": 1,
+      "ms": 633,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "attacker": "イダイトウ",
+        "defender": "メガルカリオZ",
+        "uses_context": false,
+        "ask": "threshold",
+        "intent": "speed"
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 51,
+        "prompt_tokens": 1834,
+        "total_tokens": 1885
+      }
+    },
+    {
+      "id": 132,
+      "group": "extract",
+      "run": 1,
+      "ms": 681,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "attacker": "ガブリアス",
+        "defender": "サーフゴー",
+        "move": "じしん",
+        "conditions": {
+          "field": {
+            "reflect": true
+          }
+        },
+        "uses_context": false,
+        "missing": [],
+        "intent": "damage"
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 81,
+        "prompt_tokens": 1835,
+        "total_tokens": 1916
+      }
+    },
+    {
+      "id": 133,
+      "group": "extract",
+      "run": 1,
+      "ms": 630,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "attacker": "ミミッキュ",
+        "defender": "ガブリアス",
+        "move": "じゃれつく",
+        "conditions": {
+          "field": {
+            "critical": true
+          }
+        },
+        "uses_context": false,
+        "missing": [],
+        "intent": "damage"
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 82,
+        "prompt_tokens": 1835,
+        "total_tokens": 1917
+      }
+    },
+    {
+      "id": 135,
+      "group": "extract",
+      "run": 1,
+      "ms": 652,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "attacker": "ハバタクカミ",
+        "defender": "ドラパルト",
+        "move": "ムーンフォース",
+        "conditions": {
+          "field": {
+            "terrain": "ミストフィールド"
+          }
+        },
+        "uses_context": false,
+        "missing": [],
+        "intent": "damage"
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 87,
+        "prompt_tokens": 1837,
+        "total_tokens": 1924
+      }
+    },
+    {
+      "id": 136,
+      "group": "extract",
+      "run": 1,
+      "ms": 751,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "attacker": "ガブリアス",
+        "defender": "カイリュー",
+        "move": "げきりん",
+        "conditions": {
+          "attacker": {
+            "item": "いのちのたま",
+            "nature_up": "atk",
+            "sp": {
+              "atk": 32
+            }
+          },
+          "defender": {
+            "sp": {
+              "hp": 32
+            }
+          }
+        },
+        "uses_context": false,
+        "missing": [],
+        "intent": "damage"
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 138,
+        "prompt_tokens": 1836,
+        "total_tokens": 1974
+      }
+    },
+    {
+      "id": 138,
+      "group": "extract",
+      "run": 1,
+      "ms": 623,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "speed",
+        "ask": "compare",
+        "uses_context": true,
+        "attacker": "イダイトウ",
+        "defender": "メガルカリオZ",
+        "conditions": {
+          "attacker": {
+            "boosts": {
+              "spe": 1
+            }
+          },
+          "defender": {
+            "sp": {
+              "spe": 32
+            },
+            "nature_up": "spe"
+          }
+        }
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 58,
+        "prompt_tokens": 1885,
+        "total_tokens": 1943
+      }
+    },
+    {
+      "id": 139,
+      "group": "clarify-extract",
+      "run": 1,
+      "ms": 666,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "attacker": "ガブリアス",
+        "conditions": {
+          "attacker": {
+            "sp": {
+              "atk": 32
+            },
+            "nature_up": "atk"
+          }
+        },
+        "move": "じしん",
+        "missing": [
+          "defender"
+        ],
+        "intent": "clarify"
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 92,
+        "prompt_tokens": 1829,
+        "total_tokens": 1921
+      }
+    },
+    {
+      "id": 141,
+      "group": "extract",
+      "run": 1,
+      "ms": 681,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "attacker": "ドラパルト",
+        "defender": "メガルカリオZ",
+        "conditions": {
+          "attacker": {
+            "sp": {
+              "spe": 32
+            }
+          },
+          "defender": {
+            "sp": {
+              "spe": 32
+            }
+          }
+        },
+        "uses_context": false,
+        "ask": "compare",
+        "intent": "speed"
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 111,
+        "prompt_tokens": 1837,
+        "total_tokens": 1948
+      }
+    },
+    {
+      "id": 143,
+      "group": "extract",
+      "run": 1,
+      "ms": 939,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "attacker": "ドドゲザン",
+        "defender": "サーフゴー",
+        "conditions": {
+          "attacker": {
+            "sp": {
+              "spe": 0
+            },
+            "nature_down": "spe"
+          },
+          "defender": {
+            "sp": {
+              "spe": 0
+            },
+            "nature_down": "spe"
+          }
+        },
+        "uses_context": false,
+        "missing": [],
+        "ask": "compare",
+        "intent": "speed"
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 134,
+        "prompt_tokens": 1835,
+        "total_tokens": 1969
+      }
+    },
+    {
+      "id": 145,
+      "group": "extract",
+      "run": 1,
+      "ms": 693,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "attacker": "サーフゴー",
+        "defender": "ガブリアス",
+        "move": "ゴールドラッシュ",
+        "conditions": {
+          "defender": {
+            "hp_left_percent": 70
+          }
+        },
+        "uses_context": false,
+        "missing": [],
+        "intent": "damage"
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 87,
+        "prompt_tokens": 1837,
+        "total_tokens": 1924
+      }
+    }
+  ],
+  "bursts": null
+}
