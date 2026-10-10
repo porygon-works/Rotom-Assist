@@ -10,6 +10,8 @@ import aliases from "../data/aliases.json";
 export interface AskResult {
   /** 読み上げる文 */
   speech: string;
+  /** 短い読み上げ（結論と数値だけ。なければ speech と同じ） */
+  short?: string;
   /** 画面の見出し（質問の解釈） */
   title: string;
   /** 画面に出す詳しい結果 */
@@ -182,7 +184,7 @@ function answerDamage(ex: Obj, text?: string): AskResult {
   }
   const special = result.category === "Special";
   const open = { attacker: !hasSpread(as, [special ? "spa" : "atk"]), defender: !hasSpread(ds, ["hp", special ? "spd" : "def"]) };
-  const { speech, lines } = damageSpeech({ attacker: a.ja, defender: d.ja, move: m.ja }, result, [...pr.notes, ...pr.list], {
+  const { speech, short, lines } = damageSpeech({ attacker: a.ja, defender: d.ja, move: m.ja }, result, [...pr.notes, ...pr.list], {
     question: damageQuestionOf(text),
     open,
     stealthRock: ds.stealthRock,
@@ -192,8 +194,11 @@ function answerDamage(ex: Obj, text?: string): AskResult {
   lines.push(`特性: ${abLine("攻撃側", as)}、${abLine("防御側", ds)}`);
   if (result.assumed.length) lines.push(`仮定: ${result.assumed.map((x) => (x.includes("振り方") ? `${x}は無振り（幅も表示）` : x)).join("、")}`);
   lines.push(result.base.desc);
+  // 名前が分からない・チャンピオンズにないなどの注意は、短い読み上げでも言う
+  const must = pr.list.length ? `${pr.list.join("。")}。` : "";
   return {
     speech,
+    short: must + short,
     title: `${sideLabel(a.ja, as)}の${m.ja} → ${sideLabel(d.ja, ds)}${fieldLabel(result.field)}`,
     lines,
     intent: "damage",

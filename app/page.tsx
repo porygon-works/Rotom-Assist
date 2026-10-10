@@ -11,6 +11,7 @@ interface Attempt {
 }
 interface AskResult {
   speech: string;
+  short?: string;
   title: string;
   lines: string[];
   intent: string;
@@ -41,6 +42,7 @@ export default function Home() {
   const [text, setText] = useState("");
   const [tapMode, setTapMode] = useState(false);
   const [mute, setMute] = useState(false);
+  const [brief, setBrief] = useState(false);
   const last = useRef<{ user: string; extraction: unknown } | null>(null);
 
   const send = useCallback(
@@ -67,7 +69,7 @@ export default function Home() {
         if (prev && prev.intent !== "error") setLog((l) => [prev, ...l].slice(0, 5));
         shownRef.current = item;
         setShown(item);
-        if (!mute) speak(r.speech);
+        if (!mute) speak(brief ? (r.short ?? r.speech) : r.speech);
       } catch {
         const msg = "通信に失敗したロト";
         setShown({ question: q, speech: msg, title: "エラー", lines: [], intent: "error", ms: performance.now() - t0 });
@@ -75,7 +77,7 @@ export default function Home() {
         setBusy(false);
       }
     },
-    [mute],
+    [mute, brief],
   );
 
   const mic = usePushToTalk(send);
@@ -189,8 +191,9 @@ export default function Home() {
 
       <div className="bar small">
         <label><input type="checkbox" checked={tapMode} onChange={(e) => setTapMode(e.target.checked)} /> タップで開始／終了</label>
+        <label><input type="checkbox" checked={brief} onChange={(e) => setBrief(e.target.checked)} /> 短く読む</label>
         <label><input type="checkbox" checked={mute} onChange={(e) => setMute(e.target.checked)} /> 読み上げない</label>
-        {shown && <button type="button" className="ghost" onClick={() => speak(shown.speech)}>もう一度読む</button>}
+        {shown && <button type="button" className="ghost" onClick={() => speak(brief ? (shown.short ?? shown.speech) : shown.speech)}>もう一度読む</button>}
       </div>
 
       <p className="small">

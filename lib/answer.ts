@@ -67,10 +67,11 @@ export interface DamageOptions {
   stealthRock?: boolean;
 }
 
-export function damageSpeech(n: DamageNames, d: DamageAnswer, notes: string[], opt: DamageOptions = {}): { speech: string; lines: string[] } {
+export function damageSpeech(n: DamageNames, d: DamageAnswer, notes: string[], opt: DamageOptions = {}): { speech: string; short: string; lines: string[] } {
   const b = d.base;
   if (b.immune) {
-    return { speech: `${n.attacker}の${n.move}は${n.defender}に効かないロト！`, lines: ["ダメージなし（タイプで無効、または特性など）"] };
+    const t = `${n.attacker}の${n.move}は${n.defender}に効かないロト！`;
+    return { speech: t, short: t, lines: ["ダメージなし（タイプで無効、または特性など）"] };
   }
   const lines = [`ダメージ ${rangeText(b)}・${koText(b.ko, false)}${opt.stealthRock ? "（ステロ込み）" : ""}`];
   if (b.curHP < b.hp) lines.push(`防御側の HP: ${b.curHP} / ${b.hp} で計算`);
@@ -97,9 +98,11 @@ export function damageSpeech(n: DamageNames, d: DamageAnswer, notes: string[], o
     speech = `${v}${ko}ロト！ ${chance}${p(b.minPercent)}から${p(b.maxPercent)}パーセントロト`;
   }
   if (b.curHP < b.hp) speech += `。残りHP${b.curHP}で計算したロト`;
+  // 短い読み上げ: 結論・確定数・ダメージ範囲だけ（振り方の幅や特性の一言は画面だけ）
+  const short = `${v}${ko}ロト。${p(b.minPercent)}から${p(b.maxPercent)}パーセント${b.endured ? "。タスキで1回耐えるロト" : ""}`;
   if (b.endured) notes = [...notes, `${n.defender}は${b.endured === "Focus Sash" ? "タスキ" : "がんじょう"}で1回耐えるロト`];
   if (notes.length) speech = `${notes.join("。")}。${speech}`;
-  return { speech, lines };
+  return { speech, short, lines };
 }
 
 export const STAT_JA: Record<string, string> = { hp: "H", atk: "A", def: "B", spa: "C", spd: "D", spe: "S" };
