@@ -34,7 +34,7 @@
 | `attacker` / `defender` | ポケモン（英語名） | `Mimikyu` / `Garchomp` |
 | `pokemon` | 単体の質問の対象 | `Gholdengo` |
 | `move` | わざ（英語名） | `Play Rough` |
-| `conditions` | 指定された条件 | 持ち物、特性、性格、努力値、ランク、天候、フィールド、メガシンカ、最速・最遅 など（側ごと） |
+| `conditions` | 指定された条件 | 持ち物、特性、性格、SP（ステータスポイント。「252振り」と言われた場合は 32 とみなす）、ランク、天候、フィールド、メガシンカ、最速・最遅 など（側ごと） |
 | `uses_context` | 直前の会話を使ったか | `true` / `false` |
 | `missing` | 足りない情報 | `["defender"]` |
 | `unknown_names` | 知らない名前 | `["アロロ"]` |
@@ -46,20 +46,20 @@
 |---|---|---|---|
 | 1 | ダメ計・基本 | ガブリアスにミミッキュのじゃれつく | damage / 攻 Mimikyu / 防 Garchomp / Play Rough |
 | 2 | ダメ計・言い回し | ミミッキュのじゃれつくでガブリアスどれくらい減る？ | #1 と同じ |
-| 3 | ダメ計・言い回し | ハバタクカミのムーンフォース、カイリューに何発？ | damage / 攻 Flutter Mane / 防 Dragonite / Moonblast |
+| 3 | ダメ計・言い回し | サーナイトのムーンフォース、カイリューに何発？ | damage / 攻 Gardevoir / 防 Dragonite / Moonblast |
 | 4 | ダメ計・持ち物 | スカーフガブリアスのじしん、サーフゴーに | 攻の持ち物 Choice Scarf / Earthquake / 防 Gholdengo |
 | 5 | ダメ計・持ち物 | いのちのたまリザードンのねっぷう、ハッサムに | 攻の持ち物 Life Orb / Heat Wave / 防 Scizor |
-| 6 | ダメ計・相手の持ち物 | 相手のハッサムがハチマキだったら、バレットパンチでハバタクカミ落ちる？ | 攻 Scizor（Choice Band）/ Bullet Punch / 防 Flutter Mane |
+| 6 | ダメ計・相手の持ち物 | 相手のハッサムがハチマキだったら、バレットパンチでサーナイト落ちる？ | 攻 Scizor（Choice Band）/ Bullet Punch / 防 Gardevoir |
 | 7 | ダメ計・メガ・天候 | メガリザードンYのかえんほうしゃ、晴れでドドゲザンに | 攻 Charizard-Mega-Y / Flamethrower / 天候 晴れ / 防 Kingambit |
 | 8 | ダメ計・ランク | 攻撃1段階上がったカイリューのしんそく、ガブリアスに | 攻のランク 攻撃+1 / Extreme Speed |
-| 9 | ダメ計・努力値 | HP252振りのガブリアス、サーフゴーのゴールドラッシュ耐える？ | 防の努力値 HP252 / 攻 Gholdengo / Make It Rain |
+| 9 | ダメ計・SP | HPに32振ったガブリアス、サーフゴーのゴールドラッシュ耐える？ | 防の SP HP32 / 攻 Gholdengo / Make It Rain |
 | 10 | 素早さ | ガブリアスとサーフゴーどっちが速い？ | speed / Garchomp と Gholdengo |
-| 11 | 素早さ・条件 | 最速スカーフのガブリアスって、最速のハバタクカミ抜ける？ | speed / 両方 最速、ガブリアスに Choice Scarf |
+| 11 | 素早さ・条件 | 最速スカーフのガブリアスって、最速のドラパルト抜ける？ | speed / 両方 最速、ガブリアスに Choice Scarf |
 | 12 | 素早さ・実数値 | ドラパルトの素早さ実数値いくつ？ | speed（単体）/ Dragapult |
 | 13 | タイプ | サーフゴーのタイプは？ | type / Gholdengo |
 | 14 | 相性 | サーフゴーの弱点は？ | type（相性）/ Gholdengo |
 | 15 | 種族値 | カイリューの種族値教えて | stats / Dragonite |
-| 16 | 覚える技 | ハバタクカミってでんじは覚える？ | learnset / Flutter Mane / Thunder Wave |
+| 16 | 覚える技 | サーナイトってでんじは覚える？ | learnset / Gardevoir / Thunder Wave |
 | 17 | わざ情報 | じゃれつくって何タイプ？ | move_info / Play Rough |
 | 18 | 自分のパーティの判別 | 自分のミミッキュの技なんだっけ | my_team / Mimikyu |
 | 19 | 自分のパーティの判別 | うちのガブリアスの努力値振り教えて | my_team / Garchomp |
@@ -71,11 +71,11 @@
 | 25 | 情報不足 | ミミッキュのじゃれつく | clarify / missing: defender |
 | 26 | 存在しない名前 | ガブリアスにアロロのじゃれつく | clarify / unknown_names: アロロ |
 | 27 | 聞き間違い | が降りあすに見っきゅのじゃれつく | #1 と同じに補正できれば満点 |
-| 28 | 聞き間違い | ハバタク神のムーンフォース、カイリューに | #3 と同じ |
+| 28 | 聞き間違い | さあ内藤のムーンフォース、カイリューに | #3 と同じ |
 | 29 | 複数の質問 | ガブリアスの素早さと、サーフゴーのタイプ教えて | 2 つに分ける、または clarify |
 | 30 | 前の会話を使う | （#1 のあとで）じゃあハチマキ持ってたら？ | #1 ＋ 攻の持ち物 Choice Band / uses_context: true |
 
-- ポケモン・わざはチャンピオンズにいるかを確認していない（要件 R1）。実施前に入れ替える
+- ポケモンはチャンピオンズにいるものに入れ替え済み（[data-survey.md](data-survey.md) 3 章）。チャンピオンズは努力値の代わりに SP（ステータスポイント）を使うので、#9 は SP で聞く
 - #7 のメガシンカ、#30 の会話の引き継ぎは、要件の L3・F3 に関わる
 
 ## 5. 評価の観点と合格ライン（案）
