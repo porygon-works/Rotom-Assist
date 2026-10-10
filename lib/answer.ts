@@ -74,10 +74,12 @@ export function damageSpeech(n: DamageNames, d: DamageAnswer, notes: string[], o
   }
   const lines = [`ダメージ ${rangeText(b)}・${koText(b.ko, false)}${opt.stealthRock ? "（ステロ込み）" : ""}`];
   if (b.curHP < b.hp) lines.push(`防御側の HP: ${b.curHP} / ${b.hp} で計算`);
+  if (b.endured) lines.push(`${b.endured === "Focus Sash" ? "きあいのタスキ" : "がんじょう"}で 1 発目は耐える（満タンのとき）`);
   const sr = opt.stealthRock ? "ステロ込みで" : "";
   const ko = `${sr}${koSpeech(b.ko)}`;
-  const chance = b.ko.kind === "chance" && b.ko.n < 5 ? `倒せるのは${chanceSpeech(b.ko.chance)}。` : "";
   const v = verdict(b.ko, opt.question ?? "plain");
+  // 結論で確率を言ったときは繰り返さない
+  const chance = b.ko.kind === "chance" && b.ko.n < 5 && !v.includes("確率") ? `倒せるのは${chanceSpeech(b.ko.chance)}。` : "";
   let speech: string;
   if (d.range) {
     const lo = d.range.low;
@@ -95,6 +97,7 @@ export function damageSpeech(n: DamageNames, d: DamageAnswer, notes: string[], o
     speech = `${v}${ko}ロト！ ${chance}${p(b.minPercent)}から${p(b.maxPercent)}パーセントロト`;
   }
   if (b.curHP < b.hp) speech += `。残りHP${b.curHP}で計算したロト`;
+  if (b.endured) notes = [...notes, `${n.defender}は${b.endured === "Focus Sash" ? "タスキ" : "がんじょう"}で1回耐えるロト`];
   if (notes.length) speech = `${notes.join("。")}。${speech}`;
   return { speech, lines };
 }

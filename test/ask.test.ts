@@ -65,6 +65,14 @@ describe("計算（チャンピオンズ・第0世代）", () => {
     expect(zard.field.weather).toBe("Sun");
     expect(speedOf({ species: "Basculegion" }, { weather: "Rain" })).toBe(2 * speedOf({ species: "Basculegion" }));
   });
+  it("気合の襷: 満タンなら 1 発目は耐える（計算ライブラリが反映しないのでアプリで補う）", () => {
+    const a = { species: "Garchomp", sp: { atk: 32 }, natureUp: "atk" as const };
+    expect(damage(a, { species: "Kingambit" }, "Earthquake").base.ko.n).toBe(1);
+    const sash = damage(a, { species: "Kingambit", item: "Focus Sash" }, "Earthquake").base;
+    expect(sash.ko).toMatchObject({ kind: "guaranteed", n: 2 });
+    expect(sash.endured).toBe("Focus Sash");
+    expect(damage(a, { species: "Kingambit", item: "Focus Sash", hpLeftPercent: 90 }, "Earthquake").base.endured).toBeUndefined();
+  });
   it("素早さ: ランク・スカーフ・最速・最遅", () => {
     expect(speedOf({ species: "Garchomp", sp: { spe: 32 }, natureUp: "spe" })).toBe(169);
     expect(speedOf({ species: "Garchomp", sp: { spe: 32 }, item: "Choice Scarf" })).toBe(231);

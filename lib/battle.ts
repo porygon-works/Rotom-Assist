@@ -149,6 +149,8 @@ export interface DamageResult {
   ko: Ko;
   immune: boolean;
   desc: string;
+  /** 満タンから 1 発で倒れるはずを、気合の襷・がんじょうで耐えた（その持ち物・特性の英語名） */
+  endured?: string;
 }
 
 function one(a: SideInput, d: SideInput, move: string, f: FieldInput): DamageResult {
@@ -166,7 +168,14 @@ function one(a: SideInput, d: SideInput, move: string, f: FieldInput): DamageRes
     const k = r.kochance();
     if (k.n) ko = { kind: k.chance === 1 ? "guaranteed" : "chance", n: k.n, chance: k.chance ?? 0 };
   }
-  return { min, max, minPercent: pct(min), maxPercent: pct(max), hp, curHP: defender.curHP(), ko, immune: max === 0, desc: max === 0 ? "" : r.desc() };
+  // 気合の襷・がんじょう: 計算ライブラリの確定数は反映しないので、ここで補う（満タン・連続技でないとき、1 発目は 1 残る）
+  let endured: string | undefined;
+  const sturdy = d.item === "Focus Sash" ? "Focus Sash" : abilityOf(d) === "Sturdy" ? "Sturdy" : undefined;
+  if (sturdy && ko.n === 1 && defender.curHP() === hp && (m.hits ?? 1) <= 1) {
+    endured = sturdy;
+    ko = { kind: "guaranteed", n: 2, chance: 1 };
+  }
+  return { min, max, minPercent: pct(min), maxPercent: pct(max), hp, curHP: defender.curHP(), ko, immune: max === 0, desc: max === 0 ? "" : r.desc(), endured };
 }
 
 export interface DamageAnswer {
