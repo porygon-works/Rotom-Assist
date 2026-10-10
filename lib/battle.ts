@@ -63,9 +63,9 @@ export function abilityOf(s: SideInput): string | undefined {
   return s.ability ?? defaultAbility(s.species);
 }
 
-/** 計算に効く特性か（言わなかったのに使ったら読み上げで添える。data/default-abilities.json の notable） */
-export function isNotableAbility(ab: string | undefined): boolean {
-  return !!ab && defaults.notable.includes(ab);
+/** その側で計算に効く特性か（言わなかったのに使ったら読み上げで添える。data/default-abilities.json の notableAttack / notableDefense） */
+export function isNotableAbility(ab: string | undefined, role: "attacker" | "defender"): boolean {
+  return !!ab && (role === "attacker" ? defaults.notableAttack : defaults.notableDefense).includes(ab);
 }
 
 /** 計算ライブラリがダメージに反映しない特性か（ばけのかわ） */

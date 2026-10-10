@@ -286,6 +286,8 @@ export function parseRules(text: string): Obj | null {
     if (has(/弱点|ジャクテン|タイプ|相性/) && !has(/素早サ|スバヤサ|種族値|シュゾクチ/)) return { pokemon: p.name, intent: "type" };
     if (has(/種族値|シュゾクチ/) && !has(/弱点|ジャクテン|タイプ/)) return { pokemon: p.name, intent: "stats" };
     if (has(/素早サ|スバヤサ|実数値/)) return { pokemon: p.name, conditions: conditions(Object.keys(p.cond).length ? { pokemon: p.cond } : {}), ask: "value", intent: "speed" };
+    // 名前だけ（「ガブリアス」）: 何を調べるか聞き返す
+    if (!words.length && !Object.keys(p.cond).length && toks.length === 1) return { pokemon: p.name, intent: "clarify" };
     return null;
   }
 

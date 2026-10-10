@@ -65,7 +65,12 @@
     "Surge Surfer": "Electric"
   },
   "_note_speed": "素早さの質問で、天候・フィールドが合うときは、この特性を優先する（雨のイダイトウはすいすい など）",
-  "notable": [
+  "_note_notable": "notableAttack / notableDefense: 言わなかったのに使ったら読み上げで添える特性。攻撃側には攻撃に効くもの、防御側には守りに効くものだけ添える",
+  "notCalculated": [
+    "Disguise"
+  ],
+  "_note_notCalculated": "notCalculated: 計算ライブラリがダメージに反映しない特性。使うときは『計算に入れてない』と添える（ばけのかわ）",
+  "notableAttack": [
     "Huge Power",
     "Pure Power",
     "Pixilate",
@@ -86,7 +91,9 @@
     "Steelworker",
     "Water Bubble",
     "Gorilla Tactics",
-    "Sheer Force",
+    "Sheer Force"
+  ],
+  "notableDefense": [
     "Multiscale",
     "Fur Coat",
     "Ice Scales",
@@ -96,10 +103,5 @@
     "Prism Armor",
     "Thick Fat",
     "Levitate"
-  ],
-  "_note_notable": "notable: 言わなかったのに使ったら読み上げで添える特性（計算に効くもの）",
-  "notCalculated": [
-    "Disguise"
-  ],
-  "_note_notCalculated": "notCalculated: 計算ライブラリがダメージに反映しない特性。使うときは『計算に入れてない』と添える（ばけのかわ）"
+  ]
 }

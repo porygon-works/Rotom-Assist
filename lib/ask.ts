@@ -175,9 +175,9 @@ function answerDamage(ex: Obj, text?: string): AskResult {
   });
   pr.notes.push(...autoNotes);
   // 言わなかったのに計算に効く特性を使ったら添える（「カイリューはマルチスケイルで計算したロト」）
-  for (const [sd, ja] of [[as, a.ja], [ds, d.ja]] as const) {
+  for (const [sd, ja, role] of [[as, a.ja, "attacker"], [ds, d.ja, "defender"]] as const) {
     const ab = abilityOf(sd);
-    if (!sd.ability && isNotableAbility(ab) && !result.autoField.some((x) => x.endsWith(`:${ab}`))) pr.notes.push(`${ja}は${toJa("abilities", ab!)}で計算したロト`);
+    if (!sd.ability && isNotableAbility(ab, role) && !result.autoField.some((x) => x.endsWith(`:${ab}`))) pr.notes.push(`${ja}は${toJa("abilities", ab!)}で計算したロト`);
     if (sd === ds && isNotCalculated(ab)) pr.notes.push(`${ja}の${toJa("abilities", ab!)}は計算に入れてないロト`);
   }
   const special = result.category === "Special";
@@ -422,6 +422,9 @@ export function answerExtraction(ex: Obj, text?: string): AskResult {
         if (!missing.length && str(ex.attacker) && str(ex.defender) && str(ex.move)) return answerDamage(ex, text);
         const pr = new Problems();
         for (const [k, kind] of [["attacker", "pokemon"], ["defender", "pokemon"], ["move", "moves"]] as const) pr.name(kind, str(ex[k]));
+        // ポケモンの名前だけ（「ガブリアス」）: 何を調べるか聞き返す
+        const only = !missing.length && !str(ex.move) && pr.name("pokemon", str(ex.pokemon));
+        if (only) return fail("clarify", "聞き返し", [`${only.ja}の何を調べるロト？ ダメージ、素早さ、タイプ、種族値が分かるロト`]);
         return fail("clarify", "聞き返し", [...pr.list, clarifySpeech(missing)]);
       }
       default:
