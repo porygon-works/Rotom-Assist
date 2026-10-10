@@ -4,6 +4,7 @@ import { allTypes, damage, effectiveness, hasSpread, moveInfo, speciesInfo, spee
 import { CATEGORY_JA, clarifySpeech, damageQuestionOf, damageSpeech, koText } from "./answer";
 import { extract, type Attempt, type Turn } from "./llm";
 import { resolve, resolveField, toJa, type NameKind } from "./resolve";
+import { parseRules } from "./rules";
 
 export interface AskResult {
   /** 読み上げる文 */
@@ -348,8 +349,14 @@ export function answerExtraction(ex: Obj, text?: string): AskResult {
 }
 
 /** 文字の質問に答える（AI 取り出しを含む 1 往復） */
-export async function ask(text: string, opts: { history?: Turn[] } = {}): Promise<AskResult> {
+export async function ask(text: string, opts: { history?: Turn[]; useRules?: boolean } = {}): Promise<AskResult> {
   const t0 = Date.now();
+  // まずルールで即答を試す（確実に分かるときだけ結果が返る）。駄目なら AI
+  const ruled = opts.useRules === false ? null : parseRules(text);
+  if (ruled) {
+    const out = answerExtraction(ruled, text);
+    return { ...out, extraction: ruled, diagnostics: { provider: "rules", attempts: [], totalMs: Date.now() - t0 } };
+  }
   const r = await extract(text, { history: opts.history });
   if (!r.extraction) {
     return {

@@ -75,7 +75,7 @@ const COOLDOWN_MS = 60_000;
 /** 候補を順に試す。上限（429）・サーバの不調（5xx）・時間切れ・読めない返答なら次へ */
 export async function extract(
   text: string,
-  opts: { history?: Turn[]; providers?: Provider[]; timeoutMs?: number; fetchImpl?: Fetch } = {},
+  opts: { history?: Turn[]; providers?: Provider[]; timeoutMs?: number; lastTimeoutMs?: number; fetchImpl?: Fetch } = {},
 ): Promise<ExtractResult> {
   const providers = opts.providers ?? providersFromEnv();
   const doFetch = opts.fetchImpl ?? fetch;
@@ -90,14 +90,17 @@ export async function extract(
   const attempts: Attempt[] = [];
   const now = Date.now();
   const ready = providers.filter((p) => (cooldown.get(p.name) ?? 0) <= now);
-  for (const p of ready.length ? ready : providers) {
+  const order = ready.length ? ready : providers;
+  for (const [i, p] of order.entries()) {
     const t0 = Date.now();
+    // 最後の候補は長めに待つ（予備がもう無いので、遅くても答えを返す方がよい。無料枠は混むと 10 秒以上かかることがある）
+    const timeout = i === order.length - 1 ? (opts.lastTimeoutMs ?? 8000) : (opts.timeoutMs ?? 3000);
     try {
       const res = await doFetch(p.url, {
         method: "POST",
         headers: { Authorization: `Bearer ${p.key}`, "Content-Type": "application/json" },
         body: JSON.stringify({ model: p.model, messages, temperature: 0, response_format: { type: "json_object" }, ...p.extra }),
-        signal: AbortSignal.timeout(opts.timeoutMs ?? 3000),
+        signal: AbortSignal.timeout(timeout),
       });
       if (!res.ok) {
         if (res.status === 429) cooldown.set(p.name, Date.now() + COOLDOWN_MS);

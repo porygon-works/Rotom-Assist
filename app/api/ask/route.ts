@@ -3,6 +3,8 @@ import type { Turn } from "../../../lib/llm";
 import { allow } from "../../../lib/rateLimit";
 
 export const runtime = "nodejs";
+// AI が混んでいると 10 秒近くかかることがある（lib/llm.ts の最後の候補は 8 秒まで待つ）
+export const maxDuration = 20;
 
 const MAX_TEXT = 200;
 
