@@ -38,7 +38,8 @@ describe("ルール解析（確実に分かるときだけ答える）", () => {
     expect(parseRules("が降りあすに見っきゅのじゃれつく")).toBeNull();
     expect(parseRules("ガブリアスとミミッキュのじしん")).toBeNull(); // 向きが決まらない
     expect(parseRules("CS特化サザンドラのりゅうせいぐん、ガブに")).toBeNull(); // 補正の先が決まらない
-    expect(parseRules("ミミッキュのじゃれつく")).toBeNull(); // 相手がいない（聞き返しは AI 側で）
+    expect(parseRules("ミミッキュのじゃれつく")).toMatchObject({ intent: "clarify", missing: ["defender"] }); // 相手がいない → 聞き返す
+    expect(parseRules("エンペルトにじしん撃ったらどれくらい？")).toMatchObject({ intent: "clarify", missing: ["attacker"] });
     expect(parseRules("最速イダイトウがS1段階上がったらメガルカリオZ抜ける？")).toBeNull(); // 「上がったら」の付け先が決まらない
   });
 });
@@ -56,6 +57,12 @@ describe("続きの質問（直前の解釈に条件を足す）", () => {
     expect(parseFollowUp("じゃあミミッキュなら？", prev)).toBeNull();
     expect(parseFollowUp("じゃあ雨なら？", null)).toBeNull();
     expect(parseFollowUp("雨", prev)).toBeNull();
+  });
+  it("フィールド（わざの名前と同じもの）・壁・急所・同士", () => {
+    expect(parseRules("サイコフィールドのサーナイトのサイコキネシス、カイリューに")).toMatchObject({ move: "サイコキネシス", conditions: { field: { terrain: "サイコフィールド" } } });
+    expect(parseRules("リフレクターありでガブのじしん、サーフゴー耐える？")).toMatchObject({ conditions: { field: { reflect: true } } });
+    expect(parseRules("急所に当たったらミミッキュのじゃれつくでガブ落ちる？")).toMatchObject({ conditions: { field: { critical: true } } });
+    expect(parseRules("ドラパルトとメガルカリオZ、準速同士だとどっちが速い？")).toMatchObject({ conditions: { attacker: { sp: { spe: 32 } }, defender: { sp: { spe: 32 } } } });
   });
   it("ひらがなだけの質問", () => {
     expect(parseRules("がぶりあすのじゃくてん")).toMatchObject({ intent: "type", pokemon: "ガブリアス" });

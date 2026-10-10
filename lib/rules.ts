@@ -22,9 +22,10 @@ type Tok =
   | { k: "nature"; ja: string }
   | { k: "weather"; v: string }
   | { k: "terrain"; v: string }
-  | { k: "spread"; sp: Partial<Record<Stat, number>>; up?: Stat; down?: Stat }
+  | { k: "spread"; sp: Partial<Record<Stat, number>>; up?: Stat; down?: Stat; both?: boolean } // both: 「準速同士」
   | { k: "boost"; stat: Stat; n: number; conditional?: boolean } // conditional: 「上がったら」の形（付け先が前か後ろか決まらない）
   | { k: "sr" } // ステロ込み（防御側）
+  | { k: "flag"; f: "reflect" | "critical" } // 壁・急所（場）
   | { k: "hp"; percent?: number; value?: number } // 残り HP（直後のポケモン）
   | { k: "p"; v: string } // 助詞・区切り
   | { k: "w"; v: string }; // 質問の言い回し
@@ -57,12 +58,14 @@ function dictionary(): [string, Tok][] {
     "タイプ", "弱点", "相性", "種族値", "威力", "何タイプ", "教えて", "？", "?", "。", "!", "！", "撃ったら", "うったら", "だと", "なら",
     "んだけど", "だけど", "けど",
     "じゃくてん", "しゅぞくち", "いりょく", "なんタイプ", "なんぱつ",
+    "てるときの", "てる時の", "てるとき", "ときの", "時の", "ときに", "時に", "のとき", "の時", "中で", "下で", "下の", "どっちが遅い", "どっちがおそい",
     "持ってたら", "持ってる", "もってたら", "だったら", "の場合は", "の場合", "場合", "じゃあ", "じゃ", "では", "なら", "だと",
     "覚える", "おぼえる", "覚えた", "を",
     "どこまで", "すばやさ振ってたら", "素早さ振ってたら", "振ってたら", "振ったら", "何振りまで", "何振りなら", "負ける", "抜かれる", "までなら", "まで",
   ]) add(w, { k: "w", v: norm(w) });
   // 長い語から先に照合する
-  list.sort((x, y) => y[0].length - x[0].length);
+  const prio = (t: Tok) => (t.k === "weather" || t.k === "terrain" ? 0 : 1);
+  list.sort((x, y) => y[0].length - x[0].length || prio(x[1]) - prio(y[1]));
   dict = list;
   return list;
 }
@@ -78,6 +81,15 @@ function pattern(s: string): [number, Tok] | null {
   }
   m = s.match(/^([HABCDS]{1,3})(?:振リ|252|極振リ)/);
   if (m) return [m[0].length, { k: "spread", sp: Object.fromEntries([...m[1]].map((c) => [LETTER[c], 32])) }];
+  m = s.match(/^(最速|準速|最遅)同士/);
+  if (m) {
+    const t = pattern(m[1]);
+    return t && t[1].k === "spread" ? [m[0].length, { ...t[1], both: true }] : null;
+  }
+  m = s.match(/^リフレクター(?:アリ|有リ|込ミ)?/);
+  if (m) return [m[0].length, { k: "flag", f: "reflect" }];
+  m = s.match(/^急所(?:ニ当タッタラ|ニ当タレバ|ニ当タッテ|込ミ|アリ)?/);
+  if (m) return [m[0].length, { k: "flag", f: "critical" }];
   m = s.match(/^(最速|準速|最遅)/);
   if (m) {
     if (m[1] === "最速") return [2, { k: "spread", sp: { spe: 32 }, up: "spe" }];
@@ -174,6 +186,7 @@ export function parseRules(text: string): Obj | null {
   const words = toks.filter((t): t is Extract<Tok, { k: "w" }> => t.k === "w").map((t) => t.v);
   let mods: Tok[] = [];
   let sr = false;
+  const bothSpread: Tok[] = [];
   for (let i = 0; i < toks.length; i++) {
     const t = toks[i];
     const next = toks[i + 1];
@@ -181,6 +194,15 @@ export function parseRules(text: string): Obj | null {
       if (field[t.k]) return null;
       field[t.k] = t.v;
       if (next?.k === "p" && ["ノ", "デ"].includes(next.v)) i++; // 「雨の」「晴れで」
+      continue;
+    }
+    if (t.k === "flag") {
+      field[t.f] = true;
+      if (next?.k === "p" && ["ノ", "デ"].includes(next.v)) i++;
+      continue;
+    }
+    if (t.k === "spread" && t.both) {
+      bothSpread.push(t);
       continue;
     }
     if (t.k === "sr") {
@@ -220,7 +242,8 @@ export function parseRules(text: string): Obj | null {
     return o;
   };
 
-  if (sr && !(sides.length === 2 && moves.length === 1)) return null;
+  if ((sr || field.reflect || field.critical) && !(sides.length === 2 && moves.length === 1)) return null;
+  if (bothSpread.length && !(sides.length === 2 && !moves.length)) return null;
 
   // わざの質問（ポケモンなし）
   if (!sides.length && moves.length === 1 && has(/タイプ|威力|イリョク/)) return { move: moves[0], intent: "move_info" };
@@ -229,6 +252,16 @@ export function parseRules(text: string): Obj | null {
   if (sides.length === 1 && moves.length === 1 && has(/覚エ|オボエ/)) {
     if (Object.keys(sides[0].cond).length) return null;
     return { pokemon: sides[0].name, move: moves[0], intent: "learnset" };
+  }
+
+  // 1 匹とわざだけ: 足りない側を聞き返す（「ミミッキュのじゃれつく」→ 防御側がない）
+  if (sides.length === 1 && moves.length === 1 && !has(/タイプ|威力|イリョク|覚エ|オボエ|弱点|種族値|素早サ/)) {
+    const sd = sides[0];
+    const atkP = sd.particle === "ノ" || sd.particle === "ガ" || sd.particle === "カラ";
+    const defP = sd.particle === "ニ" || sd.particle === "ヘ";
+    if (atkP) return { attacker: sd.name, move: moves[0], missing: ["defender"], intent: "clarify" };
+    if (defP) return { defender: sd.name, move: moves[0], missing: ["attacker"], intent: "clarify" };
+    return null;
   }
 
   // 1 匹: タイプ・弱点・種族値・素早さ
@@ -242,7 +275,8 @@ export function parseRules(text: string): Obj | null {
 
   // 2 匹・わざなし: 素早さ
   if (sides.length === 2 && !moves.length) {
-    const threshold = has(/ドコマデ|何振リ/);
+    if (bothSpread.length) for (const sd of sides) applyMods(sd.cond, bothSpread);
+  const threshold = has(/ドコマデ|何振リ/);
     if (!threshold && !has(/ドッチガ|抜ケ/)) return null;
     const [a, b] = sides;
     const c: Obj = {};
