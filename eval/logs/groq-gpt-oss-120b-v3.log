@@ -1,0 +1,192 @@
+groq-gpt-oss-120b run1 #1 739ms ○ 
+groq-gpt-oss-120b run1 #2 415ms ○ 
+groq-gpt-oss-120b run1 #3 417ms ○ 
+groq-gpt-oss-120b run1 #4 800ms × intent=clarify（正解 damage） / defender=undefined（正解 サーフゴー） / attacker.item=undefined（正解 /スカーフ/）
+  #5 429（1 回目）→ 1s 待つ
+  #5 429（2 回目）→ 2s 待つ
+groq-gpt-oss-120b run1 #5 1164ms ○ 
+  #6 429（1 回目）→ 1s 待つ
+groq-gpt-oss-120b run1 #6 743ms ○ 
+  #7 429（1 回目）→ 12s 待つ
+groq-gpt-oss-120b run1 #7 669ms ○ 
+  #8 429（1 回目）→ 12s 待つ
+groq-gpt-oss-120b run1 #8 832ms × intent=speed（正解 damage） / move=undefined（正解 しんそく）
+  #9 429（1 回目）→ 12s 待つ
+groq-gpt-oss-120b run1 #9 667ms ○ 
+  #10 429（1 回目）→ 14s 待つ
+groq-gpt-oss-120b run1 #10 595ms ○ 
+  #11 429（1 回目）→ 8s 待つ
+  #11 429（2 回目）→ 1s 待つ
+groq-gpt-oss-120b run1 #11 847ms ○ 
+  #12 429（1 回目）→ 12s 待つ
+groq-gpt-oss-120b run1 #12 517ms × intent=stats（正解 speed）
+groq-gpt-oss-120b run1 #13 380ms ○ 
+  #14 429（1 回目）→ 13s 待つ
+groq-gpt-oss-120b run1 #14 601ms ○ 
+  #15 429（1 回目）→ 11s 待つ
+groq-gpt-oss-120b run1 #15 333ms ○ 
+  #16 429（1 回目）→ 1s 待つ
+groq-gpt-oss-120b run1 #16 497ms × move=undefined（正解 でんじは）
+  #17 429（1 回目）→ 11s 待つ
+  #17 429（2 回目）→ 1s 待つ
+groq-gpt-oss-120b run1 #17 706ms ○ 
+  #18 429（1 回目）→ 10s 待つ
+  #18 429（2 回目）→ 1s 待つ
+groq-gpt-oss-120b run1 #18 635ms ○ 
+  #19 429（1 回目）→ 10s 待つ
+groq-gpt-oss-120b run1 #19 668ms ○ 
+  #20 429（1 回目）→ 10s 待つ
+  #20 429（2 回目）→ 2s 待つ
+groq-gpt-oss-120b run1 #20 692ms × intent=clarify（正解 my_team）
+  #21 429（1 回目）→ 2s 待つ
+groq-gpt-oss-120b run1 #21 510ms ○ 
+groq-gpt-oss-120b run1 #22 472ms ○ 
+  #23 429（1 回目）→ 13s 待つ
+groq-gpt-oss-120b run1 #23 518ms ○ 
+  #24 429（1 回目）→ 9s 待つ
+  #24 429（2 回目）→ 1s 待つ
+  #24 429（3 回目）→ 1s 待つ
+groq-gpt-oss-120b run1 #24 313ms ○ 
+  #25 429（1 回目）→ 10s 待つ
+  #25 429（2 回目）→ 1s 待つ
+groq-gpt-oss-120b run1 #25 337ms × intent=move_info（正解 clarify） / missing=undefined
+  #26 429（1 回目）→ 2s 待つ
+groq-gpt-oss-120b run1 #26 636ms ○ 
+  #27 429（1 回目）→ 11s 待つ
+groq-gpt-oss-120b run1 #27 356ms × intent=clarify（正解 damage） / attacker=undefined（正解 ミミッキュ） / defender=undefined（正解 ガブリアス） / move=undefined（正解 じゃれつく）
+  #28 429（1 回目）→ 11s 待つ
+groq-gpt-oss-120b run1 #28 643ms × intent=clarify（正解 damage） / attacker=undefined（正解 サーナイト） / defender=undefined（正解 カイリュー） / move=undefined（正解 ムーンフォース）
+  #29 429（1 回目）→ 10s 待つ
+  #29 429（2 回目）→ 1s 待つ
+groq-gpt-oss-120b run1 #29 754ms × 2 つに分けられていない（intent=multi, queries=2）
+  #30 429（1 回目）→ 3s 待つ
+groq-gpt-oss-120b run1 #30 464ms ○ 
+  #1 429（1 回目）→ 12s 待つ
+groq-gpt-oss-120b run2 #1 649ms ○ 
+  #2 429（1 回目）→ 2s 待つ
+groq-gpt-oss-120b run2 #2 359ms ○ 
+  #3 429（1 回目）→ 2s 待つ
+groq-gpt-oss-120b run2 #3 395ms ○ 
+  #4 429（1 回目）→ 2s 待つ
+groq-gpt-oss-120b run2 #4 954ms × intent=clarify（正解 damage） / attacker=undefined（正解 ガブリアス） / defender=undefined（正解 サーフゴー） / move=undefined（正解 じしん） / attacker.item=undefined（正解 /スカーフ/）
+  #5 429（1 回目）→ 3s 待つ
+groq-gpt-oss-120b run2 #5 1009ms ○ 
+  #6 429（1 回目）→ 3s 待つ
+groq-gpt-oss-120b run2 #6 665ms ○ 
+  #7 429（1 回目）→ 12s 待つ
+groq-gpt-oss-120b run2 #7 554ms ○ 
+  #8 429（1 回目）→ 3s 待つ
+groq-gpt-oss-120b run2 #8 600ms ○ 
+  #9 429（1 回目）→ 3s 待つ
+groq-gpt-oss-120b run2 #9 966ms ○ 
+  #10 429（1 回目）→ 2s 待つ
+groq-gpt-oss-120b run2 #10 287ms ○ 
+  #11 429（1 回目）→ 2s 待つ
+  #11 429（2 回目）→ 1s 待つ
+groq-gpt-oss-120b run2 #11 724ms ○ 
+  #12 429（1 回目）→ 1s 待つ
+  #12 429（2 回目）→ 1s 待つ
+groq-gpt-oss-120b run2 #12 240ms × intent=stats（正解 speed）
+  #13 429（1 回目）→ 1s 待つ
+groq-gpt-oss-120b run2 #13 318ms ○ 
+  #14 429（1 回目）→ 12s 待つ
+groq-gpt-oss-120b run2 #14 691ms ○ 
+  #15 429（1 回目）→ 10s 待つ
+groq-gpt-oss-120b run2 #15 453ms ○ 
+  #16 429（1 回目）→ 2s 待つ
+groq-gpt-oss-120b run2 #16 480ms × move=undefined（正解 でんじは）
+  #17 429（1 回目）→ 11s 待つ
+groq-gpt-oss-120b run2 #17 715ms ○ 
+  #18 429（1 回目）→ 1s 待つ
+groq-gpt-oss-120b run2 #18 671ms ○ 
+  #19 429（1 回目）→ 1s 待つ
+groq-gpt-oss-120b run2 #19 361ms ○ 
+  #20 429（1 回目）→ 12s 待つ
+  #20 429（2 回目）→ 1s 待つ
+groq-gpt-oss-120b run2 #20 683ms × intent=clarify（正解 my_team）
+  #21 429（1 回目）→ 1s 待つ
+groq-gpt-oss-120b run2 #21 382ms × intent=clarify（正解 chat）
+  #22 429（1 回目）→ 1s 待つ
+  #22 429（2 回目）→ 1s 待つ
+groq-gpt-oss-120b run2 #22 656ms ○ 
+  #23 429（1 回目）→ 11s 待つ
+groq-gpt-oss-120b run2 #23 278ms ○ 
+  #24 429（1 回目）→ 1s 待つ
+  #24 429（2 回目）→ 1s 待つ
+groq-gpt-oss-120b run2 #24 329ms ○ 
+  #25 429（1 回目）→ 11s 待つ
+groq-gpt-oss-120b run2 #25 700ms × intent=move_info（正解 clarify） / missing=undefined
+  #26 429（1 回目）→ 1s 待つ
+groq-gpt-oss-120b run2 #26 1130ms × unknown_names=undefined
+  #27 429（1 回目）→ 3s 待つ
+groq-gpt-oss-120b run2 #27 391ms × intent=clarify（正解 damage） / attacker=undefined（正解 ミミッキュ） / defender=undefined（正解 ガブリアス） / move=undefined（正解 じゃれつく）
+  #28 429（1 回目）→ 2s 待つ
+groq-gpt-oss-120b run2 #28 376ms × intent=clarify（正解 damage） / attacker=undefined（正解 サーナイト） / defender=undefined（正解 カイリュー） / move=undefined（正解 ムーンフォース）
+  #29 429（1 回目）→ 2s 待つ
+groq-gpt-oss-120b run2 #29 855ms × 2 つに分けられていない（intent=multi, queries=2）
+  #30 429（1 回目）→ 3s 待つ
+groq-gpt-oss-120b run2 #30 629ms ○ 
+  #1 429（1 回目）→ 2s 待つ
+groq-gpt-oss-120b run3 #1 671ms ○ 
+  #2 429（1 回目）→ 2s 待つ
+groq-gpt-oss-120b run3 #2 346ms ○ 
+  #3 429（1 回目）→ 2s 待つ
+groq-gpt-oss-120b run3 #3 581ms ○ 
+  #4 429（1 回目）→ 1s 待つ
+groq-gpt-oss-120b run3 #4 1167ms × intent=clarify（正解 damage） / defender=null（正解 サーフゴー） / attacker.item=undefined（正解 /スカーフ/）
+  #5 429（1 回目）→ 4s 待つ
+groq-gpt-oss-120b run3 #5 940ms ○ 
+  #6 429（1 回目）→ 13s 待つ
+groq-gpt-oss-120b run3 #6 1158ms × intent=clarify（正解 damage） / attacker=undefined（正解 ハッサム） / attacker.item=undefined（正解 /ハチマキ/）
+  #7 429（1 回目）→ 3s 待つ
+groq-gpt-oss-120b run3 #7 1417ms ○ 
+  #8 429（1 回目）→ 2s 待つ
+groq-gpt-oss-120b run3 #8 721ms × intent=speed（正解 damage） / move=undefined（正解 しんそく）
+  #9 429（1 回目）→ 3s 待つ
+groq-gpt-oss-120b run3 #9 810ms × intent=clarify（正解 damage） / attacker=undefined（正解 サーフゴー） / defender.sp.hp=undefined
+  #10 429（1 回目）→ 2s 待つ
+  #10 429（2 回目）→ 1s 待つ
+groq-gpt-oss-120b run3 #10 292ms ○ 
+  #11 429（1 回目）→ 1s 待つ
+groq-gpt-oss-120b run3 #11 689ms ○ 
+  #12 429（1 回目）→ 3s 待つ
+groq-gpt-oss-120b run3 #12 382ms × intent=stats（正解 speed）
+  #13 429（1 回目）→ 1s 待つ
+groq-gpt-oss-120b run3 #13 965ms ○ 
+  #14 429（1 回目）→ 11s 待つ
+groq-gpt-oss-120b run3 #14 371ms ○ 
+  #15 429（1 回目）→ 10s 待つ
+  #15 429（2 回目）→ 1s 待つ
+groq-gpt-oss-120b run3 #15 265ms ○ 
+  #16 429（1 回目）→ 1s 待つ
+groq-gpt-oss-120b run3 #16 233ms × move=undefined（正解 でんじは）
+  #17 429（1 回目）→ 2s 待つ
+groq-gpt-oss-120b run3 #17 342ms ○ 
+  #18 429（1 回目）→ 2s 待つ
+groq-gpt-oss-120b run3 #18 555ms ○ 
+  #19 429（1 回目）→ 2s 待つ
+groq-gpt-oss-120b run3 #19 525ms × intent=clarify（正解 my_team）
+  #20 429（1 回目）→ 11s 待つ
+groq-gpt-oss-120b run3 #20 1071ms × intent=type（正解 my_team）
+  #21 429（1 回目）→ 12s 待つ
+groq-gpt-oss-120b run3 #21 837ms × intent=clarify（正解 chat）
+groq-gpt-oss-120b run3 #22 566ms ○ 
+  #23 429（1 回目）→ 1s 待つ
+groq-gpt-oss-120b run3 #23 355ms ○ 
+  #24 429（1 回目）→ 2s 待つ
+groq-gpt-oss-120b run3 #24 205ms ○ 
+  #25 429（1 回目）→ 1s 待つ
+groq-gpt-oss-120b run3 #25 904ms × intent=move_info（正解 clarify） / missing=undefined
+groq-gpt-oss-120b run3 #26 849ms ○ 
+  #27 429（1 回目）→ 4s 待つ
+groq-gpt-oss-120b run3 #27 238ms × intent=clarify（正解 damage） / attacker=undefined（正解 ミミッキュ） / defender=undefined（正解 ガブリアス） / move=undefined（正解 じゃれつく）
+  #28 429（1 回目）→ 2s 待つ
+groq-gpt-oss-120b run3 #28 516ms × intent=clarify（正解 damage） / attacker=undefined（正解 サーナイト） / defender=undefined（正解 カイリュー） / move=undefined（正解 ムーンフォース）
+  #29 429（1 回目）→ 2s 待つ
+groq-gpt-oss-120b run3 #29 699ms ○ 
+  #30 429（1 回目）→ 3s 待つ
+groq-gpt-oss-120b run3 #30 484ms ○ 
+  連続 1: 200,200,200,200,200
+  連続 2: 200,200,200,200,200
+  連続 3: 200,200,200,200,200
+done groq-gpt-oss-120b
