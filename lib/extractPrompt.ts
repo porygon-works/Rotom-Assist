@@ -24,7 +24,8 @@ export const EXTRACT_PROMPT = `あなたはポケモン対戦（シングル、�
   "sp": {"hp":0〜32, "atk":…, "def":…, "spa":…, "spd":…, "spe":…}（SP は必ず sp の中に書く）,
   "boosts": {"atk":-6〜6, "def":…, "spa":…, "spd":…, "spe":…},
   "hp_left": 残りHPの実数値, "hp_left_percent": 残りHPの割合(%),
-  "stealth_rock": true（ステルスロックのダメージを含める）
+  "stealth_rock": true（ステルスロックのダメージを含める）,
+  "status": "やけど|まひ|どく|もうどく|ねむり|こおり"（状態異常。言われたときだけ）
 }
 
 # 名前の書き方

@@ -32,6 +32,11 @@ const STAT_KEYS: Record<string, Stat> = {
   hp: "hp", h: "hp", atk: "atk", attack: "atk", a: "atk", def: "def", defense: "def", b: "def",
   spa: "spa", spatk: "spa", c: "spa", spd: "spd", spdef: "spd", d: "spd", spe: "spe", speed: "spe", s: "spe",
 };
+/** 状態異常の呼び方 → 計算ライブラリの記号 */
+const STATUS: Record<string, SideInput["status"]> = {
+  やけど: "brn", 火傷: "brn", brn: "brn", burn: "brn", まひ: "par", 麻痺: "par", par: "par", paralysis: "par",
+  どく: "psn", 毒: "psn", psn: "psn", もうどく: "tox", 猛毒: "tox", tox: "tox", ねむり: "slp", 眠り: "slp", slp: "slp", こおり: "frz", 氷: "frz", frz: "frz",
+};
 const statKey = (k: unknown): Stat | undefined => (typeof k === "string" ? STAT_KEYS[k.toLowerCase().replace(/[^a-z]/g, "")] : undefined);
 const clamp = (n: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, Math.round(n)));
 
@@ -99,6 +104,8 @@ function side(species: string, c: Obj, pr: Problems): SideInput {
   const hpPct = num(c.hp_left_percent);
   if (hpPct !== undefined && hpPct > 0 && hpPct <= 100) s.hpLeftPercent = hpPct;
   if (c.stealth_rock === true) s.stealthRock = true;
+  const st = STATUS[str(c.status) ?? ""];
+  if (st) s.status = st;
   return s;
 }
 
@@ -130,6 +137,7 @@ function sideLabel(ja: string, s: SideInput): string {
   if (s.hpLeft) parts.push(`残りHP${s.hpLeft}`);
   if (s.hpLeftPercent) parts.push(`残りHP${s.hpLeftPercent}%`);
   if (s.stealthRock) parts.push("ステロ込み");
+  if (s.status) parts.push(({ brn: "やけど", par: "まひ", psn: "どく", tox: "もうどく", slp: "ねむり", frz: "こおり" } as const)[s.status]);
   return parts.length ? `${ja}（${parts.join("・")}）` : ja;
 }
 

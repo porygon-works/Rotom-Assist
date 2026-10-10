@@ -25,6 +25,8 @@ export interface SideInput {
   hpLeft?: number;
   hpLeftPercent?: number;
   stealthRock?: boolean;
+  /** 状態異常（計算ライブラリの記号: brn やけど / par まひ / psn どく / tox もうどく / slp ねむり / frz こおり） */
+  status?: "brn" | "par" | "psn" | "tox" | "slp" | "frz";
 }
 
 export interface FieldInput {
@@ -113,6 +115,7 @@ function build(s: SideInput): Pokemon {
     nature: pickNature(s.natureUp, s.natureDown, s.nature),
     evs: s.sp ?? {},
     boosts: s.boosts,
+    status: s.status,
   };
   const p = new Pokemon(gen, s.species, opts);
   const max = p.maxHP();

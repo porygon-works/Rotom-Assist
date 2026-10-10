@@ -64,6 +64,10 @@ describe("続きの質問（直前の解釈に条件を足す）", () => {
     expect(parseRules("急所に当たったらミミッキュのじゃれつくでガブ落ちる？")).toMatchObject({ conditions: { field: { critical: true } } });
     expect(parseRules("ドラパルトとメガルカリオZ、準速同士だとどっちが速い？")).toMatchObject({ conditions: { attacker: { sp: { spe: 32 } }, defender: { sp: { spe: 32 } } } });
   });
+  it("状態異常・無振り", () => {
+    expect(parseRules("やけどのガブのじしん、ドドゲザンに")).toMatchObject({ conditions: { attacker: { status: "やけど" } } });
+    expect(parseRules("まひしたドラパルトと無振りガブリアスどっちが速い？")).toMatchObject({ conditions: { attacker: { status: "まひ" }, defender: { sp: { spe: 0 } } } });
+  });
   it("ひらがなだけの質問", () => {
     expect(parseRules("がぶりあすのじゃくてん")).toMatchObject({ intent: "type", pokemon: "ガブリアス" });
   });
