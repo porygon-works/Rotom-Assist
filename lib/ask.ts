@@ -233,8 +233,10 @@ function answerSpeed(ex: Obj): AskResult {
     if (subjOpen && otherOpen === false) {
       const v = speedVariants(ss, f);
       const lines = [`${other.ja}: ${ov}`, `${subj.ja}: 最速 ${v.fastest}／準速 ${v.neutral}／無振り ${v.none}`];
-      const need = v.fastest > ov ? (v.neutral > ov ? (v.none > ov ? "無振りでも" : "準速なら") : "最速なら") : null;
-      const speech = need ? `${pre}${subj.ja}は${need}${other.ja}（${ov}）を抜けるロト！` : `${pre}${subj.ja}は最速でも${other.ja}（${ov}）を抜けないロト`;
+      const need: [string, number] | null = v.fastest > ov ? (v.neutral > ov ? (v.none > ov ? ["無振り", v.none] : ["準速", v.neutral]) : ["最速", v.fastest]) : null;
+      const speech = need
+        ? `${pre}${subj.ja}は${need[0]}${need[0] === "無振り" ? "でも" : "なら"}${need[1]}で、${other.ja}（${ov}）を抜けるロト！`
+        : `${pre}${subj.ja}は最速でも${v.fastest}で、${other.ja}（${ov}）を抜けないロト`;
       return { speech, title, lines, intent: "speed" };
     }
     const r = cmp(sv, ov);
