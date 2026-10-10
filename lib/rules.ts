@@ -79,6 +79,8 @@ function dictionary(): [string, Tok][] {
     "んだけど", "だけど", "けど",
     "じゃくてん", "しゅぞくち", "いりょく", "なんタイプ", "なんぱつ",
     "優先度", "ゆうせんど",
+    "一発", "1発", "2発", "3発", "確定1発", "確定一発", "確定2発", "確定二発", "乱数1発",
+    "より速い", "よりはやい", "より早い", "より遅い", "どっち速い", "どっちはやい", "どっち早い", "どっちが速いの", "どっちが先",
     "てるときの", "てる時の", "てるとき", "ときの", "時の", "ときに", "時に", "のとき", "の時", "中で", "下で", "下の", "どっちが遅い", "どっちがおそい",
     "持ってたら", "持ってる", "もってたら", "だったら", "の場合は", "の場合", "場合", "じゃあ", "じゃ", "では", "なら", "だと",
     "覚える", "おぼえる", "覚えた", "を",
@@ -206,7 +208,14 @@ function applyMods(cond: Obj, mods: Tok[]) {
 /** 文を解釈する。確実に分かるときだけ結果を返す */
 const GREETINGS = /^(コンニチ[ハワ]|コンバン[ハワ]|オハヨウ(ゴザイマス)?|アリガトウ?(ゴザイマス)?|ヨロシク(オネガイシマス)?|オヤスミ(ナサイ)?|サンキュー?)[!！。?？~〜ー]*$/;
 
-export function parseRules(text: string): Obj | null {
+/** 文頭の呼びかけ（「ねえロトム、」）を取り除く。ロトムはポケモン名でもあるので、後ろに続きがあるときだけ */
+function stripCall(text: string): string {
+  const n = text.normalize("NFKC").replace(/^\s*(ねえ|ねぇ|ねー|おい|ヘイ|へい)?\s*(ロトム|ろとむ)(さん|くん|ちゃん)?\s*[、,，!！]?\s*(?=\S)/, "");
+  return n === text.normalize("NFKC") ? text : n;
+}
+
+export function parseRules(raw: string): Obj | null {
+  const text = stripCall(raw);
   if (GREETINGS.test(norm(text))) return { intent: "chat" };
   const toks = tokenize(text);
   if (!toks || !toks.length) return null;
@@ -310,8 +319,8 @@ export function parseRules(text: string): Obj | null {
   // 2 匹・わざなし: 素早さ
   if (sides.length === 2 && !moves.length) {
     if (bothSpread.length) for (const sd of sides) applyMods(sd.cond, bothSpread);
-  const threshold = has(/ドコマデ|何振リ/);
-    if (!threshold && !has(/ドッチガ|抜ケ/)) return null;
+    const threshold = has(/ドコマデ|何振リ/);
+    if (!threshold && !has(/ドッチ|抜ケ|ヨリ速イ|ヨリハヤイ|ヨリ早イ|ヨリ遅イ/)) return null;
     const [a, b] = sides;
     const c: Obj = {};
     if (Object.keys(a.cond).length) c.attacker = a.cond;
@@ -322,7 +331,7 @@ export function parseRules(text: string): Obj | null {
 
   // 2 匹・わざ 1 つ: ダメージ
   if (sides.length === 2 && moves.length === 1) {
-    if (has(/タイプ|弱点|種族値|素早サ|スバヤサ|抜ケ|ドッチガ/)) return null;
+    if (has(/タイプ|弱点|種族値|素早サ|スバヤサ|抜ケ|ドッチ|ヨリ速イ|ヨリハヤイ|ヨリ早イ|ヨリ遅イ/)) return null;
     if (sides.some((s) => s.particle === "ト")) return null; // 「AとBの〇〇」は向きが決まらない
     const role = (s: Side): "attacker" | "defender" | undefined =>
       s.particle === "ノ" || s.particle === "ガ" || s.particle === "カラ" ? "attacker" : s.particle === "ニ" || s.particle === "ヘ" ? "defender" : undefined;

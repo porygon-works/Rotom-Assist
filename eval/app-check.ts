@@ -1,7 +1,7 @@
 // アプリでの動作確認: 起動中のアプリ（/api/ask）に、対戦でありそうな質問を通して回答を一覧にする（AI を実際に呼ぶ）
-// 使い方: npx next start -p 3123 を起動してから npx tsx eval/app-check.ts [a|b] [http://localhost:3123] > eval/app-checks/<日時>.md
+// 使い方: npx next start -p 3123 を起動してから npx tsx eval/app-check.ts [a|b|c] [http://localhost:3123] > eval/app-checks/<日時>.md
 // 1 行が 1 つの会話。「 → 」でつなぐと、前の質問を文脈として続けて聞く
-const SET = process.argv[2] === "b" ? "b" : "a";
+const SET = ["b", "c"].includes(process.argv[2]) ? process.argv[2] : "a";
 const BASE = process.argv[3] ?? "http://localhost:3123";
 
 export const CONVERSATIONS: string[] = [
@@ -53,6 +53,27 @@ export const CONVERSATIONS_B: string[] = [
   "ウォッシュロトムのハイドロポンプ、ガブリアスに → じゃあ雨なら？ → じゃあH振りなら？",
 ];
 
+// 7 回目から使う組: 音声認識の出力に近い書き方（空白・漢字・カタカナの略号）と、くだけた言い方
+export const CONVERSATIONS_C: string[] = [
+  "ガブリアス に ミミッキュ の じゃれつく",
+  "エー特化ガブの地震 エイチビー振りのカバルドンに何発",
+  "ドラパルトのシャドーボールでゲンガー一発？",
+  "サーフゴーってメガルカリオゼットより速い？",
+  "準速ガブとスカーフドラパってどっち速いの",
+  "ニンフィアのハイパーボイスってカイリュー確定1発？",
+  "相手のバンギラス砂起こしだけどガブの地震で落ちる？",
+  "ハッサムのバレットパンチ 襷のサーナイトに",
+  "まひしたガブとドドゲザンどっち速い",
+  "やけどしたミミッキュのじゃれつくでガブ何発",
+  "トリトドンの弱点",
+  "流星群の威力いくつ？",
+  "イダイトウってアクアブレイク覚える？",
+  "ねえロトム、ガブリアスのじしんでエンペルト倒せる？",
+  "メガリザードンワイのソーラービーム、ウォッシュロトムに",
+  "最速メガルカリオZとS+1の最速ガブ、どっちが先？",
+  "ミミッキュのじゃれつく、ガブに → じゃあA特化いのちのたまなら？ → じゃあステロ込みだったら？",
+];
+
 interface Res {
   speech?: string;
   title?: string;
@@ -65,7 +86,7 @@ interface Res {
 
 async function main() {
   console.log(`# アプリでの動作確認（組 ${SET}、${new Date().toISOString()}）\n`);
-  for (const conv of SET === "b" ? CONVERSATIONS_B : CONVERSATIONS) {
+  for (const conv of SET === "b" ? CONVERSATIONS_B : SET === "c" ? CONVERSATIONS_C : CONVERSATIONS) {
     let history: { user: string; extraction: unknown }[] = [];
     for (const q of conv.split(" → ")) {
       const t0 = Date.now();
@@ -84,7 +105,10 @@ async function main() {
   }
 }
 
-main().catch((e) => {
-  console.error(e);
-  process.exit(1);
-});
+// 直接実行したときだけ動かす（質問の一覧を他のスクリプトから読み込めるように）
+if (import.meta.url === `file://${process.argv[1]}`) {
+  main().catch((e) => {
+    console.error(e);
+    process.exit(1);
+  });
+}

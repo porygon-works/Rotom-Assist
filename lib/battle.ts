@@ -281,3 +281,15 @@ export function learns(speciesEn: string, moveEn: string): boolean | undefined {
   }
   return list ? list.includes(toID(moveEn)) : undefined;
 }
+
+/**
+ * その特性が今の計算に効いているか（特性を「効かない特性」に替えるとダメージが変わるか）。
+ * 言わなかったのに使った特性を読み上げで添えるかの判断に使う（ソーラービームを受けるウォッシュロトムの「ふゆう」は添えない）
+ */
+export function abilityMatters(a: SideInput, d: SideInput, move: string, f: FieldInput, role: "attacker" | "defender"): boolean {
+  const { field } = autoField([a, d], f);
+  const base = one(a, d, move, field);
+  const neutral = "Pressure"; // ダメージに関係しない特性
+  const alt = role === "attacker" ? one({ ...a, ability: neutral }, d, move, field) : one(a, { ...d, ability: neutral }, move, field);
+  return alt.min !== base.min || alt.max !== base.max || alt.ko.n !== base.ko.n;
+}

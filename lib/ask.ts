@@ -1,6 +1,6 @@
 // 1 往復の処理（構成設計 4.2）: AI 取り出し → 名前の解決 → 計算 → 回答文
 // answerExtraction は通信をしないので、保存済みの AI の出力を流し込んで確かめられる（eval/replay.ts）
-import { abilityOf, allTypes, damage, effectiveness, hasSpread, isNotableAbility, isNotCalculated, learns, moveInfo, speciesInfo, speedOf, speedThreshold, speedVariants, type FieldInput, type SideInput, type Stat } from "./battle";
+import { abilityMatters, abilityOf, allTypes, damage, effectiveness, hasSpread, isNotableAbility, isNotCalculated, learns, moveInfo, speciesInfo, speedOf, speedThreshold, speedVariants, type FieldInput, type SideInput, type Stat } from "./battle";
 import { CATEGORY_JA, clarifySpeech, damageQuestionOf, damageSpeech, koText } from "./answer";
 import { extract, type Attempt, type Turn } from "./llm";
 import { resolve, resolveField, toJa, type NameKind } from "./resolve";
@@ -179,7 +179,9 @@ function answerDamage(ex: Obj, text?: string): AskResult {
   // 言わなかったのに計算に効く特性を使ったら添える（「カイリューはマルチスケイルで計算したロト」）
   for (const [sd, ja, role] of [[as, a.ja, "attacker"], [ds, d.ja, "defender"]] as const) {
     const ab = abilityOf(sd);
-    if (!sd.ability && isNotableAbility(ab, role) && !result.autoField.some((x) => x.endsWith(`:${ab}`))) pr.notes.push(`${ja}は${toJa("abilities", ab!)}で計算したロト`);
+    if (!sd.ability && isNotableAbility(ab, role) && !result.autoField.some((x) => x.endsWith(`:${ab}`)) && abilityMatters(as, ds, m.en, f, role)) {
+      pr.notes.push(`${ja}は${toJa("abilities", ab!)}で計算したロト`);
+    }
     if (sd === ds && isNotCalculated(ab)) pr.notes.push(`${ja}の${toJa("abilities", ab!)}は計算に入れてないロト`);
   }
   const special = result.category === "Special";
@@ -295,7 +297,7 @@ function answerSpeed(ex: Obj): AskResult {
   else if (s2 === ov.fastest) speech = `${other.ja}が最速だと同速ロト。${s2}ロト`;
   else if (s2 > ov.neutral) speech = `準速の${other.ja}（${ov.neutral}）なら抜けるけど、最速（${ov.fastest}）には抜かれるロト`;
   else if (s2 > ov.none) speech = `無振りの${other.ja}（${ov.none}）なら抜けるけど、準速（${ov.neutral}）には抜かれるロト`;
-  else speech = `${other.ja}が無振り（${ov.none}）でも抜けないロト。${subj.ja}は${s2}ロト`;
+  else speech = `${other.ja}の方が速いロト。${other.ja}は無振りでも${ov.none}、${subj.ja}は${s2}ロト`;
   return { speech: pre + speech, title, lines, intent: "speed" };
 }
 
