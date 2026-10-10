@@ -5,6 +5,7 @@ import { CATEGORY_JA, clarifySpeech, damageQuestionOf, damageSpeech, koText } fr
 import { extract, type Attempt, type Turn } from "./llm";
 import { resolve, resolveField, toJa, type NameKind } from "./resolve";
 import { parseFollowUp, parseRules } from "./rules";
+import aliases from "../data/aliases.json";
 
 export interface AskResult {
   /** 読み上げる文 */
@@ -132,8 +133,14 @@ function sideLabel(ja: string, s: SideInput): string {
   return parts.length ? `${ja}（${parts.join("・")}）` : ja;
 }
 
+/** 天候・フィールドの日本語の表示名（data/aliases.json で最初に書いた呼び方） */
+function fieldJa(kind: "weather" | "terrain", v: string): string {
+  const table = (aliases as unknown as Record<string, Record<string, string>>)[kind];
+  return Object.entries(table).find(([, x]) => x === v)?.[0] ?? v;
+}
+
 function fieldLabel(f: FieldInput): string {
-  const parts = [f.weather && `天候 ${f.weather}`, f.terrain && `${f.terrain} Terrain`, f.reflect && "リフレクター", f.lightScreen && "ひかりのかべ", f.critical && "急所"].filter(Boolean);
+  const parts = [f.weather && fieldJa("weather", f.weather), f.terrain && fieldJa("terrain", f.terrain), f.reflect && "リフレクター", f.lightScreen && "ひかりのかべ", f.critical && "急所"].filter(Boolean);
   return parts.length ? ` ［${parts.join("・")}］` : "";
 }
 

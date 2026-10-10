@@ -44,6 +44,7 @@ export function damageQuestionOf(text: string | undefined): DamageQuestion {
 function chanceSpeech(c: number): string {
   const pct = c * 100;
   if (pct < 1) return "1パーセント未満";
+  if (pct >= 99.5) return "ほぼ確実";
   return `${Math.round(pct)}パーセントくらい`;
 }
 

@@ -102,9 +102,8 @@ function one(a: SideInput, d: SideInput, move: string, f: FieldInput): DamageRes
   const defender = build(d);
   const m = new Move(gen, move, { isCrit: !!f.critical });
   const r = calculate(gen, attacker, defender, m, field(f, a, d));
-  const rolls = [r.damage].flat(2) as number[];
-  const min = Math.min(...rolls);
-  const max = Math.max(...rolls);
+  // 連続技（ドラゴンアローなど）は全部当たったときの合計（range() が合計を返す）
+  const [min, max] = r.range();
   const hp = defender.maxHP();
   const pct = (n: number) => Math.floor((n * 1000) / hp) / 10; // Showdown の表示と同じ切り捨て
   let ko: Ko = { kind: "none", n: 0, chance: 0 };

@@ -51,6 +51,11 @@ describe("計算（チャンピオンズ・第0世代）", () => {
     expect(hurt.base.ko).toMatchObject({ kind: "guaranteed", n: 1 });
     expect(hurt.range).toBeUndefined(); // 両方とも振り方の指定がある
   });
+  it("連続技は全部当たったときの合計（ドラゴンアロー）", () => {
+    const r = damage({ species: "Dragapult", item: "Life Orb" }, { species: "Dragonite" }, "Dragon Darts");
+    expect([r.base.min, r.base.max]).toEqual([176, 218]);
+    expect(r.base.ko).toMatchObject({ kind: "guaranteed", n: 1 });
+  });
   it("素早さ: ランク・スカーフ・最速・最遅", () => {
     expect(speedOf({ species: "Garchomp", sp: { spe: 32 }, natureUp: "spe" })).toBe(169);
     expect(speedOf({ species: "Garchomp", sp: { spe: 32 }, item: "Choice Scarf" })).toBe(231);
