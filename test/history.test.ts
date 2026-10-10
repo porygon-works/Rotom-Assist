@@ -38,7 +38,7 @@ test("設定済みならSupabaseのRESTに保存・取得する（キーはサ�
   });
   expect((await (await post({ device_id: ID, kind: "utterance", text: "ダメ計", note: "n" })).json()).saved).toBe(true);
   expect((await (await get(ID)).json()).items).toHaveLength(1);
-  expect(calls[0].url).toBe("https://example.supabase.co/rest/v1/history");
+  expect(calls[0].url).toBe("https://example.supabase.co/rest/v1/rotom_history");
   expect((calls[0].init!.headers as Record<string, string>).apikey).toBe("test-key");
   expect(calls[1].url).toContain(`device_id=eq.${ID}`);
   expect((await get("bad")).status).toBe(400);

@@ -16,6 +16,9 @@ export interface StoredHistory {
   created_at: string;
 }
 
+/** 1つのSupabaseプロジェクトを複数アプリで共有するため、テーブル名にアプリ名を付ける */
+const TABLE = "rotom_history";
+
 function cfg() {
   const url = process.env.SUPABASE_URL;
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -29,7 +32,7 @@ const headers = (key: string) => ({ apikey: key, Authorization: `Bearer ${key}`,
 export async function insertHistory(row: HistoryRow): Promise<void> {
   const c = cfg();
   if (!c) return;
-  const res = await fetch(`${c.url}/rest/v1/history`, {
+  const res = await fetch(`${c.url}/rest/v1/${TABLE}`, {
     method: "POST",
     headers: { ...headers(c.key), Prefer: "return=minimal" },
     body: JSON.stringify(row),
@@ -41,7 +44,7 @@ export async function listHistory(deviceId: string, limit = 50): Promise<StoredH
   const c = cfg();
   if (!c) return [];
   const q = `device_id=eq.${encodeURIComponent(deviceId)}&kind=eq.utterance&order=created_at.desc&limit=${limit}&select=id,text,note,created_at`;
-  const res = await fetch(`${c.url}/rest/v1/history?${q}`, { headers: headers(c.key) });
+  const res = await fetch(`${c.url}/rest/v1/${TABLE}?${q}`, { headers: headers(c.key) });
   if (!res.ok) throw new Error(`Supabase select failed: ${res.status}`);
   return (await res.json()) as StoredHistory[];
 }
