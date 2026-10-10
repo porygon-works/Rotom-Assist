@@ -96,6 +96,10 @@ describe("回答（AI の出力から）", () => {
     expect(answerExtraction({ intent: "learnset", pokemon: "ガブリアス", move: "ムーンフォース" }).speech).toBe("ガブリアスはムーンフォースを覚えないロト");
     expect(answerExtraction({ intent: "learnset", pokemon: "メガガブリアス", move: "じしん" }).speech).toContain("覚えるロト");
   });
+  it("3 匹以上の素早さ比べは最速同士の順番", () => {
+    const a = answerExtraction({ intent: "multi", queries: ["ガブリアス", "ドラパルト", "サーフゴー"].map((p) => ({ intent: "speed", ask: "value", pokemon: p })) });
+    expect(a.speech).toBe("最速同士なら、ドラパルトが一番速いロト！ ドラパルト213、ガブリアス169、サーフゴー149ロト");
+  });
   it("数値は計算の結果だけ（AI が書いた数値は使わない）", () => {
     const a = answerExtraction({ intent: "damage", attacker: "ミミッキュ", defender: "ガブリアス", move: "じゃれつく", damage: "999%" } as never);
     expect(a.speech).not.toContain("999");

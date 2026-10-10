@@ -320,6 +320,33 @@ function answerLearnset(ex: Obj): AskResult {
   return { speech: `${pre}${p.ja}は${m.ja}を${r ? "覚えるロト！" : "覚えないロト"}`, title, lines: [r ? "覚える（チャンピオンズ）" : "覚えない（チャンピオンズ）"], intent: "learnset" };
 }
 
+function speedRanking(qs: Obj[]): AskResult | null {
+  const pr = new Problems();
+  const rows: { ja: string; v: number; note: string }[] = [];
+  for (const q of qs) {
+    const name = str(q.pokemon) ?? str(q.attacker);
+    const p = pr.name("pokemon", name);
+    if (!p) continue;
+    const c = obj(obj(q.conditions).pokemon ?? obj(q.conditions).attacker);
+    const s = side(p.en, c, pr);
+    const open = s.sp?.spe === undefined && !s.natureUp && !s.nature;
+    const v = open ? speedOf({ ...s, sp: { ...s.sp, spe: 32 }, natureUp: "spe" }) : speedOf(s);
+    rows.push({ ja: p.ja, v, note: open ? "最速" : "" });
+  }
+  if (pr.list.length) return fail("speed", "名前の確認", pr.list);
+  if (rows.length < 2) return null;
+  rows.sort((a, b) => b.v - a.v);
+  const allOpen = rows.every((r) => r.note === "最速");
+  const order = rows.map((r) => `${r.ja}${r.v}`).join("、");
+  const tie = rows[0].v === rows[1].v ? `${rows[0].ja}と${rows[1].ja}が同速で一番ロト` : `${rows[0].ja}が一番速いロト！`;
+  return {
+    speech: `${allOpen ? "最速同士なら、" : ""}${tie} ${order}ロト`,
+    title: `素早さの順番${allOpen ? "（最速同士）" : ""}`,
+    lines: rows.map((r, i) => `${i + 1}. ${r.ja} ${r.v}${r.note ? `（${r.note}）` : ""}`),
+    intent: "speed",
+  };
+}
+
 /** 取り出し結果から答えを作る（通信なし） */
 export function answerExtraction(ex: Obj, text?: string): AskResult {
   const intent = str(ex.intent) ?? "clarify";
@@ -343,7 +370,13 @@ export function answerExtraction(ex: Obj, text?: string): AskResult {
       case "chat":
         return fail("chat", "雑談", ["おしゃべりはまだ勉強中ロト。計算なら任せてロト！"]);
       case "multi": {
-        const qs = (Array.isArray(ex.queries) ? ex.queries : []).map(obj).slice(0, 3);
+        const all = (Array.isArray(ex.queries) ? ex.queries : []).map(obj);
+        // 3 匹以上の素早さ比べ（「どれが一番速い？」）: 最速同士で順番を言う
+        if (all.length >= 2 && all.every((q) => q.intent === "speed" && !str(q.defender))) {
+          const ranked = speedRanking(all);
+          if (ranked) return ranked;
+        }
+        const qs = all.slice(0, 3);
         if (!qs.length) return fail("clarify", "聞き返し", [clarifySpeech([])]);
         const rs = qs.map((q) => answerExtraction(q));
         return { speech: rs.map((r) => r.speech).join("。"), title: rs.map((r) => r.title).join(" ／ "), lines: rs.flatMap((r) => r.lines), intent: "multi" };
