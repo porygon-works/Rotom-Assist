@@ -456,7 +456,10 @@ export async function ask(text: string, opts: { history?: Turn[]; useRules?: boo
   const r = await extract(text, { history: opts.history });
   if (!r.extraction) {
     return {
-      speech: r.attempts.length ? "いま混み合ってるロト。少し待ってからもう一回聞いてほしいロト" : "AI の設定がまだロト（API キーが必要）",
+      // AI が使えなくてもルールなら答えられるので、その言い方を案内する
+      speech: r.attempts.length
+        ? "いま混み合ってるロト。「ガブにミミッキュのじゃれつく」みたいに短く言ってくれたら、すぐ答えられるロト"
+        : "AI の設定がまだロト。「ガブにミミッキュのじゃれつく」みたいに短く言ってくれたら答えられるロト",
       title: "AI に接続できない",
       lines: r.attempts.map((a) => `${a.provider}: ${a.error}`),
       intent: "error",
