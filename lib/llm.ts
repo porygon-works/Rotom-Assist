@@ -68,6 +68,10 @@ export function parseJson(text: string): Record<string, unknown> | null {
 
 type Fetch = typeof fetch;
 
+/** 上限（429）を返した候補は、しばらく飛ばす（毎回断られてから切り替える無駄を省く） */
+const cooldown = new Map<string, number>();
+const COOLDOWN_MS = 60_000;
+
 /** 候補を順に試す。上限（429）・サーバの不調（5xx）・時間切れ・読めない返答なら次へ */
 export async function extract(
   text: string,
@@ -84,7 +88,9 @@ export async function extract(
     { role: "user", content: text },
   ];
   const attempts: Attempt[] = [];
-  for (const p of providers) {
+  const now = Date.now();
+  const ready = providers.filter((p) => (cooldown.get(p.name) ?? 0) <= now);
+  for (const p of ready.length ? ready : providers) {
     const t0 = Date.now();
     try {
       const res = await doFetch(p.url, {
@@ -94,6 +100,7 @@ export async function extract(
         signal: AbortSignal.timeout(opts.timeoutMs ?? 3000),
       });
       if (!res.ok) {
+        if (res.status === 429) cooldown.set(p.name, Date.now() + COOLDOWN_MS);
         attempts.push({ provider: p.name, ms: Date.now() - t0, ok: false, error: `HTTP ${res.status}` });
         continue;
       }

@@ -37,6 +37,16 @@ const clamp = (n: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, M
 class Problems {
   list: string[] = [];
   notes: string[] = [];
+  /** 読み上げない注意（画面にだけ出す） */
+  quiet: string[] = [];
+  /** 解決できなくても読み上げない（特性など、AI が余計に書きがちで計算への影響が小さいもの） */
+  soft(kind: NameKind, heard: string | undefined): { en: string; ja: string } | undefined {
+    if (!heard) return undefined;
+    const r = resolve(kind, heard);
+    if (r.ok) return { en: r.en, ja: r.ja };
+    this.quiet.push(`「${heard}」は${r.notInGame ? "チャンピオンズにない" : "分からない"}ので無視した`);
+    return undefined;
+  }
   name(kind: NameKind, heard: string | undefined): { en: string; ja: string } | undefined {
     if (!heard) return undefined;
     const r = resolve(kind, heard);
@@ -55,7 +65,7 @@ function side(species: string, c: Obj, pr: Problems): SideInput {
   const s: SideInput = { species };
   const item = pr.name("items", str(c.item));
   if (item) s.item = item.en;
-  const ability = pr.name("abilities", str(c.ability));
+  const ability = pr.soft("abilities", str(c.ability));
   if (ability) s.ability = ability.en;
   const natureName = str(c.nature);
   if (natureName) {
@@ -148,6 +158,7 @@ function answerDamage(ex: Obj, text?: string): AskResult {
     open,
     stealthRock: ds.stealthRock,
   });
+  lines.push(...pr.quiet);
   if (result.assumed.length) lines.push(`仮定: ${result.assumed.map((x) => (x.includes("振り方") ? `${x}は無振り（幅も表示）` : x)).join("、")}`);
   lines.push(result.base.desc);
   return {
