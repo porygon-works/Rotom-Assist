@@ -1,0 +1,23 @@
+{
+  "pokemon": {
+    "ブリジュラス": "Archaludon",
+    "リザードン": "Charizard",
+    "ロトム": "Rotom",
+    "ハバタクカミ": "Flutter Mane",
+    "テツノドクガ": "Iron Moth",
+    "テツノカイナ": "Iron Hands"
+  },
+  "moves": {
+    "ラスターカノン": "Flash Cannon",
+    "ドラゴンテール": "Dragon Tail",
+    "ねっぷう": "Heat Wave",
+    "ムーンフォース": "Moonblast",
+    "じしん": "Earthquake"
+  },
+  "items": {
+    "いのちのたま": "Life Orb",
+    "こだわりメガネ": "Choice Specs",
+    "たべのこし": "Leftovers",
+    "リザードナイトY": "Charizardite Y"
+  }
+}
