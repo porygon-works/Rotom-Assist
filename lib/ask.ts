@@ -367,8 +367,13 @@ export function answerExtraction(ex: Obj, text?: string): AskResult {
         return answerLearnset(ex);
       case "my_team":
         return fail("my_team", "自分のパーティ", ["自分のパーティの機能はまだ勉強中ロト"]);
-      case "chat":
+      case "chat": {
+        const t = (text ?? "").normalize("NFKC");
+        if (/ありがと|サンキュ/.test(t)) return fail("chat", "雑談", ["どういたしましてロト！"]);
+        if (/こんにち|こんばん|おはよ|よろしく/.test(t)) return fail("chat", "雑談", ["よろしくロト！ ダメージ計算なら任せてロト"]);
+        if (/おやすみ/.test(t)) return fail("chat", "雑談", ["おやすみロト！"]);
         return fail("chat", "雑談", ["おしゃべりはまだ勉強中ロト。計算なら任せてロト！"]);
+      }
       case "multi": {
         const all = (Array.isArray(ex.queries) ? ex.queries : []).map(obj);
         // 3 匹以上の素早さ比べ（「どれが一番速い？」）: 最速同士で順番を言う

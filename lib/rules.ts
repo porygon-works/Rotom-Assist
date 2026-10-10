@@ -41,6 +41,9 @@ function dictionary(): [string, Tok][] {
   const add = (surface: string, t: Tok) => list.push([norm(surface), t]);
   for (const ja of Object.keys(n.pokemon)) add(ja, { k: "pokemon", ja });
   for (const [al, ja] of Object.entries(a.pokemon)) if (n.pokemon[ja]) add(al, { k: "pokemon", ja });
+  const others = (names as unknown as { others: Record<string, string[]> }).others;
+  for (const ja of others.pokemon ?? []) add(ja, { k: "pokemon", ja });
+  for (const ja of others.moves ?? []) add(ja, { k: "move", ja });
   for (const ja of Object.keys(n.moves)) add(ja, { k: "move", ja });
   for (const [al, ja] of Object.entries(a.moves)) if (n.moves[ja]) add(al, { k: "move", ja });
   for (const ja of Object.keys(n.items)) add(ja, { k: "item", ja });
@@ -58,6 +61,7 @@ function dictionary(): [string, Tok][] {
     "タイプ", "弱点", "相性", "種族値", "威力", "何タイプ", "教えて", "？", "?", "。", "!", "！", "撃ったら", "うったら", "だと", "なら",
     "んだけど", "だけど", "けど",
     "じゃくてん", "しゅぞくち", "いりょく", "なんタイプ", "なんぱつ",
+    "優先度", "ゆうせんど",
     "てるときの", "てる時の", "てるとき", "ときの", "時の", "ときに", "時に", "のとき", "の時", "中で", "下で", "下の", "どっちが遅い", "どっちがおそい",
     "持ってたら", "持ってる", "もってたら", "だったら", "の場合は", "の場合", "場合", "じゃあ", "じゃ", "では", "なら", "だと",
     "覚える", "おぼえる", "覚えた", "を",
@@ -86,6 +90,8 @@ function pattern(s: string): [number, Tok] | null {
     const t = pattern(m[1]);
     return t && t[1].k === "spread" ? [m[0].length, { ...t[1], both: true }] : null;
   }
+  m = s.match(/^(?:イカク|威嚇)(?:ヲ|ガ)?(?:受ケタ|入ッタ|入レラレタ|込ミ|後)/);
+  if (m) return [m[0].length, { k: "boost", stat: "atk", n: -1 }];
   m = s.match(/^リフレクター(?:アリ|有リ|込ミ)?/);
   if (m) return [m[0].length, { k: "flag", f: "reflect" }];
   m = s.match(/^急所(?:ニ当タッタラ|ニ当タレバ|ニ当タッテ|込ミ|アリ)?/);
@@ -175,7 +181,10 @@ function applyMods(cond: Obj, mods: Tok[]) {
 }
 
 /** 文を解釈する。確実に分かるときだけ結果を返す */
+const GREETINGS = /^(コンニチ[ハワ]|コンバン[ハワ]|オハヨウ(ゴザイマス)?|アリガトウ?(ゴザイマス)?|ヨロシク(オネガイシマス)?|オヤスミ(ナサイ)?|サンキュー?)[!！。?？~〜ー]*$/;
+
 export function parseRules(text: string): Obj | null {
+  if (GREETINGS.test(norm(text))) return { intent: "chat" };
   const toks = tokenize(text);
   if (!toks || !toks.length) return null;
   // 「〇〇がS1段階上がったら」は前のポケモンの話だが、名前の前に付く条件と区別できないので AI に回す
@@ -246,7 +255,7 @@ export function parseRules(text: string): Obj | null {
   if (bothSpread.length && !(sides.length === 2 && !moves.length)) return null;
 
   // わざの質問（ポケモンなし）
-  if (!sides.length && moves.length === 1 && has(/タイプ|威力|イリョク/)) return { move: moves[0], intent: "move_info" };
+  if (!sides.length && moves.length === 1 && has(/タイプ|威力|イリョク|優先度|ユウセンド/)) return { move: moves[0], intent: "move_info" };
 
   // 覚える技: 「サーナイトってでんじは覚える？」
   if (sides.length === 1 && moves.length === 1 && has(/覚エ|オボエ/)) {
