@@ -6,6 +6,7 @@ import type { DamageAnswer, DamageResult, Ko } from "./battle";
 const p = (n: number) => `${Math.round(n)}`;
 
 export function koSpeech(ko: Ko): string {
+  if (ko.n >= 5 || ko.kind === "none") return "5発以上";
   if (ko.kind === "guaranteed") return `確定${ko.n}発`;
   if (ko.kind === "chance") return `乱数${ko.n}発`;
   return "4発以上";
@@ -74,7 +75,7 @@ export function damageSpeech(n: DamageNames, d: DamageAnswer, notes: string[], o
   if (b.curHP < b.hp) lines.push(`防御側の HP: ${b.curHP} / ${b.hp} で計算`);
   const sr = opt.stealthRock ? "ステロ込みで" : "";
   const ko = `${sr}${koSpeech(b.ko)}`;
-  const chance = b.ko.kind === "chance" ? `倒せるのは${chanceSpeech(b.ko.chance)}。` : "";
+  const chance = b.ko.kind === "chance" && b.ko.n < 5 ? `倒せるのは${chanceSpeech(b.ko.chance)}。` : "";
   const v = verdict(b.ko, opt.question ?? "plain");
   let speech: string;
   if (d.range) {
