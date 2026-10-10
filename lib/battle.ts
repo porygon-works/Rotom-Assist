@@ -4,6 +4,8 @@
 import { calculate, Field, Generations, Move, Pokemon } from "@smogon/calc";
 import { getFinalSpeed } from "@smogon/calc/dist/mechanics/util";
 import learnsets from "../data/learnsets.json";
+import abilityTable from "../data/abilities.json";
+import defaults from "../data/default-abilities.json";
 
 export const gen = Generations.get(0 as never);
 const LEVEL = 50;
@@ -45,6 +47,58 @@ export function pickNature(up?: Stat, down?: Stat, name?: string): string {
   return "Hardy";
 }
 
+const toId = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, "");
+
+/** 特性を言わなかったときの特性（data/default-abilities.json の優先順。どれもなければ最初の特性） */
+export function defaultAbility(species: string): string | undefined {
+  const list = (abilityTable as unknown as Record<string, string[]>)[toId(species)];
+  if (!list?.length) return undefined;
+  return defaults.prefer.find((a) => list.includes(a)) ?? list[0];
+}
+
+/** 使う特性（指定があればそれ） */
+export function abilityOf(s: SideInput): string | undefined {
+  return s.ability ?? defaultAbility(s.species);
+}
+
+/** 計算に効く特性か（言わなかったのに使ったら読み上げで添える。data/default-abilities.json の notable） */
+export function isNotableAbility(ab: string | undefined): boolean {
+  return !!ab && defaults.notable.includes(ab);
+}
+
+/** 計算ライブラリがダメージに反映しない特性か（ばけのかわ） */
+export function isNotCalculated(ab: string | undefined): boolean {
+  return !!ab && defaults.notCalculated.includes(ab);
+}
+
+/** 素早さの質問で使う特性: 言わなかったとき、天候・フィールドが合う素早さの特性があればそれ（すいすい など） */
+function speedAbility(s: SideInput, f: FieldInput): string | undefined {
+  if (s.ability) return s.ability;
+  const list = (abilityTable as unknown as Record<string, string[]>)[toId(s.species)] ?? [];
+  const sp = (defaults as unknown as { speed: Record<string, string> }).speed;
+  return list.find((a) => sp[a] && (sp[a] === f.weather || sp[a] === f.terrain)) ?? defaultAbility(s.species);
+}
+
+/**
+ * 天候・フィールドを言わなかったとき、場に出ると天気を変える特性（ひでり・すなおこしなど）があればそれを使う。
+ * 両方が別々の天気を変える場合は決められないので使わない。使ったら note に書く
+ */
+export function autoField(sides: SideInput[], f: FieldInput): { field: FieldInput; notes: string[] } {
+  const out = { ...f };
+  const notes: string[] = [];
+  for (const kind of ["weather", "terrain"] as const) {
+    if (out[kind]) continue;
+    const table = defaults[kind] as Record<string, string>;
+    const hits = sides.map((sd) => ({ ab: abilityOf(sd), sd })).filter((x) => x.ab && table[x.ab]);
+    const values = [...new Set(hits.map((x) => table[x.ab!]))];
+    if (values.length === 1) {
+      out[kind] = values[0];
+      notes.push(`${hits[0].sd.species}:${hits[0].ab}`);
+    }
+  }
+  return { field: out, notes };
+}
+
 /** その側について、能力の振り方（SP・性格）の指定があるか */
 export function hasSpread(s: SideInput, stats: Stat[]): boolean {
   if (s.nature || s.natureUp) return true;
@@ -55,7 +109,7 @@ function build(s: SideInput): Pokemon {
   const opts = {
     level: LEVEL,
     item: s.item as never,
-    ability: s.ability as never,
+    ability: abilityOf(s) as never,
     nature: pickNature(s.natureUp, s.natureDown, s.nature),
     evs: s.sp ?? {},
     boosts: s.boosts,
@@ -116,6 +170,12 @@ function one(a: SideInput, d: SideInput, move: string, f: FieldInput): DamageRes
 }
 
 export interface DamageAnswer {
+  /** 特性で自動で入れた天候・フィールド（「英語名:特性」） */
+  autoField: string[];
+  /** 使った特性 */
+  abilities: { attacker?: string; defender?: string };
+  /** 計算に使った場（特性で入れた天候などを含む） */
+  field: FieldInput;
   /** 指定どおり（指定のない側は無振り）で計算した結果 */
   base: DamageResult;
   /** 指定のない側を振り方の幅で動かしたときの最小〜最大（指定が揃っていれば undefined） */
@@ -126,7 +186,8 @@ export interface DamageAnswer {
 }
 
 /** ダメージ計算。指定のない側は無振りを基本にし、幅も出す */
-export function damage(a: SideInput, d: SideInput, move: string, f: FieldInput = {}): DamageAnswer {
+export function damage(a: SideInput, d: SideInput, move: string, f0: FieldInput = {}): DamageAnswer {
+  const { field: f, notes: autoNotes } = autoField([a, d], f0);
   const m = new Move(gen, move);
   const category = m.category as DamageAnswer["category"];
   const atkStat: Stat = category === "Special" ? "spa" : "atk";
@@ -138,15 +199,17 @@ export function damage(a: SideInput, d: SideInput, move: string, f: FieldInput =
   if (aOpen) assumed.push("攻撃側の振り方");
   if (dOpen) assumed.push("防御側の振り方");
   if (!a.item && !d.item) assumed.push("持ち物なし");
-  if (!aOpen && !dOpen) return { base, assumed, category };
+  const extra = { autoField: autoNotes, abilities: { attacker: abilityOf(a), defender: abilityOf(d) }, field: f };
+  if (!aOpen && !dOpen) return { base, assumed, category, ...extra };
   const strongA: SideInput = aOpen ? { ...a, sp: { ...a.sp, [atkStat]: 32 }, natureUp: atkStat } : a;
   const bulkyD: SideInput = dOpen ? { ...d, sp: { ...d.sp, hp: 32, [defStat]: 32 }, natureUp: defStat } : d;
-  return { base, range: { low: one(a, bulkyD, move, f), high: one(strongA, d, move, f) }, assumed, category };
+  return { base, range: { low: one(a, bulkyD, move, f), high: one(strongA, d, move, f) }, assumed, category, ...extra };
 }
 
 /** 素早さの実数値（スカーフ・ランク・天候の特性などを反映した値） */
-export function speedOf(s: SideInput, f: FieldInput = {}): number {
-  const p = build(s);
+export function speedOf(s: SideInput, f0: FieldInput = {}): number {
+  const { field: f } = autoField([s], f0);
+  const p = build({ ...s, ability: speedAbility(s, f) });
   const fld = new Field({ gameType: "Singles", weather: f.weather as never, terrain: f.terrain as never } as never);
   return getFinalSpeed(gen, p as never, fld as never, fld.attackerSide as never);
 }

@@ -52,9 +52,18 @@ describe("計算（チャンピオンズ・第0世代）", () => {
     expect(hurt.range).toBeUndefined(); // 両方とも振り方の指定がある
   });
   it("連続技は全部当たったときの合計（ドラゴンアロー）", () => {
-    const r = damage({ species: "Dragapult", item: "Life Orb" }, { species: "Dragonite" }, "Dragon Darts");
+    const r = damage({ species: "Dragapult", item: "Life Orb" }, { species: "Dragonite", ability: "Inner Focus" }, "Dragon Darts");
     expect([r.base.min, r.base.max]).toEqual([176, 218]);
     expect(r.base.ko).toMatchObject({ kind: "guaranteed", n: 1 });
+  });
+  it("特性: 言わなかったら計算に効く代表的な特性（フェアリースキン・マルチスケイル）、天気を変える特性は天気に反映", () => {
+    expect(damage({ species: "Sylveon" }, { species: "Garchomp" }, "Hyper Voice").abilities.attacker).toBe("Pixilate");
+    const multi = damage({ species: "Garchomp" }, { species: "Dragonite" }, "Outrage");
+    const plain = damage({ species: "Garchomp" }, { species: "Dragonite", ability: "Inner Focus" }, "Outrage");
+    expect(multi.base.max).toBeLessThan(plain.base.max);
+    const zard = damage({ species: "Charizard-Mega-Y" }, { species: "Kingambit" }, "Flamethrower");
+    expect(zard.field.weather).toBe("Sun");
+    expect(speedOf({ species: "Basculegion" }, { weather: "Rain" })).toBe(2 * speedOf({ species: "Basculegion" }));
   });
   it("素早さ: ランク・スカーフ・最速・最遅", () => {
     expect(speedOf({ species: "Garchomp", sp: { spe: 32 }, natureUp: "spe" })).toBe(169);

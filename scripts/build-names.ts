@@ -82,9 +82,11 @@ const items = table(g.items, itemsJa, "item");
 // 特性は計算ライブラリの一覧が不完全（データ調査 1 章）なので、PokeAPI の全特性を英語名に直して使う
 const abilities: Record<string, string> = {};
 const abilityIdent = new Map(csv("abilities").map((r) => [r[1], r[1]]));
+// 英語名は計算ライブラリの正式名（Dragon's Maw など記号を含むもの）にそろえる。なければ識別子から作る
+const calcAbility = new Map([...g.abilities].map((a) => [ident(a.name).replace(/-/g, ""), a.name as string]));
 for (const [identifier, ja] of abilitiesJa) {
   if (!abilityIdent.has(identifier)) continue;
-  abilities[ja] = identifier.split("-").map((w) => w[0].toUpperCase() + w.slice(1)).join(" ");
+  abilities[ja] = calcAbility.get(identifier.replace(/-/g, "")) ?? identifier.split("-").map((w) => w[0].toUpperCase() + w.slice(1)).join(" ");
 }
 
 // タイプ（第0世代の 18 タイプ。??? と Stellar は除く）

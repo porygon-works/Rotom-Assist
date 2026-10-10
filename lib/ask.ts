@@ -1,6 +1,6 @@
 // 1 往復の処理（構成設計 4.2）: AI 取り出し → 名前の解決 → 計算 → 回答文
 // answerExtraction は通信をしないので、保存済みの AI の出力を流し込んで確かめられる（eval/replay.ts）
-import { allTypes, damage, effectiveness, hasSpread, learns, moveInfo, speciesInfo, speedOf, speedThreshold, speedVariants, type FieldInput, type SideInput, type Stat } from "./battle";
+import { abilityOf, allTypes, damage, effectiveness, hasSpread, isNotableAbility, isNotCalculated, learns, moveInfo, speciesInfo, speedOf, speedThreshold, speedVariants, type FieldInput, type SideInput, type Stat } from "./battle";
 import { CATEGORY_JA, clarifySpeech, damageQuestionOf, damageSpeech, koText } from "./answer";
 import { extract, type Attempt, type Turn } from "./llm";
 import { resolve, resolveField, toJa, type NameKind } from "./resolve";
@@ -159,6 +159,19 @@ function answerDamage(ex: Obj, text?: string): AskResult {
   const ds = side(d.en, obj(c.defender), pr);
   const f = fieldOf(obj(c.field));
   const result = damage(as, ds, m.en, f);
+  // 特性で天気・フィールドを変えたら言う（「メガリザードンYのひでりで晴れとして計算したロト」）
+  const autoNotes = result.autoField.map((x) => {
+    const [sp, ab] = x.split(":");
+    const ja = sp === as.species ? a.ja : d.ja;
+    return `${ja}の${toJa("abilities", ab)}で${fieldLabel(result.field).replace(/[［］\s]/g, "")}として計算したロト`;
+  });
+  pr.notes.push(...autoNotes);
+  // 言わなかったのに計算に効く特性を使ったら添える（「カイリューはマルチスケイルで計算したロト」）
+  for (const [sd, ja] of [[as, a.ja], [ds, d.ja]] as const) {
+    const ab = abilityOf(sd);
+    if (!sd.ability && isNotableAbility(ab) && !result.autoField.some((x) => x.endsWith(`:${ab}`))) pr.notes.push(`${ja}は${toJa("abilities", ab!)}で計算したロト`);
+    if (sd === ds && isNotCalculated(ab)) pr.notes.push(`${ja}の${toJa("abilities", ab!)}は計算に入れてないロト`);
+  }
   const special = result.category === "Special";
   const open = { attacker: !hasSpread(as, [special ? "spa" : "atk"]), defender: !hasSpread(ds, ["hp", special ? "spd" : "def"]) };
   const { speech, lines } = damageSpeech({ attacker: a.ja, defender: d.ja, move: m.ja }, result, [...pr.notes, ...pr.list], {
@@ -167,11 +180,13 @@ function answerDamage(ex: Obj, text?: string): AskResult {
     stealthRock: ds.stealthRock,
   });
   lines.push(...pr.quiet);
+  const abLine = (label: string, sd: SideInput) => `${label} ${toJa("abilities", abilityOf(sd) ?? "-")}${sd.ability ? "" : "（仮定）"}`;
+  lines.push(`特性: ${abLine("攻撃側", as)}、${abLine("防御側", ds)}`);
   if (result.assumed.length) lines.push(`仮定: ${result.assumed.map((x) => (x.includes("振り方") ? `${x}は無振り（幅も表示）` : x)).join("、")}`);
   lines.push(result.base.desc);
   return {
     speech,
-    title: `${sideLabel(a.ja, as)}の${m.ja} → ${sideLabel(d.ja, ds)}${fieldLabel(f)}`,
+    title: `${sideLabel(a.ja, as)}の${m.ja} → ${sideLabel(d.ja, ds)}${fieldLabel(result.field)}`,
     lines,
     intent: "damage",
   };
@@ -210,7 +225,8 @@ function answerSpeed(ex: Obj): AskResult {
     };
   }
 
-  const os = side(other.en, obj(c.defender), pr);
+  const os0 = side(other.en, obj(c.defender), pr);
+  const os = os0;
   const otherOpen = os.sp?.spe === undefined && !os.natureUp && !os.nature;
   const title = `${sideLabel(subj.ja, ss)} と ${sideLabel(other.ja, os)}の素早さ${fieldLabel(f)}`;
   const sv = speedOf(ss, f);
