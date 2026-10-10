@@ -1,0 +1,25 @@
+gemini-3.8-flash run1 #1 11720ms ○ 
+gemini-3.8-flash run1 #2 2332ms ○ 
+gemini-3.8-flash run1 #3 1811ms ○ 
+gemini-3.8-flash run1 #4 2229ms ○ 
+gemini-3.8-flash run1 #5 1603ms ○ 
+gemini-3.8-flash run1 #6 2087ms ○ 
+  #7 429（1 回目）→ 20s 待つ
+gemini-3.8-flash run1 #7 1923ms ○ 
+gemini-3.8-flash run1 #8 1743ms ○ 
+gemini-3.8-flash run1 #9 2436ms ○ 
+gemini-3.8-flash run1 #10 2683ms ○ 
+gemini-3.8-flash run1 #11 3195ms ○ 
+gemini-3.8-flash run1 #12 3239ms ○ 
+  #13 429（1 回目）→ 20s 待つ
+gemini-3.8-flash run1 #13 1369ms ○ 
+  #14 429（1 回目）→ 20s 待つ
+  #14 429（2 回目）→ 20s 待つ
+gemini-3.8-flash run1 #14 2125ms ○ 
+gemini-3.8-flash run1 #15 1148ms ○ 
+gemini-3.8-flash run1 #16 1799ms ○ 
+gemini-3.8-flash run1 #17 71ms × HTTP 429: [{
+  "error": {
+    "code": 429,
+    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-
+done gemini-3.8-flash (1 日の上限に達した（run1 #17）)

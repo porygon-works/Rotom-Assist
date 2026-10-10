@@ -1,0 +1,106 @@
+gemini-3.5-flash-lite run1 #1 805ms ○ 
+gemini-3.5-flash-lite run1 #2 695ms ○ 
+gemini-3.5-flash-lite run1 #3 724ms ○ 
+gemini-3.5-flash-lite run1 #4 698ms ○ 
+gemini-3.5-flash-lite run1 #5 715ms ○ 
+gemini-3.5-flash-lite run1 #6 649ms ○ 
+gemini-3.5-flash-lite run1 #7 796ms ○ 
+gemini-3.5-flash-lite run1 #8 1007ms ○ 
+gemini-3.5-flash-lite run1 #9 734ms ○ 
+gemini-3.5-flash-lite run1 #10 686ms ○ 
+gemini-3.5-flash-lite run1 #11 757ms ○ 
+gemini-3.5-flash-lite run1 #12 740ms ○ 
+gemini-3.5-flash-lite run1 #13 513ms ○ 
+gemini-3.5-flash-lite run1 #14 641ms ○ 
+gemini-3.5-flash-lite run1 #15 476ms ○ 
+gemini-3.5-flash-lite run1 #16 596ms ○ 
+  #17 429（1 回目）→ 20s 待つ
+gemini-3.5-flash-lite run1 #17 839ms × intent=type（正解 move_info）
+  #18 429（1 回目）→ 20s 待つ
+gemini-3.5-flash-lite run1 #18 900ms ○ 
+gemini-3.5-flash-lite run1 #19 670ms ○ 
+gemini-3.5-flash-lite run1 #20 703ms ○ 
+gemini-3.5-flash-lite run1 #21 591ms ○ 
+gemini-3.5-flash-lite run1 #22 769ms ○ 
+gemini-3.5-flash-lite run1 #23 840ms ○ 
+gemini-3.5-flash-lite run1 #24 752ms ○ 
+gemini-3.5-flash-lite run1 #25 495ms × intent=move_info（正解 clarify） / missing=[]
+gemini-3.5-flash-lite run1 #26 812ms × intent=damage（正解 clarify）
+gemini-3.5-flash-lite run1 #27 653ms ○ 
+gemini-3.5-flash-lite run1 #28 722ms × attacker="ニンフィア"（正解 サーナイト）
+gemini-3.5-flash-lite run1 #29 1158ms ○ 
+gemini-3.5-flash-lite run1 #30 417ms ○ 
+gemini-3.5-flash-lite run2 #1 624ms ○ 
+gemini-3.5-flash-lite run2 #2 618ms ○ 
+gemini-3.5-flash-lite run2 #3 686ms ○ 
+  #4 429（1 回目）→ 20s 待つ
+  #4 429（2 回目）→ 20s 待つ
+gemini-3.5-flash-lite run2 #4 717ms ○ 
+  #5 429（1 回目）→ 20s 待つ
+gemini-3.5-flash-lite run2 #5 746ms ○ 
+gemini-3.5-flash-lite run2 #6 629ms ○ 
+gemini-3.5-flash-lite run2 #7 700ms ○ 
+gemini-3.5-flash-lite run2 #8 1120ms ○ 
+gemini-3.5-flash-lite run2 #9 761ms ○ 
+gemini-3.5-flash-lite run2 #10 706ms ○ 
+gemini-3.5-flash-lite run2 #11 793ms ○ 
+gemini-3.5-flash-lite run2 #12 678ms ○ 
+gemini-3.5-flash-lite run2 #13 615ms ○ 
+gemini-3.5-flash-lite run2 #14 1081ms ○ 
+gemini-3.5-flash-lite run2 #15 691ms ○ 
+gemini-3.5-flash-lite run2 #16 710ms ○ 
+gemini-3.5-flash-lite run2 #17 629ms × intent=type（正解 move_info）
+gemini-3.5-flash-lite run2 #18 593ms ○ 
+gemini-3.5-flash-lite run2 #19 578ms ○ 
+gemini-3.5-flash-lite run2 #20 819ms ○ 
+  #21 429（1 回目）→ 20s 待つ
+gemini-3.5-flash-lite run2 #21 516ms ○ 
+  #22 429（1 回目）→ 20s 待つ
+gemini-3.5-flash-lite run2 #22 780ms ○ 
+gemini-3.5-flash-lite run2 #23 645ms ○ 
+gemini-3.5-flash-lite run2 #24 672ms ○ 
+gemini-3.5-flash-lite run2 #25 702ms × intent=move_info（正解 clarify） / missing=[]
+gemini-3.5-flash-lite run2 #26 733ms × intent=damage（正解 clarify）
+gemini-3.5-flash-lite run2 #27 794ms ○ 
+gemini-3.5-flash-lite run2 #28 797ms ○ 
+gemini-3.5-flash-lite run2 #29 1228ms ○ 
+gemini-3.5-flash-lite run2 #30 561ms ○ 
+gemini-3.5-flash-lite run3 #1 717ms ○ 
+gemini-3.5-flash-lite run3 #2 629ms ○ 
+gemini-3.5-flash-lite run3 #3 650ms ○ 
+gemini-3.5-flash-lite run3 #4 611ms ○ 
+gemini-3.5-flash-lite run3 #5 777ms ○ 
+gemini-3.5-flash-lite run3 #6 726ms ○ 
+gemini-3.5-flash-lite run3 #7 649ms ○ 
+  #8 429（1 回目）→ 20s 待つ
+  #8 429（2 回目）→ 20s 待つ
+gemini-3.5-flash-lite run3 #8 1163ms ○ 
+gemini-3.5-flash-lite run3 #9 880ms ○ 
+gemini-3.5-flash-lite run3 #10 664ms ○ 
+gemini-3.5-flash-lite run3 #11 809ms ○ 
+gemini-3.5-flash-lite run3 #12 570ms ○ 
+gemini-3.5-flash-lite run3 #13 628ms ○ 
+gemini-3.5-flash-lite run3 #14 698ms ○ 
+gemini-3.5-flash-lite run3 #15 612ms ○ 
+gemini-3.5-flash-lite run3 #16 917ms ○ 
+gemini-3.5-flash-lite run3 #17 590ms × intent=type（正解 move_info）
+gemini-3.5-flash-lite run3 #18 722ms ○ 
+gemini-3.5-flash-lite run3 #19 773ms ○ 
+gemini-3.5-flash-lite run3 #20 707ms ○ 
+gemini-3.5-flash-lite run3 #21 600ms ○ 
+gemini-3.5-flash-lite run3 #22 586ms ○ 
+gemini-3.5-flash-lite run3 #23 634ms ○ 
+  #24 429（1 回目）→ 20s 待つ
+gemini-3.5-flash-lite run3 #24 585ms ○ 
+  #25 429（1 回目）→ 20s 待つ
+  #25 429（2 回目）→ 20s 待つ
+gemini-3.5-flash-lite run3 #25 722ms × intent=move_info（正解 clarify） / missing=[]
+gemini-3.5-flash-lite run3 #26 1105ms × intent=damage（正解 clarify）
+gemini-3.5-flash-lite run3 #27 780ms × attacker="ガブリアス"（正解 ミミッキュ） / defender="ミミッキュ"（正解 ガブリアス）
+gemini-3.5-flash-lite run3 #28 762ms ○ 
+gemini-3.5-flash-lite run3 #29 1177ms ○ 
+gemini-3.5-flash-lite run3 #30 569ms ○ 
+  連続 1: 200,200,200,200,200
+  連続 2: 200,200,200,200,200
+  連続 3: 200,200,200,200,200
+done gemini-3.5-flash-lite

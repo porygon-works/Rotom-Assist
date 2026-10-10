@@ -1,0 +1,536 @@
+{
+  "name": "gemini-3.8-flash",
+  "model": "gemini-3.8-flash",
+  "extra": {
+    "reasoning_effort": "none"
+  },
+  "date": "2026-10-10T15:35:12.164Z",
+  "stopped": "1 日の上限に達した（run1 #17）",
+  "rows": [
+    {
+      "id": 1,
+      "group": "extract",
+      "run": 1,
+      "ms": 11720,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "damage",
+        "attacker": "ミミッキュ",
+        "defender": "ガブリアス",
+        "pokemon": null,
+        "move": "じゃれつく",
+        "conditions": {
+          "attacker": {},
+          "defender": {},
+          "field": {}
+        },
+        "uses_context": false,
+        "missing": [],
+        "unknown_names": [],
+        "queries": []
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 106,
+        "prompt_tokens": 743,
+        "total_tokens": 849
+      }
+    },
+    {
+      "id": 2,
+      "group": "extract",
+      "run": 1,
+      "ms": 2332,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "damage",
+        "attacker": "ミミッキュ",
+        "defender": "ガブリアス",
+        "pokemon": null,
+        "move": "じゃれつく",
+        "conditions": {
+          "attacker": {},
+          "defender": {},
+          "field": {}
+        },
+        "uses_context": false,
+        "missing": [],
+        "unknown_names": [],
+        "queries": []
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 106,
+        "prompt_tokens": 748,
+        "total_tokens": 854
+      }
+    },
+    {
+      "id": 3,
+      "group": "extract",
+      "run": 1,
+      "ms": 1811,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "damage",
+        "attacker": "サーナイト",
+        "defender": "カイリュー",
+        "pokemon": null,
+        "move": "ムーンフォース",
+        "conditions": {
+          "attacker": {},
+          "defender": {},
+          "field": {}
+        },
+        "uses_context": false,
+        "missing": [],
+        "unknown_names": [],
+        "queries": []
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 103,
+        "prompt_tokens": 744,
+        "total_tokens": 847
+      }
+    },
+    {
+      "id": 4,
+      "group": "extract",
+      "run": 1,
+      "ms": 2229,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "damage",
+        "attacker": "ガブリアス",
+        "defender": "サーフゴー",
+        "pokemon": null,
+        "move": "じしん",
+        "conditions": {
+          "attacker": {
+            "item": "こだわりスカーフ"
+          },
+          "defender": {},
+          "field": {}
+        },
+        "uses_context": false,
+        "missing": [],
+        "unknown_names": [],
+        "queries": []
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 119,
+        "prompt_tokens": 745,
+        "total_tokens": 864
+      }
+    },
+    {
+      "id": 5,
+      "group": "extract",
+      "run": 1,
+      "ms": 1603,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "damage",
+        "attacker": "リザードン",
+        "defender": "ハッサム",
+        "pokemon": null,
+        "move": "ねっぷう",
+        "conditions": {
+          "attacker": {
+            "item": "いのちのたま"
+          },
+          "defender": {},
+          "field": {}
+        },
+        "uses_context": false,
+        "missing": [],
+        "unknown_names": [],
+        "queries": []
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 118,
+        "prompt_tokens": 746,
+        "total_tokens": 950
+      }
+    },
+    {
+      "id": 6,
+      "group": "extract",
+      "run": 1,
+      "ms": 2087,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "damage",
+        "attacker": "ハッサム",
+        "defender": "サーナイト",
+        "pokemon": null,
+        "move": "バレットパンチ",
+        "conditions": {
+          "attacker": {
+            "item": "こだわりハチマキ"
+          },
+          "defender": {},
+          "field": {}
+        },
+        "uses_context": false,
+        "missing": [],
+        "unknown_names": [],
+        "queries": []
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 119,
+        "prompt_tokens": 752,
+        "total_tokens": 871
+      }
+    },
+    {
+      "id": 7,
+      "group": "extract",
+      "run": 1,
+      "ms": 1923,
+      "status": 200,
+      "retries429": 1,
+      "output": {
+        "intent": "damage",
+        "attacker": "メガリザードンY",
+        "defender": "ドドゲザン",
+        "pokemon": null,
+        "move": "かえんほうしゃ",
+        "conditions": {
+          "attacker": {},
+          "defender": {},
+          "field": {
+            "weather": "にほんばれ"
+          }
+        },
+        "uses_context": false,
+        "missing": [],
+        "unknown_names": [],
+        "queries": []
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 124,
+        "prompt_tokens": 750,
+        "total_tokens": 874
+      }
+    },
+    {
+      "id": 8,
+      "group": "extract",
+      "run": 1,
+      "ms": 1743,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "damage",
+        "attacker": "カイリュー",
+        "defender": "ガブリアス",
+        "pokemon": null,
+        "move": "しんそく",
+        "conditions": {
+          "attacker": {
+            "boosts": {
+              "atk": 1
+            }
+          },
+          "defender": {},
+          "field": {}
+        },
+        "uses_context": false,
+        "missing": [],
+        "unknown_names": [],
+        "queries": []
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 125,
+        "prompt_tokens": 748,
+        "total_tokens": 873
+      }
+    },
+    {
+      "id": 9,
+      "group": "extract",
+      "run": 1,
+      "ms": 2436,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "damage",
+        "attacker": "サーフゴー",
+        "defender": "ガブリアス",
+        "pokemon": null,
+        "move": "ゴールドラッシュ",
+        "conditions": {
+          "attacker": {},
+          "defender": {
+            "sp": {
+              "hp": 32
+            }
+          },
+          "field": {}
+        },
+        "uses_context": false,
+        "missing": [],
+        "unknown_names": [],
+        "queries": []
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 125,
+        "prompt_tokens": 751,
+        "total_tokens": 981
+      }
+    },
+    {
+      "id": 10,
+      "group": "extract",
+      "run": 1,
+      "ms": 2683,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "speed",
+        "attacker": "ガブリアス",
+        "defender": "サーフゴー",
+        "pokemon": null,
+        "move": null,
+        "conditions": {
+          "attacker": {},
+          "defender": {},
+          "field": {}
+        },
+        "uses_context": false,
+        "missing": [],
+        "unknown_names": [],
+        "queries": []
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 102,
+        "prompt_tokens": 744,
+        "total_tokens": 846
+      }
+    },
+    {
+      "id": 11,
+      "group": "extract",
+      "run": 1,
+      "ms": 3195,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "speed",
+        "attacker": "ガブリアス",
+        "defender": "ドラパルト",
+        "pokemon": null,
+        "move": null,
+        "conditions": {
+          "attacker": {
+            "item": "こだわりスカーフ",
+            "speed": "max"
+          },
+          "defender": {
+            "speed": "max"
+          },
+          "field": {}
+        },
+        "uses_context": false,
+        "missing": [],
+        "unknown_names": [],
+        "queries": []
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 135,
+        "prompt_tokens": 751,
+        "total_tokens": 886
+      }
+    },
+    {
+      "id": 12,
+      "group": "extract",
+      "run": 1,
+      "ms": 3239,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "speed",
+        "attacker": null,
+        "defender": null,
+        "pokemon": "ドラパルト",
+        "move": null,
+        "conditions": {
+          "attacker": {},
+          "defender": {},
+          "field": {}
+        },
+        "uses_context": false,
+        "missing": [],
+        "unknown_names": [],
+        "queries": []
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 98,
+        "prompt_tokens": 741,
+        "total_tokens": 839
+      }
+    },
+    {
+      "id": 13,
+      "group": "extract",
+      "run": 1,
+      "ms": 1369,
+      "status": 200,
+      "retries429": 1,
+      "output": {
+        "intent": "type",
+        "attacker": null,
+        "defender": null,
+        "pokemon": "サーフゴー",
+        "move": null,
+        "conditions": {},
+        "uses_context": false,
+        "missing": [],
+        "unknown_names": [],
+        "queries": []
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 77,
+        "prompt_tokens": 737,
+        "total_tokens": 814
+      }
+    },
+    {
+      "id": 14,
+      "group": "extract",
+      "run": 1,
+      "ms": 2125,
+      "status": 200,
+      "retries429": 2,
+      "output": {
+        "intent": "type",
+        "attacker": null,
+        "defender": null,
+        "pokemon": "サーフゴー",
+        "move": null,
+        "conditions": {
+          "attacker": {},
+          "defender": {},
+          "field": {}
+        },
+        "uses_context": false,
+        "missing": [],
+        "unknown_names": [],
+        "queries": []
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 98,
+        "prompt_tokens": 737,
+        "total_tokens": 835
+      }
+    },
+    {
+      "id": 15,
+      "group": "extract",
+      "run": 1,
+      "ms": 1148,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "stats",
+        "attacker": null,
+        "defender": null,
+        "pokemon": "カイリュー",
+        "move": null,
+        "conditions": {
+          "attacker": {},
+          "defender": {},
+          "field": {}
+        },
+        "uses_context": false,
+        "missing": [],
+        "unknown_names": [],
+        "queries": []
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 97,
+        "prompt_tokens": 737,
+        "total_tokens": 834
+      }
+    },
+    {
+      "id": 16,
+      "group": "extract",
+      "run": 1,
+      "ms": 1799,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "learnset",
+        "attacker": null,
+        "defender": null,
+        "pokemon": "サーナイト",
+        "move": "でんじは",
+        "conditions": {},
+        "uses_context": false,
+        "missing": [],
+        "unknown_names": [],
+        "queries": []
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 81,
+        "prompt_tokens": 740,
+        "total_tokens": 821
+      }
+    },
+    {
+      "id": 17,
+      "group": "extract",
+      "run": 1,
+      "ms": 71,
+      "status": 429,
+      "retries429": 0,
+      "output": null,
+      "raw": "[{\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.8-flash\\nPlease retry in 8h24m47.793126561s.\",\n    \"status\": \"RESOURCE_EXHAUSTED\",\n    \"details\": [\n      {\n        \"@type\": \"type.googleapis.com/google.rpc.Help\",\n        \"links\": [",
+      "errors": [
+        "HTTP 429: [{\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-"
+      ],
+      "fabricated": [],
+      "daily": true
+    }
+  ],
+  "bursts": null
+}

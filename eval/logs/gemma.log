@@ -1,0 +1,166 @@
+gemma-4-26b run1 #1 3136ms ○ 
+gemma-4-26b run1 #2 2407ms ○ 
+gemma-4-26b run1 #3 2342ms ○ 
+gemma-4-26b run1 #4 3135ms ○ 
+gemma-4-26b run1 #5 4272ms ○ 
+gemma-4-26b run1 #6 2938ms ○ 
+gemma-4-26b run1 #7 3207ms ○ 
+gemma-4-26b run1 #8 3052ms ○ 
+gemma-4-26b run1 #9 3243ms ○ 
+gemma-4-26b run1 #10 2363ms ○ 
+gemma-4-26b run1 #11 3332ms ○ 
+gemma-4-26b run1 #12 155ms × HTTP 500: [{
+  "error": {
+    "code": 500,
+    "message": "Internal error encountered.",
+    "status": "INTERNAL"
+  }
+}
+]
+gemma-4-26b run1 #13 2074ms ○ 
+gemma-4-26b run1 #14 2111ms ○ 
+gemma-4-26b run1 #15 2110ms ○ 
+gemma-4-26b run1 #16 2260ms ○ 
+gemma-4-26b run1 #17 2157ms × intent=type（正解 move_info）
+gemma-4-26b run1 #18 2257ms × intent=learnset（正解 my_team）
+gemma-4-26b run1 #19 2621ms ○ 
+gemma-4-26b run1 #20 2533ms ○ 
+gemma-4-26b run1 #21 2071ms ○ 
+gemma-4-26b run1 #22 2696ms ○ 
+gemma-4-26b run1 #23 2399ms ○ 
+gemma-4-26b run1 #24 2324ms ○ 
+gemma-4-26b run1 #25 2432ms × intent=move_info（正解 clarify） / missing=[]
+gemma-4-26b run1 #26 3176ms × intent=damage（正解 clarify）
+gemma-4-26b run1 #27 2367ms ○ 
+gemma-4-26b run1 #28 3537ms ○ 
+gemma-4-26b run1 #29 5732ms ○ 
+gemma-4-26b run1 #30 1517ms ○ 
+gemma-4-26b run2 #1 2776ms ○ 
+gemma-4-26b run2 #2 2433ms ○ 
+gemma-4-26b run2 #3 2345ms ○ 
+gemma-4-26b run2 #4 3241ms ○ 
+gemma-4-26b run2 #5 3642ms ○ 
+gemma-4-26b run2 #6 2901ms ○ 
+gemma-4-26b run2 #7 3143ms ○ 
+gemma-4-26b run2 #8 2970ms ○ 
+gemma-4-26b run2 #9 3301ms ○ 
+gemma-4-26b run2 #10 2315ms ○ 
+gemma-4-26b run2 #11 131ms × HTTP 500: [{
+  "error": {
+    "code": 500,
+    "message": "Internal error encountered.",
+    "status": "INTERNAL"
+  }
+}
+]
+  #12 429（1 回目）→ 20s 待つ
+gemma-4-26b run2 #12 2515ms ○ 
+gemma-4-26b run2 #13 2119ms ○ 
+gemma-4-26b run2 #14 2145ms ○ 
+gemma-4-26b run2 #15 2080ms ○ 
+gemma-4-26b run2 #16 2168ms ○ 
+gemma-4-26b run2 #17 2138ms × intent=type（正解 move_info）
+gemma-4-26b run2 #18 2296ms × intent=learnset（正解 my_team）
+gemma-4-26b run2 #19 2576ms ○ 
+gemma-4-26b run2 #20 2441ms ○ 
+gemma-4-26b run2 #21 2054ms ○ 
+gemma-4-26b run2 #22 2158ms ○ 
+gemma-4-26b run2 #23 2978ms ○ 
+gemma-4-26b run2 #24 2354ms ○ 
+gemma-4-26b run2 #25 2422ms × intent=move_info（正解 clarify） / missing=[]
+gemma-4-26b run2 #26 3204ms × intent=damage（正解 clarify）
+gemma-4-26b run2 #27 2505ms ○ 
+gemma-4-26b run2 #28 131ms × HTTP 500: [{
+  "error": {
+    "code": 500,
+    "message": "Internal error encountered.",
+    "status": "INTERNAL"
+  }
+}
+]
+gemma-4-26b run2 #29 5736ms ○ 
+gemma-4-26b run2 #30 1543ms ○ 
+gemma-4-26b run3 #1 3890ms ○ 
+gemma-4-26b run3 #2 2416ms ○ 
+gemma-4-26b run3 #3 2366ms ○ 
+gemma-4-26b run3 #4 3219ms ○ 
+gemma-4-26b run3 #5 3084ms ○ 
+gemma-4-26b run3 #6 2867ms ○ 
+gemma-4-26b run3 #7 3250ms ○ 
+gemma-4-26b run3 #8 220ms × HTTP 500: [{
+  "error": {
+    "code": 500,
+    "message": "Internal error encountered.",
+    "status": "INTERNAL"
+  }
+}
+]
+gemma-4-26b run3 #9 3304ms ○ 
+gemma-4-26b run3 #10 135ms × HTTP 500: [{
+  "error": {
+    "code": 500,
+    "message": "Internal error encountered.",
+    "status": "INTERNAL"
+  }
+}
+]
+gemma-4-26b run3 #11 3368ms ○ 
+gemma-4-26b run3 #12 2532ms ○ 
+gemma-4-26b run3 #13 2162ms ○ 
+gemma-4-26b run3 #14 2185ms ○ 
+gemma-4-26b run3 #15 161ms × HTTP 500: [{
+  "error": {
+    "code": 500,
+    "message": "Internal error encountered.",
+    "status": "INTERNAL"
+  }
+}
+]
+gemma-4-26b run3 #16 2206ms ○ 
+gemma-4-26b run3 #17 2114ms × intent=type（正解 move_info）
+gemma-4-26b run3 #18 230ms × HTTP 500: [{
+  "error": {
+    "code": 500,
+    "message": "Internal error encountered.",
+    "status": "INTERNAL"
+  }
+}
+]
+gemma-4-26b run3 #19 2574ms ○ 
+gemma-4-26b run3 #20 2447ms ○ 
+  #21 429（1 回目）→ 20s 待つ
+gemma-4-26b run3 #21 233ms × HTTP 500: [{
+  "error": {
+    "code": 500,
+    "message": "Internal error encountered.",
+    "status": "INTERNAL"
+  }
+}
+]
+gemma-4-26b run3 #22 3252ms ○ 
+gemma-4-26b run3 #23 2201ms ○ 
+gemma-4-26b run3 #24 2398ms ○ 
+gemma-4-26b run3 #25 197ms × HTTP 500: [{
+  "error": {
+    "code": 500,
+    "message": "Internal error encountered.",
+    "status": "INTERNAL"
+  }
+}
+]
+gemma-4-26b run3 #26 137ms × HTTP 500: [{
+  "error": {
+    "code": 500,
+    "message": "Internal error encountered.",
+    "status": "INTERNAL"
+  }
+}
+]
+gemma-4-26b run3 #27 2507ms ○ 
+gemma-4-26b run3 #28 3471ms ○ 
+gemma-4-26b run3 #29 5747ms ○ 
+gemma-4-26b run3 #30 1509ms ○ 
+  連続 1: 500,500,200,200,200
+  連続 2: 500,200,500,500,200
+  連続 3: 500,200,200,500,200
+done gemma-4-26b
