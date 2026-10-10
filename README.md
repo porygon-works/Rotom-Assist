@@ -1,11 +1,13 @@
 # Rotom-Assist
 ポケモン対戦のダメージ計算・音声アシスタント（@smogon/calc 利用）。
 
-## 現状：第1段階（テキスト入力）
+## 現状：第1段階（テキスト入力）＋ Claude による質問解釈
 ```
 npm install
 npm run calc -- ブリジュラス ラスターカノン ハバタクカミ
 npm test
+export ANTHROPIC_API_KEY=...   # リポジトリには書かない
+npm run ask -- "ブリジュラスのラスターカノンはハバタクカミに何割？"
 ```
 - `src/calc.ts`：計算本体（日本語名→英語名変換、範囲・確定数・前提を返す）
 - `data/ja-en.json`：名前対応表（現状は少数のシード。順次追加）
