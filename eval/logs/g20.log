@@ -1,0 +1,194 @@
+groq-gpt-oss-20b run1 #1 606ms × attacker="ガブリアス"（正解 ミミッキュ） / defender="ミミッキュ"（正解 ガブリアス）
+groq-gpt-oss-20b run1 #2 323ms ○ 
+groq-gpt-oss-20b run1 #3 511ms ○ 
+groq-gpt-oss-20b run1 #4 586ms × attacker="スカーフガブリアス"（正解 ガブリアス） / attacker.item=undefined（正解 /スカーフ/）
+groq-gpt-oss-20b run1 #5 464ms × intent=move_info（正解 damage） / move=null（正解 ねっぷう）
+groq-gpt-oss-20b run1 #6 398ms × attacker.item=undefined（正解 /ハチマキ/）
+groq-gpt-oss-20b run1 #7 643ms × intent=move_info（正解 damage） / defender=null（正解 ドドゲザン）
+  #8 429（1 回目）→ 8s 待つ
+groq-gpt-oss-20b run1 #8 553ms × attacker.boosts.atk=undefined
+  #9 429（1 回目）→ 8s 待つ
+groq-gpt-oss-20b run1 #9 399ms × intent=clarify（正解 damage） / attacker="ガブリアス"（正解 サーフゴー） / defender="サーフゴー"（正解 ガブリアス） / move=null（正解 ゴールドラッシュ） / defender.sp.hp=undefined
+  #10 429（1 回目）→ 7s 待つ
+groq-gpt-oss-20b run1 #10 992ms ○ 
+  #11 429（1 回目）→ 3s 待つ
+groq-gpt-oss-20b run1 #11 340ms × スカーフ がない / 最速が 0 体分
+  #12 429（1 回目）→ 8s 待つ
+groq-gpt-oss-20b run1 #12 405ms × intent=stats（正解 speed）
+  #13 429（1 回目）→ 1s 待つ
+groq-gpt-oss-20b run1 #13 265ms ○ 
+  #14 429（1 回目）→ 8s 待つ
+groq-gpt-oss-20b run1 #14 349ms ○ 
+  #15 429（1 回目）→ 5s 待つ
+  #15 429（2 回目）→ 3s 待つ
+groq-gpt-oss-20b run1 #15 287ms ○ 
+  #16 429（1 回目）→ 5s 待つ
+groq-gpt-oss-20b run1 #16 924ms × move="でんじ"（正解 でんじは）
+  #17 429（1 回目）→ 9s 待つ
+  #17 429（2 回目）→ 1s 待つ
+groq-gpt-oss-20b run1 #17 1741ms × intent=type（正解 move_info） / move="じゃれつくって"（正解 じゃれつく）
+  #18 429（1 回目）→ 9s 待つ
+  #18 429（2 回目）→ 9s 待つ
+groq-gpt-oss-20b run1 #18 508ms × intent=move_info（正解 my_team）
+groq-gpt-oss-20b run1 #19 233ms × intent=stats（正解 my_team）
+  #20 429（1 回目）→ 7s 待つ
+groq-gpt-oss-20b run1 #20 570ms × intent=type（正解 my_team）
+  #21 429（1 回目）→ 8s 待つ
+groq-gpt-oss-20b run1 #21 296ms ○ 
+  #22 429（1 回目）→ 6s 待つ
+  #22 429（2 回目）→ 1s 待つ
+  #22 429（3 回目）→ 2s 待つ
+groq-gpt-oss-20b run1 #22 293ms ○ 
+  #23 429（1 回目）→ 7s 待つ
+groq-gpt-oss-20b run1 #23 475ms ○ 
+  #24 429（1 回目）→ 8s 待つ
+groq-gpt-oss-20b run1 #24 298ms ○ 
+  #25 429（1 回目）→ 5s 待つ
+  #25 429（2 回目）→ 9s 待つ
+groq-gpt-oss-20b run1 #25 463ms × intent=move_info（正解 clarify） / missing=[]
+groq-gpt-oss-20b run1 #26 1046ms × intent=move_info（正解 clarify）
+  #27 429（1 回目）→ 8s 待つ
+groq-gpt-oss-20b run1 #27 677ms × intent=clarify（正解 damage） / attacker=null（正解 ミミッキュ） / defender=null（正解 ガブリアス） / move=null（正解 じゃれつく）
+  #28 429（1 回目）→ 1s 待つ
+  #28 429（2 回目）→ 2s 待つ
+groq-gpt-oss-20b run1 #28 446ms × intent=clarify（正解 damage） / attacker=null（正解 サーナイト） / defender=null（正解 カイリュー） / move=null（正解 ムーンフォース）
+  #29 429（1 回目）→ 10s 待つ
+groq-gpt-oss-20b run1 #29 710ms × 2 つに分けられていない（intent=multi, queries=2）
+  #30 429（1 回目）→ 5s 待つ
+groq-gpt-oss-20b run1 #30 303ms ○ 
+groq-gpt-oss-20b run2 #1 376ms × attacker="ガブリアス"（正解 ミミッキュ） / defender="ミミッキュ"（正解 ガブリアス）
+  #2 429（1 回目）→ 6s 待つ
+  #2 429（2 回目）→ 3s 待つ
+  #2 429（3 回目）→ 1s 待つ
+groq-gpt-oss-20b run2 #2 317ms ○ 
+  #3 429（1 回目）→ 3s 待つ
+  #3 429（2 回目）→ 1s 待つ
+  #3 429（3 回目）→ 2s 待つ
+groq-gpt-oss-20b run2 #3 324ms ○ 
+  #4 429（1 回目）→ 8s 待つ
+groq-gpt-oss-20b run2 #4 414ms × attacker="スカーフガブリアス"（正解 ガブリアス） / attacker.item=undefined（正解 /スカーフ/）
+  #5 429（1 回目）→ 5s 待つ
+groq-gpt-oss-20b run2 #5 1177ms × intent=move_info（正解 damage） / move=null（正解 ねっぷう）
+  #6 429（1 回目）→ 6s 待つ
+groq-gpt-oss-20b run2 #6 396ms × attacker.item=undefined（正解 /ハチマキ/）
+  #7 429（1 回目）→ 4s 待つ
+groq-gpt-oss-20b run2 #7 527ms × intent=move_info（正解 damage） / defender=null（正解 ドドゲザン）
+  #8 429（1 回目）→ 11s 待つ
+groq-gpt-oss-20b run2 #8 357ms × attacker.boosts.atk=undefined
+  #9 429（1 回目）→ 6s 待つ
+groq-gpt-oss-20b run2 #9 604ms × attacker="ガブリアス"（正解 サーフゴー） / defender="サーフゴー"（正解 ガブリアス） / move=null（正解 ゴールドラッシュ） / defender.sp.hp=undefined
+  #10 429（1 回目）→ 6s 待つ
+  #10 429（2 回目）→ 10s 待つ
+groq-gpt-oss-20b run2 #10 588ms × ポケモン ガブリアス がない（） / ポケモン サーフゴー がない（）
+groq-gpt-oss-20b run2 #11 356ms × スカーフ がない / 最速が 0 体分
+  #12 429（1 回目）→ 1s 待つ
+groq-gpt-oss-20b run2 #12 308ms × intent=stats（正解 speed）
+  #13 429（1 回目）→ 8s 待つ
+  #13 429（2 回目）→ 2s 待つ
+groq-gpt-oss-20b run2 #13 411ms ○ 
+  #14 429（1 回目）→ 4s 待つ
+groq-gpt-oss-20b run2 #14 466ms ○ 
+  #15 429（1 回目）→ 7s 待つ
+groq-gpt-oss-20b run2 #15 329ms ○ 
+  #16 429（1 回目）→ 8s 待つ
+  #16 429（2 回目）→ 2s 待つ
+groq-gpt-oss-20b run2 #16 960ms × move="でんじ"（正解 でんじは）
+  #17 429（1 回目）→ 11s 待つ
+  #17 429（2 回目）→ 6s 待つ
+groq-gpt-oss-20b run2 #17 432ms × intent=type（正解 move_info）
+  #18 429（1 回目）→ 1s 待つ
+groq-gpt-oss-20b run2 #18 486ms ○ 
+  #19 429（1 回目）→ 3s 待つ
+groq-gpt-oss-20b run2 #19 385ms × intent=stats（正解 my_team）
+  #20 429（1 回目）→ 4s 待つ
+  #20 429（2 回目）→ 3s 待つ
+groq-gpt-oss-20b run2 #20 487ms × intent=type（正解 my_team）
+  #21 429（1 回目）→ 5s 待つ
+  #21 429（2 回目）→ 2s 待つ
+  #21 429（3 回目）→ 1s 待つ
+groq-gpt-oss-20b run2 #21 554ms ○ 
+  #22 429（1 回目）→ 4s 待つ
+  #22 429（2 回目）→ 3s 待つ
+groq-gpt-oss-20b run2 #22 548ms ○ 
+  #23 429（1 回目）→ 7s 待つ
+groq-gpt-oss-20b run2 #23 310ms ○ 
+groq-gpt-oss-20b run2 #24 315ms ○ 
+  #25 429（1 回目）→ 9s 待つ
+groq-gpt-oss-20b run2 #25 344ms × intent=move_info（正解 clarify） / missing=[]
+  #26 429（1 回目）→ 6s 待つ
+groq-gpt-oss-20b run2 #26 1083ms × intent=move_info（正解 clarify）
+  #27 429（1 回目）→ 18s 待つ
+groq-gpt-oss-20b run2 #27 723ms × intent=clarify（正解 damage） / attacker=null（正解 ミミッキュ） / defender=null（正解 ガブリアス） / move=null（正解 じゃれつく）
+groq-gpt-oss-20b run2 #28 390ms × intent=clarify（正解 damage） / attacker=null（正解 サーナイト） / defender=null（正解 カイリュー） / move=null（正解 ムーンフォース）
+groq-gpt-oss-20b run2 #29 894ms × 2 つに分けられていない（intent=multi, queries=2）
+  #30 429（1 回目）→ 5s 待つ
+  #30 429（2 回目）→ 3s 待つ
+groq-gpt-oss-20b run2 #30 333ms ○ 
+  #1 429（1 回目）→ 8s 待つ
+groq-gpt-oss-20b run3 #1 454ms × attacker="ガブリアス"（正解 ミミッキュ） / defender="ミミッキュ"（正解 ガブリアス）
+  #2 429（1 回目）→ 7s 待つ
+groq-gpt-oss-20b run3 #2 339ms ○ 
+  #3 429（1 回目）→ 2s 待つ
+groq-gpt-oss-20b run3 #3 562ms ○ 
+  #4 429（1 回目）→ 8s 待つ
+groq-gpt-oss-20b run3 #4 563ms × attacker="スカーフガブリアス"（正解 ガブリアス） / attacker.item=undefined（正解 /スカーフ/）
+  #5 429（1 回目）→ 7s 待つ
+groq-gpt-oss-20b run3 #5 522ms × intent=clarify（正解 damage） / attacker=null（正解 リザードン） / defender=null（正解 ハッサム） / move=null（正解 ねっぷう） / attacker.item=undefined（正解 /いのちのたま/）
+  #6 429（1 回目）→ 9s 待つ
+groq-gpt-oss-20b run3 #6 553ms × attacker.item=undefined（正解 /ハチマキ/）
+  #7 429（1 回目）→ 1s 待つ
+groq-gpt-oss-20b run3 #7 382ms × intent=move_info（正解 damage） / defender=null（正解 ドドゲザン）
+  #8 429（1 回目）→ 8s 待つ
+  #8 429（2 回目）→ 1s 待つ
+groq-gpt-oss-20b run3 #8 266ms × attacker.boosts.atk=undefined
+  #9 429（1 回目）→ 2s 待つ
+groq-gpt-oss-20b run3 #9 478ms × intent=clarify（正解 damage） / attacker="ガブリアス"（正解 サーフゴー） / defender="サーフゴー"（正解 ガブリアス） / move=null（正解 ゴールドラッシュ） / defender.sp.hp=undefined
+  #10 429（1 回目）→ 7s 待つ
+groq-gpt-oss-20b run3 #10 474ms × ポケモン ガブリアス がない（） / ポケモン サーフゴー がない（）
+groq-gpt-oss-20b run3 #11 353ms × スカーフ がない / 最速が 0 体分
+  #12 429（1 回目）→ 3s 待つ
+  #12 429（2 回目）→ 2s 待つ
+groq-gpt-oss-20b run3 #12 317ms × intent=stats（正解 speed）
+  #13 429（1 回目）→ 4s 待つ
+  #13 429（2 回目）→ 3s 待つ
+groq-gpt-oss-20b run3 #13 192ms ○ 
+  #14 429（1 回目）→ 4s 待つ
+  #14 429（2 回目）→ 3s 待つ
+groq-gpt-oss-20b run3 #14 325ms ○ 
+  #15 429（1 回目）→ 4s 待つ
+  #15 429（2 回目）→ 2s 待つ
+  #15 429（3 回目）→ 2s 待つ
+groq-gpt-oss-20b run3 #15 334ms ○ 
+  #16 429（1 回目）→ 1s 待つ
+groq-gpt-oss-20b run3 #16 917ms × move="でんじ"（正解 でんじは）
+  #17 429（1 回目）→ 11s 待つ
+groq-gpt-oss-20b run3 #17 2036ms × intent=type（正解 move_info） / move="じゃれつくって"（正解 じゃれつく）
+  #18 429（1 回目）→ 11s 待つ
+groq-gpt-oss-20b run3 #18 391ms ○ 
+  #19 429（1 回目）→ 14s 待つ
+groq-gpt-oss-20b run3 #19 374ms × intent=stats（正解 my_team）
+groq-gpt-oss-20b run3 #20 524ms × intent=type（正解 my_team）
+groq-gpt-oss-20b run3 #21 326ms ○ 
+  #22 429（1 回目）→ 2s 待つ
+  #22 429（2 回目）→ 3s 待つ
+groq-gpt-oss-20b run3 #22 242ms ○ 
+  #23 429（1 回目）→ 7s 待つ
+groq-gpt-oss-20b run3 #23 784ms ○ 
+groq-gpt-oss-20b run3 #24 650ms ○ 
+  #25 429（1 回目）→ 3s 待つ
+groq-gpt-oss-20b run3 #25 650ms × intent=move_info（正解 clarify） / missing=[]
+  #26 429（1 回目）→ 2s 待つ
+groq-gpt-oss-20b run3 #26 861ms × intent=move_info（正解 clarify）
+  #27 429（1 回目）→ 10s 待つ
+groq-gpt-oss-20b run3 #27 354ms × intent=clarify（正解 damage） / attacker=null（正解 ミミッキュ） / defender=null（正解 ガブリアス） / move=null（正解 じゃれつく）
+  #28 429（1 回目）→ 2s 待つ
+groq-gpt-oss-20b run3 #28 393ms × intent=clarify（正解 damage） / attacker=null（正解 サーナイト） / defender=null（正解 カイリュー） / move=null（正解 ムーンフォース）
+  #29 429（1 回目）→ 6s 待つ
+  #29 429（2 回目）→ 2s 待つ
+groq-gpt-oss-20b run3 #29 783ms ○ 
+  #30 429（1 回目）→ 5s 待つ
+groq-gpt-oss-20b run3 #30 364ms ○ 
+  連続 1: 200,200,200,200,200
+  連続 2: 200,200,200,200,200
+  連続 3: 200,200,200,200,200
+done groq-gpt-oss-20b
