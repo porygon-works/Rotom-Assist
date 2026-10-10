@@ -38,7 +38,7 @@ type Tok =
   | { k: "boost"; stat: Stat; n: number; conditional?: boolean } // conditional: 「上がったら」の形（付け先が前か後ろか決まらない）
   | { k: "sr" } // ステロ込み（防御側）
   | { k: "flag"; f: "reflect" | "critical" } // 壁・急所（場）
-  | { k: "hp"; percent?: number; value?: number } // 残り HP（直後のポケモン）
+  | { k: "hp"; percent?: number; value?: number; left?: boolean } // 残り HP（直後のポケモン）。left: 「残り」「残ってる」が付いていた
   | { k: "status"; v: string } // 状態異常（直後のポケモン）
   | { k: "p"; v: string } // 助詞・区切り
   | { k: "w"; v: string }; // 質問の言い回し
@@ -144,10 +144,11 @@ function pattern(s: string): [number, Tok] | null {
   m = s.match(/^(?:残リ)?HP(?:ガ)?(半分|[1-9]割|\d{1,3}(?:%|パーセント)|\d{1,3})(?:残リ|残ッタ|残ッテル)?/);
   if (m) {
     const v = m[1];
-    if (v === "半分") return [m[0].length, { k: "hp", percent: 50 }];
-    if (v.endsWith("割")) return [m[0].length, { k: "hp", percent: Number(v[0]) * 10 }];
-    if (/%|パーセント/.test(v)) return [m[0].length, { k: "hp", percent: Number(v.replace(/\D/g, "")) }];
-    return [m[0].length, { k: "hp", value: Number(v) }];
+    const left = /残/.test(m[0]);
+    if (v === "半分") return [m[0].length, { k: "hp", percent: 50, left }];
+    if (v.endsWith("割")) return [m[0].length, { k: "hp", percent: Number(v[0]) * 10, left }];
+    if (/%|パーセント/.test(v)) return [m[0].length, { k: "hp", percent: Number(v.replace(/\D/g, "")), left }];
+    return [m[0].length, { k: "hp", value: Number(v), left }];
   }
   m = s.match(/^([ABCDS])([+\-])([1-6])/);
   if (m) return [m[0].length, { k: "boost", stat: LETTER[m[1]], n: (m[2] === "-" ? -1 : 1) * Number(m[3]) }];
@@ -260,7 +261,9 @@ export function parseRules(raw: string): Obj | null {
       continue;
     }
     // 名前の後ろの残り HP（「エンペルトのHP120残ってる」）: 直前のポケモンに付ける
+    // （「〇〇のHP半分減る？」のように残り HP でない意味もあるので、「残り」「残ってる」が付いているときだけ）
     if (t.k === "hp" && !mods.length && (toks[i - 1] as Tok | undefined)?.k === "p" && (toks[i - 1] as { v: string }).v === "ノ" && toks[i - 2]?.k === "pokemon" && sides.length) {
+      if (!t.left) return null;
       const last = sides[sides.length - 1];
       if (t.percent !== undefined) last.cond.hp_left_percent = t.percent;
       if (t.value !== undefined) last.cond.hp_left = t.value;
@@ -293,6 +296,10 @@ export function parseRules(raw: string): Obj | null {
 
   if ((sr || field.reflect || field.critical) && !(sides.length === 2 && moves.length === 1)) return null;
   if (bothSpread.length && !(sides.length === 2 && !moves.length)) return null;
+
+  // 天候・フィールドが付いているのに、ダメージ・素早さ以外の質問になる場合は、条件を落とさないよう AI に回す
+  const fieldUsed = Object.keys(field).length > 0;
+  if (fieldUsed && !(sides.length === 2) && !(sides.length === 1 && has(/素早サ|スバヤサ|実数値/))) return null;
 
   // わざの質問（ポケモンなし）
   if (!sides.length && moves.length === 1 && has(/タイプ|威力|イリョク|優先度|ユウセンド/)) return { move: moves[0], intent: "move_info" };

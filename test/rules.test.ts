@@ -41,6 +41,8 @@ describe("ルール解析（確実に分かるときだけ答える）", () => {
     expect(parseRules("ミミッキュのじゃれつく")).toMatchObject({ intent: "clarify", missing: ["defender"] }); // 相手がいない → 聞き返す
     expect(parseRules("エンペルトにじしん撃ったらどれくらい？")).toMatchObject({ intent: "clarify", missing: ["attacker"] });
     expect(parseRules("最速イダイトウがS1段階上がったらメガルカリオZ抜ける？")).toBeNull(); // 「上がったら」の付け先が決まらない
+    expect(parseRules("ミミッキュのじゃれつくでガブリアスのHP半分減る？")).toBeNull(); // 「残ってる」がない後ろの HP は残り HP とは限らない
+    expect(parseRules("雨のガブの弱点")).toBeNull(); // 条件を落とさない
   });
 });
 
