@@ -17,9 +17,16 @@ describe("ルール解析（確実に分かるときだけ答える）", () => {
     expect(parseRules("カイリューの種族値教えて")).toMatchObject({ intent: "stats" });
     expect(parseRules("じゃれつくって何タイプ？")).toMatchObject({ intent: "move_info", move: "じゃれつく" });
   });
+  it("ユーザーの質問例（ランク・どこまで振ったら）", () => {
+    expect(parseRules("S二段階上昇のイダイトウって最速メガルカリオZ抜ける？")).toMatchObject({
+      intent: "speed", ask: "compare", attacker: "イダイトウ", defender: "メガルカリオZ",
+      conditions: { attacker: { boosts: { spe: 2 } }, defender: { sp: { spe: 32 }, nature_up: "spe" } },
+    });
+    expect(parseRules("S二段階上昇のイダイトウってメガルカリオZがどこまですばやさ振ってたら負ける？")).toMatchObject({ ask: "threshold", conditions: { attacker: { boosts: { spe: 2 } } } });
+    expect(parseRules("HP半分のドドゲザン、ガブのじしんで落ちる？")).toMatchObject({ conditions: { defender: { hp_left_percent: 50 } } });
+  });
   it("知らない語が残ったら答えない（AI に回す）", () => {
     expect(parseRules("HPに32振ったガブリアス、サーフゴーのゴールドラッシュ耐える？")).toBeNull();
-    expect(parseRules("HP半分のドドゲザン、ガブのじしんで落ちる？")).toBeNull();
     expect(parseRules("じゃあA特化なら？")).toBeNull();
     expect(parseRules("が降りあすに見っきゅのじゃれつく")).toBeNull();
     expect(parseRules("ガブリアスとミミッキュのじしん")).toBeNull(); // 向きが決まらない

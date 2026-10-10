@@ -25,6 +25,7 @@ type Tok =
   | { k: "spread"; sp: Partial<Record<Stat, number>>; up?: Stat; down?: Stat }
   | { k: "boost"; stat: Stat; n: number }
   | { k: "sr" } // ステロ込み（防御側）
+  | { k: "hp"; percent?: number; value?: number } // 残り HP（直後のポケモン）
   | { k: "p"; v: string } // 助詞・区切り
   | { k: "w"; v: string }; // 質問の言い回し
 
@@ -54,6 +55,7 @@ function dictionary(): [string, Tok][] {
     "何発", "なんぱつ", "確定", "確定数", "耐える", "耐えれる", "耐えられる", "落ちる", "落とせる", "倒せる", "どれくらい", "どのくらい", "減る",
     "どっちが速い", "どっちがはやい", "どっちが早い", "どっちが先", "抜ける", "抜かれる", "素早さ", "すばやさ", "実数値", "いくつ",
     "タイプ", "弱点", "相性", "種族値", "威力", "何タイプ", "教えて", "？", "?", "。", "!", "！", "撃ったら", "うったら", "だと", "なら",
+    "どこまで", "すばやさ振ってたら", "素早さ振ってたら", "振ってたら", "振ったら", "何振りまで", "何振りなら", "負ける", "抜かれる", "までなら", "まで",
   ]) add(w, { k: "w", v: norm(w) });
   // 長い語から先に照合する
   list.sort((x, y) => y[0].length - x[0].length);
@@ -80,6 +82,24 @@ function pattern(s: string): [number, Tok] | null {
   }
   m = s.match(/^(?:ステロ|ステルスロック)(?:込ミ|コミ|込|アリ|有リ|入リ)/);
   if (m) return [m[0].length, { k: "sr" }];
+  // ランク: 「S+2」「C-1」「S二段階上昇の」「攻撃1段階上がった」
+  m = s.match(/^([ABCDS])([+\-])([1-6])/);
+  if (m) return [m[0].length, { k: "boost", stat: LETTER[m[1]], n: (m[2] === "-" ? -1 : 1) * Number(m[3]) }];
+  m = s.match(/^([ABCDS]|攻撃|防御|特攻|特防|素早サ|スバヤサ)ガ?([1-6一二三四五六])段階(上昇|上ガッタ|上ガッテル|アップ|下降|下ガッタ|下ガッテル|ダウン)/);
+  if (m) {
+    const stat = LETTER[m[1]] ?? ({ 攻撃: "atk", 防御: "def", 特攻: "spa", 特防: "spd", 素早サ: "spe", スバヤサ: "spe" } as Record<string, Stat>)[m[1]];
+    const n = Number(m[2]) || "一二三四五六".indexOf(m[2]) + 1;
+    return [m[0].length, { k: "boost", stat, n: /下|ダウン/.test(m[3]) ? -n : n }];
+  }
+  // 残り HP（名前の前に付く形）: 「HP半分の」「残りHP3割の」「HP120の」
+  m = s.match(/^(?:残リ)?HP(?:ガ)?(半分|[1-9]割|\d{1,3}(?:%|パーセント)|\d{1,3})(?:残リ|残ッタ|残ッテル)?/);
+  if (m) {
+    const v = m[1];
+    if (v === "半分") return [m[0].length, { k: "hp", percent: 50 }];
+    if (v.endsWith("割")) return [m[0].length, { k: "hp", percent: Number(v[0]) * 10 }];
+    if (/%|パーセント/.test(v)) return [m[0].length, { k: "hp", percent: Number(v.replace(/\D/g, "")) }];
+    return [m[0].length, { k: "hp", value: Number(v) }];
+  }
   m = s.match(/^([ABCDS])([+\-])([1-6])/);
   if (m) return [m[0].length, { k: "boost", stat: LETTER[m[1]], n: (m[2] === "-" ? -1 : 1) * Number(m[3]) }];
   return null;
@@ -131,6 +151,10 @@ function applyMods(cond: Obj, mods: Tok[]) {
     } else if (t.k === "item") cond.item = t.ja;
     else if (t.k === "nature") cond.nature = t.ja;
     else if (t.k === "boost") cond.boosts = { ...(cond.boosts as Obj | undefined), [t.stat]: t.n };
+    else if (t.k === "hp") {
+      if (t.percent !== undefined) cond.hp_left_percent = t.percent;
+      if (t.value !== undefined) cond.hp_left = t.value;
+    }
   }
 }
 
@@ -158,7 +182,7 @@ export function parseRules(text: string): Obj | null {
       if (next?.k === "p" && ["ノ", "デ"].includes(next.v)) i++; // 「ステロ込みで」
       continue;
     }
-    if (t.k === "spread" || t.k === "item" || t.k === "nature" || t.k === "boost") {
+    if (t.k === "spread" || t.k === "item" || t.k === "nature" || t.k === "boost" || t.k === "hp") {
       mods.push(t);
       continue;
     }
@@ -198,12 +222,14 @@ export function parseRules(text: string): Obj | null {
 
   // 2 匹・わざなし: 素早さ
   if (sides.length === 2 && !moves.length) {
-    if (!has(/ドッチガ|抜ケ/)) return null;
+    const threshold = has(/ドコマデ|何振リ/);
+    if (!threshold && !has(/ドッチガ|抜ケ/)) return null;
     const [a, b] = sides;
     const c: Obj = {};
     if (Object.keys(a.cond).length) c.attacker = a.cond;
     if (Object.keys(b.cond).length) c.defender = b.cond;
-    return { attacker: a.name, defender: b.name, conditions: conditions(c), ask: "compare", intent: "speed" };
+    if (threshold && b.cond.sp) return null; // 相手の振り方を聞いているのに、相手の振り方が指定されている
+    return { attacker: a.name, defender: b.name, conditions: conditions(c), ask: threshold ? "threshold" : "compare", intent: "speed" };
   }
 
   // 2 匹・わざ 1 つ: ダメージ
