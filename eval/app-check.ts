@@ -1,7 +1,8 @@
 // アプリでの動作確認: 起動中のアプリ（/api/ask）に、対戦でありそうな質問を通して回答を一覧にする（AI を実際に呼ぶ）
-// 使い方: npx next start -p 3123 を起動してから npx tsx eval/app-check.ts [http://localhost:3123] > eval/app-checks/<日時>.md
+// 使い方: npx next start -p 3123 を起動してから npx tsx eval/app-check.ts [a|b] [http://localhost:3123] > eval/app-checks/<日時>.md
 // 1 行が 1 つの会話。「 → 」でつなぐと、前の質問を文脈として続けて聞く
-const BASE = process.argv[2] ?? "http://localhost:3123";
+const SET = process.argv[2] === "b" ? "b" : "a";
+const BASE = process.argv[3] ?? "http://localhost:3123";
 
 export const CONVERSATIONS: string[] = [
   "メガガブリアスのじしん、HB特化カバルドンに",
@@ -30,6 +31,28 @@ export const CONVERSATIONS: string[] = [
   "サーフゴーのゴールドラッシュ、HB特化カイリューに → マルチスケイル込みだと？",
 ];
 
+// 4 回目から使う別の組（1〜3 回目で直したことが、別の言い方でも効くかを見る）
+export const CONVERSATIONS_B: string[] = [
+  "ガブのげきりん、H振りメガカイリューに",
+  "マルチスケイルのカイリューにガブのげきりん",
+  "ハッサムにリザードンのかえんほうしゃ、晴れ",
+  "ガブリアスとドラパルトとサーフゴー、どれが一番速い？",
+  "ガブの地震でゲンガー落ちる？",
+  "ドドゲザンのふいうち、HP3割のサーフゴーに",
+  "しんそくとバレットパンチどっちが優先度高い？",
+  "がぶりあすのじゃくてん",
+  "メガルカリオZの種族値",
+  "最速イダイトウの実数値",
+  "ハッサムってつるぎのまい覚える？",
+  "S+1ガブリアスと最速メガルカリオZどっちが速い？",
+  "ステロ込みでリザードンにドドゲザンのアイアンヘッド",
+  "スカーフガブリアス抜ける？",
+  "こんにちは",
+  "ガブリアスにピカチュウのボルテッカー",
+  "がぶりあすにみみっきゅのじゃれ付く",
+  "ウォッシュロトムのハイドロポンプ、ガブリアスに → じゃあ雨なら？ → じゃあH振りなら？",
+];
+
 interface Res {
   speech?: string;
   title?: string;
@@ -41,8 +64,8 @@ interface Res {
 }
 
 async function main() {
-  console.log(`# アプリでの動作確認（${new Date().toISOString()}）\n`);
-  for (const conv of CONVERSATIONS) {
+  console.log(`# アプリでの動作確認（組 ${SET}、${new Date().toISOString()}）\n`);
+  for (const conv of SET === "b" ? CONVERSATIONS_B : CONVERSATIONS) {
     let history: { user: string; extraction: unknown }[] = [];
     for (const q of conv.split(" → ")) {
       const t0 = Date.now();
