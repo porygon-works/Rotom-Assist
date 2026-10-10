@@ -1,0 +1,2186 @@
+{
+  "name": "gemini-3.5-flash-lite",
+  "prompt": "v3",
+  "model": "gemini-3.5-flash-lite",
+  "extra": {
+    "reasoning_effort": "minimal"
+  },
+  "date": "2026-10-10T16:13:26.628Z",
+  "stopped": null,
+  "rows": [
+    {
+      "id": 1,
+      "group": "extract",
+      "run": 1,
+      "ms": 804,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "clarify",
+        "attacker": "ミミッキュ",
+        "defender": "ガブリアス",
+        "move": "じゃれつく",
+        "missing": [
+          "defender"
+        ]
+      },
+      "errors": [
+        "intent=clarify（正解 damage）"
+      ],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 58,
+        "prompt_tokens": 1191,
+        "total_tokens": 1249
+      }
+    },
+    {
+      "id": 2,
+      "group": "extract",
+      "run": 1,
+      "ms": 577,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "damage",
+        "attacker": "ミミッキュ",
+        "defender": "ガブリアス",
+        "move": "じゃれつく"
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 43,
+        "prompt_tokens": 1196,
+        "total_tokens": 1239
+      }
+    },
+    {
+      "id": 3,
+      "group": "extract",
+      "run": 1,
+      "ms": 447,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "damage",
+        "attacker": "サーナイト",
+        "defender": "カイリュー",
+        "move": "ムーンフォース",
+        "uses_context": false
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 48,
+        "prompt_tokens": 1192,
+        "total_tokens": 1240
+      }
+    },
+    {
+      "id": 4,
+      "group": "extract",
+      "run": 1,
+      "ms": 569,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "damage",
+        "attacker": "ガブリアス",
+        "defender": "サーフゴー",
+        "move": "じしん",
+        "conditions": {
+          "attacker": {
+            "item": "こだわりスカーフ"
+          }
+        },
+        "uses_context": false
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 79,
+        "prompt_tokens": 1193,
+        "total_tokens": 1272
+      }
+    },
+    {
+      "id": 5,
+      "group": "extract",
+      "run": 1,
+      "ms": 569,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "damage",
+        "attacker": "リザードン",
+        "defender": "ハッサム",
+        "move": "ねっぷう",
+        "conditions": {
+          "attacker": {
+            "item": "いのちのたま"
+          }
+        },
+        "uses_context": false
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 79,
+        "prompt_tokens": 1194,
+        "total_tokens": 1273
+      }
+    },
+    {
+      "id": 6,
+      "group": "extract",
+      "run": 1,
+      "ms": 870,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "damage",
+        "attacker": "ハッサム",
+        "defender": "サーナイト",
+        "move": "バレットパンチ",
+        "conditions": {
+          "attacker": {
+            "item": "こだわりハチマキ"
+          }
+        },
+        "uses_context": false
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 79,
+        "prompt_tokens": 1200,
+        "total_tokens": 1279
+      }
+    },
+    {
+      "id": 7,
+      "group": "extract",
+      "run": 1,
+      "ms": 649,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "clarify",
+        "attacker": "メガリザードンY",
+        "defender": "ドドゲザン",
+        "move": "かえんほうしゃ",
+        "conditions": {
+          "field": {
+            "weather": "晴れ"
+          }
+        },
+        "missing": [
+          "defender"
+        ]
+      },
+      "errors": [
+        "intent=clarify（正解 damage）"
+      ],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 89,
+        "prompt_tokens": 1198,
+        "total_tokens": 1287
+      }
+    },
+    {
+      "id": 8,
+      "group": "extract",
+      "run": 1,
+      "ms": 613,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "damage",
+        "attacker": "カイリュー",
+        "defender": "ガブリアス",
+        "move": "しんそく",
+        "conditions": {
+          "attacker": {
+            "boosts": {
+              "atk": 1
+            }
+          }
+        },
+        "uses_context": false
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 85,
+        "prompt_tokens": 1196,
+        "total_tokens": 1281
+      }
+    },
+    {
+      "id": 9,
+      "group": "extract",
+      "run": 1,
+      "ms": 610,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "damage",
+        "attacker": "サーフゴー",
+        "defender": "ガブリアス",
+        "move": "ゴールドラッシュ",
+        "conditions": {
+          "defender": {
+            "sp": {
+              "hp": 32
+            }
+          }
+        },
+        "uses_context": false
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 85,
+        "prompt_tokens": 1199,
+        "total_tokens": 1284
+      }
+    },
+    {
+      "id": 10,
+      "group": "extract",
+      "run": 1,
+      "ms": 504,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "speed",
+        "attacker": "ガブリアス",
+        "defender": "サーフゴー"
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 32,
+        "prompt_tokens": 1192,
+        "total_tokens": 1224
+      }
+    },
+    {
+      "id": 11,
+      "group": "extract",
+      "run": 1,
+      "ms": 659,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "speed",
+        "attacker": "ガブリアス",
+        "defender": "ドラパルト",
+        "conditions": {
+          "attacker": {
+            "item": "こだわりスカーフ",
+            "speed": "max"
+          },
+          "defender": {
+            "speed": "max"
+          }
+        },
+        "uses_context": false
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 94,
+        "prompt_tokens": 1199,
+        "total_tokens": 1293
+      }
+    },
+    {
+      "id": 12,
+      "group": "extract",
+      "run": 1,
+      "ms": 512,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "speed",
+        "pokemon": "ドラパルト",
+        "uses_context": false
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 29,
+        "prompt_tokens": 1189,
+        "total_tokens": 1218
+      }
+    },
+    {
+      "id": 13,
+      "group": "extract",
+      "run": 1,
+      "ms": 505,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "type",
+        "pokemon": "サーフゴー"
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 21,
+        "prompt_tokens": 1185,
+        "total_tokens": 1206
+      }
+    },
+    {
+      "id": 14,
+      "group": "extract",
+      "run": 1,
+      "ms": 729,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "type",
+        "pokemon": "サーフゴー"
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 21,
+        "prompt_tokens": 1185,
+        "total_tokens": 1206
+      }
+    },
+    {
+      "id": 15,
+      "group": "extract",
+      "run": 1,
+      "ms": 685,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "stats",
+        "pokemon": "カイリュー",
+        "uses_context": false
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 28,
+        "prompt_tokens": 1185,
+        "total_tokens": 1213
+      }
+    },
+    {
+      "id": 16,
+      "group": "extract",
+      "run": 1,
+      "ms": 536,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "learnset",
+        "pokemon": "サーナイト",
+        "move": "でんじは"
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 32,
+        "prompt_tokens": 1188,
+        "total_tokens": 1220
+      }
+    },
+    {
+      "id": 17,
+      "group": "extract",
+      "run": 1,
+      "ms": 575,
+      "status": 200,
+      "retries429": 1,
+      "output": {
+        "intent": "move_info",
+        "move": "じゃれつく"
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 23,
+        "prompt_tokens": 1185,
+        "total_tokens": 1208
+      }
+    },
+    {
+      "id": 18,
+      "group": "deferred",
+      "run": 1,
+      "ms": 783,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "my_team",
+        "pokemon": "ミミッキュ",
+        "uses_context": false
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 32,
+        "prompt_tokens": 1188,
+        "total_tokens": 1220
+      }
+    },
+    {
+      "id": 19,
+      "group": "deferred",
+      "run": 1,
+      "ms": 599,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "my_team",
+        "pokemon": "ガブリアス",
+        "uses_context": false
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 32,
+        "prompt_tokens": 1188,
+        "total_tokens": 1220
+      }
+    },
+    {
+      "id": 20,
+      "group": "deferred",
+      "run": 1,
+      "ms": 801,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "my_team",
+        "defender": "ドドゲザン",
+        "uses_context": false
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 32,
+        "prompt_tokens": 1192,
+        "total_tokens": 1224
+      }
+    },
+    {
+      "id": 21,
+      "group": "deferred",
+      "run": 1,
+      "ms": 612,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "chat"
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 11,
+        "prompt_tokens": 1187,
+        "total_tokens": 1198
+      }
+    },
+    {
+      "id": 22,
+      "group": "deferred",
+      "run": 1,
+      "ms": 583,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "chat"
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 11,
+        "prompt_tokens": 1187,
+        "total_tokens": 1198
+      }
+    },
+    {
+      "id": 23,
+      "group": "deferred",
+      "run": 1,
+      "ms": 505,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "chat",
+        "pokemon": "ロトム"
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 20,
+        "prompt_tokens": 1185,
+        "total_tokens": 1205
+      }
+    },
+    {
+      "id": 24,
+      "group": "clarify-extract",
+      "run": 1,
+      "ms": 535,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "clarify",
+        "pokemon": "ガブリアス",
+        "missing": [
+          "move",
+          "defender"
+        ]
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 42,
+        "prompt_tokens": 1192,
+        "total_tokens": 1234
+      }
+    },
+    {
+      "id": 25,
+      "group": "clarify-extract",
+      "run": 1,
+      "ms": 494,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "clarify",
+        "pokemon": "ミミッキュ",
+        "move": "じゃれつく",
+        "missing": [
+          "attacker",
+          "defender"
+        ]
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 52,
+        "prompt_tokens": 1186,
+        "total_tokens": 1238
+      }
+    },
+    {
+      "id": 26,
+      "group": "clarify-extract",
+      "run": 1,
+      "ms": 700,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "clarify",
+        "attacker": null,
+        "defender": "ガブリアス",
+        "move": "じゃれつく",
+        "missing": [
+          "attacker"
+        ],
+        "unknown_names": [
+          "アロロ"
+        ]
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 72,
+        "prompt_tokens": 1190,
+        "total_tokens": 1262
+      }
+    },
+    {
+      "id": 27,
+      "group": "extract",
+      "run": 1,
+      "ms": 656,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "clarify",
+        "unknown_names": [
+          "が降りあす"
+        ]
+      },
+      "errors": [
+        "intent=clarify（正解 damage）",
+        "attacker=undefined（正解 ミミッキュ）",
+        "defender=undefined（正解 ガブリアス）",
+        "move=undefined（正解 じゃれつく）"
+      ],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 31,
+        "prompt_tokens": 1189,
+        "total_tokens": 1220
+      }
+    },
+    {
+      "id": 28,
+      "group": "extract",
+      "run": 1,
+      "ms": 624,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "clarify",
+        "attacker": null,
+        "defender": "カイリュー",
+        "move": "ムーンフォース",
+        "missing": [
+          "attacker"
+        ],
+        "unknown_names": [
+          "内藤"
+        ],
+        "uses_context": false
+      },
+      "errors": [
+        "intent=clarify（正解 damage）",
+        "attacker=null（正解 サーナイト）"
+      ],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 78,
+        "prompt_tokens": 1191,
+        "total_tokens": 1269
+      }
+    },
+    {
+      "id": 29,
+      "group": "extract",
+      "run": 1,
+      "ms": 577,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "multi",
+        "queries": [
+          {
+            "intent": "speed",
+            "attacker": "ガブリアスの素早さ"
+          },
+          {
+            "intent": "type",
+            "pokemon": "サーフゴー"
+          }
+        ]
+      },
+      "errors": [
+        "2 つに分けられていない（intent=multi, queries=2）"
+      ],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 72,
+        "prompt_tokens": 1192,
+        "total_tokens": 1264
+      }
+    },
+    {
+      "id": 30,
+      "group": "extract",
+      "run": 1,
+      "ms": 643,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "damage",
+        "attacker": "ミミッキュ",
+        "defender": "ガブリアス",
+        "move": "じゃれつく",
+        "conditions": {
+          "attacker": {
+            "item": "こだわりハチマキ"
+          }
+        },
+        "uses_context": true,
+        "missing": [],
+        "unknown_names": []
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 53,
+        "prompt_tokens": 1245,
+        "total_tokens": 1298
+      }
+    },
+    {
+      "id": 1,
+      "group": "extract",
+      "run": 2,
+      "ms": 646,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "clarify",
+        "attacker": "ミミッキュ",
+        "defender": "ガブリアス",
+        "move": "じゃれつく",
+        "missing": []
+      },
+      "errors": [
+        "intent=clarify（正解 damage）"
+      ],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 50,
+        "prompt_tokens": 1191,
+        "total_tokens": 1241
+      }
+    },
+    {
+      "id": 2,
+      "group": "extract",
+      "run": 2,
+      "ms": 571,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "damage",
+        "attacker": "ミミッキュ",
+        "defender": "ガブリアス",
+        "move": "じゃれつく",
+        "uses_context": false
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 51,
+        "prompt_tokens": 1196,
+        "total_tokens": 1247
+      }
+    },
+    {
+      "id": 3,
+      "group": "extract",
+      "run": 2,
+      "ms": 791,
+      "status": 200,
+      "retries429": 3,
+      "output": {
+        "intent": "damage",
+        "attacker": "サーナイト",
+        "defender": "カイリュー",
+        "move": "ムーンフォース",
+        "uses_context": false
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 48,
+        "prompt_tokens": 1192,
+        "total_tokens": 1240
+      }
+    },
+    {
+      "id": 4,
+      "group": "extract",
+      "run": 2,
+      "ms": 621,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "damage",
+        "attacker": "ガブリアス",
+        "defender": "サーフゴー",
+        "move": "じしん",
+        "conditions": {
+          "attacker": {
+            "item": "こだわりスカーフ"
+          }
+        },
+        "uses_context": false
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 79,
+        "prompt_tokens": 1193,
+        "total_tokens": 1272
+      }
+    },
+    {
+      "id": 5,
+      "group": "extract",
+      "run": 2,
+      "ms": 657,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "damage",
+        "attacker": "リザードン",
+        "defender": "ハッサム",
+        "move": "ねっぷう",
+        "conditions": {
+          "attacker": {
+            "item": "いのちのたま"
+          }
+        },
+        "uses_context": false
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 79,
+        "prompt_tokens": 1194,
+        "total_tokens": 1273
+      }
+    },
+    {
+      "id": 6,
+      "group": "extract",
+      "run": 2,
+      "ms": 675,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "damage",
+        "attacker": "ハッサム",
+        "defender": "サーナイト",
+        "move": "バレットパンチ",
+        "conditions": {
+          "attacker": {
+            "item": "こだわりハチマキ"
+          }
+        },
+        "uses_context": false
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 79,
+        "prompt_tokens": 1200,
+        "total_tokens": 1279
+      }
+    },
+    {
+      "id": 7,
+      "group": "extract",
+      "run": 2,
+      "ms": 610,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "clarify",
+        "attacker": "メガリザードンY",
+        "defender": "ドドゲザン",
+        "move": "かえんほうしゃ",
+        "conditions": {
+          "field": {
+            "weather": "晴れ"
+          }
+        },
+        "missing": [
+          "damage"
+        ]
+      },
+      "errors": [
+        "intent=clarify（正解 damage）"
+      ],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 89,
+        "prompt_tokens": 1198,
+        "total_tokens": 1287
+      }
+    },
+    {
+      "id": 8,
+      "group": "extract",
+      "run": 2,
+      "ms": 504,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "damage",
+        "attacker": "カイリュー",
+        "defender": "ガブリアス",
+        "move": "しんそく",
+        "conditions": {
+          "attacker": {
+            "boosts": {
+              "atk": 1
+            }
+          }
+        },
+        "uses_context": false
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 85,
+        "prompt_tokens": 1196,
+        "total_tokens": 1281
+      }
+    },
+    {
+      "id": 9,
+      "group": "extract",
+      "run": 2,
+      "ms": 581,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "damage",
+        "attacker": "サーフゴー",
+        "defender": "ガブリアス",
+        "move": "ゴールドラッシュ",
+        "conditions": {
+          "defender": {
+            "sp": {
+              "hp": 32
+            }
+          }
+        },
+        "uses_context": false
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 85,
+        "prompt_tokens": 1199,
+        "total_tokens": 1284
+      }
+    },
+    {
+      "id": 10,
+      "group": "extract",
+      "run": 2,
+      "ms": 604,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "speed",
+        "attacker": "ガブリアス",
+        "defender": "サーフゴー"
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 32,
+        "prompt_tokens": 1192,
+        "total_tokens": 1224
+      }
+    },
+    {
+      "id": 11,
+      "group": "extract",
+      "run": 2,
+      "ms": 659,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "speed",
+        "attacker": "ガブリアス",
+        "defender": "ドラパルト",
+        "conditions": {
+          "attacker": {
+            "item": "こだわりスカーフ",
+            "speed": "max"
+          },
+          "defender": {
+            "speed": "max"
+          }
+        },
+        "uses_context": false
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 94,
+        "prompt_tokens": 1199,
+        "total_tokens": 1293
+      }
+    },
+    {
+      "id": 12,
+      "group": "extract",
+      "run": 2,
+      "ms": 885,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "speed",
+        "attacker": "ドラパルト",
+        "uses_context": false
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 29,
+        "prompt_tokens": 1189,
+        "total_tokens": 1218
+      }
+    },
+    {
+      "id": 13,
+      "group": "extract",
+      "run": 2,
+      "ms": 587,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "type",
+        "pokemon": "サーフゴー"
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 21,
+        "prompt_tokens": 1185,
+        "total_tokens": 1206
+      }
+    },
+    {
+      "id": 14,
+      "group": "extract",
+      "run": 2,
+      "ms": 595,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "type",
+        "pokemon": "サーフゴー"
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 21,
+        "prompt_tokens": 1185,
+        "total_tokens": 1206
+      }
+    },
+    {
+      "id": 15,
+      "group": "extract",
+      "run": 2,
+      "ms": 660,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "stats",
+        "pokemon": "カイリュー",
+        "uses_context": false
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 28,
+        "prompt_tokens": 1185,
+        "total_tokens": 1213
+      }
+    },
+    {
+      "id": 16,
+      "group": "extract",
+      "run": 2,
+      "ms": 632,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "learnset",
+        "pokemon": "サーナイト",
+        "move": "でんじは",
+        "uses_context": false
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 40,
+        "prompt_tokens": 1188,
+        "total_tokens": 1228
+      }
+    },
+    {
+      "id": 17,
+      "group": "extract",
+      "run": 2,
+      "ms": 517,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "move_info",
+        "move": "じゃれつく"
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 23,
+        "prompt_tokens": 1185,
+        "total_tokens": 1208
+      }
+    },
+    {
+      "id": 18,
+      "group": "deferred",
+      "run": 2,
+      "ms": 433,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "my_team",
+        "pokemon": "ミミッキュ",
+        "uses_context": false
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 32,
+        "prompt_tokens": 1188,
+        "total_tokens": 1220
+      }
+    },
+    {
+      "id": 19,
+      "group": "deferred",
+      "run": 2,
+      "ms": 773,
+      "status": 200,
+      "retries429": 1,
+      "output": {
+        "intent": "my_team",
+        "pokemon": "ガブリアス",
+        "uses_context": false
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 32,
+        "prompt_tokens": 1188,
+        "total_tokens": 1220
+      }
+    },
+    {
+      "id": 20,
+      "group": "deferred",
+      "run": 2,
+      "ms": 626,
+      "status": 200,
+      "retries429": 1,
+      "output": {
+        "intent": "my_team",
+        "defender": "ドドゲザン",
+        "uses_context": false
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 32,
+        "prompt_tokens": 1192,
+        "total_tokens": 1224
+      }
+    },
+    {
+      "id": 21,
+      "group": "deferred",
+      "run": 2,
+      "ms": 862,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "chat"
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 11,
+        "prompt_tokens": 1187,
+        "total_tokens": 1198
+      }
+    },
+    {
+      "id": 22,
+      "group": "deferred",
+      "run": 2,
+      "ms": 935,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "chat"
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 11,
+        "prompt_tokens": 1187,
+        "total_tokens": 1198
+      }
+    },
+    {
+      "id": 23,
+      "group": "deferred",
+      "run": 2,
+      "ms": 590,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "chat",
+        "pokemon": "ロトム"
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 20,
+        "prompt_tokens": 1185,
+        "total_tokens": 1205
+      }
+    },
+    {
+      "id": 24,
+      "group": "clarify-extract",
+      "run": 2,
+      "ms": 547,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "clarify",
+        "pokemon": "ガブリアス",
+        "missing": [
+          "move"
+        ]
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 37,
+        "prompt_tokens": 1192,
+        "total_tokens": 1229
+      }
+    },
+    {
+      "id": 25,
+      "group": "clarify-extract",
+      "run": 2,
+      "ms": 538,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "clarify",
+        "pokemon": "ミミッキュ",
+        "move": "じゃれつく",
+        "missing": [
+          "defender"
+        ]
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 47,
+        "prompt_tokens": 1186,
+        "total_tokens": 1233
+      }
+    },
+    {
+      "id": 26,
+      "group": "clarify-extract",
+      "run": 2,
+      "ms": 934,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "clarify",
+        "attacker": null,
+        "defender": "ガブリアス",
+        "move": "じゃれつく",
+        "missing": [
+          "attacker"
+        ],
+        "unknown_names": [
+          "アロロ"
+        ]
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 72,
+        "prompt_tokens": 1190,
+        "total_tokens": 1262
+      }
+    },
+    {
+      "id": 27,
+      "group": "extract",
+      "run": 2,
+      "ms": 622,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "clarify",
+        "unknown_names": [
+          "が降りあす"
+        ]
+      },
+      "errors": [
+        "intent=clarify（正解 damage）",
+        "attacker=undefined（正解 ミミッキュ）",
+        "defender=undefined（正解 ガブリアス）",
+        "move=undefined（正解 じゃれつく）"
+      ],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 31,
+        "prompt_tokens": 1189,
+        "total_tokens": 1220
+      }
+    },
+    {
+      "id": 28,
+      "group": "extract",
+      "run": 2,
+      "ms": 637,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "clarify",
+        "attacker": null,
+        "defender": "カイリュー",
+        "move": "ムーンフォース",
+        "missing": [
+          "attacker"
+        ],
+        "unknown_names": [
+          "内藤"
+        ]
+      },
+      "errors": [
+        "intent=clarify（正解 damage）",
+        "attacker=null（正解 サーナイト）"
+      ],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 70,
+        "prompt_tokens": 1191,
+        "total_tokens": 1261
+      }
+    },
+    {
+      "id": 29,
+      "group": "extract",
+      "run": 2,
+      "ms": 632,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "multi",
+        "queries": [
+          {
+            "intent": "speed",
+            "pokemon": "ガブリアス"
+          },
+          {
+            "intent": "type",
+            "pokemon": "サーフゴー"
+          }
+        ],
+        "uses_context": false
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 77,
+        "prompt_tokens": 1192,
+        "total_tokens": 1269
+      }
+    },
+    {
+      "id": 30,
+      "group": "extract",
+      "run": 2,
+      "ms": 533,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "damage",
+        "attacker": "ミミッキュ",
+        "defender": "ガブリアス",
+        "move": "じゃれつく",
+        "conditions": {
+          "attacker": {
+            "item": "こだわりハチマキ"
+          }
+        },
+        "uses_context": true,
+        "missing": [],
+        "unknown_names": []
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 53,
+        "prompt_tokens": 1245,
+        "total_tokens": 1298
+      }
+    },
+    {
+      "id": 1,
+      "group": "extract",
+      "run": 3,
+      "ms": 684,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "clarify",
+        "attacker": "ミミッキュ",
+        "defender": "ガブリアス",
+        "move": "じゃれつく",
+        "missing": []
+      },
+      "errors": [
+        "intent=clarify（正解 damage）"
+      ],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 50,
+        "prompt_tokens": 1191,
+        "total_tokens": 1241
+      }
+    },
+    {
+      "id": 2,
+      "group": "extract",
+      "run": 3,
+      "ms": 603,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "damage",
+        "attacker": "ミミッキュ",
+        "defender": "ガブリアス",
+        "move": "じゃれつく"
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 43,
+        "prompt_tokens": 1196,
+        "total_tokens": 1239
+      }
+    },
+    {
+      "id": 3,
+      "group": "extract",
+      "run": 3,
+      "ms": 552,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "damage",
+        "attacker": "サーナイト",
+        "defender": "カイリュー",
+        "move": "ムーンフォース",
+        "uses_context": false
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 48,
+        "prompt_tokens": 1192,
+        "total_tokens": 1240
+      }
+    },
+    {
+      "id": 4,
+      "group": "extract",
+      "run": 3,
+      "ms": 681,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "damage",
+        "attacker": "ガブリアス",
+        "defender": "サーフゴー",
+        "move": "じしん",
+        "conditions": {
+          "attacker": {
+            "item": "こだわりスカーフ"
+          }
+        },
+        "uses_context": false
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 79,
+        "prompt_tokens": 1193,
+        "total_tokens": 1272
+      }
+    },
+    {
+      "id": 5,
+      "group": "extract",
+      "run": 3,
+      "ms": 622,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "damage",
+        "attacker": "リザードン",
+        "defender": "ハッサム",
+        "move": "ねっぷう",
+        "conditions": {
+          "attacker": {
+            "item": "いのちのたま"
+          }
+        },
+        "uses_context": false
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 79,
+        "prompt_tokens": 1194,
+        "total_tokens": 1273
+      }
+    },
+    {
+      "id": 6,
+      "group": "extract",
+      "run": 3,
+      "ms": 713,
+      "status": 200,
+      "retries429": 1,
+      "output": {
+        "intent": "damage",
+        "attacker": "ハッサム",
+        "defender": "サーナイト",
+        "move": "バレットパンチ",
+        "conditions": {
+          "attacker": {
+            "item": "こだわりハチマキ"
+          }
+        },
+        "uses_context": false
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 79,
+        "prompt_tokens": 1200,
+        "total_tokens": 1279
+      }
+    },
+    {
+      "id": 7,
+      "group": "extract",
+      "run": 3,
+      "ms": 678,
+      "status": 200,
+      "retries429": 2,
+      "output": {
+        "intent": "clarify",
+        "attacker": "メガリザードンY",
+        "defender": "ドドゲザン",
+        "move": "かえんほうしゃ",
+        "conditions": {
+          "field": {
+            "weather": "晴れ"
+          }
+        },
+        "missing": [
+          "damage"
+        ]
+      },
+      "errors": [
+        "intent=clarify（正解 damage）"
+      ],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 89,
+        "prompt_tokens": 1198,
+        "total_tokens": 1287
+      }
+    },
+    {
+      "id": 8,
+      "group": "extract",
+      "run": 3,
+      "ms": 976,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "damage",
+        "attacker": "カイリュー",
+        "defender": "ガブリアス",
+        "move": "しんそく",
+        "conditions": {
+          "attacker": {
+            "boosts": {
+              "atk": 1
+            }
+          }
+        },
+        "uses_context": false
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 85,
+        "prompt_tokens": 1196,
+        "total_tokens": 1281
+      }
+    },
+    {
+      "id": 9,
+      "group": "extract",
+      "run": 3,
+      "ms": 861,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "damage",
+        "attacker": "サーフゴー",
+        "defender": "ガブリアス",
+        "move": "ゴールドラッシュ",
+        "conditions": {
+          "defender": {
+            "sp": {
+              "hp": 32
+            }
+          }
+        },
+        "uses_context": false
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 85,
+        "prompt_tokens": 1199,
+        "total_tokens": 1284
+      }
+    },
+    {
+      "id": 10,
+      "group": "extract",
+      "run": 3,
+      "ms": 774,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "speed",
+        "attacker": "ガブリアス",
+        "defender": "サーフゴー"
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 32,
+        "prompt_tokens": 1192,
+        "total_tokens": 1224
+      }
+    },
+    {
+      "id": 11,
+      "group": "extract",
+      "run": 3,
+      "ms": 763,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "speed",
+        "attacker": "ガブリアス",
+        "defender": "ドラパルト",
+        "conditions": {
+          "attacker": {
+            "item": "こだわりスカーフ",
+            "speed": "max"
+          },
+          "defender": {
+            "speed": "max"
+          }
+        },
+        "uses_context": false
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 94,
+        "prompt_tokens": 1199,
+        "total_tokens": 1293
+      }
+    },
+    {
+      "id": 12,
+      "group": "extract",
+      "run": 3,
+      "ms": 575,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "speed",
+        "pokemon": "ドラパルト",
+        "uses_context": false
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 29,
+        "prompt_tokens": 1189,
+        "total_tokens": 1218
+      }
+    },
+    {
+      "id": 13,
+      "group": "extract",
+      "run": 3,
+      "ms": 710,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "type",
+        "pokemon": "サーフゴー"
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 21,
+        "prompt_tokens": 1185,
+        "total_tokens": 1206
+      }
+    },
+    {
+      "id": 14,
+      "group": "extract",
+      "run": 3,
+      "ms": 728,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "type",
+        "pokemon": "サーフゴー"
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 21,
+        "prompt_tokens": 1185,
+        "total_tokens": 1206
+      }
+    },
+    {
+      "id": 15,
+      "group": "extract",
+      "run": 3,
+      "ms": 619,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "stats",
+        "pokemon": "カイリュー",
+        "uses_context": false
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 28,
+        "prompt_tokens": 1185,
+        "total_tokens": 1213
+      }
+    },
+    {
+      "id": 16,
+      "group": "extract",
+      "run": 3,
+      "ms": 769,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "learnset",
+        "pokemon": "サーナイト",
+        "move": "でんじは",
+        "uses_context": false
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 40,
+        "prompt_tokens": 1188,
+        "total_tokens": 1228
+      }
+    },
+    {
+      "id": 17,
+      "group": "extract",
+      "run": 3,
+      "ms": 521,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "move_info",
+        "move": "じゃれつく"
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 23,
+        "prompt_tokens": 1185,
+        "total_tokens": 1208
+      }
+    },
+    {
+      "id": 18,
+      "group": "deferred",
+      "run": 3,
+      "ms": 576,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "my_team",
+        "pokemon": "ミミッキュ",
+        "uses_context": false
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 32,
+        "prompt_tokens": 1188,
+        "total_tokens": 1220
+      }
+    },
+    {
+      "id": 19,
+      "group": "deferred",
+      "run": 3,
+      "ms": 1271,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "my_team",
+        "pokemon": "ガブリアス",
+        "uses_context": false
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 32,
+        "prompt_tokens": 1188,
+        "total_tokens": 1220
+      }
+    },
+    {
+      "id": 20,
+      "group": "deferred",
+      "run": 3,
+      "ms": 597,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "my_team",
+        "defender": "ドドゲザン",
+        "uses_context": false
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 32,
+        "prompt_tokens": 1192,
+        "total_tokens": 1224
+      }
+    },
+    {
+      "id": 21,
+      "group": "deferred",
+      "run": 3,
+      "ms": 669,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "chat"
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 11,
+        "prompt_tokens": 1187,
+        "total_tokens": 1198
+      }
+    },
+    {
+      "id": 22,
+      "group": "deferred",
+      "run": 3,
+      "ms": 456,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "chat"
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 11,
+        "prompt_tokens": 1187,
+        "total_tokens": 1198
+      }
+    },
+    {
+      "id": 23,
+      "group": "deferred",
+      "run": 3,
+      "ms": 447,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "chat"
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 11,
+        "prompt_tokens": 1185,
+        "total_tokens": 1196
+      }
+    },
+    {
+      "id": 24,
+      "group": "clarify-extract",
+      "run": 3,
+      "ms": 635,
+      "status": 200,
+      "retries429": 2,
+      "output": {
+        "intent": "clarify",
+        "pokemon": "ガブリアス",
+        "missing": [
+          "move"
+        ]
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 37,
+        "prompt_tokens": 1192,
+        "total_tokens": 1229
+      }
+    },
+    {
+      "id": 25,
+      "group": "clarify-extract",
+      "run": 3,
+      "ms": 638,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "clarify",
+        "pokemon": "ミミッキュ",
+        "move": "じゃれつく",
+        "missing": [
+          "defender"
+        ]
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 47,
+        "prompt_tokens": 1186,
+        "total_tokens": 1233
+      }
+    },
+    {
+      "id": 26,
+      "group": "clarify-extract",
+      "run": 3,
+      "ms": 657,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "clarify",
+        "missing": [
+          "defender"
+        ],
+        "unknown_names": [
+          "アロロ"
+        ]
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 44,
+        "prompt_tokens": 1190,
+        "total_tokens": 1234
+      }
+    },
+    {
+      "id": 27,
+      "group": "extract",
+      "run": 3,
+      "ms": 470,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "clarify",
+        "unknown_names": [
+          "が降りあす"
+        ]
+      },
+      "errors": [
+        "intent=clarify（正解 damage）",
+        "attacker=undefined（正解 ミミッキュ）",
+        "defender=undefined（正解 ガブリアス）",
+        "move=undefined（正解 じゃれつく）"
+      ],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 31,
+        "prompt_tokens": 1189,
+        "total_tokens": 1220
+      }
+    },
+    {
+      "id": 28,
+      "group": "extract",
+      "run": 3,
+      "ms": 710,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "clarify",
+        "attacker": null,
+        "defender": "カイリュー",
+        "move": "ムーンフォース",
+        "missing": [
+          "attacker"
+        ],
+        "unknown_names": [
+          "内藤"
+        ],
+        "uses_context": false
+      },
+      "errors": [
+        "intent=clarify（正解 damage）",
+        "attacker=null（正解 サーナイト）"
+      ],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 78,
+        "prompt_tokens": 1191,
+        "total_tokens": 1269
+      }
+    },
+    {
+      "id": 29,
+      "group": "extract",
+      "run": 3,
+      "ms": 678,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "multi",
+        "queries": [
+          {
+            "intent": "speed",
+            "attacker": "ガブリアスの素早さ",
+            "pokemon": "ガブリアス"
+          },
+          {
+            "intent": "type",
+            "pokemon": "サーフゴー"
+          }
+        ]
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 83,
+        "prompt_tokens": 1192,
+        "total_tokens": 1275
+      }
+    },
+    {
+      "id": 30,
+      "group": "extract",
+      "run": 3,
+      "ms": 661,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "damage",
+        "attacker": "ミミッキュ",
+        "defender": "ガブリアス",
+        "move": "じゃれつく",
+        "conditions": {
+          "attacker": {
+            "item": "こだわりハチマキ"
+          }
+        },
+        "uses_context": true,
+        "missing": [],
+        "unknown_names": []
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 53,
+        "prompt_tokens": 1245,
+        "total_tokens": 1298
+      }
+    }
+  ],
+  "bursts": [
+    {
+      "round": 1,
+      "statuses": [
+        200,
+        200,
+        200,
+        200,
+        200
+      ],
+      "ms": [
+        629,
+        638,
+        687,
+        598,
+        787
+      ]
+    },
+    {
+      "round": 2,
+      "statuses": [
+        200,
+        200,
+        200,
+        200,
+        200
+      ],
+      "ms": [
+        749,
+        642,
+        787,
+        598,
+        664
+      ]
+    },
+    {
+      "round": 3,
+      "statuses": [
+        200,
+        200,
+        200,
+        200,
+        200
+      ],
+      "ms": [
+        633,
+        527,
+        473,
+        683,
+        641
+      ]
+    }
+  ]
+}
