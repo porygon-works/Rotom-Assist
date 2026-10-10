@@ -1,6 +1,6 @@
 // 1 往復の処理（構成設計 4.2）: AI 取り出し → 名前の解決 → 計算 → 回答文
 // answerExtraction は通信をしないので、保存済みの AI の出力を流し込んで確かめられる（eval/replay.ts）
-import { allTypes, damage, effectiveness, hasSpread, moveInfo, speciesInfo, speedOf, speedThreshold, speedVariants, type FieldInput, type SideInput, type Stat } from "./battle";
+import { allTypes, damage, effectiveness, hasSpread, learns, moveInfo, speciesInfo, speedOf, speedThreshold, speedVariants, type FieldInput, type SideInput, type Stat } from "./battle";
 import { CATEGORY_JA, clarifySpeech, damageQuestionOf, damageSpeech, koText } from "./answer";
 import { extract, type Attempt, type Turn } from "./llm";
 import { resolve, resolveField, toJa, type NameKind } from "./resolve";
@@ -306,6 +306,19 @@ function answerMove(ex: Obj): AskResult {
   return { speech: `${m.ja}は${type}タイプの${cat}技。${bp}${pri}ロト`, title: `${m.ja}の性能`, lines: [`${type}・${cat}・${bp}${pri}`], intent: "move_info" };
 }
 
+function answerLearnset(ex: Obj): AskResult {
+  const pr = new Problems();
+  const p = pr.name("pokemon", str(ex.pokemon) ?? str(ex.attacker));
+  const m = pr.name("moves", str(ex.move));
+  if (!str(ex.move)) return fail("clarify", "聞き返し", ["どの技ロト？"]);
+  if (!p || !m) return fail("learnset", "名前の確認", pr.list.length ? pr.list : ["どのポケモンロト？"]);
+  const r = learns(p.en, m.en);
+  const pre = pr.notes.length ? `${pr.notes.join("。")}。` : "";
+  const title = `${p.ja}は${m.ja}を覚えるか`;
+  if (r === undefined) return fail("learnset", title, [`${p.ja}の覚える技のデータがないロト`]);
+  return { speech: `${pre}${p.ja}は${m.ja}を${r ? "覚えるロト！" : "覚えないロト"}`, title, lines: [r ? "覚える（チャンピオンズ）" : "覚えない（チャンピオンズ）"], intent: "learnset" };
+}
+
 /** 取り出し結果から答えを作る（通信なし） */
 export function answerExtraction(ex: Obj, text?: string): AskResult {
   const intent = str(ex.intent) ?? "clarify";
@@ -323,7 +336,7 @@ export function answerExtraction(ex: Obj, text?: string): AskResult {
       case "move_info":
         return answerMove(ex);
       case "learnset":
-        return fail("learnset", "覚える技", ["覚える技のデータはまだ準備中ロト"]);
+        return answerLearnset(ex);
       case "my_team":
         return fail("my_team", "自分のパーティ", ["自分のパーティの機能はまだ勉強中ロト"]);
       case "chat":

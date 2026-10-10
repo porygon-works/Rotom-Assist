@@ -56,6 +56,7 @@ function dictionary(): [string, Tok][] {
     "どっちが速い", "どっちがはやい", "どっちが早い", "どっちが先", "抜ける", "抜かれる", "素早さ", "すばやさ", "実数値", "いくつ",
     "タイプ", "弱点", "相性", "種族値", "威力", "何タイプ", "教えて", "？", "?", "。", "!", "！", "撃ったら", "うったら", "だと", "なら",
     "んだけど", "だけど", "けど",
+    "覚える", "おぼえる", "覚えた", "を",
     "どこまで", "すばやさ振ってたら", "素早さ振ってたら", "振ってたら", "振ったら", "何振りまで", "何振りなら", "負ける", "抜かれる", "までなら", "まで",
   ]) add(w, { k: "w", v: norm(w) });
   // 長い語から先に照合する
@@ -184,7 +185,7 @@ export function parseRules(text: string): Obj | null {
       continue;
     }
     // 名前の後ろの残り HP（「エンペルトのHP120残ってる」）: 直前のポケモンに付ける
-    if (t.k === "hp" && !mods.length && toks[i - 1]?.k === "p" && toks[i - 1].v === "ノ" && toks[i - 2]?.k === "pokemon" && sides.length) {
+    if (t.k === "hp" && !mods.length && (toks[i - 1] as Tok | undefined)?.k === "p" && (toks[i - 1] as { v: string }).v === "ノ" && toks[i - 2]?.k === "pokemon" && sides.length) {
       const last = sides[sides.length - 1];
       if (t.percent !== undefined) last.cond.hp_left_percent = t.percent;
       if (t.value !== undefined) last.cond.hp_left = t.value;
@@ -219,6 +220,12 @@ export function parseRules(text: string): Obj | null {
 
   // わざの質問（ポケモンなし）
   if (!sides.length && moves.length === 1 && has(/タイプ|威力/)) return { move: moves[0], intent: "move_info" };
+
+  // 覚える技: 「サーナイトってでんじは覚える？」
+  if (sides.length === 1 && moves.length === 1 && has(/覚エ|オボエ/)) {
+    if (Object.keys(sides[0].cond).length) return null;
+    return { pokemon: sides[0].name, move: moves[0], intent: "learnset" };
+  }
 
   // 1 匹: タイプ・弱点・種族値・素早さ
   if (sides.length === 1 && !moves.length) {

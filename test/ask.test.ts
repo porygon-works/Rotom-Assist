@@ -91,6 +91,11 @@ describe("回答（AI の出力から）", () => {
     expect(answerExtraction({ intent: "stats", pokemon: "カイリュー" }).speech).toContain("合計600");
     expect(answerExtraction({ intent: "move_info", move: "じゃれつく" }).speech).toContain("フェアリータイプの物理技");
   });
+  it("覚える技（チャンピオンズ。メガシンカは元のポケモンの一覧）", () => {
+    expect(answerExtraction({ intent: "learnset", pokemon: "サーナイト", move: "でんじは" }).speech).toBe("サーナイトはでんじはを覚えるロト！");
+    expect(answerExtraction({ intent: "learnset", pokemon: "ガブリアス", move: "ムーンフォース" }).speech).toBe("ガブリアスはムーンフォースを覚えないロト");
+    expect(answerExtraction({ intent: "learnset", pokemon: "メガガブリアス", move: "じしん" }).speech).toContain("覚えるロト");
+  });
   it("数値は計算の結果だけ（AI が書いた数値は使わない）", () => {
     const a = answerExtraction({ intent: "damage", attacker: "ミミッキュ", defender: "ガブリアス", move: "じゃれつく", damage: "999%" } as never);
     expect(a.speech).not.toContain("999");

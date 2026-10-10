@@ -3,6 +3,7 @@
 // - 指定のない側は「幅」で答える（構成設計 8.1）: 無振り（SP0・補正なし）〜特化（SP32・補正あり）
 import { calculate, Field, Generations, Move, Pokemon } from "@smogon/calc";
 import { getFinalSpeed } from "@smogon/calc/dist/mechanics/util";
+import learnsets from "../data/learnsets.json";
 
 export const gen = Generations.get(0 as never);
 const LEVEL = 50;
@@ -192,4 +193,17 @@ export function effectiveness(attackType: string, defTypes: string[]): number {
 
 export function allTypes(): string[] {
   return [...gen.types].map((t) => t.name as string).filter((n) => n !== "???" && n !== "Stellar");
+}
+
+const toID = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, "");
+
+/** 覚えるか（チャンピオンズの覚える技。メガシンカなどは元のポケモンの一覧を見る）。データにないポケモンは undefined */
+export function learns(speciesEn: string, moveEn: string): boolean | undefined {
+  const table = learnsets as unknown as Record<string, string[]>;
+  let list = table[toID(speciesEn)];
+  if (!list) {
+    const base = (gen.species.get(toID(speciesEn) as never) as { baseSpecies?: string } | undefined)?.baseSpecies ?? speciesEn.split("-")[0];
+    list = table[toID(base)];
+  }
+  return list ? list.includes(toID(moveEn)) : undefined;
 }
