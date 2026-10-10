@@ -1,4 +1,5 @@
 // 比較テスト用の指示文（全候補で共通。docs/eval-plan.md 2 章）
+import { EXTRACT_PROMPT } from "../lib/extractPrompt";
 export const SYSTEM_V1 = `あなたはポケモン対戦（シングル）の音声アシスタントの「質問の解釈係」。
 ユーザーの発話（音声認識の結果。聞き間違いを含むことがある）から質問の中身を取り出し、JSON だけを返す。
 
@@ -522,4 +523,4 @@ export const SYSTEM_V8 = `あなたはポケモン対戦（シングル、ポケ
 - ダメージ・種族値・実数値・確定数などを計算した数値は絶対に書かない（ユーザーが言った SP・ランク・残りHP は書いてよい）
 - 直前の会話を前提にした質問（「じゃあ〜なら？」）は、前の質問の中身と条件をすべて引き継ぎ、新しい条件を足して、uses_context を true にする`;
 
-export const PROMPTS: Record<string, string> = { v1: SYSTEM_V1, v2: SYSTEM_V2, v3: SYSTEM_V3, v4: SYSTEM_V4, v5: SYSTEM_V5, v6: SYSTEM_V6, v7: SYSTEM_V7, v8: SYSTEM_V8 };
+export const PROMPTS: Record<string, string> = { v1: SYSTEM_V1, v2: SYSTEM_V2, v3: SYSTEM_V3, v4: SYSTEM_V4, v5: SYSTEM_V5, v6: SYSTEM_V6, v7: SYSTEM_V7, v8: SYSTEM_V8, app: EXTRACT_PROMPT };
