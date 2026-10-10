@@ -1,14 +1,14 @@
 // ルール解析（lib/rules.ts）だけで、テストの質問のうちどれを正しく即答できるかを数える（AI は呼ばない）
 // 大事なのは「即答した問題で間違いが 0 件」であること。答えられない問題は AI に回るだけ
 // 使い方: npx tsx eval/rules.ts
-import { parseRules } from "../lib/rules";
+import { parseFollowUp, parseRules } from "../lib/rules";
 import { CASES } from "./cases";
 import { CASES2 } from "./cases2";
 
 let ok = 0, wrong = 0, pass = 0;
 for (const c of [...CASES, ...CASES2]) {
-  if (c.history) continue; // 前の会話を使う質問はルールの対象外
-  const o = parseRules(c.text);
+  // 前の会話を使う質問は、直前の解釈に条件を足すルール（parseFollowUp）で測る
+  const o = c.history ? parseFollowUp(c.text, JSON.parse(c.history.assistant)) : parseRules(c.text);
   if (!o) {
     pass++;
     continue;

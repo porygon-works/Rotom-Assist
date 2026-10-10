@@ -23,7 +23,7 @@ type Tok =
   | { k: "weather"; v: string }
   | { k: "terrain"; v: string }
   | { k: "spread"; sp: Partial<Record<Stat, number>>; up?: Stat; down?: Stat }
-  | { k: "boost"; stat: Stat; n: number }
+  | { k: "boost"; stat: Stat; n: number; conditional?: boolean } // conditional: 「上がったら」の形（付け先が前か後ろか決まらない）
   | { k: "sr" } // ステロ込み（防御側）
   | { k: "hp"; percent?: number; value?: number } // 残り HP（直後のポケモン）
   | { k: "p"; v: string } // 助詞・区切り
@@ -56,6 +56,8 @@ function dictionary(): [string, Tok][] {
     "どっちが速い", "どっちがはやい", "どっちが早い", "どっちが先", "抜ける", "抜かれる", "素早さ", "すばやさ", "実数値", "いくつ",
     "タイプ", "弱点", "相性", "種族値", "威力", "何タイプ", "教えて", "？", "?", "。", "!", "！", "撃ったら", "うったら", "だと", "なら",
     "んだけど", "だけど", "けど",
+    "じゃくてん", "しゅぞくち", "いりょく", "なんタイプ", "なんぱつ",
+    "持ってたら", "持ってる", "もってたら", "だったら", "の場合は", "の場合", "場合", "じゃあ", "じゃ", "では", "なら", "だと",
     "覚える", "おぼえる", "覚えた", "を",
     "どこまで", "すばやさ振ってたら", "素早さ振ってたら", "振ってたら", "振ったら", "何振りまで", "何振りなら", "負ける", "抜かれる", "までなら", "まで",
   ]) add(w, { k: "w", v: norm(w) });
@@ -87,11 +89,11 @@ function pattern(s: string): [number, Tok] | null {
   // ランク: 「S+2」「C-1」「S二段階上昇の」「攻撃1段階上がった」
   m = s.match(/^([ABCDS])([+\-])([1-6])/);
   if (m) return [m[0].length, { k: "boost", stat: LETTER[m[1]], n: (m[2] === "-" ? -1 : 1) * Number(m[3]) }];
-  m = s.match(/^([ABCDS]|攻撃|防御|特攻|特防|素早サ|スバヤサ)ガ?([1-6一二三四五六])段階(上昇|上ガッタ|上ガッテル|アップ|下降|下ガッタ|下ガッテル|ダウン)/);
+  m = s.match(/^([ABCDS]|攻撃|防御|特攻|特防|素早サ|スバヤサ)ガ?([1-6一二三四五六])段階(上昇|上ガッテタラ|上ガッタラ|上ガッタ|上ガッテル|アップ|下降|下ガッテタラ|下ガッタラ|下ガッタ|下ガッテル|ダウン)/);
   if (m) {
     const stat = LETTER[m[1]] ?? ({ 攻撃: "atk", 防御: "def", 特攻: "spa", 特防: "spd", 素早サ: "spe", スバヤサ: "spe" } as Record<string, Stat>)[m[1]];
     const n = Number(m[2]) || "一二三四五六".indexOf(m[2]) + 1;
-    return [m[0].length, { k: "boost", stat, n: /下|ダウン/.test(m[3]) ? -n : n }];
+    return [m[0].length, { k: "boost", stat, n: /下|ダウン/.test(m[3]) ? -n : n, conditional: /タラ$/.test(m[3]) }];
   }
   // 残り HP（名前の前に付く形）: 「HP半分の」「残りHP3割の」「HP120の」
   m = s.match(/^(?:残リ)?HP(?:ガ)?(半分|[1-9]割|\d{1,3}(?:%|パーセント)|\d{1,3})(?:残リ|残ッタ|残ッテル)?/);
@@ -164,6 +166,8 @@ function applyMods(cond: Obj, mods: Tok[]) {
 export function parseRules(text: string): Obj | null {
   const toks = tokenize(text);
   if (!toks || !toks.length) return null;
+  // 「〇〇がS1段階上がったら」は前のポケモンの話だが、名前の前に付く条件と区別できないので AI に回す
+  if (toks.some((t) => t.k === "boost" && t.conditional)) return null;
   const field: Obj = {};
   const sides: Side[] = [];
   const moves: string[] = [];
@@ -219,7 +223,7 @@ export function parseRules(text: string): Obj | null {
   if (sr && !(sides.length === 2 && moves.length === 1)) return null;
 
   // わざの質問（ポケモンなし）
-  if (!sides.length && moves.length === 1 && has(/タイプ|威力/)) return { move: moves[0], intent: "move_info" };
+  if (!sides.length && moves.length === 1 && has(/タイプ|威力|イリョク/)) return { move: moves[0], intent: "move_info" };
 
   // 覚える技: 「サーナイトってでんじは覚える？」
   if (sides.length === 1 && moves.length === 1 && has(/覚エ|オボエ/)) {
@@ -230,8 +234,8 @@ export function parseRules(text: string): Obj | null {
   // 1 匹: タイプ・弱点・種族値・素早さ
   if (sides.length === 1 && !moves.length) {
     const p = sides[0];
-    if (has(/弱点|タイプ|相性/) && !has(/素早サ|スバヤサ|種族値/)) return { pokemon: p.name, intent: "type" };
-    if (has(/種族値/) && !has(/弱点|タイプ/)) return { pokemon: p.name, intent: "stats" };
+    if (has(/弱点|ジャクテン|タイプ|相性/) && !has(/素早サ|スバヤサ|種族値|シュゾクチ/)) return { pokemon: p.name, intent: "type" };
+    if (has(/種族値|シュゾクチ/) && !has(/弱点|ジャクテン|タイプ/)) return { pokemon: p.name, intent: "stats" };
     if (has(/素早サ|スバヤサ|実数値/)) return { pokemon: p.name, conditions: conditions(Object.keys(p.cond).length ? { pokemon: p.cond } : {}), ask: "value", intent: "speed" };
     return null;
   }
@@ -267,4 +271,60 @@ export function parseRules(text: string): Obj | null {
     return { attacker: atk.name, defender: def.name, move: moves[0], conditions: conditions(c), intent: "damage" };
   }
   return null;
+}
+
+/**
+ * 続きの質問（「じゃあハチマキなら？」「じゃあ雨なら？」「じゃあガブがH振りだったら？」）を、直前の解釈に条件を足して解釈する。
+ * 条件だけの発話のときだけ答える。足す先は、ポケモン名があればそのポケモン、なければ条件の種類で決める
+ * （攻撃に効くもの → 攻撃側、耐久に効くもの → 防御側、天候など → 場）
+ */
+export function parseFollowUp(text: string, prev: Obj | null | undefined): Obj | null {
+  if (!prev || (prev.intent !== "damage" && prev.intent !== "speed")) return null;
+  const n = norm(text);
+  if (!/^(ジャア|ジャ|デハ)/.test(n) || !/(ナラ|ダッタラ|ダト|場合ハ?|持ッテタラ|上ガッテタラ|下ガッテタラ|込ミダト|込ミナラ)[?？]?$/.test(n)) return null;
+  const toks = tokenize(text);
+  if (!toks) return null;
+  const cond = JSON.parse(JSON.stringify(prev.conditions ?? {})) as Record<string, Obj>;
+  const sideOf = (name: string) => (name === prev.attacker ? "attacker" : name === prev.defender ? "defender" : name === prev.pokemon ? "pokemon" : null);
+  let target: string | null = null;
+  let changed = false;
+  for (let i = 0; i < toks.length; i++) {
+    const t = toks[i];
+    if (t.k === "p" || t.k === "w") continue;
+    if (t.k === "pokemon") {
+      target = sideOf(t.ja);
+      if (!target) return null; // 前の質問にいないポケモン
+      continue;
+    }
+    if (t.k === "move") return null;
+    if (t.k === "weather" || t.k === "terrain") {
+      cond.field = { ...(cond.field ?? {}), [t.k]: t.v };
+      changed = true;
+      continue;
+    }
+    // 足す先: 指定があればそのポケモン。なければ条件の種類で決める
+    const side =
+      target ??
+      (prev.intent === "speed"
+        ? prev.pokemon
+          ? "pokemon"
+          : "attacker"
+        : t.k === "sr" || t.k === "hp"
+          ? "defender"
+          : t.k === "spread"
+            ? (["atk", "spa"].includes(t.up ?? "") || Object.keys(t.sp).some((k) => k === "atk" || k === "spa"))
+              ? "attacker"
+              : "defender"
+            : t.k === "boost"
+              ? ["def", "spd"].includes(t.stat)
+                ? "defender"
+                : "attacker"
+              : "attacker");
+    const c = (cond[side] = { ...(cond[side] ?? {}) });
+    if (t.k === "sr") c.stealth_rock = true;
+    else applyMods(c, [t]);
+    changed = true;
+  }
+  if (!changed) return null;
+  return { ...prev, conditions: cond, uses_context: true };
 }

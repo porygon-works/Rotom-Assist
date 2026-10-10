@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { parseRules } from "../lib/rules";
+import { parseFollowUp, parseRules } from "../lib/rules";
 
 describe("ルール解析（確実に分かるときだけ答える）", () => {
   it("よくあるダメージの言い方", () => {
@@ -39,5 +39,25 @@ describe("ルール解析（確実に分かるときだけ答える）", () => {
     expect(parseRules("ガブリアスとミミッキュのじしん")).toBeNull(); // 向きが決まらない
     expect(parseRules("CS特化サザンドラのりゅうせいぐん、ガブに")).toBeNull(); // 補正の先が決まらない
     expect(parseRules("ミミッキュのじゃれつく")).toBeNull(); // 相手がいない（聞き返しは AI 側で）
+    expect(parseRules("最速イダイトウがS1段階上がったらメガルカリオZ抜ける？")).toBeNull(); // 「上がったら」の付け先が決まらない
+  });
+});
+
+describe("続きの質問（直前の解釈に条件を足す）", () => {
+  const prev = parseRules("ウォッシュロトムのハイドロポンプ、ガブリアスに");
+  it("条件の種類で足す先を決める", () => {
+    expect(parseFollowUp("じゃあ雨なら？", prev)).toMatchObject({ uses_context: true, conditions: { field: { weather: "雨" } } });
+    expect(parseFollowUp("じゃあH振りなら？", prev)).toMatchObject({ conditions: { defender: { sp: { hp: 32 } } } });
+    expect(parseFollowUp("じゃあA特化なら？", prev)).toMatchObject({ conditions: { attacker: { sp: { atk: 32 }, nature_up: "atk" } } });
+    expect(parseFollowUp("じゃあステロ込みだったら？", prev)).toMatchObject({ conditions: { defender: { stealth_rock: true } } });
+    expect(parseFollowUp("じゃあハチマキ持ってたら？", prev)).toMatchObject({ conditions: { attacker: { item: "こだわりハチマキ" } } });
+  });
+  it("ポケモンの入れ替えや、前の質問がない場合は答えない（AI に回す）", () => {
+    expect(parseFollowUp("じゃあミミッキュなら？", prev)).toBeNull();
+    expect(parseFollowUp("じゃあ雨なら？", null)).toBeNull();
+    expect(parseFollowUp("雨", prev)).toBeNull();
+  });
+  it("ひらがなだけの質問", () => {
+    expect(parseRules("がぶりあすのじゃくてん")).toMatchObject({ intent: "type", pokemon: "ガブリアス" });
   });
 });

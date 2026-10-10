@@ -4,7 +4,7 @@ import { allTypes, damage, effectiveness, hasSpread, learns, moveInfo, speciesIn
 import { CATEGORY_JA, clarifySpeech, damageQuestionOf, damageSpeech, koText } from "./answer";
 import { extract, type Attempt, type Turn } from "./llm";
 import { resolve, resolveField, toJa, type NameKind } from "./resolve";
-import { parseRules } from "./rules";
+import { parseFollowUp, parseRules } from "./rules";
 
 export interface AskResult {
   /** 読み上げる文 */
@@ -187,15 +187,16 @@ function answerSpeed(ex: Obj): AskResult {
   const notes = [...pr.notes, ...pr.list];
   const pre = notes.length ? `${notes.join("。")}。` : "";
 
-  // 1 匹だけ（素早さの値）
+  // 1 匹だけ（素早さの値）。「抜ける？」なのに相手がいなければ、値に添えて聞き返す
+  const askOther = ask === "compare" ? "。どのポケモンと比べるロト？" : "";
   if (!other) {
     if (!subjOpen) {
       const v = speedOf(ss, f);
-      return { speech: `${pre}${subj.ja}の素早さは${v}ロト`, title: `${sideLabel(subj.ja, ss)}の素早さ`, lines: [`素早さ ${v}`], intent: "speed" };
+      return { speech: `${pre}${subj.ja}の素早さは${v}ロト${askOther}`, title: `${sideLabel(subj.ja, ss)}の素早さ`, lines: [`素早さ ${v}`], intent: "speed" };
     }
     const v = speedVariants(ss, f);
     return {
-      speech: `${pre}${subj.ja}の素早さは、最速${v.fastest}、準速${v.neutral}、無振り${v.none}ロト`,
+      speech: `${pre}${subj.ja}の素早さは、最速${v.fastest}、準速${v.neutral}、無振り${v.none}ロト${askOther}`,
       title: `${sideLabel(subj.ja, ss)}の素早さ`,
       lines: [`最速 ${v.fastest}／準速 ${v.neutral}／無振り ${v.none}／最遅 ${v.slowest}`],
       intent: "speed",
@@ -367,7 +368,8 @@ export function answerExtraction(ex: Obj, text?: string): AskResult {
 export async function ask(text: string, opts: { history?: Turn[]; useRules?: boolean } = {}): Promise<AskResult> {
   const t0 = Date.now();
   // まずルールで即答を試す（確実に分かるときだけ結果が返る）。駄目なら AI
-  const ruled = opts.useRules === false ? null : parseRules(text);
+  const prev = opts.history?.[opts.history.length - 1]?.extraction as Obj | undefined;
+  const ruled = opts.useRules === false ? null : (parseRules(text) ?? parseFollowUp(text, prev));
   if (ruled) {
     const out = answerExtraction(ruled, text);
     return { ...out, extraction: ruled, diagnostics: { provider: "rules", attempts: [], totalMs: Date.now() - t0 } };
