@@ -1,0 +1,24 @@
+gemini-3.1-flash-lite run1 #111 25359ms ○ 
+gemini-3.1-flash-lite run1 #112 783ms ○ 
+gemini-3.1-flash-lite run1 #114 600ms ○ 
+gemini-3.1-flash-lite run1 #115 585ms ○ 
+gemini-3.1-flash-lite run1 #117 721ms ○ 
+gemini-3.1-flash-lite run1 #118 6581ms ○ 
+gemini-3.1-flash-lite run1 #120 921ms ○ 
+gemini-3.1-flash-lite run1 #121 5256ms ○ 
+gemini-3.1-flash-lite run1 #123 4106ms ○ 
+gemini-3.1-flash-lite run1 #124 799ms ○ 
+gemini-3.1-flash-lite run1 #126 1247ms ○ 
+gemini-3.1-flash-lite run1 #127 1065ms ○ 
+gemini-3.1-flash-lite run1 #129 661ms ○ 
+gemini-3.1-flash-lite run1 #130 1034ms ○ 
+gemini-3.1-flash-lite run1 #132 856ms ○ 
+gemini-3.1-flash-lite run1 #133 1776ms ○ 
+gemini-3.1-flash-lite run1 #135 702ms ○ 
+gemini-3.1-flash-lite run1 #136 671ms ○ 
+gemini-3.1-flash-lite run1 #138 792ms ○ 
+gemini-3.1-flash-lite run1 #139 910ms ○ 
+gemini-3.1-flash-lite run1 #141 666ms ○ 
+gemini-3.1-flash-lite run1 #143 821ms × intent=multi（正解 speed） / attacker=undefined（正解 ドドゲザン） / defender=undefined（正解 サーフゴー） / attacker が最遅になっていない / defender が最遅になっていない / ask=undefined（正解 compare）
+gemini-3.1-flash-lite run1 #145 583ms ○ 
+done gemini-3.1-flash-lite

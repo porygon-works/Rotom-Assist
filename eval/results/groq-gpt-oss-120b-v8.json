@@ -1,0 +1,30 @@
+{
+  "name": "groq-gpt-oss-120b",
+  "prompt": "v8",
+  "set": "base",
+  "tag": "",
+  "model": "openai/gpt-oss-120b",
+  "extra": {
+    "reasoning_effort": "low"
+  },
+  "date": "2026-10-10T16:49:22.906Z",
+  "stopped": "1 日の上限に達した（run1 #1）",
+  "rows": [
+    {
+      "id": 1,
+      "group": "extract",
+      "run": 1,
+      "ms": 240,
+      "status": 429,
+      "retries429": 0,
+      "output": null,
+      "raw": "{\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m4k6gn69etj9ff3kz0t27f87` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 199171, Requested 2552. Please try again in 12m24.335999999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}\n",
+      "errors": [
+        "HTTP 429: {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m4k6gn69etj9ff3kz0t27f87` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 199171, Re"
+      ],
+      "fabricated": [],
+      "daily": true
+    }
+  ],
+  "bursts": null
+}

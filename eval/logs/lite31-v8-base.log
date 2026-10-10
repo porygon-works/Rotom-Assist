@@ -1,0 +1,31 @@
+gemini-3.1-flash-lite run1 #1 602ms ○ 
+gemini-3.1-flash-lite run1 #2 645ms ○ 
+gemini-3.1-flash-lite run1 #3 676ms ○ 
+gemini-3.1-flash-lite run1 #4 601ms ○ 
+gemini-3.1-flash-lite run1 #5 634ms ○ 
+gemini-3.1-flash-lite run1 #6 768ms ○ 
+gemini-3.1-flash-lite run1 #7 699ms ○ 
+  #8 429（1 回目）→ 20s 待つ
+  #8 429（2 回目）→ 20s 待つ
+gemini-3.1-flash-lite run1 #8 8773ms ○ 
+gemini-3.1-flash-lite run1 #9 537ms ○ 
+gemini-3.1-flash-lite run1 #10 490ms ○ 
+gemini-3.1-flash-lite run1 #11 704ms ○ 
+gemini-3.1-flash-lite run1 #12 3417ms ○ 
+gemini-3.1-flash-lite run1 #13 691ms ○ 
+gemini-3.1-flash-lite run1 #14 691ms ○ 
+gemini-3.1-flash-lite run1 #15 708ms ○ 
+gemini-3.1-flash-lite run1 #16 561ms ○ 
+gemini-3.1-flash-lite run1 #17 578ms ○ 
+gemini-3.1-flash-lite run1 #18 654ms × intent=learnset（正解 my_team）
+gemini-3.1-flash-lite run1 #19 614ms ○ 
+gemini-3.1-flash-lite run1 #20 490ms ○ 
+gemini-3.1-flash-lite run1 #21 778ms ○ 
+gemini-3.1-flash-lite run1 #22 588ms ○ 
+gemini-3.1-flash-lite run1 #23 485ms ○ 
+  #24 429（1 回目）→ 20s 待つ
+  #24 429（2 回目）→ 20s 待つ
+gemini-3.1-flash-lite run1 #24 603ms ○ 
+gemini-3.1-flash-lite run1 #25 582ms ○ 
+gemini-3.1-flash-lite run1 #26 614ms ○ 
+gemini-3.1-flash-lite run1 #27 612ms × defender="ブリジュラス"（正解 ガブリアス）

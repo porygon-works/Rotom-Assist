@@ -1,0 +1,2 @@
+groq-gpt-oss-120b run1 #1 240ms × HTTP 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m4k6gn69etj9ff3kz0t27f87` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 199171, Re
+done groq-gpt-oss-120b (1 日の上限に達した（run1 #1）)

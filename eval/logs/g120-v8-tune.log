@@ -1,0 +1,31 @@
+groq-gpt-oss-120b run1 #111 1017ms × attacker.sp.spa=undefined（正解 32）
+groq-gpt-oss-120b run1 #112 589ms × attacker=undefined（正解 ガブリアス） / attacker.sp.spe=undefined（正解 32） / defender.sp.spe=undefined（正解 32） / defender の性格補正=undefined（正解 spe）
+groq-gpt-oss-120b run1 #114 709ms ○ 
+  #115 429（1 回目）→ 14s 待つ
+  #115 429（2 回目）→ 1s 待つ
+groq-gpt-oss-120b run1 #115 665ms ○ 
+  #117 429（1 回目）→ 17s 待つ
+groq-gpt-oss-120b run1 #117 859ms ○ 
+  #118 429（1 回目）→ 18s 待つ
+groq-gpt-oss-120b run1 #118 893ms ○ 
+  #120 429（1 回目）→ 1s 待つ
+groq-gpt-oss-120b run1 #120 582ms × attacker の性格補正=undefined（正解 atk）
+  #121 429（1 回目）→ 18s 待つ
+groq-gpt-oss-120b run1 #121 953ms × defender.sp.spe=undefined（正解 32） / defender の性格補正=undefined（正解 spe）
+  #123 429（1 回目）→ 18s 待つ
+groq-gpt-oss-120b run1 #123 669ms ○ 
+  #124 429（1 回目）→ 16s 待つ
+groq-gpt-oss-120b run1 #124 847ms ○ 
+  #126 429（1 回目）→ 18s 待つ
+groq-gpt-oss-120b run1 #126 1231ms × defender.sp.hp=undefined（正解 32）
+  #127 429（1 回目）→ 2s 待つ
+  #127 429（2 回目）→ 1s 待つ
+  #127 429（3 回目）→ 1s 待つ
+groq-gpt-oss-120b run1 #127 865ms ○ 
+  #129 429（1 回目）→ 15s 待つ
+  #129 429（2 回目）→ 2s 待つ
+groq-gpt-oss-120b run1 #129 1252ms ○ 
+  #130 429（1 回目）→ 18s 待つ
+groq-gpt-oss-120b run1 #130 688ms ○ 
+groq-gpt-oss-120b run1 #132 65ms × HTTP 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m4k6gn69etj9ff3kz0t27f87` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 199177, Re
+done groq-gpt-oss-120b (1 日の上限に達した（run1 #132）)

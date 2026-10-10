@@ -1,0 +1,21 @@
+gemma-4-26b run1 #101 268ms × HTTP 500: [{
+  "error": {
+    "code": 500,
+    "message": "Internal error encountered.",
+    "status": "INTERNAL"
+  }
+}
+]
+gemma-4-26b run1 #102 4616ms × defender.sp.spe=undefined（正解 32）
+  #103 429（1 回目）→ 20s 待つ
+  #103 429（2 回目）→ 20s 待つ
+gemma-4-26b run1 #103 6252ms × attacker="メガルカリオZ"（正解 イダイトウ） / defender="イダイトウ"（正解 メガルカリオZ） / attacker.boosts.spe=undefined（正解 2）
+gemma-4-26b run1 #113 2118ms ○ 
+gemma-4-26b run1 #116 3101ms ○ 
+gemma-4-26b run1 #119 2134ms ○ 
+gemma-4-26b run1 #122 2632ms ○ 
+gemma-4-26b run1 #125 3081ms ○ 
+gemma-4-26b run1 #128 1757ms ○ 
+gemma-4-26b run1 #131 2467ms ○ 
+  #134 429（1 回目）→ 20s 待つ
+  #134 429（2 回目）→ 20s 待つ

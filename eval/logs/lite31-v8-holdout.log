@@ -1,0 +1,20 @@
+gemini-3.1-flash-lite run1 #101 947ms ○ 
+gemini-3.1-flash-lite run1 #102 669ms ○ 
+gemini-3.1-flash-lite run1 #103 654ms ○ 
+gemini-3.1-flash-lite run1 #113 853ms ○ 
+gemini-3.1-flash-lite run1 #116 837ms ○ 
+gemini-3.1-flash-lite run1 #119 1079ms ○ 
+  #122 429（1 回目）→ 20s 待つ
+  #122 429（2 回目）→ 20s 待つ
+gemini-3.1-flash-lite run1 #122 786ms × pokemon="メガルカリオ"（正解 メガルカリオZ） / pokemon.sp.spe=undefined（正解 32） / pokemon の性格補正=undefined（正解 spe）
+  #125 429（1 回目）→ 20s 待つ
+gemini-3.1-flash-lite run1 #125 666ms ○ 
+gemini-3.1-flash-lite run1 #128 542ms ○ 
+gemini-3.1-flash-lite run1 #131 599ms ○ 
+gemini-3.1-flash-lite run1 #134 677ms ○ 
+gemini-3.1-flash-lite run1 #137 785ms ○ 
+gemini-3.1-flash-lite run1 #140 533ms ○ 
+gemini-3.1-flash-lite run1 #142 608ms ○ 
+gemini-3.1-flash-lite run1 #144 568ms ○ 
+gemini-3.1-flash-lite run1 #146 692ms ○ 
+done gemini-3.1-flash-lite

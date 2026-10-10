@@ -1,0 +1,35 @@
+gemma-4-26b run1 #111 2989ms × attacker の性格補正=undefined（正解 spa）
+gemma-4-26b run1 #112 3470ms ○ 
+gemma-4-26b run1 #114 2608ms ○ 
+gemma-4-26b run1 #115 2359ms ○ 
+gemma-4-26b run1 #117 2335ms ○ 
+gemma-4-26b run1 #118 2042ms ○ 
+gemma-4-26b run1 #120 2203ms ○ 
+gemma-4-26b run1 #121 3136ms × defender.sp.spe=undefined（正解 32） / defender の性格補正=undefined（正解 spe）
+  #123 429（1 回目）→ 20s 待つ
+  #123 429（2 回目）→ 20s 待つ
+gemma-4-26b run1 #123 2133ms ○ 
+gemma-4-26b run1 #124 2230ms ○ 
+gemma-4-26b run1 #126 3045ms × attacker の性格補正=undefined（正解 atk）
+gemma-4-26b run1 #127 3865ms × intent=clarify（正解 damage）
+gemma-4-26b run1 #129 2991ms ○ 
+gemma-4-26b run1 #130 1956ms ○ 
+gemma-4-26b run1 #132 2361ms ○ 
+gemma-4-26b run1 #133 2252ms ○ 
+gemma-4-26b run1 #135 2195ms ○ 
+  #136 429（1 回目）→ 20s 待つ
+  #136 429（2 回目）→ 20s 待つ
+gemma-4-26b run1 #136 3139ms × attacker の性格補正=undefined（正解 atk）
+gemma-4-26b run1 #138 1609ms × attacker.boosts.spe=undefined（正解 1）
+gemma-4-26b run1 #139 228ms × HTTP 500: [{
+  "error": {
+    "code": 500,
+    "message": "Internal error encountered.",
+    "status": "INTERNAL"
+  }
+}
+]
+gemma-4-26b run1 #141 2719ms × attacker.sp.spe=undefined（正解 32） / defender.sp.spe=undefined（正解 32）
+gemma-4-26b run1 #143 3598ms ○ 
+gemma-4-26b run1 #145 2346ms ○ 
+done gemma-4-26b
