@@ -1,0 +1,25 @@
+gemini-3.1-flash-lite run1 #111 4491ms ○ 
+gemini-3.1-flash-lite run1 #112 710ms ○ 
+gemini-3.1-flash-lite run1 #114 761ms ○ 
+gemini-3.1-flash-lite run1 #115 2613ms ○ 
+gemini-3.1-flash-lite run1 #117 1274ms ○ 
+gemini-3.1-flash-lite run1 #118 769ms ○ 
+gemini-3.1-flash-lite run1 #120 909ms ○ 
+gemini-3.1-flash-lite run1 #121 711ms ○ 
+gemini-3.1-flash-lite run1 #123 2189ms ○ 
+gemini-3.1-flash-lite run1 #124 6254ms ○ 
+gemini-3.1-flash-lite run1 #126 835ms ○ 
+gemini-3.1-flash-lite run1 #127 1015ms ○ 
+gemini-3.1-flash-lite run1 #129 2544ms ○ 
+gemini-3.1-flash-lite run1 #130 1887ms ○ 
+gemini-3.1-flash-lite run1 #132 4147ms ○ 
+gemini-3.1-flash-lite run1 #133 1056ms ○ 
+  #135 429（1 回目）→ 20s 待つ
+gemini-3.1-flash-lite run1 #135 9928ms ○ 
+gemini-3.1-flash-lite run1 #136 979ms ○ 
+gemini-3.1-flash-lite run1 #138 23544ms ○ 
+gemini-3.1-flash-lite run1 #139 697ms ○ 
+gemini-3.1-flash-lite run1 #141 4658ms ○ 
+gemini-3.1-flash-lite run1 #143 13762ms ○ 
+gemini-3.1-flash-lite run1 #145 5307ms ○ 
+done gemini-3.1-flash-lite
