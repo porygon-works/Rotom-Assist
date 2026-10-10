@@ -55,6 +55,7 @@ function dictionary(): [string, Tok][] {
     "何発", "なんぱつ", "確定", "確定数", "耐える", "耐えれる", "耐えられる", "落ちる", "落とせる", "倒せる", "どれくらい", "どのくらい", "減る",
     "どっちが速い", "どっちがはやい", "どっちが早い", "どっちが先", "抜ける", "抜かれる", "素早さ", "すばやさ", "実数値", "いくつ",
     "タイプ", "弱点", "相性", "種族値", "威力", "何タイプ", "教えて", "？", "?", "。", "!", "！", "撃ったら", "うったら", "だと", "なら",
+    "んだけど", "だけど", "けど",
     "どこまで", "すばやさ振ってたら", "素早さ振ってたら", "振ってたら", "振ったら", "何振りまで", "何振りなら", "負ける", "抜かれる", "までなら", "まで",
   ]) add(w, { k: "w", v: norm(w) });
   // 長い語から先に照合する
@@ -72,7 +73,7 @@ function pattern(s: string): [number, Tok] | null {
     if (nonH.length !== 1) return null; // 「CS特化」など補正の先が決まらないものは AI に回す
     return [m[0].length, { k: "spread", sp: Object.fromEntries(stats.map((x) => [x, 32])), up: nonH[0] }];
   }
-  m = s.match(/^([HABCDS]{1,3})(?:振り|252|極振り)/);
+  m = s.match(/^([HABCDS]{1,3})(?:振リ|252|極振リ)/);
   if (m) return [m[0].length, { k: "spread", sp: Object.fromEntries([...m[1]].map((c) => [LETTER[c], 32])) }];
   m = s.match(/^(最速|準速|最遅)/);
   if (m) {
@@ -125,7 +126,7 @@ export function tokenize(text: string): Tok[] | null {
         out.push(t);
         i += surface.length;
         if (t.k === "item") {
-          const mm = s.slice(i).match(/^(持ち|モチ)/);
+          const mm = s.slice(i).match(/^(持チ|モチ)/);
           if (mm) i += mm[0].length;
         }
         continue outer;
@@ -180,6 +181,14 @@ export function parseRules(text: string): Obj | null {
     if (t.k === "sr") {
       sr = true;
       if (next?.k === "p" && ["ノ", "デ"].includes(next.v)) i++; // 「ステロ込みで」
+      continue;
+    }
+    // 名前の後ろの残り HP（「エンペルトのHP120残ってる」）: 直前のポケモンに付ける
+    if (t.k === "hp" && !mods.length && toks[i - 1]?.k === "p" && toks[i - 1].v === "ノ" && toks[i - 2]?.k === "pokemon" && sides.length) {
+      const last = sides[sides.length - 1];
+      if (t.percent !== undefined) last.cond.hp_left_percent = t.percent;
+      if (t.value !== undefined) last.cond.hp_left = t.value;
+      last.particle = next?.k === "p" ? next.v : undefined;
       continue;
     }
     if (t.k === "spread" || t.k === "item" || t.k === "nature" || t.k === "boost" || t.k === "hp") {

@@ -17,6 +17,13 @@ describe("ルール解析（確実に分かるときだけ答える）", () => {
     expect(parseRules("カイリューの種族値教えて")).toMatchObject({ intent: "stats" });
     expect(parseRules("じゃれつくって何タイプ？")).toMatchObject({ intent: "move_info", move: "じゃれつく" });
   });
+  it("ユーザーの質問例 1（後ろに付く残りHP・HB振り・A特化）", () => {
+    expect(parseRules("HB振りエンペルトのHP120残ってるんだけど、A特化ガブのじしん耐える？")).toMatchObject({
+      intent: "damage", attacker: "ガブリアス", defender: "エンペルト", move: "じしん",
+      conditions: { attacker: { sp: { atk: 32 }, nature_up: "atk" }, defender: { sp: { hp: 32, def: 32 }, hp_left: 120 } },
+    });
+    expect(parseRules("スカーフ持ちガブのじしん、サーフゴーに")).toMatchObject({ conditions: { attacker: { item: "こだわりスカーフ" } } });
+  });
   it("ユーザーの質問例（ランク・どこまで振ったら）", () => {
     expect(parseRules("S二段階上昇のイダイトウって最速メガルカリオZ抜ける？")).toMatchObject({
       intent: "speed", ask: "compare", attacker: "イダイトウ", defender: "メガルカリオZ",
