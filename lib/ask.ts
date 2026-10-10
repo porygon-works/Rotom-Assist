@@ -165,6 +165,8 @@ function answerDamage(ex: Obj, text?: string): AskResult {
     return fail("clarify", "聞き返し", [...pr.list, clarifySpeech(missing)]);
   }
   if (!a || !d || !m) return fail("damage", "名前の確認", pr.list);
+  // 変化技（つるぎのまいなど）はダメージがない。「効かない」と言うとタイプで無効に聞こえるので、別に答える
+  if (moveInfo(m.en).category === "Status") return fail("damage", `${m.ja}は変化技`, [`${m.ja}は変化技だから、ダメージはないロト`]);
   const as = side(a.en, obj(c.attacker), pr);
   const ds = side(d.en, obj(c.defender), pr);
   const f = fieldOf(obj(c.field));

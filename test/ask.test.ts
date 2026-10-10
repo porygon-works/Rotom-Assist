@@ -122,6 +122,9 @@ describe("回答（AI の出力から）", () => {
     const a = answerExtraction({ intent: "multi", queries: ["ガブリアス", "ドラパルト", "サーフゴー"].map((p) => ({ intent: "speed", ask: "value", pokemon: p })) });
     expect(a.speech).toBe("最速同士なら、ドラパルトが一番速いロト！ ドラパルト213、ガブリアス169、サーフゴー149ロト");
   });
+  it("変化技はダメージがないと答える（タイプで無効と区別する）", () => {
+    expect(answerExtraction({ intent: "damage", attacker: "ガブリアス", defender: "ミミッキュ", move: "つるぎのまい" }).speech).toBe("つるぎのまいは変化技だから、ダメージはないロト");
+  });
   it("数値は計算の結果だけ（AI が書いた数値は使わない）", () => {
     const a = answerExtraction({ intent: "damage", attacker: "ミミッキュ", defender: "ガブリアス", move: "じゃれつく", damage: "999%" } as never);
     expect(a.speech).not.toContain("999");
