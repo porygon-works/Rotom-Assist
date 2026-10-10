@@ -434,6 +434,8 @@ export function answerExtraction(ex: Obj, text?: string): AskResult {
         // ポケモンの名前だけ（「ガブリアス」）: 何を調べるか聞き返す
         const only = !missing.length && !str(ex.move) && pr.name("pokemon", str(ex.pokemon));
         if (only) return fail("clarify", "聞き返し", [`${only.ja}の何を調べるロト？ ダメージ、素早さ、タイプ、種族値が分かるロト`]);
+        // 素早さの質問（「〇〇抜ける？」）で相手がいないときは、撃つ相手ではなく比べる相手を聞く
+        if (/抜け|ぬけ|速い|はやい|早い|素早|すばや/.test(text ?? "")) return fail("clarify", "聞き返し", [...pr.list, "どのポケモンと比べるロト？"]);
         return fail("clarify", "聞き返し", [...pr.list, clarifySpeech(missing)]);
       }
       default:
