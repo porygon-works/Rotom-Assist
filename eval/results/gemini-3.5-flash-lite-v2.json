@@ -1,0 +1,1922 @@
+{
+  "name": "gemini-3.5-flash-lite",
+  "prompt": "v2",
+  "model": "gemini-3.5-flash-lite",
+  "extra": {
+    "reasoning_effort": "minimal"
+  },
+  "date": "2026-10-10T16:01:39.066Z",
+  "stopped": null,
+  "rows": [
+    {
+      "id": 1,
+      "group": "extract",
+      "run": 1,
+      "ms": 1347,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "damage",
+        "attacker": "ミミッキュ",
+        "defender": "ガブリアス",
+        "move": "じゃれつく",
+        "conditions": {
+          "attacker": {
+            "item": "",
+            "ability": "",
+            "nature": "",
+            "sp": {
+              "hp": 0,
+              "atk": 0,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 0
+            },
+            "boosts": {
+              "atk": 0,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 0
+            },
+            "mega": "",
+            "speed": ""
+          },
+          "defender": {
+            "item": "",
+            "ability": "",
+            "nature": "",
+            "sp": {
+              "hp": 0,
+              "atk": 0,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 0
+            },
+            "boosts": {
+              "atk": 0,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 0
+            },
+            "mega": "",
+            "speed": ""
+          },
+          "field": {
+            "weather": "",
+            "terrain": ""
+          }
+        },
+        "uses_context": false,
+        "missing": [],
+        "unknown_names": [],
+        "queries": []
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 390,
+        "prompt_tokens": 1171,
+        "total_tokens": 1561
+      }
+    },
+    {
+      "id": 2,
+      "group": "extract",
+      "run": 1,
+      "ms": 1149,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "damage",
+        "attacker": "ミミッキュ",
+        "defender": "ガブリアス",
+        "move": "じゃれつく",
+        "conditions": {
+          "attacker": {
+            "item": "",
+            "ability": "",
+            "nature": "",
+            "sp": {
+              "hp": 0,
+              "atk": 0,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 0
+            },
+            "boosts": {
+              "atk": 0,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 0
+            },
+            "mega": "",
+            "speed": ""
+          },
+          "defender": {
+            "item": "",
+            "ability": "",
+            "nature": "",
+            "sp": {
+              "hp": 0,
+              "atk": 0,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 0
+            },
+            "boosts": {
+              "atk": 0,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 0
+            },
+            "mega": "",
+            "speed": ""
+          },
+          "field": {
+            "weather": "",
+            "terrain": ""
+          }
+        },
+        "uses_context": false,
+        "missing": [],
+        "unknown_names": [],
+        "queries": []
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 390,
+        "prompt_tokens": 1176,
+        "total_tokens": 1566
+      }
+    },
+    {
+      "id": 3,
+      "group": "extract",
+      "run": 1,
+      "ms": 1189,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "damage",
+        "attacker": "サーナイト",
+        "defender": "カイリュー",
+        "pokemon": null,
+        "move": "ムーンフォース",
+        "conditions": {
+          "attacker": {
+            "item": "",
+            "ability": "",
+            "nature": "",
+            "sp": {
+              "hp": 0,
+              "atk": 0,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 0
+            },
+            "boosts": {
+              "atk": 0,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 0
+            },
+            "mega": "",
+            "speed": ""
+          },
+          "defender": {
+            "item": "",
+            "ability": "",
+            "nature": "",
+            "sp": {
+              "hp": 0,
+              "atk": 0,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 0
+            },
+            "boosts": {
+              "atk": 0,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 0
+            },
+            "mega": "",
+            "speed": ""
+          },
+          "field": {
+            "weather": "",
+            "terrain": ""
+          }
+        },
+        "uses_context": false,
+        "missing": [],
+        "unknown_names": []
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 388,
+        "prompt_tokens": 1172,
+        "total_tokens": 1560
+      }
+    },
+    {
+      "id": 4,
+      "group": "extract",
+      "run": 1,
+      "ms": 835,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "damage",
+        "attacker": "ガブリアス",
+        "defender": "サーフゴー",
+        "move": "じしん",
+        "conditions": {
+          "attacker": {
+            "item": "こだわりスカーフ",
+            "ability": "",
+            "nature": "",
+            "sp": {},
+            "boosts": {},
+            "mega": "",
+            "speed": ""
+          },
+          "defender": {
+            "item": "",
+            "ability": "",
+            "nature": "",
+            "sp": {},
+            "boosts": {},
+            "mega": "",
+            "speed": ""
+          },
+          "field": {
+            "weather": "",
+            "terrain": ""
+          }
+        },
+        "uses_context": false,
+        "missing": [],
+        "unknown_names": [],
+        "queries": []
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 210,
+        "prompt_tokens": 1173,
+        "total_tokens": 1383
+      }
+    },
+    {
+      "id": 5,
+      "group": "extract",
+      "run": 1,
+      "ms": 867,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "damage",
+        "attacker": "リザードン",
+        "defender": "ハッサム",
+        "move": "ねっぷう",
+        "conditions": {
+          "attacker": {
+            "item": "いのちのたま",
+            "ability": "",
+            "nature": "",
+            "sp": {},
+            "boosts": {},
+            "mega": "",
+            "speed": ""
+          },
+          "defender": {
+            "item": "",
+            "ability": "",
+            "nature": "",
+            "sp": {},
+            "boosts": {},
+            "mega": "",
+            "speed": ""
+          },
+          "field": {
+            "weather": "",
+            "terrain": ""
+          }
+        },
+        "uses_context": false,
+        "missing": [],
+        "unknown_names": []
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 204,
+        "prompt_tokens": 1174,
+        "total_tokens": 1378
+      }
+    },
+    {
+      "id": 6,
+      "group": "extract",
+      "run": 1,
+      "ms": 802,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "damage",
+        "attacker": "ハッサム",
+        "defender": "サーナイト",
+        "move": "バレットパンチ",
+        "conditions": {
+          "attacker": {
+            "item": "こだわりハチマキ"
+          },
+          "defender": {},
+          "field": {}
+        },
+        "uses_context": false,
+        "missing": [],
+        "unknown_names": []
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 106,
+        "prompt_tokens": 1180,
+        "total_tokens": 1286
+      }
+    },
+    {
+      "id": 7,
+      "group": "extract",
+      "run": 1,
+      "ms": 1153,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "damage",
+        "attacker": "メガリザードンY",
+        "defender": "ドドゲザン",
+        "pokemon": null,
+        "move": "かえんほうしゃ",
+        "conditions": {
+          "attacker": {
+            "item": "",
+            "ability": "",
+            "nature": "",
+            "sp": {
+              "hp": 0,
+              "atk": 0,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 0
+            },
+            "boosts": {
+              "atk": 0,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 0
+            },
+            "mega": "",
+            "speed": ""
+          },
+          "defender": {
+            "item": "",
+            "ability": "",
+            "nature": "",
+            "sp": {
+              "hp": 0,
+              "atk": 0,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 0
+            },
+            "boosts": {
+              "atk": 0,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 0
+            },
+            "mega": "",
+            "speed": ""
+          },
+          "field": {
+            "weather": "ひざしがつよい",
+            "terrain": ""
+          }
+        },
+        "uses_context": false,
+        "missing": [],
+        "unknown_names": []
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 401,
+        "prompt_tokens": 1178,
+        "total_tokens": 1579
+      }
+    },
+    {
+      "id": 8,
+      "group": "extract",
+      "run": 1,
+      "ms": 1335,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "damage",
+        "attacker": "カイリュー",
+        "defender": "ガブリアス",
+        "pokemon": null,
+        "move": "しんそく",
+        "conditions": {
+          "attacker": {
+            "item": "",
+            "ability": "",
+            "nature": "",
+            "sp": {
+              "hp": 0,
+              "atk": 0,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 0
+            },
+            "boosts": {
+              "atk": 1,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 0
+            },
+            "mega": "",
+            "speed": ""
+          },
+          "defender": {
+            "item": "",
+            "ability": "",
+            "nature": "",
+            "sp": {
+              "hp": 0,
+              "atk": 0,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 0
+            },
+            "boosts": {
+              "atk": 0,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 0
+            },
+            "mega": "",
+            "speed": ""
+          },
+          "field": {
+            "weather": "",
+            "terrain": ""
+          }
+        },
+        "uses_context": false,
+        "missing": [],
+        "unknown_names": [],
+        "queries": []
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 396,
+        "prompt_tokens": 1176,
+        "total_tokens": 1572
+      }
+    },
+    {
+      "id": 9,
+      "group": "extract",
+      "run": 1,
+      "ms": 686,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "damage",
+        "attacker": "サーフゴー",
+        "defender": "ガブリアス",
+        "move": "ゴールドラッシュ",
+        "conditions": {
+          "attacker": {},
+          "defender": {
+            "sp": {
+              "hp": 32
+            }
+          },
+          "field": {}
+        },
+        "uses_context": false,
+        "missing": [],
+        "unknown_names": []
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 112,
+        "prompt_tokens": 1179,
+        "total_tokens": 1291
+      }
+    },
+    {
+      "id": 10,
+      "group": "extract",
+      "run": 1,
+      "ms": 849,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "speed",
+        "attacker": "ガブリアス",
+        "defender": "サーフゴー",
+        "pokemon": null,
+        "move": null,
+        "conditions": {
+          "attacker": {},
+          "defender": {},
+          "field": {}
+        },
+        "uses_context": false,
+        "missing": [],
+        "unknown_names": []
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 96,
+        "prompt_tokens": 1172,
+        "total_tokens": 1268
+      }
+    },
+    {
+      "id": 11,
+      "group": "extract",
+      "run": 1,
+      "ms": 852,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "speed",
+        "attacker": "ガブリアス",
+        "defender": "ドラパルト",
+        "pokemon": null,
+        "move": null,
+        "conditions": {
+          "attacker": {
+            "item": "こだわりスカーフ",
+            "ability": "",
+            "nature": "",
+            "sp": {},
+            "boosts": {},
+            "mega": "",
+            "speed": "max"
+          },
+          "defender": {
+            "item": "",
+            "ability": "",
+            "nature": "",
+            "sp": {},
+            "boosts": {},
+            "mega": "",
+            "speed": "max"
+          },
+          "field": {
+            "weather": "",
+            "terrain": ""
+          }
+        },
+        "uses_context": false,
+        "missing": [],
+        "unknown_names": []
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 212,
+        "prompt_tokens": 1179,
+        "total_tokens": 1391
+      }
+    },
+    {
+      "id": 12,
+      "group": "extract",
+      "run": 1,
+      "ms": 742,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "speed",
+        "attacker": "ドラパルト",
+        "defender": null,
+        "pokemon": "ドラパルト",
+        "move": null,
+        "conditions": {
+          "attacker": {
+            "item": "",
+            "ability": "",
+            "nature": "",
+            "sp": {},
+            "boosts": {},
+            "mega": "",
+            "speed": ""
+          },
+          "defender": {
+            "item": "",
+            "ability": "",
+            "nature": "",
+            "sp": {},
+            "boosts": {},
+            "mega": "",
+            "speed": ""
+          },
+          "field": {
+            "weather": "",
+            "terrain": ""
+          }
+        },
+        "uses_context": false,
+        "missing": [],
+        "unknown_names": []
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 202,
+        "prompt_tokens": 1169,
+        "total_tokens": 1371
+      }
+    },
+    {
+      "id": 13,
+      "group": "extract",
+      "run": 1,
+      "ms": 1112,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "type",
+        "attacker": null,
+        "defender": null,
+        "pokemon": "サーフゴー",
+        "move": null,
+        "conditions": {
+          "attacker": {
+            "item": "",
+            "ability": "",
+            "nature": "",
+            "sp": {
+              "hp": 0,
+              "atk": 0,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 0
+            },
+            "boosts": {
+              "atk": 0,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 0
+            },
+            "mega": "",
+            "speed": ""
+          },
+          "defender": {
+            "item": "",
+            "ability": "",
+            "nature": "",
+            "sp": {
+              "hp": 0,
+              "atk": 0,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 0
+            },
+            "boosts": {
+              "atk": 0,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 0
+            },
+            "mega": "",
+            "speed": ""
+          },
+          "field": {
+            "weather": "",
+            "terrain": ""
+          }
+        },
+        "uses_context": false,
+        "missing": [],
+        "unknown_names": []
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 383,
+        "prompt_tokens": 1165,
+        "total_tokens": 1548
+      }
+    },
+    {
+      "id": 14,
+      "group": "extract",
+      "run": 1,
+      "ms": 1250,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "type",
+        "attacker": null,
+        "defender": null,
+        "pokemon": "サーフゴー",
+        "move": null,
+        "conditions": {
+          "attacker": {
+            "item": "",
+            "ability": "",
+            "nature": "",
+            "sp": {
+              "hp": 0,
+              "atk": 0,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 0
+            },
+            "boosts": {
+              "atk": 0,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 0
+            },
+            "mega": "",
+            "speed": ""
+          },
+          "defender": {
+            "item": "",
+            "ability": "",
+            "nature": "",
+            "sp": {
+              "hp": 0,
+              "atk": 0,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 0
+            },
+            "boosts": {
+              "atk": 0,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 0
+            },
+            "mega": "",
+            "speed": ""
+          },
+          "field": {
+            "weather": "",
+            "terrain": ""
+          }
+        },
+        "uses_context": false,
+        "missing": [],
+        "unknown_names": []
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 383,
+        "prompt_tokens": 1165,
+        "total_tokens": 1548
+      }
+    },
+    {
+      "id": 15,
+      "group": "extract",
+      "run": 1,
+      "ms": 1580,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "stats",
+        "attacker": null,
+        "defender": null,
+        "pokemon": "カイリュー",
+        "move": null,
+        "conditions": {
+          "attacker": {
+            "item": "",
+            "ability": "",
+            "nature": "",
+            "sp": {
+              "hp": 0,
+              "atk": 0,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 0
+            },
+            "boosts": {
+              "atk": 0,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 0
+            },
+            "mega": "",
+            "speed": ""
+          },
+          "defender": {
+            "item": "",
+            "ability": "",
+            "nature": "",
+            "sp": {
+              "hp": 0,
+              "atk": 0,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 0
+            },
+            "boosts": {
+              "atk": 0,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 0
+            },
+            "mega": "",
+            "speed": ""
+          },
+          "field": {
+            "weather": "",
+            "terrain": ""
+          }
+        },
+        "uses_context": false,
+        "missing": [],
+        "unknown_names": []
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 382,
+        "prompt_tokens": 1165,
+        "total_tokens": 1547
+      }
+    },
+    {
+      "id": 16,
+      "group": "extract",
+      "run": 1,
+      "ms": 1175,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "learnset",
+        "attacker": null,
+        "defender": null,
+        "pokemon": "サーナイト",
+        "move": "でんじは",
+        "conditions": {
+          "attacker": {
+            "item": "",
+            "ability": "",
+            "nature": "",
+            "sp": {
+              "hp": 0,
+              "atk": 0,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 0
+            },
+            "boosts": {
+              "atk": 0,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 0
+            },
+            "mega": "",
+            "speed": ""
+          },
+          "defender": {
+            "item": "",
+            "ability": "",
+            "nature": "",
+            "sp": {
+              "hp": 0,
+              "atk": 0,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 0
+            },
+            "boosts": {
+              "atk": 0,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 0
+            },
+            "mega": "",
+            "speed": ""
+          },
+          "field": {
+            "weather": "",
+            "terrain": ""
+          }
+        },
+        "uses_context": false,
+        "missing": [],
+        "unknown_names": []
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 387,
+        "prompt_tokens": 1168,
+        "total_tokens": 1555
+      }
+    },
+    {
+      "id": 17,
+      "group": "extract",
+      "run": 1,
+      "ms": 1229,
+      "status": 200,
+      "retries429": 3,
+      "output": {
+        "intent": "move_info",
+        "attacker": null,
+        "defender": null,
+        "pokemon": null,
+        "move": "じゃれつく",
+        "conditions": {
+          "attacker": {
+            "item": "",
+            "ability": "",
+            "nature": "",
+            "sp": {
+              "hp": 0,
+              "atk": 0,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 0
+            },
+            "boosts": {
+              "atk": 0,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 0
+            },
+            "mega": "",
+            "speed": ""
+          },
+          "defender": {
+            "item": "",
+            "ability": "",
+            "nature": "",
+            "sp": {
+              "hp": 0,
+              "atk": 0,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 0
+            },
+            "boosts": {
+              "atk": 0,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 0
+            },
+            "mega": "",
+            "speed": ""
+          },
+          "field": {
+            "weather": "",
+            "terrain": ""
+          }
+        },
+        "uses_context": false,
+        "missing": [],
+        "unknown_names": []
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 385,
+        "prompt_tokens": 1165,
+        "total_tokens": 1550
+      }
+    },
+    {
+      "id": 18,
+      "group": "deferred",
+      "run": 1,
+      "ms": 984,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "my_team",
+        "attacker": null,
+        "defender": null,
+        "pokemon": "ミミッキュ",
+        "move": null,
+        "conditions": {
+          "attacker": {
+            "item": "",
+            "ability": "",
+            "nature": "",
+            "sp": {},
+            "boosts": {},
+            "mega": ""
+          },
+          "defender": {
+            "item": "",
+            "ability": "",
+            "nature": "",
+            "sp": {},
+            "boosts": {},
+            "mega": ""
+          },
+          "field": {
+            "weather": "",
+            "terrain": ""
+          }
+        },
+        "uses_context": false,
+        "missing": [],
+        "unknown_names": []
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 190,
+        "prompt_tokens": 1168,
+        "total_tokens": 1358
+      }
+    },
+    {
+      "id": 19,
+      "group": "deferred",
+      "run": 1,
+      "ms": 752,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "my_team",
+        "attacker": null,
+        "defender": null,
+        "pokemon": "ガブリアス",
+        "move": null,
+        "conditions": {},
+        "uses_context": false,
+        "missing": [],
+        "unknown_names": []
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 74,
+        "prompt_tokens": 1168,
+        "total_tokens": 1242
+      }
+    },
+    {
+      "id": 20,
+      "group": "deferred",
+      "run": 1,
+      "ms": 1098,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "my_team",
+        "attacker": null,
+        "defender": "ドドゲザン",
+        "pokemon": null,
+        "move": null,
+        "conditions": {
+          "attacker": {
+            "item": "",
+            "ability": "",
+            "nature": "",
+            "sp": {
+              "hp": 0,
+              "atk": 0,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 0
+            },
+            "boosts": {
+              "atk": 0,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 0
+            },
+            "mega": "",
+            "speed": ""
+          },
+          "defender": {
+            "item": "",
+            "ability": "",
+            "nature": "",
+            "sp": {
+              "hp": 0,
+              "atk": 0,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 0
+            },
+            "boosts": {
+              "atk": 0,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 0
+            },
+            "mega": "",
+            "speed": ""
+          },
+          "field": {
+            "weather": "",
+            "terrain": ""
+          }
+        },
+        "uses_context": false,
+        "missing": [],
+        "unknown_names": []
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 252,
+        "prompt_tokens": 1172,
+        "total_tokens": 1424
+      }
+    },
+    {
+      "id": 21,
+      "group": "deferred",
+      "run": 1,
+      "ms": 757,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "chat",
+        "attacker": null,
+        "defender": null,
+        "pokemon": null,
+        "move": null,
+        "conditions": {
+          "attacker": {
+            "item": "",
+            "ability": "",
+            "nature": "",
+            "sp": {},
+            "boosts": {},
+            "mega": "",
+            "speed": ""
+          },
+          "defender": {
+            "item": "",
+            "ability": "",
+            "nature": "",
+            "sp": {},
+            "boosts": {},
+            "mega": "",
+            "speed": ""
+          },
+          "field": {
+            "weather": "",
+            "terrain": ""
+          }
+        },
+        "uses_context": false,
+        "missing": [],
+        "unknown_names": []
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 158,
+        "prompt_tokens": 1167,
+        "total_tokens": 1325
+      }
+    },
+    {
+      "id": 22,
+      "group": "deferred",
+      "run": 1,
+      "ms": 821,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "chat",
+        "attacker": null,
+        "defender": null,
+        "pokemon": null,
+        "move": null,
+        "conditions": {
+          "attacker": {
+            "item": "",
+            "ability": "",
+            "nature": "",
+            "sp": {},
+            "boosts": {},
+            "mega": ""
+          },
+          "defender": {
+            "item": "",
+            "ability": "",
+            "nature": "",
+            "sp": {},
+            "boosts": {},
+            "mega": ""
+          },
+          "field": {
+            "weather": "",
+            "terrain": ""
+          }
+        },
+        "uses_context": false,
+        "missing": [],
+        "unknown_names": []
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 184,
+        "prompt_tokens": 1167,
+        "total_tokens": 1351
+      }
+    },
+    {
+      "id": 23,
+      "group": "deferred",
+      "run": 1,
+      "ms": 1225,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "chat",
+        "attacker": null,
+        "defender": null,
+        "pokemon": null,
+        "move": null,
+        "conditions": {
+          "attacker": {
+            "item": "",
+            "ability": "",
+            "nature": "",
+            "sp": {
+              "hp": 0,
+              "atk": 0,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 0
+            },
+            "boosts": {
+              "atk": 0,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 0
+            },
+            "mega": "",
+            "speed": ""
+          },
+          "defender": {
+            "item": "",
+            "ability": "",
+            "nature": "",
+            "sp": {
+              "hp": 0,
+              "atk": 0,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 0
+            },
+            "boosts": {
+              "atk": 0,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 0
+            },
+            "mega": "",
+            "speed": ""
+          },
+          "field": {
+            "weather": "",
+            "terrain": ""
+          }
+        },
+        "uses_context": false,
+        "missing": [],
+        "unknown_names": []
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 380,
+        "prompt_tokens": 1165,
+        "total_tokens": 1545
+      }
+    },
+    {
+      "id": 24,
+      "group": "clarify-extract",
+      "run": 1,
+      "ms": 1197,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "clarify",
+        "attacker": null,
+        "defender": "ガブリアス",
+        "pokemon": null,
+        "move": null,
+        "conditions": {
+          "attacker": {
+            "item": "",
+            "ability": "",
+            "nature": "",
+            "sp": {
+              "hp": 0,
+              "atk": 0,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 0
+            },
+            "boosts": {
+              "atk": 0,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 0
+            },
+            "mega": "",
+            "speed": ""
+          },
+          "defender": {
+            "item": "",
+            "ability": "",
+            "nature": "",
+            "sp": {
+              "hp": 0,
+              "atk": 0,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 0
+            },
+            "boosts": {
+              "atk": 0,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 0
+            },
+            "mega": "",
+            "speed": ""
+          },
+          "field": {
+            "weather": "",
+            "terrain": ""
+          }
+        },
+        "uses_context": false,
+        "missing": [
+          "move"
+        ],
+        "unknown_names": []
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 393,
+        "prompt_tokens": 1172,
+        "total_tokens": 1565
+      }
+    },
+    {
+      "id": 25,
+      "group": "clarify-extract",
+      "run": 1,
+      "ms": 1157,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "clarify",
+        "attacker": "ミミッキュ",
+        "defender": null,
+        "pokemon": null,
+        "move": "じゃれつく",
+        "conditions": {
+          "attacker": {
+            "item": "",
+            "ability": "",
+            "nature": "",
+            "sp": {
+              "hp": 0,
+              "atk": 0,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 0
+            },
+            "boosts": {
+              "atk": 0,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 0
+            },
+            "mega": "",
+            "speed": ""
+          },
+          "defender": {
+            "item": "",
+            "ability": "",
+            "nature": "",
+            "sp": {
+              "hp": 0,
+              "atk": 0,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 0
+            },
+            "boosts": {
+              "atk": 0,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 0
+            },
+            "mega": "",
+            "speed": ""
+          },
+          "field": {
+            "weather": "",
+            "terrain": ""
+          }
+        },
+        "uses_context": false,
+        "missing": [
+          "defender"
+        ],
+        "unknown_names": [],
+        "queries": []
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 402,
+        "prompt_tokens": 1166,
+        "total_tokens": 1568
+      }
+    },
+    {
+      "id": 26,
+      "group": "clarify-extract",
+      "run": 1,
+      "ms": 993,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "clarify",
+        "attacker": null,
+        "defender": "ガブリアス",
+        "pokemon": null,
+        "move": "じゃれつく",
+        "conditions": {
+          "attacker": {
+            "item": "",
+            "ability": "",
+            "nature": "",
+            "sp": {},
+            "boosts": {},
+            "mega": "",
+            "speed": ""
+          },
+          "defender": {
+            "item": "",
+            "ability": "",
+            "nature": "",
+            "sp": {},
+            "boosts": {},
+            "mega": "",
+            "speed": ""
+          },
+          "field": {
+            "weather": "",
+            "terrain": ""
+          }
+        },
+        "uses_context": false,
+        "missing": [
+          "attacker"
+        ],
+        "unknown_names": [
+          "アロロ"
+        ]
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 222,
+        "prompt_tokens": 1170,
+        "total_tokens": 1392
+      }
+    },
+    {
+      "id": 27,
+      "group": "extract",
+      "run": 1,
+      "ms": 875,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "clarify",
+        "attacker": null,
+        "defender": null,
+        "pokemon": null,
+        "move": "じゃれつく",
+        "conditions": {
+          "attacker": {
+            "item": "",
+            "ability": "",
+            "nature": "",
+            "sp": {},
+            "boosts": {},
+            "mega": "",
+            "speed": ""
+          },
+          "defender": {
+            "item": "",
+            "ability": "",
+            "nature": "",
+            "sp": {},
+            "boosts": {},
+            "mega": "",
+            "speed": ""
+          },
+          "field": {
+            "weather": "",
+            "terrain": ""
+          }
+        },
+        "uses_context": false,
+        "missing": [
+          "attacker",
+          "defender"
+        ],
+        "unknown_names": [
+          "が降りあす",
+          "みっきゅ"
+        ]
+      },
+      "errors": [
+        "intent=clarify（正解 damage）",
+        "attacker=null（正解 ミミッキュ）",
+        "defender=null（正解 ガブリアス）"
+      ],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 231,
+        "prompt_tokens": 1169,
+        "total_tokens": 1400
+      }
+    },
+    {
+      "id": 28,
+      "group": "extract",
+      "run": 1,
+      "ms": 1029,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "clarify",
+        "attacker": null,
+        "defender": "カイリュー",
+        "pokemon": null,
+        "move": "ムーンフォース",
+        "conditions": {
+          "attacker": {
+            "item": "",
+            "ability": "",
+            "nature": "",
+            "sp": {},
+            "boosts": {},
+            "mega": "",
+            "speed": ""
+          },
+          "defender": {
+            "item": "",
+            "ability": "",
+            "nature": "",
+            "sp": {},
+            "boosts": {},
+            "mega": "",
+            "speed": ""
+          },
+          "field": {
+            "weather": "",
+            "terrain": ""
+          }
+        },
+        "uses_context": false,
+        "missing": [
+          "attacker"
+        ],
+        "unknown_names": [
+          "さあ内藤"
+        ],
+        "queries": []
+      },
+      "errors": [
+        "intent=clarify（正解 damage）",
+        "attacker=null（正解 サーナイト）"
+      ],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 228,
+        "prompt_tokens": 1171,
+        "total_tokens": 1399
+      }
+    },
+    {
+      "id": 29,
+      "group": "extract",
+      "run": 1,
+      "ms": 2821,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "multi",
+        "attacker": null,
+        "defender": null,
+        "pokemon": null,
+        "move": null,
+        "conditions": {
+          "attacker": {
+            "item": "",
+            "ability": "",
+            "nature": "",
+            "sp": {
+              "hp": 0,
+              "atk": 0,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 0
+            },
+            "boosts": {
+              "atk": 0,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 0
+            },
+            "mega": "",
+            "speed": ""
+          },
+          "defender": {
+            "item": "",
+            "ability": "",
+            "nature": "",
+            "sp": {
+              "hp": 0,
+              "atk": 0,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 0
+            },
+            "boosts": {
+              "atk": 0,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 0
+            },
+            "mega": "",
+            "speed": ""
+          },
+          "field": {
+            "weather": "",
+            "terrain": ""
+          }
+        },
+        "uses_context": false,
+        "missing": [],
+        "unknown_names": [],
+        "queries": [
+          {
+            "intent": "speed",
+            "attacker": "ガブリアス",
+            "defender": null,
+            "pokemon": "ガブリアス",
+            "move": null,
+            "conditions": {
+              "attacker": {
+                "item": "",
+                "ability": "",
+                "nature": "",
+                "sp": {
+                  "hp": 0,
+                  "atk": 0,
+                  "def": 0,
+                  "spa": 0,
+                  "spd": 0,
+                  "spe": 0
+                },
+                "boosts": {
+                  "atk": 0,
+                  "def": 0,
+                  "spa": 0,
+                  "spd": 0,
+                  "spe": 0
+                },
+                "mega": "",
+                "speed": ""
+              },
+              "defender": {
+                "item": "",
+                "ability": "",
+                "nature": "",
+                "sp": {
+                  "hp": 0,
+                  "atk": 0,
+                  "def": 0,
+                  "spa": 0,
+                  "spd": 0,
+                  "spe": 0
+                },
+                "boosts": {
+                  "atk": 0,
+                  "def": 0,
+                  "spa": 0,
+                  "spd": 0,
+                  "spe": 0
+                },
+                "mega": "",
+                "speed": ""
+              },
+              "field": {
+                "weather": "",
+                "terrain": ""
+              }
+            },
+            "uses_context": false,
+            "missing": [],
+            "unknown_names": []
+          },
+          {
+            "intent": "type",
+            "attacker": null,
+            "defender": null,
+            "pokemon": "サーフゴー",
+            "move": null,
+            "conditions": {
+              "attacker": {
+                "item": "",
+                "ability": "",
+                "nature": "",
+                "sp": {
+                  "hp": 0,
+                  "atk": 0,
+                  "def": 0,
+                  "spa": 0,
+                  "spd": 0,
+                  "spe": 0
+                },
+                "boosts": {
+                  "atk": 0,
+                  "def": 0,
+                  "spa": 0,
+                  "spd": 0,
+                  "spe": 0
+                },
+                "mega": "",
+                "speed": ""
+              },
+              "defender": {
+                "item": "",
+                "ability": "",
+                "nature": "",
+                "sp": {
+                  "hp": 0,
+                  "atk": 0,
+                  "def": 0,
+                  "spa": 0,
+                  "spd": 0,
+                  "spe": 0
+                },
+                "boosts": {
+                  "atk": 0,
+                  "def": 0,
+                  "spa": 0,
+                  "spd": 0,
+                  "spe": 0
+                },
+                "mega": "",
+                "speed": ""
+              },
+              "field": {
+                "weather": "",
+                "terrain": ""
+              }
+            },
+            "uses_context": false,
+            "missing": [],
+            "unknown_names": []
+          }
+        ]
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 1166,
+        "prompt_tokens": 1172,
+        "total_tokens": 2338
+      }
+    },
+    {
+      "id": 30,
+      "group": "extract",
+      "run": 1,
+      "ms": 589,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "damage",
+        "attacker": "ミミッキュ",
+        "defender": "ガブリアス",
+        "move": "じゃれつく",
+        "conditions": {
+          "attacker": {
+            "item": "こだわりハチマキ"
+          }
+        },
+        "uses_context": true,
+        "missing": [],
+        "unknown_names": []
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 53,
+        "prompt_tokens": 1225,
+        "total_tokens": 1278
+      }
+    }
+  ],
+  "bursts": null
+}

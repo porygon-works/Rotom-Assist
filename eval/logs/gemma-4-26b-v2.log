@@ -1,0 +1,90 @@
+gemma-4-26b run1 #1 283ms × HTTP 500: [{
+  "error": {
+    "code": 500,
+    "message": "Internal error encountered.",
+    "status": "INTERNAL"
+  }
+}
+]
+gemma-4-26b run1 #2 217ms × HTTP 500: [{
+  "error": {
+    "code": 500,
+    "message": "Internal error encountered.",
+    "status": "INTERNAL"
+  }
+}
+]
+gemma-4-26b run1 #3 2348ms ○ 
+gemma-4-26b run1 #4 3124ms ○ 
+gemma-4-26b run1 #5 3971ms ○ 
+gemma-4-26b run1 #6 4984ms ○ 
+gemma-4-26b run1 #7 3939ms ○ 
+gemma-4-26b run1 #8 171ms × HTTP 500: [{
+  "error": {
+    "code": 500,
+    "message": "Internal error encountered.",
+    "status": "INTERNAL"
+  }
+}
+]
+gemma-4-26b run1 #9 3119ms ○ 
+gemma-4-26b run1 #10 2346ms ○ 
+gemma-4-26b run1 #11 3351ms ○ 
+gemma-4-26b run1 #12 2253ms × intent=stats（正解 speed）
+gemma-4-26b run1 #13 2080ms ○ 
+  #14 429（1 回目）→ 20s 待つ
+  #14 429（2 回目）→ 20s 待つ
+gemma-4-26b run1 #14 175ms × HTTP 500: [{
+  "error": {
+    "code": 500,
+    "message": "Internal error encountered.",
+    "status": "INTERNAL"
+  }
+}
+]
+gemma-4-26b run1 #15 148ms × HTTP 500: [{
+  "error": {
+    "code": 500,
+    "message": "Internal error encountered.",
+    "status": "INTERNAL"
+  }
+}
+]
+gemma-4-26b run1 #16 2201ms ○ 
+gemma-4-26b run1 #17 154ms × HTTP 500: [{
+  "error": {
+    "code": 500,
+    "message": "Internal error encountered.",
+    "status": "INTERNAL"
+  }
+}
+]
+gemma-4-26b run1 #18 7564ms × intent=learnset（正解 my_team）
+gemma-4-26b run1 #19 2367ms ○ 
+gemma-4-26b run1 #20 2367ms ○ 
+gemma-4-26b run1 #21 2113ms ○ 
+gemma-4-26b run1 #22 2180ms ○ 
+gemma-4-26b run1 #23 2193ms ○ 
+gemma-4-26b run1 #24 241ms × HTTP 500: [{
+  "error": {
+    "code": 500,
+    "message": "Internal error encountered.",
+    "status": "INTERNAL"
+  }
+}
+]
+gemma-4-26b run1 #25 2682ms ○ 
+gemma-4-26b run1 #26 2655ms ○ 
+  #27 429（1 回目）→ 20s 待つ
+gemma-4-26b run1 #27 4225ms × intent=clarify（正解 damage） / defender="ハバタクカミ"（正解 ガブリアス）
+gemma-4-26b run1 #28 8646ms × intent=clarify（正解 damage） / attacker="ハバタクカミ"（正解 サーナイト）
+gemma-4-26b run1 #29 181ms × HTTP 500: [{
+  "error": {
+    "code": 500,
+    "message": "Internal error encountered.",
+    "status": "INTERNAL"
+  }
+}
+]
+gemma-4-26b run1 #30 1632ms ○ 
+done gemma-4-26b

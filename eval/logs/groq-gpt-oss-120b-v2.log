@@ -1,0 +1,58 @@
+groq-gpt-oss-120b run1 #1 1762ms ○ 
+groq-gpt-oss-120b run1 #2 2728ms ○ 
+groq-gpt-oss-120b run1 #3 697ms ○ 
+groq-gpt-oss-120b run1 #4 2557ms × intent=clarify（正解 damage）
+groq-gpt-oss-120b run1 #5 1450ms ○ 
+groq-gpt-oss-120b run1 #6 1271ms ○ 
+  #7 429（1 回目）→ 1s 待つ
+groq-gpt-oss-120b run1 #7 1198ms ○ 
+  #8 429（1 回目）→ 10s 待つ
+  #8 429（2 回目）→ 2s 待つ
+groq-gpt-oss-120b run1 #8 807ms × intent=speed（正解 damage） / move=null（正解 しんそく）
+  #9 429（1 回目）→ 11s 待つ
+groq-gpt-oss-120b run1 #9 982ms ○ 
+  #10 429（1 回目）→ 10s 待つ
+groq-gpt-oss-120b run1 #10 1184ms ○ 
+  #11 429（1 回目）→ 8s 待つ
+groq-gpt-oss-120b run1 #11 850ms ○ 
+  #12 429（1 回目）→ 12s 待つ
+groq-gpt-oss-120b run1 #12 1624ms ○ 
+  #13 429（1 回目）→ 6s 待つ
+groq-gpt-oss-120b run1 #13 724ms ○ 
+  #14 429（1 回目）→ 1s 待つ
+groq-gpt-oss-120b run1 #14 610ms ○ 
+  #15 429（1 回目）→ 11s 待つ
+groq-gpt-oss-120b run1 #15 429ms ○ 
+groq-gpt-oss-120b run1 #16 353ms × move=null（正解 でんじは）
+  #17 429（1 回目）→ 12s 待つ
+groq-gpt-oss-120b run1 #17 651ms ○ 
+  #18 429（1 回目）→ 8s 待つ
+groq-gpt-oss-120b run1 #18 671ms ○ 
+  #19 429（1 回目）→ 9s 待つ
+  #19 429（2 回目）→ 1s 待つ
+groq-gpt-oss-120b run1 #19 540ms ○ 
+  #20 429（1 回目）→ 1s 待つ
+groq-gpt-oss-120b run1 #20 900ms × intent=clarify（正解 my_team）
+  #21 429（1 回目）→ 10s 待つ
+groq-gpt-oss-120b run1 #21 643ms × intent=clarify（正解 chat）
+  #22 429（1 回目）→ 2s 待つ
+groq-gpt-oss-120b run1 #22 494ms ○ 
+groq-gpt-oss-120b run1 #23 305ms ○ 
+  #24 429（1 回目）→ 2s 待つ
+  #24 429（2 回目）→ 1s 待つ
+  #24 429（3 回目）→ 1s 待つ
+groq-gpt-oss-120b run1 #24 395ms ○ 
+groq-gpt-oss-120b run1 #25 653ms × intent=move_info（正解 clarify） / missing=[]
+  #26 429（1 回目）→ 9s 待つ
+groq-gpt-oss-120b run1 #26 983ms ○ 
+  #27 429（1 回目）→ 13s 待つ
+groq-gpt-oss-120b run1 #27 416ms × intent=clarify（正解 damage） / attacker=null（正解 ミミッキュ） / defender=null（正解 ガブリアス） / move=null（正解 じゃれつく）
+  #28 429（1 回目）→ 1s 待つ
+  #28 429（2 回目）→ 1s 待つ
+  #28 429（3 回目）→ 1s 待つ
+groq-gpt-oss-120b run1 #28 864ms × intent=clarify（正解 damage） / attacker=null（正解 サーナイト）
+  #29 429（1 回目）→ 2s 待つ
+groq-gpt-oss-120b run1 #29 1133ms ○ 
+  #30 429（1 回目）→ 1s 待つ
+groq-gpt-oss-120b run1 #30 615ms ○ 
+done groq-gpt-oss-120b

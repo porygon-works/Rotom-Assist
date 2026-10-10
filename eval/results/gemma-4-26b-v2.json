@@ -1,0 +1,787 @@
+{
+  "name": "gemma-4-26b",
+  "prompt": "v2",
+  "model": "gemma-4-26b-a4b-it",
+  "extra": {
+    "reasoning_effort": "minimal"
+  },
+  "date": "2026-10-10T16:02:20.539Z",
+  "stopped": null,
+  "rows": [
+    {
+      "id": 1,
+      "group": "extract",
+      "run": 1,
+      "ms": 283,
+      "status": 500,
+      "retries429": 0,
+      "output": null,
+      "raw": "[{\n  \"error\": {\n    \"code\": 500,\n    \"message\": \"Internal error encountered.\",\n    \"status\": \"INTERNAL\"\n  }\n}\n]",
+      "errors": [
+        "HTTP 500: [{\n  \"error\": {\n    \"code\": 500,\n    \"message\": \"Internal error encountered.\",\n    \"status\": \"INTERNAL\"\n  }\n}\n]"
+      ],
+      "fabricated": [],
+      "daily": false
+    },
+    {
+      "id": 2,
+      "group": "extract",
+      "run": 1,
+      "ms": 217,
+      "status": 500,
+      "retries429": 0,
+      "output": null,
+      "raw": "[{\n  \"error\": {\n    \"code\": 500,\n    \"message\": \"Internal error encountered.\",\n    \"status\": \"INTERNAL\"\n  }\n}\n]",
+      "errors": [
+        "HTTP 500: [{\n  \"error\": {\n    \"code\": 500,\n    \"message\": \"Internal error encountered.\",\n    \"status\": \"INTERNAL\"\n  }\n}\n]"
+      ],
+      "fabricated": [],
+      "daily": false
+    },
+    {
+      "id": 3,
+      "group": "extract",
+      "run": 1,
+      "ms": 2348,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "damage",
+        "attacker": "サーナイト",
+        "defender": "カイリュー",
+        "pokemon": null,
+        "move": "ムーンフォース",
+        "conditions": {},
+        "uses_context": false,
+        "missing": [],
+        "unknown_names": [],
+        "queries": []
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 82,
+        "prompt_tokens": 1172,
+        "total_tokens": 1254
+      }
+    },
+    {
+      "id": 4,
+      "group": "extract",
+      "run": 1,
+      "ms": 3124,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "damage",
+        "attacker": "ガブリアス",
+        "defender": "サーフゴー",
+        "pokemon": null,
+        "move": "じしん",
+        "conditions": {
+          "attacker": {
+            "item": "こだわりスカーフ"
+          },
+          "defender": {},
+          "field": {}
+        },
+        "uses_context": false,
+        "missing": [],
+        "unknown_names": [],
+        "queries": []
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 125,
+        "prompt_tokens": 1173,
+        "total_tokens": 1298
+      }
+    },
+    {
+      "id": 5,
+      "group": "extract",
+      "run": 1,
+      "ms": 3971,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "damage",
+        "attacker": "リザードン",
+        "defender": "ハッサム",
+        "pokemon": null,
+        "move": "ねっぷう",
+        "conditions": {
+          "attacker": {
+            "item": "いのちのたま"
+          }
+        },
+        "uses_context": false,
+        "missing": [],
+        "unknown_names": [],
+        "queries": []
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 113,
+        "prompt_tokens": 1174,
+        "total_tokens": 1287
+      }
+    },
+    {
+      "id": 6,
+      "group": "extract",
+      "run": 1,
+      "ms": 4984,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "damage",
+        "attacker": "ハッサム",
+        "defender": "サーナイト",
+        "pokemon": null,
+        "move": "バレットパンチ",
+        "conditions": {
+          "attacker": {
+            "item": "こだわりハチマキ"
+          }
+        },
+        "uses_context": false,
+        "missing": [],
+        "unknown_names": [],
+        "queries": []
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 113,
+        "prompt_tokens": 1180,
+        "total_tokens": 1293
+      }
+    },
+    {
+      "id": 7,
+      "group": "extract",
+      "run": 1,
+      "ms": 3939,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "damage",
+        "attacker": "メガリザードンY",
+        "defender": "ドドゲザン",
+        "pokemon": null,
+        "move": "かえんほうしゃ",
+        "conditions": {
+          "attacker": {
+            "mega": "メガリザードンY"
+          },
+          "defender": {},
+          "field": {
+            "weather": "晴れ"
+          }
+        },
+        "uses_context": false,
+        "missing": [],
+        "unknown_names": [],
+        "queries": []
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 144,
+        "prompt_tokens": 1178,
+        "total_tokens": 1322
+      }
+    },
+    {
+      "id": 8,
+      "group": "extract",
+      "run": 1,
+      "ms": 171,
+      "status": 500,
+      "retries429": 0,
+      "output": null,
+      "raw": "[{\n  \"error\": {\n    \"code\": 500,\n    \"message\": \"Internal error encountered.\",\n    \"status\": \"INTERNAL\"\n  }\n}\n]",
+      "errors": [
+        "HTTP 500: [{\n  \"error\": {\n    \"code\": 500,\n    \"message\": \"Internal error encountered.\",\n    \"status\": \"INTERNAL\"\n  }\n}\n]"
+      ],
+      "fabricated": [],
+      "daily": false
+    },
+    {
+      "id": 9,
+      "group": "extract",
+      "run": 1,
+      "ms": 3119,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "damage",
+        "attacker": "サーフゴー",
+        "defender": "ガブリアス",
+        "pokemon": null,
+        "move": "ゴールドラッシュ",
+        "conditions": {
+          "attacker": {},
+          "defender": {
+            "sp": {
+              "hp": 32
+            }
+          },
+          "field": {}
+        },
+        "uses_context": false,
+        "missing": [],
+        "unknown_names": [],
+        "queries": []
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 125,
+        "prompt_tokens": 1179,
+        "total_tokens": 1304
+      }
+    },
+    {
+      "id": 10,
+      "group": "extract",
+      "run": 1,
+      "ms": 2346,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "speed",
+        "attacker": "ガブリアス",
+        "defender": "サーフゴー",
+        "pokemon": null,
+        "move": null,
+        "conditions": {},
+        "uses_context": false,
+        "missing": [],
+        "unknown_names": [],
+        "queries": []
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 87,
+        "prompt_tokens": 1172,
+        "total_tokens": 1259
+      }
+    },
+    {
+      "id": 11,
+      "group": "extract",
+      "run": 1,
+      "ms": 3351,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "speed",
+        "attacker": "ガブリアス",
+        "defender": "ドラパルト",
+        "pokemon": null,
+        "move": null,
+        "conditions": {
+          "attacker": {
+            "item": "こだわりスカーフ",
+            "speed": "max"
+          },
+          "defender": {
+            "speed": "max"
+          }
+        },
+        "uses_context": false,
+        "missing": [],
+        "unknown_names": [],
+        "queries": []
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 135,
+        "prompt_tokens": 1179,
+        "total_tokens": 1314
+      }
+    },
+    {
+      "id": 12,
+      "group": "extract",
+      "run": 1,
+      "ms": 2253,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "stats",
+        "attacker": null,
+        "defender": null,
+        "pokemon": "ドラパルト",
+        "move": null,
+        "conditions": {},
+        "uses_context": false,
+        "missing": [],
+        "unknown_names": [],
+        "queries": []
+      },
+      "errors": [
+        "intent=stats（正解 speed）"
+      ],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 83,
+        "prompt_tokens": 1169,
+        "total_tokens": 1252
+      }
+    },
+    {
+      "id": 13,
+      "group": "extract",
+      "run": 1,
+      "ms": 2080,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "type",
+        "attacker": null,
+        "defender": null,
+        "pokemon": "サーフゴー",
+        "move": null,
+        "conditions": {},
+        "uses_context": false,
+        "missing": [],
+        "unknown_names": [],
+        "queries": []
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 77,
+        "prompt_tokens": 1165,
+        "total_tokens": 1242
+      }
+    },
+    {
+      "id": 14,
+      "group": "extract",
+      "run": 1,
+      "ms": 175,
+      "status": 500,
+      "retries429": 2,
+      "output": null,
+      "raw": "[{\n  \"error\": {\n    \"code\": 500,\n    \"message\": \"Internal error encountered.\",\n    \"status\": \"INTERNAL\"\n  }\n}\n]",
+      "errors": [
+        "HTTP 500: [{\n  \"error\": {\n    \"code\": 500,\n    \"message\": \"Internal error encountered.\",\n    \"status\": \"INTERNAL\"\n  }\n}\n]"
+      ],
+      "fabricated": [],
+      "daily": false
+    },
+    {
+      "id": 15,
+      "group": "extract",
+      "run": 1,
+      "ms": 148,
+      "status": 500,
+      "retries429": 0,
+      "output": null,
+      "raw": "[{\n  \"error\": {\n    \"code\": 500,\n    \"message\": \"Internal error encountered.\",\n    \"status\": \"INTERNAL\"\n  }\n}\n]",
+      "errors": [
+        "HTTP 500: [{\n  \"error\": {\n    \"code\": 500,\n    \"message\": \"Internal error encountered.\",\n    \"status\": \"INTERNAL\"\n  }\n}\n]"
+      ],
+      "fabricated": [],
+      "daily": false
+    },
+    {
+      "id": 16,
+      "group": "extract",
+      "run": 1,
+      "ms": 2201,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "learnset",
+        "attacker": null,
+        "defender": null,
+        "pokemon": "サーナイト",
+        "move": "でんじは",
+        "conditions": {},
+        "uses_context": false,
+        "missing": [],
+        "unknown_names": [],
+        "queries": []
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 81,
+        "prompt_tokens": 1168,
+        "total_tokens": 1249
+      }
+    },
+    {
+      "id": 17,
+      "group": "extract",
+      "run": 1,
+      "ms": 154,
+      "status": 500,
+      "retries429": 0,
+      "output": null,
+      "raw": "[{\n  \"error\": {\n    \"code\": 500,\n    \"message\": \"Internal error encountered.\",\n    \"status\": \"INTERNAL\"\n  }\n}\n]",
+      "errors": [
+        "HTTP 500: [{\n  \"error\": {\n    \"code\": 500,\n    \"message\": \"Internal error encountered.\",\n    \"status\": \"INTERNAL\"\n  }\n}\n]"
+      ],
+      "fabricated": [],
+      "daily": false
+    },
+    {
+      "id": 18,
+      "group": "deferred",
+      "run": 1,
+      "ms": 7564,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "learnset",
+        "attacker": null,
+        "defender": null,
+        "pokemon": "ミミッキュ",
+        "move": null,
+        "conditions": {},
+        "uses_context": false,
+        "missing": [],
+        "unknown_names": [],
+        "queries": []
+      },
+      "errors": [
+        "intent=learnset（正解 my_team）"
+      ],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 85,
+        "prompt_tokens": 1168,
+        "total_tokens": 1253
+      }
+    },
+    {
+      "id": 19,
+      "group": "deferred",
+      "run": 1,
+      "ms": 2367,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "my_team",
+        "attacker": null,
+        "defender": null,
+        "pokemon": "ガブリアス",
+        "move": null,
+        "conditions": {},
+        "uses_context": false,
+        "missing": [],
+        "unknown_names": [],
+        "queries": []
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 86,
+        "prompt_tokens": 1168,
+        "total_tokens": 1254
+      }
+    },
+    {
+      "id": 20,
+      "group": "deferred",
+      "run": 1,
+      "ms": 2367,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "my_team",
+        "attacker": null,
+        "defender": "ドドゲザン",
+        "pokemon": null,
+        "move": null,
+        "conditions": {},
+        "uses_context": false,
+        "missing": [],
+        "unknown_names": [],
+        "queries": []
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 86,
+        "prompt_tokens": 1172,
+        "total_tokens": 1258
+      }
+    },
+    {
+      "id": 21,
+      "group": "deferred",
+      "run": 1,
+      "ms": 2113,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "chat",
+        "attacker": null,
+        "defender": null,
+        "pokemon": null,
+        "move": null,
+        "conditions": {},
+        "uses_context": false,
+        "missing": [],
+        "unknown_names": [],
+        "queries": []
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 74,
+        "prompt_tokens": 1167,
+        "total_tokens": 1241
+      }
+    },
+    {
+      "id": 22,
+      "group": "deferred",
+      "run": 1,
+      "ms": 2180,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "chat",
+        "attacker": null,
+        "defender": null,
+        "pokemon": null,
+        "move": null,
+        "conditions": {},
+        "uses_context": false,
+        "missing": [],
+        "unknown_names": [],
+        "queries": []
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 80,
+        "prompt_tokens": 1167,
+        "total_tokens": 1247
+      }
+    },
+    {
+      "id": 23,
+      "group": "deferred",
+      "run": 1,
+      "ms": 2193,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "chat",
+        "attacker": null,
+        "defender": null,
+        "pokemon": null,
+        "move": null,
+        "conditions": {},
+        "uses_context": false,
+        "missing": [],
+        "unknown_names": [],
+        "queries": []
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 80,
+        "prompt_tokens": 1165,
+        "total_tokens": 1245
+      }
+    },
+    {
+      "id": 24,
+      "group": "clarify-extract",
+      "run": 1,
+      "ms": 241,
+      "status": 500,
+      "retries429": 0,
+      "output": null,
+      "raw": "[{\n  \"error\": {\n    \"code\": 500,\n    \"message\": \"Internal error encountered.\",\n    \"status\": \"INTERNAL\"\n  }\n}\n]",
+      "errors": [
+        "HTTP 500: [{\n  \"error\": {\n    \"code\": 500,\n    \"message\": \"Internal error encountered.\",\n    \"status\": \"INTERNAL\"\n  }\n}\n]"
+      ],
+      "fabricated": [],
+      "daily": false
+    },
+    {
+      "id": 25,
+      "group": "clarify-extract",
+      "run": 1,
+      "ms": 2682,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "clarify",
+        "attacker": "ミミッキュ",
+        "defender": null,
+        "pokemon": null,
+        "move": "じゃれつく",
+        "conditions": {},
+        "uses_context": false,
+        "missing": [
+          "defender"
+        ],
+        "unknown_names": [],
+        "queries": []
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 97,
+        "prompt_tokens": 1166,
+        "total_tokens": 1263
+      }
+    },
+    {
+      "id": 26,
+      "group": "clarify-extract",
+      "run": 1,
+      "ms": 2655,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "clarify",
+        "attacker": "アロロ",
+        "defender": "ガブリアス",
+        "pokemon": null,
+        "move": "じゃれつく",
+        "conditions": {},
+        "uses_context": false,
+        "missing": [],
+        "unknown_names": [
+          "アロロ"
+        ],
+        "queries": []
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 102,
+        "prompt_tokens": 1170,
+        "total_tokens": 1272
+      }
+    },
+    {
+      "id": 27,
+      "group": "extract",
+      "run": 1,
+      "ms": 4225,
+      "status": 200,
+      "retries429": 1,
+      "output": {
+        "intent": "clarify",
+        "attacker": "ミミッキュ",
+        "defender": "ハバタクカミ",
+        "pokemon": null,
+        "move": "じゃれつく",
+        "conditions": {},
+        "uses_context": false,
+        "missing": [],
+        "unknown_names": [
+          "が降りあす"
+        ],
+        "queries": []
+      },
+      "errors": [
+        "intent=clarify（正解 damage）",
+        "defender=\"ハバタクカミ\"（正解 ガブリアス）"
+      ],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 104,
+        "prompt_tokens": 1169,
+        "total_tokens": 1273
+      }
+    },
+    {
+      "id": 28,
+      "group": "extract",
+      "run": 1,
+      "ms": 8646,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "clarify",
+        "attacker": "ハバタクカミ",
+        "defender": "カイリュー",
+        "pokemon": null,
+        "move": "ムーンフォース",
+        "conditions": {},
+        "uses_context": false,
+        "missing": [
+          "attacker"
+        ],
+        "unknown_names": [
+          "内藤"
+        ],
+        "queries": []
+      },
+      "errors": [
+        "intent=clarify（正解 damage）",
+        "attacker=\"ハバタクカミ\"（正解 サーナイト）"
+      ],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 109,
+        "prompt_tokens": 1171,
+        "total_tokens": 1280
+      }
+    },
+    {
+      "id": 29,
+      "group": "extract",
+      "run": 1,
+      "ms": 181,
+      "status": 500,
+      "retries429": 0,
+      "output": null,
+      "raw": "[{\n  \"error\": {\n    \"code\": 500,\n    \"message\": \"Internal error encountered.\",\n    \"status\": \"INTERNAL\"\n  }\n}\n]",
+      "errors": [
+        "HTTP 500: [{\n  \"error\": {\n    \"code\": 500,\n    \"message\": \"Internal error encountered.\",\n    \"status\": \"INTERNAL\"\n  }\n}\n]"
+      ],
+      "fabricated": [],
+      "daily": false
+    },
+    {
+      "id": 30,
+      "group": "extract",
+      "run": 1,
+      "ms": 1632,
+      "status": 200,
+      "retries429": 0,
+      "output": {
+        "intent": "damage",
+        "attacker": "ミミッキュ",
+        "defender": "ガブリアス",
+        "move": "じゃれつく",
+        "conditions": {
+          "attacker": {
+            "item": "こだわりハチマキ"
+          }
+        },
+        "uses_context": true,
+        "missing": [],
+        "unknown_names": []
+      },
+      "errors": [],
+      "fabricated": [],
+      "usage": {
+        "completion_tokens": 53,
+        "prompt_tokens": 1225,
+        "total_tokens": 1278
+      }
+    }
+  ],
+  "bursts": null
+}

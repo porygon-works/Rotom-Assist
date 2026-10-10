@@ -1,0 +1,34 @@
+gemini-3.5-flash-lite run1 #1 1347ms ○ 
+gemini-3.5-flash-lite run1 #2 1149ms ○ 
+gemini-3.5-flash-lite run1 #3 1189ms ○ 
+gemini-3.5-flash-lite run1 #4 835ms ○ 
+gemini-3.5-flash-lite run1 #5 867ms ○ 
+gemini-3.5-flash-lite run1 #6 802ms ○ 
+gemini-3.5-flash-lite run1 #7 1153ms ○ 
+gemini-3.5-flash-lite run1 #8 1335ms ○ 
+gemini-3.5-flash-lite run1 #9 686ms ○ 
+gemini-3.5-flash-lite run1 #10 849ms ○ 
+gemini-3.5-flash-lite run1 #11 852ms ○ 
+gemini-3.5-flash-lite run1 #12 742ms ○ 
+gemini-3.5-flash-lite run1 #13 1112ms ○ 
+gemini-3.5-flash-lite run1 #14 1250ms ○ 
+gemini-3.5-flash-lite run1 #15 1580ms ○ 
+gemini-3.5-flash-lite run1 #16 1175ms ○ 
+  #17 429（1 回目）→ 20s 待つ
+  #17 429（2 回目）→ 20s 待つ
+  #17 429（3 回目）→ 20s 待つ
+gemini-3.5-flash-lite run1 #17 1229ms ○ 
+gemini-3.5-flash-lite run1 #18 984ms ○ 
+gemini-3.5-flash-lite run1 #19 752ms ○ 
+gemini-3.5-flash-lite run1 #20 1098ms ○ 
+gemini-3.5-flash-lite run1 #21 757ms ○ 
+gemini-3.5-flash-lite run1 #22 821ms ○ 
+gemini-3.5-flash-lite run1 #23 1225ms ○ 
+gemini-3.5-flash-lite run1 #24 1197ms ○ 
+gemini-3.5-flash-lite run1 #25 1157ms ○ 
+gemini-3.5-flash-lite run1 #26 993ms ○ 
+gemini-3.5-flash-lite run1 #27 875ms × intent=clarify（正解 damage） / attacker=null（正解 ミミッキュ） / defender=null（正解 ガブリアス）
+gemini-3.5-flash-lite run1 #28 1029ms × intent=clarify（正解 damage） / attacker=null（正解 サーナイト）
+gemini-3.5-flash-lite run1 #29 2821ms ○ 
+gemini-3.5-flash-lite run1 #30 589ms ○ 
+done gemini-3.5-flash-lite
