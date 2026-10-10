@@ -64,6 +64,14 @@ describe("続きの質問（直前の解釈に条件を足す）", () => {
     expect(parseRules("急所に当たったらミミッキュのじゃれつくでガブ落ちる？")).toMatchObject({ conditions: { field: { critical: true } } });
     expect(parseRules("ドラパルトとメガルカリオZ、準速同士だとどっちが速い？")).toMatchObject({ conditions: { attacker: { sp: { spe: 32 } }, defender: { sp: { spe: 32 } } } });
   });
+  it("音声認識の表記ゆれ（略号の読み・小文字・メガの X/Y/Z の読み）", () => {
+    expect(parseRules("エー特化ガブのじしん、エイチビー振りエンペルトに")).toMatchObject({
+      conditions: { attacker: { sp: { atk: 32 }, nature_up: "atk" }, defender: { sp: { hp: 32, def: 32 } } },
+    });
+    expect(parseRules("エス二段階上昇のイダイトウって最速メガルカリオゼット抜ける？")).toMatchObject({ defender: "メガルカリオZ", conditions: { attacker: { boosts: { spe: 2 } } } });
+    expect(parseRules("c特化サザンドラのあくのはどう、サーフゴーに")).toMatchObject({ conditions: { attacker: { nature_up: "spa" } } });
+    expect(parseRules("エースバーンのとびひざげり、ガブに")).toMatchObject({ attacker: "エースバーン" }); // 「エー」を A にしない
+  });
   it("状態異常・無振り", () => {
     expect(parseRules("やけどのガブのじしん、ドドゲザンに")).toMatchObject({ conditions: { attacker: { status: "やけど" } } });
     expect(parseRules("まひしたドラパルトと無振りガブリアスどっちが速い？")).toMatchObject({ conditions: { attacker: { status: "まひ" }, defender: { sp: { spe: 0 } } } });

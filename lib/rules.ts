@@ -12,8 +12,19 @@ function norm(s: string): string {
   return s
     .normalize("NFKC")
     .replace(/[ぁ-ゖ]/g, (c) => String.fromCharCode(c.charCodeAt(0) + 0x60))
-    .replace(/\s+/g, "");
+    .replace(/\s+/g, "")
+    // 能力の略号の読み（音声認識がカタカナで書くことがある:「エー特化」「エイチビー振り」「エス二段階」）。
+    // 特化・振り・段階・＋−・補正の直前に続くときだけ直す（「エースバーン」などを壊さない）
+    .replace(/((?:エイチ|エッチ|エー|エイ|ビー|シー|ディー|デー|エス)+)(?=特化|振リ|段階|[+\-]|補正|252|ガ?[1-6一二三四五六]段階)/g, (m) =>
+      LETTER_READING.reduce((x, [re, l]) => x.replace(re, l), m),
+    )
+    .replace(/([hbacds]+)(?=特化|振リ|段階|[+\-]|補正|252)/g, (m) => m.toUpperCase());
 }
+
+/** 能力の略号の読み → 略号 */
+const LETTER_READING: [RegExp, string][] = [
+  [/エイチ|エッチ/g, "H"], [/エー|エイ/g, "A"], [/ビー/g, "B"], [/シー/g, "C"], [/ディー|デー/g, "D"], [/エス/g, "S"],
+];
 
 type Tok =
   | { k: "pokemon"; ja: string }
@@ -40,7 +51,12 @@ function dictionary(): [string, Tok][] {
   const a = aliases as unknown as Record<string, Record<string, string>>;
   const list: [string, Tok][] = [];
   const add = (surface: string, t: Tok) => list.push([norm(surface), t]);
-  for (const ja of Object.keys(n.pokemon)) add(ja, { k: "pokemon", ja });
+  for (const ja of Object.keys(n.pokemon)) {
+    add(ja, { k: "pokemon", ja });
+    // メガシンカの末尾の読み（メガルカリオゼット、メガリザードンワイ）
+    const m = ja.match(/^(メガ.+)([XYZ])$/);
+    if (m) add(m[1] + { X: "エックス", Y: "ワイ", Z: "ゼット" }[m[2] as "X" | "Y" | "Z"], { k: "pokemon", ja });
+  }
   for (const [al, ja] of Object.entries(a.pokemon)) if (n.pokemon[ja]) add(al, { k: "pokemon", ja });
   const others = (names as unknown as { others: Record<string, string[]> }).others;
   for (const ja of others.pokemon ?? []) add(ja, { k: "pokemon", ja });
