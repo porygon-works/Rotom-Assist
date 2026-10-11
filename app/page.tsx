@@ -358,7 +358,8 @@ export default function Home() {
         <section className="card" aria-label="結果">
           <p className="small">聞き取り: 「{shown.question}」</p>
           <h2>{shown.title}</h2>
-          <p className="speech" data-testid="speech">{shown.speech}</p>
+          {/* ダメ計は結論だけを大きく出す（場合分け・前提はカードに出る。全文は読み上げる） */}
+          <p className="speech" data-testid="speech">{shown.card ? (shown.short ?? shown.speech) : shown.speech}</p>
           <p className="small">
             {shown.diagnostics?.provider === "rules" ? "ルールで即答" : shown.diagnostics?.provider ? `AI（${shown.diagnostics.provider}）` : ""} {Math.round(shown.ms)} ms
           </p>
@@ -435,7 +436,7 @@ export default function Home() {
       </div>
 
       <p className="small">
-        ポケモンチャンピオンズ（Lv50・SP）の仕様で、@smogon/calc を使って計算しています。振り方を言わなかった側は無振りで計算し、振り方の幅も出します。日本語名: PokeAPI。
+        ポケモンチャンピオンズ（Lv50・SP）の仕様で、@smogon/calc を使って計算しています。振り方を言わなければ、攻撃側は使う能力に全振り（補正ありの場合も出す）、防御側は無振り（耐久に振った場合も出す）で計算します。日本語名: PokeAPI。
       </p>
     </main>
   );
@@ -448,7 +449,11 @@ function CardView({ card }: { card: DamageCard }) {
       <p className="dresult">
         <strong>{card.result.damage}</strong> <span className="ko">{card.result.ko}</span>
       </p>
-      {card.result.range && <p className="small drange">{card.result.range}（言われていない側の振り方を変えたとき）</p>}
+      {card.result.cases.map((c) => (
+        <p key={c} className="small drange">
+          {c}
+        </p>
+      ))}
       <div className="sides">
         <SideView side={card.attacker} />
         <div className="arrow" aria-hidden>

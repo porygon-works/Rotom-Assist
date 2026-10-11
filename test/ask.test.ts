@@ -46,11 +46,21 @@ describe("名前の解決", () => {
 });
 
 describe("計算（チャンピオンズ・第0世代）", () => {
-  it("ミミッキュのじゃれつく → ガブリアス（無振り）は Showdown と同じ 98-116", () => {
-    const r = damage({ species: "Mimikyu" }, { species: "Garchomp" }, "Play Rough");
+  it("ミミッキュのじゃれつく → ガブリアス（無振り同士）は Showdown と同じ 98-116", () => {
+    const r = damage({ species: "Mimikyu", sp: { atk: 0 } }, { species: "Garchomp" }, "Play Rough");
     expect([r.base.min, r.base.max]).toEqual([98, 116]);
     expect(r.base.ko).toMatchObject({ kind: "guaranteed", n: 2 });
-    expect(r.range).toBeDefined(); // 振り方の指定がないので幅も出す
+    expect(r.attackerBoosted).toBeDefined(); // 性格補正の指定がないので補正ありも出す
+    expect(r.defenderBulky).toBeDefined(); // 防御側の振り方の指定がないので耐久振りも出す
+  });
+  it("攻撃側の振り方を言わなければ全振り（SP32）・補正なしで計算し、補正ありも出す", () => {
+    const r = damage({ species: "Mimikyu" }, { species: "Garchomp" }, "Play Rough");
+    const full = damage({ species: "Mimikyu", sp: { atk: 32 } }, { species: "Garchomp" }, "Play Rough");
+    expect(r.base.max).toBe(full.base.max);
+    expect(r.attackerBoosted!.max).toBeGreaterThan(r.base.max);
+    expect(r.assumed).toContain("攻撃側はA全振り・補正なし");
+    // 性格補正を言ったら補正ありの場合分けはしない
+    expect(damage({ species: "Mimikyu", natureDown: "spa" }, { species: "Garchomp" }, "Play Rough").attackerBoosted).toBeUndefined();
   });
   it("残り HP を確定数に反映する", () => {
     const a = { species: "Garchomp", sp: { atk: 32 }, natureUp: "atk" as const };
@@ -58,10 +68,11 @@ describe("計算（チャンピオンズ・第0世代）", () => {
     const hurt = damage(a, { species: "Empoleon", sp: { hp: 32, def: 32 }, hpLeft: 120 }, "Earthquake");
     expect(full.base.ko.kind).toBe("chance");
     expect(hurt.base.ko).toMatchObject({ kind: "guaranteed", n: 1 });
-    expect(hurt.range).toBeUndefined(); // 両方とも振り方の指定がある
+    expect(hurt.attackerBoosted).toBeUndefined(); // 両方とも振り方の指定がある
+    expect(hurt.defenderBulky).toBeUndefined();
   });
   it("連続技は全部当たったときの合計（ドラゴンアロー）", () => {
-    const r = damage({ species: "Dragapult", item: "Life Orb" }, { species: "Dragonite", ability: "Inner Focus" }, "Dragon Darts");
+    const r = damage({ species: "Dragapult", item: "Life Orb", sp: { atk: 0 } }, { species: "Dragonite", ability: "Inner Focus" }, "Dragon Darts");
     expect([r.base.min, r.base.max]).toEqual([176, 218]);
     expect(r.base.ko).toMatchObject({ kind: "guaranteed", n: 1 });
   });
@@ -105,8 +116,8 @@ describe("計算（チャンピオンズ・第0世代）", () => {
     expect(damage({ species: "Garchomp" }, { species: "Mimikyu" }, "Earthquake").base.endured).toBe("Disguise");
   });
   it("ばけのかわ: 満タンなら 1 発目を防ぎ、確定数を 1 つ増やす（連続技・満タンでないときは対象外）", () => {
-    const base = damage({ species: "Garchomp" }, { species: "Mimikyu", ability: "Pressure" }, "Earthquake").base;
-    const disguise = damage({ species: "Garchomp" }, { species: "Mimikyu" }, "Earthquake").base;
+    const base = damage({ species: "Garchomp", sp: { atk: 0 } }, { species: "Mimikyu", ability: "Pressure" }, "Earthquake").base;
+    const disguise = damage({ species: "Garchomp", sp: { atk: 0 } }, { species: "Mimikyu" }, "Earthquake").base;
     expect(disguise.endured).toBe("Disguise");
     expect(disguise.ko.n).toBeGreaterThan(base.ko.n);
     expect(damage({ species: "Garchomp" }, { species: "Mimikyu", hpLeftPercent: 50 }, "Earthquake").base.endured).toBeUndefined();

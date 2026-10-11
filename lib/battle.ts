@@ -51,6 +51,9 @@ export function pickNature(up?: Stat, down?: Stat, name?: string): string {
   return "Hardy";
 }
 
+/** 能力の略号（A・C など） */
+export const STAT_LETTER: Record<Stat, string> = { hp: "H", atk: "A", def: "B", spa: "C", spd: "D", spe: "S" };
+
 const toId = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, "");
 
 /** 特性を言わなかったときの特性（data/default-abilities.json の優先順。どれもなければ最初の特性） */
@@ -210,10 +213,12 @@ export interface DamageAnswer {
   field: FieldInput;
   /** 防御側のいかくで変えた攻撃側の攻撃ランク（0 は特性で防いだ。undefined は関係なし） */
   intimidate?: number;
-  /** 指定どおり（指定のない側は無振り）で計算した結果 */
+  /** 指定どおりで計算した結果。攻撃側の振り方を言わなければ使う能力に全振り（SP32）・補正なし、防御側は無振り */
   base: DamageResult;
-  /** 指定のない側を振り方の幅で動かしたときの最小〜最大（指定が揃っていれば undefined） */
-  range?: { low: DamageResult; high: DamageResult };
+  /** 攻撃側の性格補正を言わなかったとき: 補正あり（使う能力が上がる性格）の結果 */
+  attackerBoosted?: DamageResult;
+  /** 防御側の振り方を言わなかったとき: 耐久に振っていた（H32・防御か特防32・補正あり）ときの結果 */
+  defenderBulky?: DamageResult;
   /** 仮定した内容（読み上げ・表示用） */
   assumed: string[];
   category: "Physical" | "Special" | "Status";
@@ -241,21 +246,27 @@ export function damage(a0: SideInput, d: SideInput, move: string, f0: FieldInput
   const { field: f, notes: autoNotes } = autoField([a0, d], f0);
   const m = new Move(gen, move);
   const category = m.category as DamageAnswer["category"];
-  const { a, change: intimidate } = applyIntimidate(a0, d, category);
+  const { a: a1, change: intimidate } = applyIntimidate(a0, d, category);
   const atkStat: Stat = category === "Special" ? "spa" : "atk";
   const defStat: Stat = category === "Special" ? "spd" : "def";
-  const aOpen = !hasSpread(a, [atkStat]);
-  const dOpen = !hasSpread(d, ["hp", defStat]);
-  const base = one(a, d, move, f);
+  const L = STAT_LETTER;
   const assumed: string[] = [];
-  if (aOpen) assumed.push("攻撃側の振り方");
-  if (dOpen) assumed.push("防御側の振り方");
+  // 攻撃側: 振り方を言わなければ、使う能力に全振り（SP32）。対戦では攻撃側はぶっぱが基本のため
+  const aSpOpen = a1.sp?.[atkStat] === undefined;
+  const a: SideInput = aSpOpen ? { ...a1, sp: { ...a1.sp, [atkStat]: 32 } } : a1;
+  // 性格補正を言わなければ補正なしで計算し、補正ありも出す
+  const aNatureOpen = !a.nature && !a.natureUp && !a.natureDown;
+  const aParts = [aSpOpen && `${L[atkStat]}全振り`, aNatureOpen && "補正なし"].filter(Boolean);
+  if (aParts.length) assumed.push(`攻撃側は${aParts.join("・")}`);
+  const dOpen = !hasSpread(d, ["hp", defStat]);
+  if (dOpen) assumed.push("防御側は無振り");
   if (!a.item && !d.item) assumed.push("持ち物なし");
+  const base = one(a, d, move, f);
   const extra = { autoField: autoNotes, abilities: { attacker: abilityOf(a), defender: abilityOf(d) }, field: f, intimidate };
-  if (!aOpen && !dOpen) return { base, assumed, category, ...extra };
-  const strongA: SideInput = aOpen ? { ...a, sp: { ...a.sp, [atkStat]: 32 }, natureUp: atkStat } : a;
-  const bulkyD: SideInput = dOpen ? { ...d, sp: { ...d.sp, hp: 32, [defStat]: 32 }, natureUp: defStat } : d;
-  return { base, range: { low: one(a, bulkyD, move, f), high: one(strongA, d, move, f) }, assumed, category, ...extra };
+  if (base.immune) return { base, assumed, category, ...extra };
+  const attackerBoosted = aNatureOpen ? one({ ...a, natureUp: atkStat }, d, move, f) : undefined;
+  const defenderBulky = dOpen ? one(a, { ...d, sp: { ...d.sp, hp: 32, [defStat]: 32 }, natureUp: defStat }, move, f) : undefined;
+  return { base, attackerBoosted, defenderBulky, assumed, category, ...extra };
 }
 
 /** 素早さの実数値（スカーフ・ランク・天候の特性などを反映した値） */

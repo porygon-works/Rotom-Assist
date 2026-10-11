@@ -210,18 +210,15 @@ function answerDamage(ex: Obj, text?: string): AskResult {
     else if (result.intimidate === 0) pr.notes.push(`${a.ja}は${aab}で、${d.ja}のいかくを受けないロト`);
     else pr.notes.push(`${d.ja}のいかくで${a.ja}の${aab}が発動して、攻撃+${result.intimidate}で計算したロト`);
   }
-  const special = result.category === "Special";
-  const open = { attacker: !hasSpread(as, [special ? "spa" : "atk"]), defender: !hasSpread(ds, ["hp", special ? "spd" : "def"]) };
   const { speech, short, lines } = damageSpeech({ attacker: a.ja, defender: d.ja, move: m.ja }, result, [...pr.notes, ...pr.list], {
     question: damageQuestionOf(text),
-    open,
     stealthRock: ds.stealthRock,
   });
   // 条件（振り方・性格・持ち物・特性・場）はカードで見せる。行には補足だけ残す
   const rest = lines.filter((l) => !/^(ダメージ|振り方の幅)/.test(l));
   lines.length = 0;
   lines.push(...rest, ...pr.quiet);
-  const card = damageCard({ attacker: a.ja, defender: d.ja, move: m.ja }, as, ds, m.en, result, open);
+  const card = damageCard({ attacker: a.ja, defender: d.ja, move: m.ja }, as, ds, m.en, result);
   // 名前が分からない・チャンピオンズにないなどの注意は、短い読み上げでも言う
   const must = pr.list.length ? `${pr.list.join("。")}。` : "";
   return {

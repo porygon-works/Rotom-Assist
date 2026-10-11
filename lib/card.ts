@@ -21,7 +21,7 @@ export interface DamageCard {
   defender: SideCard;
   move: { name: string; type: string; category: string; power: string };
   field: string[];
-  result: { damage: string; ko: string; range?: string };
+  result: { damage: string; ko: string; cases: string[] };
 }
 
 const ORDER: Stat[] = ["hp", "atk", "def", "spa", "spd", "spe"];
@@ -63,11 +63,24 @@ function boostText(b: SideInput["boosts"], intimidate?: number): string {
   return parts.join(" ");
 }
 
-function sideCard(role: SideCard["role"], ja: string, s: SideInput, ability: string | undefined, open: boolean, extra: { intimidate?: number } = {}): SideCard {
+/** 振り方・性格を言われなかったときの扱い（攻撃側: 全振りと仮定・補正ありも計算、防御側: 無振り・耐久振りも計算） */
+interface Open {
+  /** 全振りと仮定した能力（攻撃側） */
+  fullStat?: Stat;
+  /** 補正ありも計算した（攻撃側） */
+  natureCases?: boolean;
+  /** 耐久振りも計算した（防御側） */
+  bulkyCases?: boolean;
+}
+
+function sideCard(role: SideCard["role"], ja: string, s: SideInput, ability: string | undefined, open: Open, extra: { intimidate?: number } = {}): SideCard {
   const items: CardItem[] = [];
   const sp = spreadText(s.sp);
-  items.push(sp ? { label: "振り方", value: sp } : { label: "振り方", value: open ? "無振り（幅も計算）" : "無振り", assumed: true });
-  items.push(natureItem(s));
+  if (open.fullStat) items.push({ label: "振り方", value: `${spreadText({ ...s.sp, [open.fullStat]: 32 })}（全振りと仮定）`, assumed: true });
+  else if (sp) items.push({ label: "振り方", value: sp });
+  else items.push({ label: "振り方", value: open.bulkyCases ? "無振り（耐久振りも計算）" : "無振り", assumed: true });
+  const nature = natureItem(s);
+  items.push(open.natureCases ? { ...nature, value: "補正なし（補正ありも計算）" } : nature);
   const boosts = boostText(s.boosts, extra.intimidate);
   items.push({ label: "能力ランク", value: boosts || "なし", assumed: !boosts });
   items.push(s.item ? { label: "持ち物", value: toJa("items", s.item) } : { label: "持ち物", value: "なし", assumed: true });
@@ -113,13 +126,14 @@ export function damageCard(
   d: SideInput,
   moveEn: string,
   r: DamageAnswer,
-  open: { attacker: boolean; defender: boolean },
 ): DamageCard {
   const m = moveInfo(moveEn);
   const b = r.base;
+  const atkStat: Stat = r.category === "Special" ? "spa" : "atk";
+  const aOpen: Open = { fullStat: a.sp?.[atkStat] === undefined ? atkStat : undefined, natureCases: !!r.attackerBoosted };
   return {
-    attacker: sideCard("攻撃側", names.attacker, a, r.abilities.attacker ?? abilityOf(a), open.attacker, { intimidate: r.intimidate }),
-    defender: sideCard("防御側", names.defender, d, r.abilities.defender ?? abilityOf(d), open.defender),
+    attacker: sideCard("攻撃側", names.attacker, a, r.abilities.attacker ?? abilityOf(a), aOpen, { intimidate: r.intimidate }),
+    defender: sideCard("防御側", names.defender, d, r.abilities.defender ?? abilityOf(d), { bulkyCases: !!r.defenderBulky }),
     move: moveCard(names.move, m, b, r.field),
     // 特性で入れた天候・フィールドは、どの特性かを添える（晴れ（ひでり））
     field: fieldTexts(r.field).map((t) => {
@@ -129,7 +143,10 @@ export function damageCard(
     result: {
       damage: b.immune ? "ダメージなし" : `${b.min}〜${b.max}（${b.minPercent}〜${b.maxPercent}%）`,
       ko: koText(b.ko, b.immune),
-      range: r.range ? `振り方しだいで ${r.range.low.minPercent}〜${r.range.high.maxPercent}%` : undefined,
+      cases: [
+        r.attackerBoosted && `攻撃側が補正ありなら ${r.attackerBoosted.minPercent}〜${r.attackerBoosted.maxPercent}%（${koText(r.attackerBoosted.ko, false)}）`,
+        r.defenderBulky && `防御側が耐久に振っていたら ${r.defenderBulky.minPercent}〜${r.defenderBulky.maxPercent}%（${koText(r.defenderBulky.ko, false)}）`,
+      ].filter(Boolean) as string[],
     },
   };
 }
