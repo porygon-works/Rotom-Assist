@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { answerExtraction } from "../lib/ask";
 import { damage, speedOf, speedThreshold, speedVariants } from "../lib/battle";
-import { extract, providersFromEnv, type Provider } from "../lib/llm";
+import { aiSetup, extract, providersFromEnv, type Provider } from "../lib/llm";
 import { resolve } from "../lib/resolve";
 import aliases from "../data/aliases.json";
 import names from "../data/names.json";
@@ -164,5 +164,10 @@ describe("AI 取り出しの切り替え", () => {
   it("環境変数から候補を作る（キーがなければ空）", () => {
     expect(providersFromEnv({})).toEqual([]);
     expect(providersFromEnv({ GEMINI_API_KEY: "g", GROQ_API_KEY: "q" }).map((x) => x.name)).toEqual(["gemini-3.5-flash-lite", "gemini-3.1-flash-lite", "groq-gpt-oss-120b"]);
+  });
+  it("記録先（Supabase）が見えているかを診断に出す（URL とキーの両方が要る）", () => {
+    expect(aiSetup({}).log).toBe(false);
+    expect(aiSetup({ SUPABASE_URL: "u" }).log).toBe(false);
+    expect(aiSetup({ SUPABASE_URL: "u", SUPABASE_SERVICE_ROLE_KEY: "k" }).log).toBe(true);
   });
 });

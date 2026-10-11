@@ -459,7 +459,7 @@ function setupLines(s: AiSetup): string[] {
   const has = (b: boolean) => (b ? "あり" : "なし");
   return [
     `このデプロイ（環境: ${s.env}${s.commit ? `、コミット ${s.commit}` : ""}）から AI のキーが見えていない`,
-    `GEMINI_API_KEY: ${has(s.keys.GEMINI_API_KEY)} / GROQ_API_KEY: ${has(s.keys.GROQ_API_KEY)}`,
+    `GEMINI_API_KEY: ${has(s.keys.GEMINI_API_KEY)} / GROQ_API_KEY: ${has(s.keys.GROQ_API_KEY)} / 記録(SUPABASE_*): ${has(s.log)}`,
     "Vercel の Environment Variables で、この環境にチェックが入っているか確認し、登録後に Redeploy する",
   ];
 }

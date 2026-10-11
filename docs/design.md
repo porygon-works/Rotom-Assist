@@ -132,7 +132,7 @@ Supabase（プロジェクト porygon-works / スキーマ roas）
 
 ### 6.5 `POST /api/ask` の記録
 `/api/ask` は答えを返した後（`next/server` の `after`）に、質問・答え・答え方・AI の呼び出し結果・AI の設定の状態を `roas.ask_log` に 1 行書く。Supabase 未設定なら書かない。記録の失敗は答えに影響させず、Vercel の Logs に出す。
-AI の設定の状態（`diagnostics.setup`）は画面の「診断」にも出す: 環境（`VERCEL_ENV`）、コミット、各キーの有無（値は出さない）。AI の候補が 0 件のときは、画面の詳しい結果にも「キーが見えていない」ことと確認手順を出す。
+AI の設定の状態（`diagnostics.setup`）は画面の「診断」にも出す: 環境（`VERCEL_ENV`）、コミット、各キーの有無、記録先（`SUPABASE_URL`・`SUPABASE_SERVICE_ROLE_KEY`）が見えているか（`log`。値は出さない）。記録先が見えていないときは Vercel の Logs に `ask_log skipped` を出す（`roas.ask_log` が 0 件のときの確認用）。AI の候補が 0 件のときは、画面の詳しい結果にも「キーが見えていない」ことと確認手順を出す。
 
 ## 7. データベース設計
 
@@ -162,7 +162,7 @@ AI の設定の状態（`diagnostics.setup`）は画面の「診断」にも出�
 | `total_ms` | integer | サーバ側の処理時間 |
 | `attempts` | jsonb | AI の呼び出しごとの結果 `[{provider, ms, ok, error}]` |
 | `extraction` | jsonb | 質問の解釈 |
-| `setup` | jsonb | AI の設定の状態 `{env, commit, keys, providers}`。キーの値は入れない |
+| `setup` | jsonb | AI の設定の状態 `{env, commit, keys, providers, log}`。キーの値は入れない |
 | `created_at` | timestamptz | 既定 `now()` |
 
 索引: `ask_log_created (created_at desc)`、`ask_log_device_created (device_id, created_at desc)`。RLS は有効でポリシーなし。

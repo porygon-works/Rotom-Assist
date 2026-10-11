@@ -14,6 +14,7 @@ interface AiSetup {
   commit: string;
   keys: { GEMINI_API_KEY: boolean; GROQ_API_KEY: boolean; LLM_API_KEY: boolean };
   providers: string[];
+  log?: boolean;
 }
 interface AskResult {
   speech: string;
@@ -178,7 +179,7 @@ export default function Home() {
                 <li>
                   環境 {shown.diagnostics.setup.env}
                   {shown.diagnostics.setup.commit && `（${shown.diagnostics.setup.commit}）`} / キー: GEMINI {shown.diagnostics.setup.keys.GEMINI_API_KEY ? "あり" : "なし"}・GROQ{" "}
-                  {shown.diagnostics.setup.keys.GROQ_API_KEY ? "あり" : "なし"}
+                  {shown.diagnostics.setup.keys.GROQ_API_KEY ? "あり" : "なし"} / 記録(ask_log) {shown.diagnostics.setup.log ? "あり" : "なし"}
                 </li>
               )}
               {shown.diagnostics?.attempts.map((a, i) => (
