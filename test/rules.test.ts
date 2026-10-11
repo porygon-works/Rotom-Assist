@@ -9,6 +9,19 @@ describe("ルール解析（確実に分かるときだけ答える）", () => {
     expect(parseRules("ドラパルドのドラゴンアローでカイリュウ何発")).toMatchObject({ intent: "damage", attacker: "ドラパルド", defender: "カイリュウ" });
     expect(parseRules("エースバンとマスカニャどっちが速い")).toMatchObject({ intent: "speed", attacker: "エースバン", defender: "マスカニャ" });
   });
+  it("性格補正の上げ下げ（C下降補正・Cマイナス補正・C↓・A↑）と、音声認識が略号を日本語にしたとき（し・市・絵）", () => {
+    const def = (q: string) => (parseRules(q) as { conditions?: { defender?: unknown } } | null)?.conditions?.defender;
+    expect(def("C下降補正のガブリアスにサーフゴーのシャドーボール")).toEqual({ nature_down: "spa" });
+    expect(def("Cマイナス補正のガブリアスにサーフゴーのシャドーボール")).toEqual({ nature_down: "spa" });
+    expect(def("C↓のガブリアスにサーフゴーのシャドーボール")).toEqual({ nature_down: "spa" });
+    expect(def("し下降補正のガブリアスにサーフゴーのシャドーボール")).toEqual({ nature_down: "spa" });
+    expect(def("市下降補正のガブリアスにサーフゴーのシャドーボール")).toEqual({ nature_down: "spa" });
+    expect(def("HB特化C下降補正のサーフゴーにガブリアスのじしん")).toEqual({ sp: { hp: 32, def: 32 }, nature_up: "def", nature_down: "spa" });
+    expect(parseRules("A↑C↓のガブリアスのじしんでサーフゴー何発")).toMatchObject({ conditions: { attacker: { nature_up: "atk", nature_down: "spa" } } });
+    expect(parseRules("絵特化ガブリアスのじしんでサーフゴー何発")).toMatchObject({ conditions: { attacker: { sp: { atk: 32 }, nature_up: "atk" } } });
+    // 名前の最後の「シ」は略号にしない
+    expect(parseRules("カエンジシのかえんほうしゃでガブリアス何発")).toMatchObject({ attacker: "カエンジシ", conditions: {} });
+  });
   it("よくあるダメージの言い方", () => {
     expect(parseRules("ガブリアスにミミッキュのじゃれつく")).toMatchObject({ intent: "damage", attacker: "ミミッキュ", defender: "ガブリアス", move: "じゃれつく" });
     expect(parseRules("A特化ガブのじしん、HB特化エンペルトに")).toMatchObject({

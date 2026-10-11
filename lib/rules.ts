@@ -16,11 +16,19 @@ function norm(s: string): string {
     .replace(/\s+/g, "")
     // 能力の略号の読み（音声認識がカタカナで書くことがある:「エー特化」「エイチビー振り」「エス二段階」）。
     // 特化・振り・段階・＋−・補正の直前に続くときだけ直す（「エースバーン」などを壊さない）
-    .replace(/((?:エイチ|エッチ|エー|エイ|ビー|シー|ディー|デー|エス)+)(?=特化|振リ|段階|[+\-]|補正|252|ガ?[1-6一二三四五六]段階)/g, (m) =>
+    .replace(/((?:エイチ|エッチ|エー|エイ|ビー|シー|ディー|デー|エス)+)(?=特化|振リ|段階|[+\-]|補正|252|ガ?[1-6一二三四五六]段階|ニ?(?:下降|上昇|マイナス|プラス|ダウン|アップ)補正|[↑↓])/g, (m) =>
       LETTER_READING.reduce((x, [re, l]) => x.replace(re, l), m),
     )
-    .replace(/([hbacds]+)(?=特化|振リ|段階|[+\-]|補正|252)/g, (m) => m.toUpperCase());
+    // 1 字だけの読み・漢字（音声認識が「C」を「し」「市」「氏」、「A」を「え」「絵」「英」と書く）。
+    // 名前の一部（カエンジシ、アヤシシ）を壊さないよう、文頭・助詞・区切り・略号の直後で、後ろに特化・振り・補正などが続くときだけ
+    .replace(new RegExp(`(?<=^|[ノニデガトハヲモ、,\\s]|[HABCDS])(シ|エ|[${Object.keys(LETTER_KANJI).join("")}])(?=${STAT_TRIGGER})`, "g"), (m) => (m === "シ" ? "C" : m === "エ" ? "A" : LETTER_KANJI[m]))
+    .replace(/([hbacds]+)(?=特化|振リ|段階|[+\-]|補正|252|[↑↓])/g, (m) => m.toUpperCase());
 }
+
+/** 能力の略号の後ろに続く語（この前にあるときだけ、読みや漢字を略号に直す） */
+const STAT_TRIGGER = "特化|振リ|補正|ニ?(?:下降|上昇|マイナス|プラス|ダウン|アップ|低下)補正|[↑↓]|[+\\-][1-6]|ガ?[1-6一二三四五六]段階";
+/** 音声認識が略号を書き換える漢字 → 略号 */
+const LETTER_KANJI: Record<string, string> = { 市: "C", 氏: "C", 誌: "C", 紙: "C", 師: "C", 史: "C", 絵: "A", 英: "A", 栄: "A" };
 
 /** 能力の略号の読み → 略号 */
 const LETTER_READING: [RegExp, string][] = [
@@ -112,6 +120,12 @@ function pattern(s: string): [number, Tok] | null {
   }
   m = s.match(/^([HABCDS]{1,3})(?:振リ|252|極振リ)/);
   if (m) return [m[0].length, { k: "spread", sp: Object.fromEntries([...m[1]].map((c) => [LETTER[c], 32])) }];
+  // 性格補正: 「C下降補正」「Cマイナス補正」「C↓」= 性格で特攻が下がる（ようき・いじっぱり など）、「A上昇補正」「A↑」「A補正」= 上がる
+  m = s.match(/^([ABCDS])ニ?(?:(下降|低下|マイナス|ダウン|[-−])補正|(上昇|プラス|アップ|[+＋])補正|(↓)|(↑)|補正)/);
+  if (m) {
+    const stat = LETTER[m[1]];
+    return [m[0].length, m[2] || m[4] ? { k: "spread", sp: {}, down: stat } : { k: "spread", sp: {}, up: stat }];
+  }
   // 無振り: すべての SP が 0・補正なし（指定ありとして扱い、幅は出さない）
   m = s.match(/^(?:無振リ|ムフリ)/);
   if (m) return [m[0].length, { k: "spread", sp: { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 } }];
@@ -250,7 +264,8 @@ interface Side {
 function applyMods(cond: Obj, mods: Tok[]) {
   for (const t of mods) {
     if (t.k === "spread") {
-      cond.sp = { ...(cond.sp as Obj | undefined), ...t.sp };
+      // 性格補正だけ（「C↓」）のときは、振り方は指定なしのまま
+      if (Object.keys(t.sp).length) cond.sp = { ...(cond.sp as Obj | undefined), ...t.sp };
       if (t.up) cond.nature_up = t.up;
       if (t.down) cond.nature_down = t.down;
     } else if (t.k === "item") cond.item = t.ja;
