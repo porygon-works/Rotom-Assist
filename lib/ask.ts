@@ -114,6 +114,7 @@ function side(species: string, c: Obj, pr: Problems): SideInput {
   if (c.stealth_rock === true) s.stealthRock = true;
   const st = STATUS[str(c.status) ?? ""];
   if (st) s.status = st;
+  if (c.disguise_broken === true) s.disguiseBroken = true;
   return s;
 }
 
@@ -146,6 +147,7 @@ function sideLabel(ja: string, s: SideInput): string {
   if (s.hpLeftPercent) parts.push(`残りHP${s.hpLeftPercent}%`);
   if (s.stealthRock) parts.push("ステロ込み");
   if (s.status) parts.push(({ brn: "やけど", par: "まひ", psn: "どく", tox: "もうどく", slp: "ねむり", frz: "こおり" } as const)[s.status]);
+  if (s.disguiseBroken) parts.push("ばけのかわなし");
   return parts.length ? `${ja}（${parts.join("・")}）` : ja;
 }
 

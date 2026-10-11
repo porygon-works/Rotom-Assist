@@ -76,6 +76,7 @@ function sideCard(role: SideCard["role"], ja: string, s: SideInput, ability: str
   if (s.hpLeftPercent !== undefined) items.push({ label: "残りHP", value: `${s.hpLeftPercent}%` });
   if (s.hpLeft !== undefined) items.push({ label: "残りHP", value: String(s.hpLeft) });
   if (s.stealthRock) items.push({ label: "ステロ", value: "込み" });
+  if (s.disguiseBroken) items.push({ label: "ばけのかわ", value: "剥がれている（残りHP 7/8）" });
   return { role, name: ja, items };
 }
 

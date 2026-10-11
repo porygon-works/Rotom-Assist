@@ -25,6 +25,7 @@ export const EXTRACT_PROMPT = `あなたはポケモン対戦（シングル、�
   "boosts": {"atk":-6〜6, "def":…, "spa":…, "spd":…, "spe":…},
   "hp_left": 残りHPの実数値, "hp_left_percent": 残りHPの割合(%),
   "stealth_rock": true（ステルスロックのダメージを含める）,
+  "disguise_broken": true（ばけのかわが剥がれている。ミミッキュ）,
   "status": "やけど|まひ|どく|もうどく|ねむり|こおり"（状態異常。言われたときだけ）
 }
 
@@ -40,13 +41,14 @@ export const EXTRACT_PROMPT = `あなたはポケモン対戦（シングル、�
 - 「〇特化」= その能力の SP 32 ＋ 性格でその能力が上がる（例: A特化 → sp.atk 32、nature_up "atk"。HB特化 → sp.hp 32、sp.def 32、nature_up "def"）
 - 「〇補正」「〇上昇補正」「〇プラス補正」「〇↑」= 性格でその能力が上がる（nature_up）
 - 「〇下降補正」「〇マイナス補正」「〇↓」= 性格でその能力が下がる（nature_down）。例: C下降補正 → nature_down "spa"（ようき・いじっぱり など）
-- 能力の略号は音声認識で書き換わることがある: 「し」「シー」「市」「氏」= C、「え」「エー」「絵」「英」= A、「ビー」= B、「ディー」= D、「エス」= S、「エイチ」「エッチ」= H（後ろに 特化・振り・補正・↑↓・段階 が続くとき）
+- 能力の略号は音声認識で書き換わることがある: 「し」「シー」「市」「氏」= C、「え」「エー」「絵」「英」= A、「ビー」= B、「ディー」= D、「エス」= S、「エイチ」「エッチ」= H（後ろに 特化・振り・補正・↑↓・段階 が続くとき）。「資格補正」「私加工補正」は「C下降補正」の書き起こし違い
 - 「準速」= sp.spe 32、性格補正なし（nature_up は書かない）
 - 「最速」= sp.spe 32 ＋ nature_up "spe"
 - 「最遅」= sp.spe 0 ＋ nature_down "spe"
 - 「S二段階上昇」「S+2」= boosts.spe 2。「攻撃1段階下がった」「A-1」= boosts.atk -1
 - 「HP120残ってる」= hp_left 120。「HP半分」= hp_left_percent 50。「3割」= 30
 - 「ステロ込み」= 防御側の stealth_rock true
+- 「化けの皮が剥がれた」「ばけのかわなし」= そのポケモンの disguise_broken true
 - 性格名（いじっぱり など）は nature に書き、上がる能力も nature_up に書く
 
 # あだ名（正式名で書く）

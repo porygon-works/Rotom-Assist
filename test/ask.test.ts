@@ -89,6 +89,12 @@ describe("計算（チャンピオンズ・第0世代）", () => {
     expect(sash.endured).toBe("Focus Sash");
     expect(damage(a, { species: "Kingambit", item: "Focus Sash", hpLeftPercent: 90 }, "Earthquake").base.endured).toBeUndefined();
   });
+  it("ばけのかわが剥がれた: 1 発目を防がず、剥がれた姿・残り HP 7/8 で計算する", () => {
+    const broken = damage({ species: "Garchomp" }, { species: "Mimikyu", disguiseBroken: true }, "Earthquake").base;
+    expect(broken.endured).toBeUndefined();
+    expect(broken.curHP).toBe(broken.hp - Math.floor(broken.hp / 8));
+    expect(damage({ species: "Garchomp" }, { species: "Mimikyu" }, "Earthquake").base.endured).toBe("Disguise");
+  });
   it("ばけのかわ: 満タンなら 1 発目を防ぎ、確定数を 1 つ増やす（連続技・満タンでないときは対象外）", () => {
     const base = damage({ species: "Garchomp" }, { species: "Mimikyu", ability: "Pressure" }, "Earthquake").base;
     const disguise = damage({ species: "Garchomp" }, { species: "Mimikyu" }, "Earthquake").base;

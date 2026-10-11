@@ -27,6 +27,8 @@ export interface SideInput {
   stealthRock?: boolean;
   /** 状態異常（計算ライブラリの記号: brn やけど / par まひ / psn どく / tox もうどく / slp ねむり / frz こおり） */
   status?: "brn" | "par" | "psn" | "tox" | "slp" | "frz";
+  /** ばけのかわが剥がれた（ミミッキュ）: 剥がれた姿で、残り HP を言わなければ 7/8 で計算する */
+  disguiseBroken?: boolean;
 }
 
 export interface FieldInput {
@@ -157,6 +159,12 @@ export interface DamageResult {
 }
 
 function one(a: SideInput, d: SideInput, move: string, f: FieldInput): DamageResult {
+  // ばけのかわが剥がれた後: 剥がれた姿（Mimikyu-Busted）で、剥がれたときに最大 HP の 1/8 減っている
+  if (d.disguiseBroken && d.species === "Mimikyu") {
+    const hp = build(d).maxHP();
+    const left = d.hpLeft !== undefined || d.hpLeftPercent !== undefined ? {} : { hpLeft: hp - Math.floor(hp / 8) };
+    return one(a, { ...d, disguiseBroken: undefined, species: "Mimikyu-Busted", ...left }, move, f);
+  }
   const attacker = build(a);
   const defender = build(d);
   const m = new Move(gen, move, { isCrit: !!f.critical });

@@ -16,6 +16,8 @@ function norm(s: string): string {
     .replace(/\s+/g, "")
     // 「下降補正」の書き起こし違い（加工補正 など。ask_log #10）
     .replace(/(加工|河口|火口|下向)(?=補正)/g, "下降")
+    // 「C下降補正」（しかこう）が 1 語の漢字になった（資格補正 など）
+    .replace(/(資格|視覚|四角|死角|シカク|シカコウ)(?=補正)/g, "C下降")
     // 能力の略号の読み（音声認識がカタカナで書くことがある:「エー特化」「エイチビー振り」「エス二段階」）。
     // 特化・振り・段階・＋−・補正の直前に続くときだけ直す（「エースバーン」などを壊さない）
     .replace(/((?:エイチ|エッチ|エー|エイ|ビー|シー|ディー|デー|エス)+)(?=特化|振リ|段階|[+\-]|補正|252|ガ?[1-6一二三四五六]段階|ニ?(?:下降|上昇|マイナス|プラス|ダウン|アップ)補正|[↑↓])/g, (m) =>
@@ -51,6 +53,7 @@ type Tok =
   | { k: "flag"; f: "reflect" | "critical" } // 壁・急所（場）
   | { k: "hp"; percent?: number; value?: number; left?: boolean } // 残り HP（直後のポケモン）。left: 「残り」「残ってる」が付いていた
   | { k: "status"; v: string } // 状態異常（直後のポケモン）
+  | { k: "busted" } // ばけのかわが剥がれた（直後のポケモン）
   | { k: "p"; v: string } // 助詞・区切り
   | { k: "w"; v: string }; // 質問の言い回し
 
@@ -93,7 +96,7 @@ function dictionary(): [string, Tok][] {
     "何発", "なんぱつ", "確定", "確定数", "耐える", "耐えれる", "耐えられる", "落ちる", "落とせる", "倒せる", "どれくらい", "どのくらい", "減る",
     "どっちが速い", "どっちがはやい", "どっちが早い", "どっちが先", "抜ける", "抜かれる", "素早さ", "すばやさ", "実数値", "いくつ",
     "タイプ", "弱点", "相性", "種族値", "威力", "何タイプ", "教えて", "？", "?", "。", "!", "！", "撃ったら", "うったら", "だと", "なら",
-    "んだけど", "だけど", "けど", "何が", "なにが", "何", "なに", "与える", "与えれる", "与え", "あたえる",
+    "んだけど", "だけど", "けど", "何が", "なにが", "何", "なに", "与える", "与えれる", "与え", "あたえる", "入る", "はいる", "入れる", "通る",
     "じゃくてん", "しゅぞくち", "いりょく", "なんタイプ", "なんぱつ",
     "優先度", "ゆうせんど", "どっちが優先度高い", "どっちが威力高い", "高い",
     "何パーセント", "なんパーセント", "何%", "何割", "なんわり",
@@ -138,6 +141,8 @@ function pattern(s: string): [number, Tok] | null {
   }
   m = s.match(/^(?:イカク|威嚇)(?:ヲ|ガ)?(?:受ケタ|入ッタ|入レラレタ|込ミ|後)/);
   if (m) return [m[0].length, { k: "boost", stat: "atk", n: -1 }];
+  m = s.match(/^(?:化ケノ皮|バケノカワ|化ケノカワ|バケノ皮)(?:ガ|ノ)?(?:剥ガレタ|ハガレタ|剥ゲタ|ハゲタ|ナイ|ナシ|無シ|割レタ|ワレタ)/);
+  if (m) return [m[0].length, { k: "busted" }];
   m = s.match(/^(ヤケド|火傷|マヒ|麻痺)(?:状態)?(?:シタ|シテル|シテイル)?/);
   if (m) return [m[0].length, { k: "status", v: /ヤケド|火傷/.test(m[1]) ? "やけど" : "まひ" }];
   m = s.match(/^リフレクター(?:アリ|有リ|込ミ)?/);
@@ -275,6 +280,7 @@ function applyMods(cond: Obj, mods: Tok[]) {
     else if (t.k === "boost") cond.boosts = { ...(cond.boosts as Obj | undefined), [t.stat]: t.n };
     else if (t.k === "status") cond.status = t.v;
     else if (t.k === "ability") cond.ability = t.ja;
+    else if (t.k === "busted") cond.disguise_broken = true;
     else if (t.k === "hp") {
       if (t.percent !== undefined) cond.hp_left_percent = t.percent;
       if (t.value !== undefined) cond.hp_left = t.value;
@@ -338,7 +344,7 @@ export function parseRules(raw: string): Obj | null {
       last.particle = next?.k === "p" ? next.v : undefined;
       continue;
     }
-    if (t.k === "spread" || t.k === "item" || t.k === "nature" || t.k === "boost" || t.k === "hp" || t.k === "status" || t.k === "ability") {
+    if (t.k === "spread" || t.k === "item" || t.k === "nature" || t.k === "boost" || t.k === "hp" || t.k === "status" || t.k === "ability" || t.k === "busted") {
       mods.push(t);
       continue;
     }
@@ -346,7 +352,8 @@ export function parseRules(raw: string): Obj | null {
       const cond: Obj = {};
       applyMods(cond, mods);
       mods = [];
-      sides.push({ name: t.heard ?? t.ja, cond, particle: next?.k === "p" ? next.v : undefined });
+      // 「ミミッキュを（倒せる）」の「を」も助詞として見る（防御側の印）
+      sides.push({ name: t.heard ?? t.ja, cond, particle: next?.k === "p" ? next.v : next?.k === "w" && next.v === "ヲ" ? "ヲ" : undefined });
       continue;
     }
     if (t.k === "move") {
@@ -428,7 +435,7 @@ export function parseRules(raw: string): Obj | null {
     if (has(/タイプ|弱点|種族値|素早サ|スバヤサ|抜ケ|ドッチ|ヨリ速イ|ヨリハヤイ|ヨリ早イ|ヨリ遅イ/)) return null;
     if (sides.some((s) => s.particle === "ト")) return null; // 「AとBの〇〇」は向きが決まらない
     const role = (s: Side): "attacker" | "defender" | undefined =>
-      s.particle === "ノ" || s.particle === "ガ" || s.particle === "カラ" ? "attacker" : s.particle === "ニ" || s.particle === "ヘ" ? "defender" : undefined;
+      s.particle === "ノ" || s.particle === "ガ" || s.particle === "カラ" ? "attacker" : s.particle === "ニ" || s.particle === "ヘ" || s.particle === "ヲ" ? "defender" : undefined;
     let [ra, rb] = sides.map(role);
     if (ra && !rb) rb = ra === "attacker" ? "defender" : "attacker";
     if (rb && !ra) ra = rb === "attacker" ? "defender" : "attacker";
