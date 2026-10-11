@@ -91,11 +91,18 @@ function releaseAudio() {
   player.load();
 }
 
-/** 読み上げ・合図を止める（マイクを使う前、次の答えの前） */
+/** 読み上げ・合図を止める（次の答えの前） */
 function stopSound() {
   seq++;
   releaseAudio();
   window.speechSynthesis?.cancel();
+}
+
+/** マイクを使う前: 鳴っているときだけ止める。何も鳴っていなければ音の部品に触らない
+ *  （スマホでは、聞き始めの直前に audio 要素を操作するだけで音声認識が止まった。2026-10-11 ask_log #25） */
+function stopSoundForMic() {
+  seq++;
+  if (player && !player.paused) player.pause();
 }
 
 /** Gemini の声（/api/tts）。失敗したら null（ブラウザの読み上げに戻す） */
@@ -151,6 +158,23 @@ export default function Home() {
   const [tapMode, setTapMode] = useState(false);
   const [mute, setMute] = useState(false);
   const [voice, setVoiceState] = useState<Voice>("browser");
+  // 合図の音（答えの前）。端末によって音声認識とぶつかる場合に切れるようにする
+  const [chimeOn, setChimeOnState] = useState(true);
+  useEffect(() => {
+    try {
+      if (localStorage.getItem("rotom-chime") === "off") setChimeOnState(false);
+    } catch {
+      /* 保存できない環境 */
+    }
+  }, []);
+  const setChimeOn = (on: boolean) => {
+    setChimeOnState(on);
+    try {
+      localStorage.setItem("rotom-chime", on ? "on" : "off");
+    } catch {
+      /* 保存できない環境 */
+    }
+  };
   useEffect(() => {
     try {
       if (localStorage.getItem("rotom-voice") === "gemini") setVoiceState("gemini");
@@ -194,7 +218,7 @@ export default function Home() {
         shownRef.current = item;
         setShown(item);
         // 答えの準備ができたら合図の音 → 読み上げ（聞き取りはもう終わっているので音声認識とはぶつからない）
-        if (!mute) void announce(brief ? (r.short ?? r.speech) : r.speech, voice, true);
+        if (!mute) void announce(brief ? (r.short ?? r.speech) : r.speech, voice, chimeOn);
       } catch {
         const msg = "通信に失敗したロト";
         setShown({ question: q, speech: msg, title: "エラー", lines: [], intent: "error", ms: performance.now() - t0 });
@@ -202,12 +226,12 @@ export default function Home() {
         setBusy(false);
       }
     },
-    [mute, brief, voice],
+    [mute, brief, voice, chimeOn],
   );
 
   const mic0 = usePushToTalk(send);
   // マイクを使う前に、鳴っている合図・読み上げを止める
-  const mic = { ...mic0, start: () => (stopSound(), mic0.start()) };
+  const mic = { ...mic0, start: () => (stopSoundForMic(), mic0.start()) };
   // 画面を開いたときの確認（音が出ること・マナーモードの解除）。押すと合図の音を鳴らす（ブラウザは操作の後でないと音を出せない）
   const [ready, setReady] = useState(false);
   // マイクが聞き始めたら振動で合図（音は鳴らさない: スマホでは音の再生が音声認識とぶつかり、聞き取りが止まるため）
@@ -370,6 +394,7 @@ export default function Home() {
         <label><input type="checkbox" checked={tapMode} onChange={(e) => setTapMode(e.target.checked)} /> タップで開始／終了</label>
         <label><input type="checkbox" checked={brief} onChange={(e) => setBrief(e.target.checked)} /> 短く読む</label>
         <label><input type="checkbox" checked={mute} onChange={(e) => setMute(e.target.checked)} /> 読み上げない</label>
+        <label><input type="checkbox" checked={chimeOn} onChange={(e) => setChimeOn(e.target.checked)} /> 答えの前の合図</label>
         <label>
           声{" "}
           <select value={voice} onChange={(e) => setVoice(e.target.value as Voice)}>
