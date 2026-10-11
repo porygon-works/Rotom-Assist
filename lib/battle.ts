@@ -70,7 +70,7 @@ export function isNotableAbility(ab: string | undefined, role: "attacker" | "def
 
 /** 計算ライブラリがダメージに反映しない特性か（ばけのかわ） */
 export function isNotCalculated(ab: string | undefined): boolean {
-  return !!ab && defaults.notCalculated.includes(ab);
+  return !!ab && (defaults.notCalculated as string[]).includes(ab);
 }
 
 /** 素早さの質問で使う特性: 言わなかったとき、天候・フィールドが合う素早さの特性があればそれ（すいすい など） */
