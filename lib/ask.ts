@@ -60,7 +60,8 @@ class Problems {
     if (!heard) return undefined;
     const r = resolve(kind, heard);
     if (r.ok) {
-      if (r.fuzzy) this.notes.push(`${r.ja}のことだと思って計算したロト`);
+      // 聞き間違いを直したことは読み上げない（毎回言うとうるさい）。見出しと画面の詳しい結果で分かる
+      if (r.fuzzy) this.quiet.push(`「${heard}」は${r.ja}として計算した`);
       return { en: r.en, ja: r.ja };
     }
     if (r.notInGame) this.list.push(`${r.notInGame}はチャンピオンズに${kind === "pokemon" ? "いない" : "ない"}ロト`);

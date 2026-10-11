@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { parseFollowUp, parseRules } from "../lib/rules";
 
 describe("ルール解析（確実に分かるときだけ答える）", () => {
-  it("聞き間違い・言い間違いの名前は読みの近さで直し、聞こえた形のまま渡す（回答で「〇〇のことだと思って」と添える）", () => {
+  it("聞き間違い・言い間違いの名前は読みの近さで直し、聞こえた形のまま渡す（読み上げでは言わず、画面にだけ出す）", () => {
     // 「ミミ」（あだ名）+「ック」と切ると行き詰まるので、戻って「ミミック」を 1 語として読む
     expect(parseRules("ミミックのじゃれつくでガブリアス何発")).toMatchObject({ intent: "damage", attacker: "ミミック", defender: "ガブリアス", move: "じゃれつく" });
     expect(parseRules("ミミックって何が弱点")).toMatchObject({ intent: "type", pokemon: "ミミック" });

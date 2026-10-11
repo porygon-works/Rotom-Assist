@@ -28,7 +28,7 @@ const LETTER_READING: [RegExp, string][] = [
 ];
 
 type Tok =
-  | { k: "pokemon"; ja: string; heard?: string } // heard: 聞き間違いを読みの近さで直したとき、聞こえた形（回答で「〇〇のことだと思って」と添える）
+  | { k: "pokemon"; ja: string; heard?: string } // heard: 聞き間違いを読みの近さで直したとき、聞こえた形（回答は直した名前で答え、画面にだけ「〇〇として計算した」と出す）
   | { k: "move"; ja: string; heard?: string }
   | { k: "item"; ja: string }
   | { k: "nature"; ja: string }

@@ -131,9 +131,10 @@ describe("回答（AI の出力から）", () => {
   });
   it("聞き返し・知らない名前・チャンピオンズにいない", () => {
     expect(answerExtraction({ intent: "clarify", attacker: "ミミッキュ", move: "じゃれつく", missing: ["defender"] }).speech).toBe("どのポケモンに撃つロト？");
-    // 聞き間違いを直したことと、へんげんじざいでタイプ一致にしたことを言う
-    const pro = answerExtraction({ intent: "damage", attacker: "ミミック", defender: "ガブリアス", move: "じゃれつく" }).speech;
-    expect(pro).toContain("ミミッキュのことだと思って");
+    // 聞き間違いを直したことは画面にだけ出す。へんげんじざいでタイプ一致にしたことは言う
+    const pro = answerExtraction({ intent: "damage", attacker: "ミミック", defender: "ガブリアス", move: "じゃれつく" });
+    expect(pro.speech).not.toContain("ミミック");
+    expect(pro.lines).toContain("「ミミック」はミミッキュとして計算した");
     expect(answerExtraction({ intent: "damage", attacker: "マスカーニャ", defender: "ガブリアス", move: "じゃれつく" }).speech).toContain("マスカーニャはへんげんじざいでタイプ一致として計算したロト");
     expect(answerExtraction({ intent: "type", pokemon: "ゲッコウガ" }).speech).toContain("わざを出すとそのわざのタイプに変わる");
     expect(answerExtraction({ intent: "damage", attacker: "アロロ", defender: "ガブリアス", move: "じゃれつく" }).speech).toBe("アロロは分からないロト");
