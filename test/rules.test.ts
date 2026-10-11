@@ -2,6 +2,13 @@ import { describe, expect, it } from "vitest";
 import { parseFollowUp, parseRules } from "../lib/rules";
 
 describe("ルール解析（確実に分かるときだけ答える）", () => {
+  it("聞き間違い・言い間違いの名前は読みの近さで直し、聞こえた形のまま渡す（回答で「〇〇のことだと思って」と添える）", () => {
+    // 「ミミ」（あだ名）+「ック」と切ると行き詰まるので、戻って「ミミック」を 1 語として読む
+    expect(parseRules("ミミックのじゃれつくでガブリアス何発")).toMatchObject({ intent: "damage", attacker: "ミミック", defender: "ガブリアス", move: "じゃれつく" });
+    expect(parseRules("ミミックって何が弱点")).toMatchObject({ intent: "type", pokemon: "ミミック" });
+    expect(parseRules("ドラパルドのドラゴンアローでカイリュウ何発")).toMatchObject({ intent: "damage", attacker: "ドラパルド", defender: "カイリュウ" });
+    expect(parseRules("エースバンとマスカニャどっちが速い")).toMatchObject({ intent: "speed", attacker: "エースバン", defender: "マスカニャ" });
+  });
   it("よくあるダメージの言い方", () => {
     expect(parseRules("ガブリアスにミミッキュのじゃれつく")).toMatchObject({ intent: "damage", attacker: "ミミッキュ", defender: "ガブリアス", move: "じゃれつく" });
     expect(parseRules("A特化ガブのじしん、HB特化エンペルトに")).toMatchObject({

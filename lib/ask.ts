@@ -182,7 +182,9 @@ function answerDamage(ex: Obj, text?: string): AskResult {
   for (const [sd, ja, role] of [[as, a.ja, "attacker"], [ds, d.ja, "defender"]] as const) {
     const ab = abilityOf(sd);
     if (!sd.ability && isNotableAbility(ab, role) && !result.autoField.some((x) => x.endsWith(`:${ab}`)) && abilityMatters(as, ds, m.en, f, role)) {
-      pr.notes.push(`${ja}は${toJa("abilities", ab!)}で計算したロト`);
+      // へんげんじざい・リベロ: わざを出す前にそのわざのタイプに変わるので、どのわざもタイプ一致になる
+      const protean = ab === "Protean" || ab === "Libero";
+      pr.notes.push(`${ja}は${toJa("abilities", ab!)}${protean ? "でタイプ一致として" : "で"}計算したロト`);
     }
     if (sd === ds && isNotCalculated(ab)) pr.notes.push(`${ja}の${toJa("abilities", ab!)}は計算に入れてないロト`);
   }
@@ -328,7 +330,11 @@ function answerType(ex: Obj): AskResult {
   const types = info.types.map(tj).join("・");
   const weak = [...weak4.map((t) => `${t}（4倍）`), ...weak2].join("、") || "なし";
   const lines = [`タイプ: ${types}`, `弱点: ${weak}`, `半減: ${[...(by.get(0.25) ?? []).map((t) => `${t}（1/4）`), ...(by.get(0.5) ?? [])].join("、") || "なし"}`, `無効: ${immune.join("、") || "なし"}`];
-  const speech = `${pr.notes.length ? pr.notes.join("。") + "。" : ""}${p.ja}は${types}タイプ。弱点は${weak}ロト${immune.length ? `。${immune.join("と")}は効かないロト` : ""}`;
+  // へんげんじざい・リベロ: わざを出すとそのわざのタイプに変わるので、元のタイプの弱点が当てにならない
+  const ab = abilityOf({ species: p.en });
+  const protean = ab === "Protean" || ab === "Libero" ? `ただし、${toJa("abilities", ab)}で、わざを出すとそのわざのタイプに変わるロト` : "";
+  if (protean) lines.push(protean);
+  const speech = `${pr.notes.length ? pr.notes.join("。") + "。" : ""}${p.ja}は${types}タイプ。弱点は${weak}ロト${immune.length ? `。${immune.join("と")}は効かないロト` : ""}${protean ? `。${protean}` : ""}`;
   return { speech, title: `${p.ja}のタイプ`, lines, intent: "type" };
 }
 

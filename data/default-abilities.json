@@ -21,7 +21,7 @@
     "Steelworker",
     "Water Bubble",
     "Gorilla Tactics",
-    "Sheer Force",
+    "Sheer Force", "Protean", "Libero",
     "Multiscale",
     "Fur Coat",
     "Ice Scales",
@@ -89,7 +89,7 @@
     "Steelworker",
     "Water Bubble",
     "Gorilla Tactics",
-    "Sheer Force"
+    "Sheer Force", "Protean", "Libero"
   ],
   "notableDefense": [
     "Multiscale",

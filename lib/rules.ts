@@ -3,6 +3,7 @@
 // （試作版のルール解析が「HPに32振った」を黙って落とした反省。eval-plan.md 7.6）
 import names from "../data/names.json";
 import aliases from "../data/aliases.json";
+import { resolve } from "./resolve";
 
 type Obj = Record<string, unknown>;
 type Stat = "hp" | "atk" | "def" | "spa" | "spd" | "spe";
@@ -27,8 +28,8 @@ const LETTER_READING: [RegExp, string][] = [
 ];
 
 type Tok =
-  | { k: "pokemon"; ja: string }
-  | { k: "move"; ja: string }
+  | { k: "pokemon"; ja: string; heard?: string } // heard: 聞き間違いを読みの近さで直したとき、聞こえた形（回答で「〇〇のことだと思って」と添える）
+  | { k: "move"; ja: string; heard?: string }
   | { k: "item"; ja: string }
   | { k: "nature"; ja: string }
   | { k: "ability"; ja: string } // 特性（直後のポケモン）
@@ -159,36 +160,58 @@ function pattern(s: string): [number, Tok] | null {
 /** 左から最長一致で語に分ける。説明できない文字が残れば null */
 export function tokenize(text: string): Tok[] | null {
   const s = norm(text);
-  const d = dictionary();
-  const out: Tok[] = [];
-  let i = 0;
-  outer: while (i < s.length) {
-    const rest = s.slice(i);
-    const pt = pattern(rest);
-    if (pt) {
-      out.push(pt[1]);
-      i += pt[0];
-      continue;
+  const failed = new Set<number>();
+  // 先頭から順に語を当てる。行き詰まったら手前に戻って別の切り方を試す（「ミミック」を「ミミ」+「ック」と切って行き詰まる など）
+  const walk = (i: number): Tok[] | null => {
+    if (i >= s.length) return [];
+    if (failed.has(i)) return null;
+    for (const [len, toks] of candidates(s, i)) {
+      const rest = walk(i + len);
+      if (rest) return [...toks, ...rest];
     }
-    for (const [surface, t] of d) {
-      if (rest.startsWith(surface)) {
-        // 持ち物の後ろの「持ち」「もち」は読み飛ばす
-        out.push(t);
-        i += surface.length;
-        if (t.k === "item") {
-          const mm = s.slice(i).match(/^(持チ|モチ)/);
-          if (mm) i += mm[0].length;
-        }
-        if (t.k === "ability") {
-          const mm = s.slice(i).match(/^(込ミ|コミ|持チ|アリ)/);
-          if (mm) i += mm[0].length;
-        }
-        continue outer;
-      }
+    // 辞書で読めないときだけ: ポケモン・わざの聞き間違いかを読みの近さで調べる（「ミミックのじゃれつく」→ミミッキュ）
+    for (const [len, t] of guessName(s.slice(i))) {
+      const rest = walk(i + len);
+      if (rest) return [t, ...rest];
     }
+    failed.add(i);
     return null;
+  };
+  return walk(0);
+}
+
+/** 位置 i から当てはまる語の候補（決まった言い回し → 辞書の長い順） */
+function candidates(s: string, i: number): [number, Tok[]][] {
+  const rest = s.slice(i);
+  const out: [number, Tok[]][] = [];
+  const pt = pattern(rest);
+  if (pt) out.push([pt[0], [pt[1]]]);
+  for (const [surface, t] of dictionary()) {
+    if (!rest.startsWith(surface)) continue;
+    let len = surface.length;
+    // 持ち物・特性の後ろの「持ち」「込み」などは読み飛ばす
+    if (t.k === "item") len += s.slice(i + len).match(/^(持チ|モチ)/)?.[0].length ?? 0;
+    if (t.k === "ability") len += s.slice(i + len).match(/^(込ミ|コミ|持チ|アリ)/)?.[0].length ?? 0;
+    out.push([len, [t]]);
   }
   return out;
+}
+
+/**
+ * 文の先頭の 3〜10 文字を、ポケモン・わざの名前の聞き間違いとして読みの近さで照合する。
+ * 候補が 1 つに決まる長さだけを、違いの小さい順（同じなら長い順）に返す。後ろが読めない切り方は tokenize が捨てる
+ */
+function guessName(rest: string): [number, Tok][] {
+  const found: { len: number; dist: number; tok: Tok }[] = [];
+  for (let len = Math.min(10, rest.length); len >= 3; len--) {
+    const heard = rest.slice(0, len);
+    if (!/^[ァ-ヶー一-龯]/.test(heard) || /[、,?？!！。]/.test(heard)) continue;
+    for (const kind of ["pokemon", "moves"] as const) {
+      const r = resolve(kind, heard);
+      if (r.ok && r.fuzzy) found.push({ len, dist: r.dist ?? 0, tok: { k: kind === "pokemon" ? "pokemon" : "move", ja: r.ja, heard } });
+    }
+  }
+  return found.sort((a, b) => a.dist - b.dist || b.len - a.len).map((f) => [f.len, f.tok]);
 }
 
 interface Side {
@@ -279,12 +302,12 @@ export function parseRules(raw: string): Obj | null {
       const cond: Obj = {};
       applyMods(cond, mods);
       mods = [];
-      sides.push({ name: t.ja, cond, particle: next?.k === "p" ? next.v : undefined });
+      sides.push({ name: t.heard ?? t.ja, cond, particle: next?.k === "p" ? next.v : undefined });
       continue;
     }
     if (t.k === "move") {
       if (mods.length) return null; // わざの前の条件は付け先が分からない
-      moves.push(t.ja);
+      moves.push(t.heard ?? t.ja);
       continue;
     }
   }
