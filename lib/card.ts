@@ -96,6 +96,17 @@ function fieldOfAuto(auto: string, f: FieldInput): FieldInput {
   return /Surge|Hadron/.test(ab) ? { terrain: f.terrain } : { weather: f.weather };
 }
 
+/** わざの欄。場で変わったタイプ・威力（だいちのはどう・ウェザーボール）は、変わった後の値と理由を出す */
+function moveCard(name: string, m: ReturnType<typeof moveInfo>, b: DamageAnswer["base"], f: FieldInput): DamageCard["move"] {
+  const type = b.moveType ?? m.type;
+  const bp = b.moveBp ?? m.bp;
+  // 変えたのはフィールド（だいちのはどう）か天候（ウェザーボール）のどちらか
+  const why = fieldTexts(m.name === "Terrain Pulse" ? { terrain: f.terrain } : { weather: f.weather }).join("・");
+  const typeText = type !== m.type ? `${toJa("types", type)}（${why}で${toJa("types", m.type)}から変化）` : toJa("types", type);
+  const power = bp && bp !== m.bp ? `${bp}（${why}で${m.bp}から変化）` : m.bp ? String(m.bp) : "-";
+  return { name, type: typeText, category: CATEGORY_JA[m.category] ?? m.category, power };
+}
+
 export function damageCard(
   names: { attacker: string; defender: string; move: string },
   a: SideInput,
@@ -109,7 +120,7 @@ export function damageCard(
   return {
     attacker: sideCard("攻撃側", names.attacker, a, r.abilities.attacker ?? abilityOf(a), open.attacker, { intimidate: r.intimidate }),
     defender: sideCard("防御側", names.defender, d, r.abilities.defender ?? abilityOf(d), open.defender),
-    move: { name: names.move, type: toJa("types", m.type), category: CATEGORY_JA[m.category] ?? m.category, power: m.bp ? String(m.bp) : "-" },
+    move: moveCard(names.move, m, b, r.field),
     // 特性で入れた天候・フィールドは、どの特性かを添える（晴れ（ひでり））
     field: fieldTexts(r.field).map((t) => {
       const auto = r.autoField.find((x) => fieldTexts(fieldOfAuto(x, r.field)).includes(t));

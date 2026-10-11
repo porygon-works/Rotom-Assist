@@ -6,7 +6,7 @@ import { aiSetup, extract, type AiSetup, type Attempt, type Turn } from "./llm";
 import { resolve, resolveField, toJa, type NameKind } from "./resolve";
 import { parseFollowUp, parseRules } from "./rules";
 import aliases from "../data/aliases.json";
-import { damageCard, spreadText, type DamageCard } from "./card";
+import { damageCard, fieldTexts, spreadText, type DamageCard } from "./card";
 
 export interface AskResult {
   /** 読み上げる文 */
@@ -183,9 +183,16 @@ function answerDamage(ex: Obj, text?: string): AskResult {
   const autoNotes = result.autoField.map((x) => {
     const [sp, ab] = x.split(":");
     const ja = sp === as.species ? a.ja : d.ja;
-    return `${ja}の${toJa("abilities", ab)}で${fieldLabel(result.field).replace(/[［］\s]/g, "")}として計算したロト`;
+    // その特性が入れた天候かフィールドだけを言う（言われたフィールドまで特性のせいに聞こえないように）
+    const own = fieldTexts(/Surge|Hadron/.test(ab) ? { terrain: result.field.terrain } : { weather: result.field.weather }).join("・");
+    return `${ja}の${toJa("abilities", ab)}で${own}として計算したロト`;
   });
   pr.notes.push(...autoNotes);
+  // 場でタイプ・威力が変わるわざ（だいちのはどう・ウェザーボール）は前提を言う
+  const mi = moveInfo(m.en);
+  if (result.base.moveType && (result.base.moveType !== mi.type || (result.base.moveBp ?? mi.bp) !== mi.bp)) {
+    pr.notes.push(`${m.ja}は${toJa("types", result.base.moveType)}タイプ・威力${result.base.moveBp}で計算したロト`);
+  }
   // 言わなかったのに計算に効く特性を使ったら添える（「カイリューはマルチスケイルで計算したロト」）
   for (const [sd, ja, role] of [[as, a.ja, "attacker"], [ds, d.ja, "defender"]] as const) {
     const ab = abilityOf(sd);

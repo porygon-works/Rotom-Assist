@@ -156,6 +156,9 @@ export interface DamageResult {
   desc: string;
   /** 満タンから 1 発で倒れるはずを、気合の襷・がんじょうで耐えた（その持ち物・特性の英語名） */
   endured?: string;
+  /** 計算に使ったわざのタイプ・威力（だいちのはどう・ウェザーボールなどは場で変わる。特性の倍率は含まない） */
+  moveType?: string;
+  moveBp?: number;
 }
 
 function one(a: SideInput, d: SideInput, move: string, f: FieldInput): DamageResult {
@@ -193,7 +196,9 @@ function one(a: SideInput, d: SideInput, move: string, f: FieldInput): DamageRes
     if (busted.ko.n) ko = { ...busted.ko, n: busted.ko.n + 1 };
     endured = "Disguise";
   }
-  return { min, max, minPercent: pct(min), maxPercent: pct(max), hp, curHP: defender.curHP(), ko, immune: max === 0, desc: max === 0 ? "" : r.desc(), endured };
+  const desc = max === 0 ? "" : r.desc();
+  const bp = Number(desc.match(/\((\d+) BP\)/)?.[1] ?? m.bp);
+  return { min, max, minPercent: pct(min), maxPercent: pct(max), hp, curHP: defender.curHP(), ko, immune: max === 0, desc, endured, moveType: r.move.type as string, moveBp: bp };
 }
 
 export interface DamageAnswer {
@@ -291,7 +296,7 @@ export function speciesInfo(en: string) {
 
 export function moveInfo(en: string) {
   const m = new Move(gen, en);
-  return { type: m.type as string, category: m.category as string, bp: m.bp, priority: m.priority };
+  return { name: m.name as string, type: m.type as string, category: m.category as string, bp: m.bp, priority: m.priority };
 }
 
 /** 防御側のタイプに対する相性の倍率（タイプ名は英語） */

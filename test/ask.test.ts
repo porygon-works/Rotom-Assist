@@ -89,6 +89,15 @@ describe("計算（チャンピオンズ・第0世代）", () => {
     expect(sash.endured).toBe("Focus Sash");
     expect(damage(a, { species: "Kingambit", item: "Focus Sash", hpLeftPercent: 90 }, "Earthquake").base.endured).toBeUndefined();
   });
+  it("だいちのはどう: エレキフィールドででんきタイプ・威力 100、メガランチャーも乗る。カードと読み上げに前提を出す", () => {
+    const r = damage({ species: "Blastoise-Mega" }, { species: "Charizard-Mega-Y" }, "Terrain Pulse", { terrain: "Electric" });
+    expect([r.base.moveType, r.base.moveBp, r.abilities.attacker]).toEqual(["Electric", 100, "Mega Launcher"]);
+    expect(r.base.ko).toMatchObject({ kind: "guaranteed", n: 1 });
+    const a = answerExtraction({ intent: "damage", attacker: "メガカメックス", defender: "メガリザードンY", move: "だいちのはどう", conditions: { field: { terrain: "エレキフィールド" } } });
+    expect(a.speech).toContain("だいちのはどうはでんきタイプ・威力100で計算したロト");
+    expect(a.card?.move.type).toBe("でんき（エレキフィールドでノーマルから変化）");
+    expect(a.speech).toContain("ひでりで晴れとして計算");
+  });
   it("ばけのかわが剥がれた: 1 発目を防がず、剥がれた姿・残り HP 7/8 で計算する", () => {
     const broken = damage({ species: "Garchomp" }, { species: "Mimikyu", disguiseBroken: true }, "Earthquake").base;
     expect(broken.endured).toBeUndefined();
