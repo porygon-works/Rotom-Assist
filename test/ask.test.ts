@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { answerExtraction } from "../lib/ask";
+import { fixMishearing } from "../lib/misheard";
 import { damage, speedOf, speedThreshold, speedVariants } from "../lib/battle";
 import { extract, providersFromEnv, type Provider } from "../lib/llm";
 import { resolve } from "../lib/resolve";
@@ -164,5 +165,27 @@ describe("AI 取り出しの切り替え", () => {
   it("環境変数から候補を作る（キーがなければ空）", () => {
     expect(providersFromEnv({})).toEqual([]);
     expect(providersFromEnv({ GEMINI_API_KEY: "g", GROQ_API_KEY: "q" }).map((x) => x.name)).toEqual(["gemini-3.5-flash-lite", "gemini-3.1-flash-lite", "groq-gpt-oss-120b"]);
+  });
+});
+
+describe("実際のログ（roas.ask_log）で答えられなかった質問", () => {
+  it("音声認識の聞き間違いを直す", () => {
+    expect(fixMishearing("HBブリエンペルトに特化ガムの受診は")).toBe("HB振りエンペルトに特化ガブのじしんは");
+    expect(fixMishearing("HBトッカエンペルトに特化ガブリアスの受信を打ったら耐える")).toBe("HB特化エンペルトに特化ガブリアスのじしんを打ったら耐える");
+    expect(fixMishearing("メガボーマンダの地震でHB特化とひどいレに")).toBe("メガボーマンダの地震でHB特化ドヒドイデに");
+    expect(fixMishearing("メガソ武者の不意打ち")).toBe("メガグソクムシャの不意打ち");
+    // 正しい文は変えない
+    expect(fixMishearing("ガブリアスのじしんでドヒドイデ何発")).toBe("ガブリアスのじしんでドヒドイデ何発");
+  });
+  it("特性を聞く質問（AI が種族値に分類しても）", () => {
+    expect(answerExtraction({ intent: "stats", pokemon: "ポワルン" }, "ポワルンって特性何").speech).toContain("てんきや");
+    const r = answerExtraction({ intent: "move_info", pokemon: "マスカーニャ", conditions: { pokemon: { ability: "へんげんじざい" } } }, "変幻自在って特性の効果教えて");
+    expect(r.intent).toBe("ability");
+    expect(r.speech).toContain("マスカーニャ");
+  });
+  it("技の相性を聞く質問", () => {
+    const r = answerExtraction({ intent: "clarify", missing: ["defender"], move: "インファイト", attacker: "ハッサム" }, "ハッサムにインファイト打ったら効果抜群");
+    expect(r.speech).toContain("等倍");
+    expect(answerExtraction({ intent: "type", move: "かえんほうしゃ", pokemon: "ハッサム" }, "ハッサムにかえんほうしゃは効く？").speech).toContain("4倍");
   });
 });

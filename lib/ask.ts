@@ -1,11 +1,13 @@
 // 1 往復の処理（構成設計 4.2）: AI 取り出し → 名前の解決 → 計算 → 回答文
 // answerExtraction は通信をしないので、保存済みの AI の出力を流し込んで確かめられる（eval/replay.ts）
-import { abilityMatters, abilityOf, allTypes, damage, effectiveness, hasSpread, isNotableAbility, isNotCalculated, learns, moveInfo, speciesInfo, speedOf, speedThreshold, speedVariants, type FieldInput, type SideInput, type Stat } from "./battle";
+import { abilitiesOf, abilityMatters, abilityOf, allTypes, damage, effectiveness, hasSpread, isNotableAbility, isNotCalculated, learns, moveInfo, speciesInfo, speedOf, speedThreshold, speedVariants, speciesWithAbility, type FieldInput, type SideInput, type Stat } from "./battle";
 import { CATEGORY_JA, clarifySpeech, damageQuestionOf, damageSpeech, koText } from "./answer";
 import { aiSetup, extract, type AiSetup, type Attempt, type Turn } from "./llm";
 import { resolve, resolveField, toJa, type NameKind } from "./resolve";
+import { fixMishearing } from "./misheard";
 import { parseFollowUp, parseRules } from "./rules";
 import aliases from "../data/aliases.json";
+import names from "../data/names.json";
 
 export interface AskResult {
   /** 読み上げる文 */
@@ -19,7 +21,7 @@ export interface AskResult {
   intent: string;
   /** 次の質問の文脈に使う取り出し結果 */
   extraction?: Record<string, unknown> | null;
-  diagnostics?: { provider?: string; attempts: Attempt[]; totalMs: number; setup?: AiSetup };
+  diagnostics?: { provider?: string; attempts: Attempt[]; totalMs: number; setup?: AiSetup; /** 聞き間違いを直した文（直したときだけ） */ fixed?: string };
 }
 
 type Obj = Record<string, unknown>;
@@ -317,6 +319,20 @@ function answerType(ex: Obj): AskResult {
   const info = speciesInfo(p.en);
   if (!info) return fail("type", p.ja, [`${p.ja}のデータが見つからないロト`]);
   const tj = (t: string) => toJa("types", t);
+  // 「ハッサムにインファイトは抜群？」: 技が分かれば、その技の相性を答える
+  const m = str(ex.move) ? new Problems().soft("moves", str(ex.move)) : undefined;
+  if (m) {
+    const mt = moveInfo(m.en).type;
+    const x = effectiveness(mt, info.types);
+    const word = x === 0 ? "効かない" : x >= 4 ? "4倍で効果抜群" : x >= 2 ? "効果抜群" : x <= 0.25 ? "1/4でいまひとつ" : x < 1 ? "いまひとつ" : "等倍";
+    const types = info.types.map(tj).join("・");
+    return {
+      speech: `${m.ja}（${tj(mt)}）は${p.ja}（${types}）に${word}ロト`,
+      title: `${m.ja} → ${p.ja}の相性`,
+      lines: [`${m.ja}: ${tj(mt)}タイプ`, `${p.ja}: ${types}`, `倍率: ${x}倍`],
+      intent: "type",
+    };
+  }
   const by = new Map<number, string[]>();
   for (const t of allTypes()) {
     const x = effectiveness(t, info.types);
@@ -330,6 +346,35 @@ function answerType(ex: Obj): AskResult {
   const lines = [`タイプ: ${types}`, `弱点: ${weak}`, `半減: ${[...(by.get(0.25) ?? []).map((t) => `${t}（1/4）`), ...(by.get(0.5) ?? [])].join("、") || "なし"}`, `無効: ${immune.join("、") || "なし"}`];
   const speech = `${pr.notes.length ? pr.notes.join("。") + "。" : ""}${p.ja}は${types}タイプ。弱点は${weak}ロト${immune.length ? `。${immune.join("と")}は効かないロト` : ""}`;
   return { speech, title: `${p.ja}のタイプ`, lines, intent: "type" };
+}
+
+/** 「〇〇の特性は？」「〇〇って特性の効果は？」（効果の説明文はデータがないので、持っているポケモンを答える） */
+function answerAbility(ex: Obj, text: string): AskResult | undefined {
+  const pr = new Problems();
+  const heardPoke = str(ex.pokemon) ?? str(ex.attacker) ?? str(ex.defender);
+  const cond = obj(obj(ex.conditions).pokemon);
+  const heardAb = str(cond.ability) ?? Object.keys(obj((names as unknown as Obj).abilities)).find((ja) => text.includes(ja));
+  // 特性の名前が文にあれば、特性について聞いている（AI がポケモンを補っていても特性を優先）
+  const aboutAbility = /効果|説明|どんな/.test(text) || (!!heardAb && text.includes(heardAb));
+  const ab = heardAb && aboutAbility ? pr.soft("abilities", heardAb) : undefined;
+  if (ab) {
+    // 日本語名がない（チャンピオンズにいない）ポケモンは除く
+    const holders = speciesWithAbility(ab.en)
+      .map((en) => toJa("pokemon", en))
+      .filter((ja) => !/^[A-Za-z]/.test(ja));
+    const shown = holders.slice(0, 6).join("、");
+    return {
+      speech: `${ab.ja}の効果の説明はまだ入っていないロト。${holders.length ? `持っているのは${shown}${holders.length > 6 ? "など" : ""}ロト` : ""}`,
+      title: `${ab.ja}`,
+      lines: holders.length ? [`持っているポケモン: ${holders.join("、")}`] : [],
+      intent: "ability",
+    };
+  }
+  const p = heardPoke ? pr.name("pokemon", heardPoke) : undefined;
+  if (!p) return undefined;
+  const list = abilitiesOf(p.en).map((a) => toJa("abilities", a));
+  if (!list.length) return fail("ability", p.ja, [`${p.ja}の特性のデータが見つからないロト`]);
+  return { speech: `${p.ja}の特性は${list.join("、")}ロト`, title: `${p.ja}の特性`, lines: [`特性: ${list.join("、")}`], intent: "ability" };
 }
 
 function answerStats(ex: Obj): AskResult {
@@ -399,6 +444,20 @@ export function answerExtraction(ex: Obj, text?: string): AskResult {
   const intent = str(ex.intent) ?? "clarify";
   const missing = Array.isArray(ex.missing) ? (ex.missing as string[]) : [];
   try {
+    // ダメージや素早さを聞いていない質問は、AI の分類がぶれても文の言葉で振り分ける
+    const calcWords = /入る|入れ|耐え|何発|ダメ|倒せ|落ち|確定|乱数|パーセント|抜け|速い|早い|素早/;
+    if (text && !calcWords.test(text)) {
+      // 「〇〇の特性は？」「〇〇って特性の効果は？」
+      if (/特性/.test(text)) {
+        const a = answerAbility(ex, text);
+        if (a) return a;
+      }
+      // 「ハッサムにインファイトは抜群？」: 技とポケモンが分かれば相性
+      if (/抜群|効く|効かない|効果|相性|いまひとつ|半減/.test(text) && str(ex.move)) {
+        const target = str(ex.defender) ?? str(ex.pokemon) ?? str(ex.attacker);
+        if (target) return answerType({ ...ex, pokemon: target });
+      }
+    }
     switch (intent) {
       case "damage":
         return answerDamage(ex, text);
@@ -469,10 +528,14 @@ export async function ask(text: string, opts: { history?: Turn[]; useRules?: boo
   const t0 = Date.now();
   // まずルールで即答を試す（確実に分かるときだけ結果が返る）。駄目なら AI
   const prev = opts.history?.[opts.history.length - 1]?.extraction as Obj | undefined;
+  // 音声認識の聞き間違い（「受診」→「じしん」など）を先に直す。ルールも AI も直した文で読む
+  const heard = text;
+  text = fixMishearing(text);
+  const fixed = text !== heard ? text : undefined;
   const ruled = opts.useRules === false ? null : (parseRules(text) ?? parseFollowUp(text, prev));
   if (ruled) {
     const out = answerExtraction(ruled, text);
-    return { ...out, extraction: ruled, diagnostics: { provider: "rules", attempts: [], totalMs: Date.now() - t0, setup: aiSetup() } };
+    return { ...out, extraction: ruled, diagnostics: { provider: "rules", attempts: [], totalMs: Date.now() - t0, setup: aiSetup(), fixed } };
   }
   const r = await extract(text, { history: opts.history });
   if (!r.extraction) {
@@ -486,11 +549,11 @@ export async function ask(text: string, opts: { history?: Turn[]; useRules?: boo
       lines: r.attempts.length ? r.attempts.map((a) => `${a.provider}: ${a.error}`) : setupLines(setup),
       intent: "error",
       extraction: null,
-      diagnostics: { attempts: r.attempts, totalMs: Date.now() - t0, setup },
+      diagnostics: { attempts: r.attempts, totalMs: Date.now() - t0, setup, fixed },
     };
   }
   const out = answerExtraction(r.extraction, text);
-  return { ...out, extraction: r.extraction, diagnostics: { provider: r.provider, attempts: r.attempts, totalMs: Date.now() - t0, setup: aiSetup() } };
+  return { ...out, extraction: r.extraction, diagnostics: { provider: r.provider, attempts: r.attempts, totalMs: Date.now() - t0, setup: aiSetup(), fixed } };
 }
 
 export { koText };

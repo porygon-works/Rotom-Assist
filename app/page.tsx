@@ -22,7 +22,7 @@ interface AskResult {
   lines: string[];
   intent: string;
   extraction?: unknown;
-  diagnostics?: { provider?: string; attempts: Attempt[]; totalMs: number; setup?: AiSetup };
+  diagnostics?: { provider?: string; attempts: Attempt[]; totalMs: number; setup?: AiSetup; fixed?: string };
   error?: string;
 }
 interface Shown extends AskResult {
@@ -174,6 +174,7 @@ export default function Home() {
             <ul className="small lines">
               <li>全体 {Math.round(shown.ms)} ms（サーバ {shown.diagnostics?.totalMs ?? "-"} ms）</li>
               <li>AI: {shown.diagnostics?.provider ?? "なし"}</li>
+              {shown.diagnostics?.fixed && <li>聞き間違いを直した文: {shown.diagnostics.fixed}</li>}
               {shown.diagnostics?.setup && (
                 <li>
                   環境 {shown.diagnostics.setup.env}

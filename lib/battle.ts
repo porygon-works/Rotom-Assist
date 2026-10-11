@@ -51,6 +51,19 @@ export function pickNature(up?: Stat, down?: Stat, name?: string): string {
 
 const toId = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, "");
 
+/** そのポケモンの特性の一覧（英語名）。データにないポケモンは空 */
+export function abilitiesOf(species: string): string[] {
+  return (abilityTable as unknown as Record<string, string[]>)[toId(species)] ?? [];
+}
+
+/** その特性を持つポケモン（英語名。計算ライブラリにいるものだけ） */
+export function speciesWithAbility(ab: string): string[] {
+  return Object.entries(abilityTable as unknown as Record<string, unknown>)
+    .filter(([k, v]) => !k.startsWith("_") && Array.isArray(v) && (v as string[]).includes(ab))
+    .map(([k]) => gen.species.get(k as never)?.name as string | undefined)
+    .filter((n): n is string => !!n);
+}
+
 /** 特性を言わなかったときの特性（data/default-abilities.json の優先順。どれもなければ最初の特性） */
 export function defaultAbility(species: string): string | undefined {
   const list = (abilityTable as unknown as Record<string, string[]>)[toId(species)];
