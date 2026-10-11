@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { usePushToTalk } from "./usePushToTalk";
 import type { DamageCard, SideCard } from "../lib/card";
+import { RotomFace } from "./RotomFace";
 
 interface Attempt {
   provider: string;
@@ -49,6 +50,21 @@ function deviceId(): string {
   }
 }
 
+// ---- しゃべっているか（顔の口を動かす）----
+const speakingListeners = new Set<(b: boolean) => void>();
+let speakingNow = false;
+let speakingPoll = 0;
+function setSpeaking(b: boolean) {
+  if (b === speakingNow) return;
+  speakingNow = b;
+  speakingListeners.forEach((f) => f(b));
+  window.clearInterval(speakingPoll);
+  // 終わりの知らせ（onend）が来ない端末があるので、ブラウザの読み上げが止まったかを定期的に確かめる
+  if (b) speakingPoll = window.setInterval(() => {
+    if (!window.speechSynthesis?.speaking && !(player && !player.paused && player.src.startsWith("blob:"))) setSpeaking(false);
+  }, 300);
+}
+
 function speak(text: string) {
   const s = window.speechSynthesis;
   if (!s) return;
@@ -56,7 +72,11 @@ function speak(text: string) {
   const u = new SpeechSynthesisUtterance(text);
   u.lang = "ja-JP";
   u.rate = 1.15;
+  u.onstart = () => setSpeaking(true);
+  u.onend = () => setSpeaking(false);
+  u.onerror = () => setSpeaking(false);
   s.speak(u);
+  setSpeaking(true);
 }
 
 // ---- 経過の記録（聞き取りが止まる原因を調べる用。roas.history に kind=event で送る。失敗しても何もしない）----
@@ -112,6 +132,7 @@ function stopSound() {
   seq++;
   releaseAudio();
   window.speechSynthesis?.cancel();
+  setSpeaking(false);
 }
 
 /** マイクを使う前: 鳴っているときだけ止める。何も鳴っていなければ音の部品に触らない
@@ -119,6 +140,7 @@ function stopSound() {
 function stopSoundForMic() {
   seq++;
   if (player && !player.paused) player.pause();
+  setSpeaking(false);
 }
 
 /** Gemini の声（/api/tts）。失敗したら null（ブラウザの読み上げに戻す） */
@@ -148,7 +170,9 @@ async function announce(text: string, voice: Voice, chime: boolean) {
     return; // 途中でマイクを使った・次の答えが来た
   }
   if (url) {
+    setSpeaking(true);
     await playUrl(url);
+    setSpeaking(false);
     URL.revokeObjectURL(url);
     releaseAudio();
     return;
@@ -254,6 +278,11 @@ export default function Home() {
     [mute, brief, voice, chimeOn],
   );
 
+  const [speaking, setSpeakingState] = useState(false);
+  useEffect(() => {
+    speakingListeners.add(setSpeakingState);
+    return () => void speakingListeners.delete(setSpeakingState);
+  }, []);
   const mic0 = usePushToTalk(send, logEvent);
   // 開いたときの環境（端末・ブラウザ）を記録
   useEffect(() => logEvent("page-load", navigator.userAgent), []);
@@ -308,6 +337,7 @@ export default function Home() {
     return (
       <main>
         <h1>ロトムアシスト</h1>
+        <RotomFace speaking={false} />
         <section className="card start" aria-label="はじめに">
           <p className="speech">このアプリは音が出ます</p>
           <p>答えの前に合図の音が鳴り、答えを読み上げます。いまボタンを押すと、確認の音が鳴ります。</p>
@@ -342,6 +372,7 @@ export default function Home() {
   return (
     <main>
       <h1>ロトムアシスト</h1>
+      <RotomFace speaking={speaking} />
       <p className="hint">ボタンを押しながら話してください（PC はスペースキー）。例:「HB振りエンペルトにA特化ガブのじしん」「最速ドラパルト抜ける？」</p>
 
       {mic.state === "unsupported" && <p className="err">このブラウザは音声認識に対応していません。Chrome / Edge / Safari で開くか、下の文字入力を使ってください。</p>}
