@@ -4,7 +4,7 @@ import "./globals.css";
 export const metadata = {
   title: "ロトムアシスト",
   description: "ポケモン対戦ダメージ計算・音声アシスタント",
-  // アイコンは app/icon.svg（ブラウザのタブ）と app/apple-icon.png（iPhone のホーム画面）。ロトムの顔
+  // アイコンは app/icon.png（ブラウザのタブなど）と app/apple-icon.png（iPhone のホーム画面）。ロトムの顔の下にロゴ
   appleWebApp: { title: "ロトムアシスト", capable: true, statusBarStyle: "default" as const },
 };
 
