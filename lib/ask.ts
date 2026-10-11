@@ -186,6 +186,13 @@ function answerDamage(ex: Obj, text?: string): AskResult {
     }
     if (sd === ds && isNotCalculated(ab)) pr.notes.push(`${ja}の${toJa("abilities", ab!)}は計算に入れてないロト`);
   }
+  // いかく（防御側）: 攻撃側の攻撃ランクを変えて計算したことを言う
+  if (result.intimidate !== undefined) {
+    const aab = toJa("abilities", abilityOf(as) ?? "");
+    if (result.intimidate < 0) pr.notes.push(`${d.ja}のいかくで、${a.ja}の攻撃を${-result.intimidate}段階下げて計算したロト`);
+    else if (result.intimidate === 0) pr.notes.push(`${a.ja}は${aab}で、${d.ja}のいかくを受けないロト`);
+    else pr.notes.push(`${d.ja}のいかくで${a.ja}の${aab}が発動して、攻撃+${result.intimidate}で計算したロト`);
+  }
   const special = result.category === "Special";
   const open = { attacker: !hasSpread(as, [special ? "spa" : "atk"]), defender: !hasSpread(ds, ["hp", special ? "spd" : "def"]) };
   const { speech, short, lines } = damageSpeech({ attacker: a.ja, defender: d.ja, move: m.ja }, result, [...pr.notes, ...pr.list], {

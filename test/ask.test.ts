@@ -73,6 +73,19 @@ describe("計算（チャンピオンズ・第0世代）", () => {
     expect(sash.endured).toBe("Focus Sash");
     expect(damage(a, { species: "Kingambit", item: "Focus Sash", hpLeftPercent: 90 }, "Earthquake").base.endured).toBeUndefined();
   });
+  it("ばけのかわ: 満タンなら 1 発目を防ぎ、確定数を 1 つ増やす（連続技・満タンでないときは対象外）", () => {
+    const base = damage({ species: "Garchomp" }, { species: "Mimikyu", ability: "Pressure" }, "Earthquake").base;
+    const disguise = damage({ species: "Garchomp" }, { species: "Mimikyu" }, "Earthquake").base;
+    expect(disguise.endured).toBe("Disguise");
+    expect(disguise.ko.n).toBeGreaterThan(base.ko.n);
+    expect(damage({ species: "Garchomp" }, { species: "Mimikyu", hpLeftPercent: 50 }, "Earthquake").base.endured).toBeUndefined();
+  });
+  it("いかく: 防御側がいかくで物理技なら攻撃 −1。クリアボディは下がらない、攻撃ランクを言われたらそのまま", () => {
+    expect(damage({ species: "Garchomp" }, { species: "Incineroar" }, "Earthquake").intimidate).toBe(-1);
+    expect(damage({ species: "Metagross" }, { species: "Incineroar" }, "Meteor Mash").intimidate).toBe(0);
+    expect(damage({ species: "Hydreigon" }, { species: "Incineroar" }, "Dark Pulse").intimidate).toBeUndefined();
+    expect(damage({ species: "Garchomp", boosts: { atk: 1 } }, { species: "Incineroar" }, "Earthquake").intimidate).toBeUndefined();
+  });
   it("素早さ: ランク・スカーフ・最速・最遅", () => {
     expect(speedOf({ species: "Garchomp", sp: { spe: 32 }, natureUp: "spe" })).toBe(169);
     expect(speedOf({ species: "Garchomp", sp: { spe: 32 }, item: "Choice Scarf" })).toBe(231);

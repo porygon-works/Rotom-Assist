@@ -178,6 +178,13 @@ function one(a: SideInput, d: SideInput, move: string, f: FieldInput): DamageRes
     endured = sturdy;
     ko = { kind: "guaranteed", n: 2, chance: 1 };
   }
+  // ばけのかわ（ミミッキュ）: 満タンなら 1 発目は防いで最大 HP の 1/8 だけ減る。計算ライブラリは反映しないので、
+  // 「剥がれた姿（Mimikyu-Busted）・残り HP 7/8」に何発で倒れるかを求めて 1 発足す（連続技は 1 発目だけ防ぐので対象外）
+  if (max > 0 && abilityOf(d) === "Disguise" && d.species === "Mimikyu" && defender.curHP() === hp && (m.hits ?? 1) <= 1) {
+    const busted = one(a, { ...d, species: "Mimikyu-Busted", ability: "Disguise", hpLeft: hp - Math.floor(hp / 8), hpLeftPercent: undefined }, move, f);
+    if (busted.ko.n) ko = { ...busted.ko, n: busted.ko.n + 1 };
+    endured = "Disguise";
+  }
   return { min, max, minPercent: pct(min), maxPercent: pct(max), hp, curHP: defender.curHP(), ko, immune: max === 0, desc: max === 0 ? "" : r.desc(), endured };
 }
 
@@ -188,6 +195,8 @@ export interface DamageAnswer {
   abilities: { attacker?: string; defender?: string };
   /** 計算に使った場（特性で入れた天候などを含む） */
   field: FieldInput;
+  /** 防御側のいかくで変えた攻撃側の攻撃ランク（0 は特性で防いだ。undefined は関係なし） */
+  intimidate?: number;
   /** 指定どおり（指定のない側は無振り）で計算した結果 */
   base: DamageResult;
   /** 指定のない側を振り方の幅で動かしたときの最小〜最大（指定が揃っていれば undefined） */
@@ -198,10 +207,28 @@ export interface DamageAnswer {
 }
 
 /** ダメージ計算。指定のない側は無振りを基本にし、幅も出す */
-export function damage(a: SideInput, d: SideInput, move: string, f0: FieldInput = {}): DamageAnswer {
-  const { field: f, notes: autoNotes } = autoField([a, d], f0);
+/** いかくを受けたときの攻撃側の反応（特性による。クリアボディなどは下がらない、まけんきは結果として上がる） */
+const INTIMIDATE_REACTION: Record<string, number> = {
+  "Clear Body": 0, "Hyper Cutter": 0, "Inner Focus": 0, Oblivious: 0, "Own Tempo": 0, Scrappy: 0,
+  "Full Metal Body": 0, "White Smoke": 0, "Mirror Armor": 0, Defiant: 1, "Guard Dog": 1, Contrary: 1, Simple: -2,
+};
+
+/**
+ * いかく: 防御側が「いかく」で物理技のとき、攻撃側の攻撃ランクを変えて計算する（攻撃ランクを言われていなければ）。
+ * 場に出たときに入る特性だが、対戦ではほぼ必ず入るので、常に考慮する
+ */
+function applyIntimidate(a: SideInput, d: SideInput, category: string): { a: SideInput; change?: number } {
+  if (category !== "Physical" || abilityOf(d) !== "Intimidate" || a.boosts?.atk !== undefined) return { a };
+  const change = INTIMIDATE_REACTION[abilityOf(a) ?? ""] ?? -1;
+  if (!change) return { a, change: 0 };
+  return { a: { ...a, boosts: { ...a.boosts, atk: change } }, change };
+}
+
+export function damage(a0: SideInput, d: SideInput, move: string, f0: FieldInput = {}): DamageAnswer {
+  const { field: f, notes: autoNotes } = autoField([a0, d], f0);
   const m = new Move(gen, move);
   const category = m.category as DamageAnswer["category"];
+  const { a, change: intimidate } = applyIntimidate(a0, d, category);
   const atkStat: Stat = category === "Special" ? "spa" : "atk";
   const defStat: Stat = category === "Special" ? "spd" : "def";
   const aOpen = !hasSpread(a, [atkStat]);
@@ -211,7 +238,7 @@ export function damage(a: SideInput, d: SideInput, move: string, f0: FieldInput 
   if (aOpen) assumed.push("攻撃側の振り方");
   if (dOpen) assumed.push("防御側の振り方");
   if (!a.item && !d.item) assumed.push("持ち物なし");
-  const extra = { autoField: autoNotes, abilities: { attacker: abilityOf(a), defender: abilityOf(d) }, field: f };
+  const extra = { autoField: autoNotes, abilities: { attacker: abilityOf(a), defender: abilityOf(d) }, field: f, intimidate };
   if (!aOpen && !dOpen) return { base, assumed, category, ...extra };
   const strongA: SideInput = aOpen ? { ...a, sp: { ...a.sp, [atkStat]: 32 }, natureUp: atkStat } : a;
   const bulkyD: SideInput = dOpen ? { ...d, sp: { ...d.sp, hp: 32, [defStat]: 32 }, natureUp: defStat } : d;

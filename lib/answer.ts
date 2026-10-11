@@ -15,6 +15,7 @@ export function koSpeech(ko: Ko): string {
 /** 画面用の確定数（乱数は確率付き） */
 export function koText(ko: Ko, immune: boolean): string {
   if (immune) return "ダメージなし";
+  if (ko.kind === "none" || ko.n >= 5) return "5発以上";
   if (ko.kind === "guaranteed") return `確定${ko.n}発`;
   if (ko.kind === "chance") return `乱数${ko.n}発（${(ko.chance * 100).toFixed(1)}%）`;
   return "確定数なし（4発以上）";
@@ -23,6 +24,13 @@ export function koText(ko: Ko, immune: boolean): string {
 function rangeText(r: DamageResult) {
   return `${r.min}〜${r.max}（${r.minPercent}〜${r.maxPercent}%）`;
 }
+
+/** 1 発目を耐える・防ぐ持ち物と特性の呼び方 */
+const ENDURE: Record<string, { name: string; short: string; verb: string }> = {
+  "Focus Sash": { name: "きあいのタスキ", short: "タスキ", verb: "1回耐える" },
+  Sturdy: { name: "がんじょう", short: "がんじょう", verb: "1回耐える" },
+  Disguise: { name: "ばけのかわ", short: "ばけのかわ", verb: "1発目を防ぐ" },
+};
 
 export interface DamageNames {
   attacker: string;
@@ -75,7 +83,8 @@ export function damageSpeech(n: DamageNames, d: DamageAnswer, notes: string[], o
   }
   const lines = [`ダメージ ${rangeText(b)}・${koText(b.ko, false)}${opt.stealthRock ? "（ステロ込み）" : ""}`];
   if (b.curHP < b.hp) lines.push(`防御側の HP: ${b.curHP} / ${b.hp} で計算`);
-  if (b.endured) lines.push(`${b.endured === "Focus Sash" ? "きあいのタスキ" : "がんじょう"}で 1 発目は耐える（満タンのとき）`);
+  const en = b.endured ? ENDURE[b.endured] : undefined;
+  if (en) lines.push(b.endured === "Disguise" ? "ばけのかわで 1 発目を防ぐ（満タンのとき。剥がれると最大 HP の 1/8 減る）。確定数はこれを含む" : `${en.name}で 1 発目は耐える（満タンのとき）`);
   const sr = opt.stealthRock ? "ステロ込みで" : "";
   const ko = `${sr}${koSpeech(b.ko)}`;
   const v = verdict(b.ko, opt.question ?? "plain");
@@ -99,8 +108,8 @@ export function damageSpeech(n: DamageNames, d: DamageAnswer, notes: string[], o
   }
   if (b.curHP < b.hp) speech += `。残りHP${b.curHP}で計算したロト`;
   // 短い読み上げ: 結論・確定数・ダメージ範囲だけ（振り方の幅や特性の一言は画面だけ）
-  const short = `${v}${ko}ロト。${p(b.minPercent)}から${p(b.maxPercent)}パーセント${b.endured ? "。タスキで1回耐えるロト" : ""}`;
-  if (b.endured) notes = [...notes, `${n.defender}は${b.endured === "Focus Sash" ? "タスキ" : "がんじょう"}で1回耐えるロト`];
+  const short = `${v}${ko}ロト。${p(b.minPercent)}から${p(b.maxPercent)}パーセント${en ? `。${en.short}で${en.verb}ロト` : ""}`;
+  if (en) notes = [...notes, `${n.defender}は${en.short}で${en.verb}ロト`];
   if (notes.length) speech = `${notes.join("。")}。${speech}`;
   return { speech, short, lines };
 }
