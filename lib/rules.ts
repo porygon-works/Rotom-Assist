@@ -47,6 +47,9 @@ type Tok =
 const LETTER: Record<string, Stat> = { H: "hp", A: "atk", B: "def", C: "spa", D: "spd", S: "spe" };
 
 let dict: [string, Tok][] | null = null;
+let surfaceSet: Set<string> | null = null;
+/** 辞書の語の表記（完全一致の確認用） */
+const surfaces = () => (surfaceSet ??= new Set(dictionary().map(([w]) => w)));
 function dictionary(): [string, Tok][] {
   if (dict) return dict;
   const n = names as unknown as Record<string, Record<string, string>>;
@@ -160,24 +163,43 @@ function pattern(s: string): [number, Tok] | null {
 /** 左から最長一致で語に分ける。説明できない文字が残れば null */
 export function tokenize(text: string): Tok[] | null {
   const s = norm(text);
-  const failed = new Set<number>();
+  const failed = new Set<string>();
+  // 助詞は文頭や助詞の直後には来ない（「トヒドイデ」を「と」+ヒドイデ、「カラルヤドラン」を「から」+… と切らない）
+  // 読点（、）は区切りなので、助詞の後にも来てよく、前の状態を引き継ぐ（「ステロ込みで、」）
+  const isComma = (t: Tok) => t.k === "p" && /^[、,]$/.test(t.v);
+  const isParticle = (t: Tok) => (t.k === "p" && !isComma(t)) || (t.k === "w" && t.v === "ヲ");
   // 先頭から順に語を当てる。行き詰まったら手前に戻って別の切り方を試す（「ミミック」を「ミミ」+「ック」と切って行き詰まる など）
-  const walk = (i: number): Tok[] | null => {
+  const walk = (i: number, afterParticle: boolean): Tok[] | null => {
     if (i >= s.length) return [];
-    if (failed.has(i)) return null;
+    const memo = `${i}:${afterParticle}`;
+    if (failed.has(memo)) return null;
+    const next = (len: number, toks: Tok[]): Tok[] | null => {
+      if (isParticle(toks[0]) && afterParticle) return null;
+      const last = toks[toks.length - 1];
+      const rest = walk(i + len, isComma(last) ? afterParticle : isParticle(last));
+      return rest ? [...toks, ...rest] : null;
+    };
     for (const [len, toks] of candidates(s, i)) {
-      const rest = walk(i + len);
-      if (rest) return [...toks, ...rest];
+      const r = next(len, toks);
+      if (r) return r;
     }
     // 辞書で読めないときだけ: ポケモン・わざの聞き間違いかを読みの近さで調べる（「ミミックのじゃれつく」→ミミッキュ）
     for (const [len, t] of guessName(s.slice(i))) {
-      const rest = walk(i + len);
-      if (rest) return [t, ...rest];
+      const r = next(len, [t]);
+      if (r) return r;
     }
-    failed.add(i);
+    // 言い直し: 名前を言いかけて言い直した（「リザ、メガリザードンY」の「リザ」）。直後の名前に含まれる 1〜4 文字なら読み飛ばす
+    for (let k = 1; k <= 4 && i + k < s.length; k++) {
+      const frag = s.slice(i, i + k);
+      const nx = candidates(s, i + k).find(([, ts]) => ts[0].k === "pokemon" || ts[0].k === "move");
+      if (!nx || !norm((nx[1][0] as { ja: string }).ja).includes(frag)) continue;
+      const rest = walk(i + k, afterParticle);
+      if (rest) return rest;
+    }
+    failed.add(memo);
     return null;
   };
-  return walk(0);
+  return walk(0, true);
 }
 
 /** 位置 i から当てはまる語の候補（決まった言い回し → 辞書の長い順） */
@@ -198,14 +220,19 @@ function candidates(s: string, i: number): [number, Tok[]][] {
 }
 
 /**
- * 文の先頭の 3〜10 文字を、ポケモン・わざの名前の聞き間違いとして読みの近さで照合する。
+ * 文の先頭の 4〜10 文字（漢字を含めば 3 文字から）を、ポケモン・わざの名前の聞き間違いとして読みの近さで照合する。
  * 候補が 1 つに決まる長さだけを、違いの小さい順（同じなら長い順）に返す。後ろが読めない切り方は tokenize が捨てる
  */
 function guessName(rest: string): [number, Tok][] {
   const found: { len: number; dist: number; tok: Tok }[] = [];
+  // 名前の頭に来ない字（助詞の「ヲ」、ン・ッ・ー・小さい字）で始まる切り方は取らない（「をリザ」→オリーヴァ の誤り）
+  if (!/^[ァ-ヶ一-龯]/.test(rest) || /^[ヲンッーァィゥェォャュョヮ]/.test(rest)) return [];
+  // カナ 3 文字以下は別の名前に当たりやすいので 4 文字から（漢字を含むときは 3 文字も: 月光蛾）
   for (let len = Math.min(10, rest.length); len >= 3; len--) {
     const heard = rest.slice(0, len);
-    if (!/^[ァ-ヶー一-龯]/.test(heard) || /[、,?？!！。]/.test(heard)) continue;
+    if (/[、,?？!！。]/.test(heard) || (len === 3 && !/[一-龯]/.test(heard))) continue;
+    // 辞書にある語 + 助詞の 1 字（「ジシンヲ」）は聞き間違いではない。助詞を名前に吸わせない
+    if (/[ノヲニデガトハヘモ]$/.test(heard) && surfaces().has(heard.slice(0, -1))) continue;
     for (const kind of ["pokemon", "moves"] as const) {
       const r = resolve(kind, heard);
       if (r.ok && r.fuzzy) found.push({ len, dist: r.dist ?? 0, tok: { k: kind === "pokemon" ? "pokemon" : "move", ja: r.ja, heard } });
