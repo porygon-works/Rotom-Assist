@@ -36,6 +36,7 @@
         ▼
 Vercel（Next.js App Router）
  ├─ POST /api/calc     … @smogon/calc で計算
+ ├─ POST /api/ask      … 質問 1 回の処理。答えた後に Supabase(roas.ask_log) へ記録（任意）
  └─ GET/POST /api/history … Supabase(roas.history) へ保存・取得（任意）
         │ service_role キー（サーバ側の環境変数）
         ▼
@@ -48,7 +49,7 @@ Supabase（プロジェクト porygon-works / スキーマ roas）
 | 解釈 | `lib/wakeword.ts`, `lib/parse.ts`, `lib/names.ts` | 合言葉検出、質問の分解、日英名変換 |
 | 計算 | `lib/calc.ts`, `lib/validate.ts` | 計算本体、`/api/calc` の入力検証 |
 | 読み上げ | `lib/speech.ts` | 結果 → 短い日本語文 |
-| 保存 | `lib/history.ts`, `lib/validateHistory.ts` | Supabase REST の呼び出し、入力検証 |
+| 保存 | `lib/history.ts`, `lib/validateHistory.ts`, `lib/askLog.ts` | Supabase REST の呼び出し、入力検証、質問の記録 |
 | データ | `data/ja-en.json` | 日→英の対応表（ポケモン・わざ・持ち物） |
 
 ## 3. 画面と操作の流れ
@@ -129,6 +130,10 @@ Supabase（プロジェクト porygon-works / スキーマ roas）
 ### 6.4 端末ID
 `localStorage` の `rotom-device-id`（UUID）。ログインはなく、このIDで履歴を絞る。**IDを知らない他人には見えないが、ブラウザのデータを消すと過去の履歴は見えなくなる**
 
+### 6.5 `POST /api/ask` の記録
+`/api/ask` は答えを返した後（`next/server` の `after`）に、質問・答え・答え方・AI の呼び出し結果・AI の設定の状態を `roas.ask_log` に 1 行書く。Supabase 未設定なら書かない。記録の失敗は答えに影響させず、Vercel の Logs に出す。
+AI の設定の状態（`diagnostics.setup`）は画面の「診断」にも出す: 環境（`VERCEL_ENV`）、コミット、各キーの有無（値は出さない）。AI の候補が 0 件のときは、画面の詳しい結果にも「キーが見えていない」ことと確認手順を出す。
+
 ## 7. データベース設計
 
 プロジェクト `porygon-works`（東京、Free）の `roas` スキーマ。作成 SQL は `supabase/001_init.sql`。
@@ -145,8 +150,25 @@ Supabase（プロジェクト porygon-works / スキーマ roas）
 
 索引: `history_device_created (device_id, created_at desc)`。RLS は有効でポリシーなし（サーバの `service_role` だけが読み書きできる）。
 
-### 7.2 Supabase 側の必須設定（作成後の 3 点セット）
-1. `supabase/001_init.sql` を SQL Editor で実行（スキーマ作成・テーブル・RLS・`service_role` への権限付与）
+### 7.2 `roas.ask_log`（`supabase/002_ask_log.sql`）
+質問 1 回ごとの記録。答えられなかった理由（AI のキーが見えていない、AI が混んでいる、解釈できない）を後から調べるためのもの。
+| 列 | 型 | 説明 |
+|---|---|---|
+| `id` | bigint identity | 主キー |
+| `device_id` | text | 端末ID（6.4。無ければ空） |
+| `question` | text | 質問文（音声認識の結果） |
+| `title`・`speech`・`intent` | text | 画面の見出し・読み上げ文・答えの種類（`error`、`clarify` など） |
+| `provider` | text | `rules`（ルールで即答）／AI の名前／空（答えられなかった） |
+| `total_ms` | integer | サーバ側の処理時間 |
+| `attempts` | jsonb | AI の呼び出しごとの結果 `[{provider, ms, ok, error}]` |
+| `extraction` | jsonb | 質問の解釈 |
+| `setup` | jsonb | AI の設定の状態 `{env, commit, keys, providers}`。キーの値は入れない |
+| `created_at` | timestamptz | 既定 `now()` |
+
+索引: `ask_log_created (created_at desc)`、`ask_log_device_created (device_id, created_at desc)`。RLS は有効でポリシーなし。
+
+### 7.3 Supabase 側の必須設定（作成後の 3 点セット）
+1. `supabase/001_init.sql`、`supabase/002_ask_log.sql` を SQL Editor で順に実行（スキーマ作成・テーブル・RLS・`service_role` への権限付与）
 2. Project Settings → Data API → **Exposed schemas に `roas` を追加**
 3. Vercel の環境変数 `SUPABASE_URL`、`SUPABASE_SERVICE_ROLE_KEY` を設定して再デプロイ
 
@@ -203,7 +225,7 @@ alter default privileges in schema <app> grant all on sequences to service_role;
 - デプロイ: Vercel に GitHub リポジトリを Import。環境変数は Supabase 用 2 つのみ（任意）
 - マイクは https か localhost でのみ使える
 - Chrome 系の音声認識は、音声が外部サーバに送られる。他人に共有する場合は伝える
-- 履歴には発話の文字起こしが保存される
+- 履歴には発話の文字起こしが保存される。`roas.ask_log` には質問文と答えが保存される
 
 ## 10. テスト
 

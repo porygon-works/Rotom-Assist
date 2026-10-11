@@ -9,6 +9,12 @@ interface Attempt {
   ok: boolean;
   error?: string;
 }
+interface AiSetup {
+  env: string;
+  commit: string;
+  keys: { GEMINI_API_KEY: boolean; GROQ_API_KEY: boolean; LLM_API_KEY: boolean };
+  providers: string[];
+}
 interface AskResult {
   speech: string;
   short?: string;
@@ -16,12 +22,27 @@ interface AskResult {
   lines: string[];
   intent: string;
   extraction?: unknown;
-  diagnostics?: { provider?: string; attempts: Attempt[]; totalMs: number };
+  diagnostics?: { provider?: string; attempts: Attempt[]; totalMs: number; setup?: AiSetup };
   error?: string;
 }
 interface Shown extends AskResult {
   question: string;
   ms: number;
+}
+
+let memoryId: string | null = null;
+/** 端末ごとの匿名ID。質問の記録（roas.ask_log）をこの端末の分で絞るのに使う（ログインはなし） */
+function deviceId(): string {
+  try {
+    let v = localStorage.getItem("rotom-device-id");
+    if (!v) {
+      v = crypto.randomUUID();
+      localStorage.setItem("rotom-device-id", v);
+    }
+    return v;
+  } catch {
+    return (memoryId ??= crypto.randomUUID());
+  }
 }
 
 function speak(text: string) {
@@ -54,7 +75,7 @@ export default function Home() {
         const res = await fetch("/api/ask", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ text: q, history: last.current ? [last.current] : [] }),
+          body: JSON.stringify({ text: q, history: last.current ? [last.current] : [], device_id: deviceId() }),
         });
         const r = (await res.json()) as AskResult;
         if (!res.ok) {
@@ -153,6 +174,13 @@ export default function Home() {
             <ul className="small lines">
               <li>全体 {Math.round(shown.ms)} ms（サーバ {shown.diagnostics?.totalMs ?? "-"} ms）</li>
               <li>AI: {shown.diagnostics?.provider ?? "なし"}</li>
+              {shown.diagnostics?.setup && (
+                <li>
+                  環境 {shown.diagnostics.setup.env}
+                  {shown.diagnostics.setup.commit && `（${shown.diagnostics.setup.commit}）`} / キー: GEMINI {shown.diagnostics.setup.keys.GEMINI_API_KEY ? "あり" : "なし"}・GROQ{" "}
+                  {shown.diagnostics.setup.keys.GROQ_API_KEY ? "あり" : "なし"}
+                </li>
+              )}
               {shown.diagnostics?.attempts.map((a, i) => (
                 <li key={i}>
                   {a.provider}: {a.ok ? "成功" : `失敗（${a.error}）`} {a.ms} ms

@@ -2,7 +2,7 @@
 // answerExtraction は通信をしないので、保存済みの AI の出力を流し込んで確かめられる（eval/replay.ts）
 import { abilityMatters, abilityOf, allTypes, damage, effectiveness, hasSpread, isNotableAbility, isNotCalculated, learns, moveInfo, speciesInfo, speedOf, speedThreshold, speedVariants, type FieldInput, type SideInput, type Stat } from "./battle";
 import { CATEGORY_JA, clarifySpeech, damageQuestionOf, damageSpeech, koText } from "./answer";
-import { extract, type Attempt, type Turn } from "./llm";
+import { aiSetup, extract, type AiSetup, type Attempt, type Turn } from "./llm";
 import { resolve, resolveField, toJa, type NameKind } from "./resolve";
 import { parseFollowUp, parseRules } from "./rules";
 import aliases from "../data/aliases.json";
@@ -19,7 +19,7 @@ export interface AskResult {
   intent: string;
   /** 次の質問の文脈に使う取り出し結果 */
   extraction?: Record<string, unknown> | null;
-  diagnostics?: { provider?: string; attempts: Attempt[]; totalMs: number };
+  diagnostics?: { provider?: string; attempts: Attempt[]; totalMs: number; setup?: AiSetup };
 }
 
 type Obj = Record<string, unknown>;
@@ -454,6 +454,16 @@ export function answerExtraction(ex: Obj, text?: string): AskResult {
   }
 }
 
+/** AI の候補が 0 件のとき、何が足りないかを画面に出す（キーの値は出さない） */
+function setupLines(s: AiSetup): string[] {
+  const has = (b: boolean) => (b ? "あり" : "なし");
+  return [
+    `このデプロイ（環境: ${s.env}${s.commit ? `、コミット ${s.commit}` : ""}）から AI のキーが見えていない`,
+    `GEMINI_API_KEY: ${has(s.keys.GEMINI_API_KEY)} / GROQ_API_KEY: ${has(s.keys.GROQ_API_KEY)}`,
+    "Vercel の Environment Variables で、この環境にチェックが入っているか確認し、登録後に Redeploy する",
+  ];
+}
+
 /** 文字の質問に答える（AI 取り出しを含む 1 往復） */
 export async function ask(text: string, opts: { history?: Turn[]; useRules?: boolean } = {}): Promise<AskResult> {
   const t0 = Date.now();
@@ -462,24 +472,25 @@ export async function ask(text: string, opts: { history?: Turn[]; useRules?: boo
   const ruled = opts.useRules === false ? null : (parseRules(text) ?? parseFollowUp(text, prev));
   if (ruled) {
     const out = answerExtraction(ruled, text);
-    return { ...out, extraction: ruled, diagnostics: { provider: "rules", attempts: [], totalMs: Date.now() - t0 } };
+    return { ...out, extraction: ruled, diagnostics: { provider: "rules", attempts: [], totalMs: Date.now() - t0, setup: aiSetup() } };
   }
   const r = await extract(text, { history: opts.history });
   if (!r.extraction) {
+    const setup = aiSetup();
     return {
       // AI が使えなくてもルールなら答えられるので、その言い方を案内する
       speech: r.attempts.length
         ? "いま混み合ってるロト。「ガブにミミッキュのじゃれつく」みたいに短く言ってくれたら、すぐ答えられるロト"
         : "AI の設定がまだロト。「ガブにミミッキュのじゃれつく」みたいに短く言ってくれたら答えられるロト",
       title: "AI に接続できない",
-      lines: r.attempts.map((a) => `${a.provider}: ${a.error}`),
+      lines: r.attempts.length ? r.attempts.map((a) => `${a.provider}: ${a.error}`) : setupLines(setup),
       intent: "error",
       extraction: null,
-      diagnostics: { attempts: r.attempts, totalMs: Date.now() - t0 },
+      diagnostics: { attempts: r.attempts, totalMs: Date.now() - t0, setup },
     };
   }
   const out = answerExtraction(r.extraction, text);
-  return { ...out, extraction: r.extraction, diagnostics: { provider: r.provider, attempts: r.attempts, totalMs: Date.now() - t0 } };
+  return { ...out, extraction: r.extraction, diagnostics: { provider: r.provider, attempts: r.attempts, totalMs: Date.now() - t0, setup: aiSetup() } };
 }
 
 export { koText };

@@ -30,6 +30,25 @@ export function providersFromEnv(env: Record<string, string | undefined> = proce
   return list;
 }
 
+/** AI の設定の状態（キーの有無・環境・コミット）。キーの値そのものは含めない。調査用にログと画面の診断に出す */
+export interface AiSetup {
+  /** Vercel の環境（production / preview / development）。手元なら local */
+  env: string;
+  /** デプロイ元のコミット（短縮）。手元なら空 */
+  commit: string;
+  keys: { GEMINI_API_KEY: boolean; GROQ_API_KEY: boolean; LLM_API_KEY: boolean };
+  providers: string[];
+}
+
+export function aiSetup(env: Record<string, string | undefined> = process.env): AiSetup {
+  return {
+    env: env.VERCEL_ENV ?? "local",
+    commit: (env.VERCEL_GIT_COMMIT_SHA ?? "").slice(0, 7),
+    keys: { GEMINI_API_KEY: !!env.GEMINI_API_KEY, GROQ_API_KEY: !!env.GROQ_API_KEY, LLM_API_KEY: !!env.LLM_API_KEY },
+    providers: providersFromEnv(env).map((p) => p.name),
+  };
+}
+
 export interface Turn {
   user: string;
   /** そのときの取り出し結果（JSON） */
