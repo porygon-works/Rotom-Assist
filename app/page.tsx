@@ -290,6 +290,7 @@ export default function Home() {
   const mic = { ...mic0, start: () => (stopSoundForMic(), mic0.start()) };
   // 画面を開いたときの確認（音が出ること・マナーモードの解除）。押すと合図の音を鳴らす（ブラウザは操作の後でないと音を出せない）
   const [ready, setReady] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
   // マイクが聞き始めたら振動で合図（音は鳴らさない: スマホでは音の再生が音声認識とぶつかり、聞き取りが止まるため）
   useEffect(() => {
     if (mic.state === "listening") navigator.vibrate?.(40);
@@ -317,7 +318,7 @@ export default function Home() {
   }, [mic]);
 
   const listening = mic.state === "listening";
-  const label = busy ? "考え中ロト…" : listening ? (tapMode ? "聞いてるロト（タップで送る）" : "聞いてるロト（離すと送る）") : tapMode ? "タップして話す" : "押して話す";
+  const label = busy ? "考え中…" : listening ? (tapMode ? "タップで送る" : "離すと送る") : tapMode ? "タップして話す" : "押して話す";
 
   const buttonHandlers = tapMode
     ? { onClick: () => (listening ? mic.stop() : mic.start()) }
@@ -335,141 +336,200 @@ export default function Home() {
 
   if (!ready)
     return (
-      <main>
-        <h1>ロトムアシスト</h1>
-        <RotomFace speaking={false} />
-        <section className="card start" aria-label="はじめに">
-          <p className="speech">このアプリは音が出ます</p>
-          <p>答えの前に合図の音が鳴り、答えを読み上げます。いまボタンを押すと、確認の音が鳴ります。</p>
-          <p>
-            <strong>マナーモード（消音）を解除して、音量を上げてください。</strong>
-          </p>
-          <button
-            type="button"
-            className="start-btn"
-            onClick={() => {
-              unlockSound();
-              setReady(true);
-            }}
-          >
-            音を鳴らしてはじめる
-          </button>
-          <p className="small">音が聞こえなければ、マナーモードと音量を確かめてください。</p>
-          <button
-            type="button"
-            className="ghost"
-            onClick={() => {
-              setMute(true);
-              setReady(true);
-            }}
-          >
-            音なしで使う
-          </button>
-        </section>
-      </main>
+      <div className="app">
+        <Header />
+        <main>
+          <section className="hero">
+            <RotomFace speaking={false} />
+          </section>
+          <section className="card start" aria-label="はじめに">
+            <p className="speech">このアプリは音が出ます</p>
+            <p>答えを読み上げます。いまボタンを押すと、確認の音が鳴ります。</p>
+            <p>
+              <strong>マナーモード（消音）を解除して、音量を上げてください。</strong>
+            </p>
+            <button
+              type="button"
+              className="start-btn"
+              onClick={() => {
+                unlockSound();
+                setReady(true);
+              }}
+            >
+              音を鳴らしてはじめる
+            </button>
+            <p className="small">音が聞こえなければ、マナーモードと音量を確かめてください。</p>
+            <button
+              type="button"
+              className="ghost"
+              onClick={() => {
+                setMute(true);
+                setReady(true);
+              }}
+            >
+              音なしで使う
+            </button>
+          </section>
+        </main>
+      </div>
     );
 
+  // 顔の下に出す今の状態
+  const status = busy ? "考え中ロト…" : listening ? mic.interim || "聞いてるロト…" : shown ? "" : tapMode ? "下のボタンをタップして話してロト" : "下のボタンを押しながら話してロト";
+
   return (
-    <main>
-      <h1>ロトムアシスト</h1>
-      <RotomFace speaking={speaking} />
-      <p className="hint">ボタンを押しながら話してください（PC はスペースキー）。例:「HB振りエンペルトにA特化ガブのじしん」「最速ドラパルト抜ける？」</p>
+    <div className="app">
+      <Header onSettings={() => setSettingsOpen((v) => !v)} settingsOpen={settingsOpen} />
 
-      {mic.state === "unsupported" && <p className="err">このブラウザは音声認識に対応していません。Chrome / Edge / Safari で開くか、下の文字入力を使ってください。</p>}
-      {mic.error && <p className="err" role="alert">{mic.error}</p>}
+      {settingsOpen && (
+        <section className="sheet" aria-label="設定">
+          <label className="row"><span>タップで開始／終了</span><input type="checkbox" checked={tapMode} onChange={(e) => setTapMode(e.target.checked)} /></label>
+          <label className="row"><span>短く読む</span><input type="checkbox" checked={brief} onChange={(e) => setBrief(e.target.checked)} /></label>
+          <label className="row"><span>読み上げない</span><input type="checkbox" checked={mute} onChange={(e) => setMute(e.target.checked)} /></label>
+          <label className="row"><span>答えの前の合図</span><input type="checkbox" checked={chimeOn} onChange={(e) => setChimeOn(e.target.checked)} /></label>
+          <label className="row">
+            <span>声</span>
+            <select value={voice} onChange={(e) => setVoice(e.target.value as Voice)}>
+              <option value="browser">ブラウザ（速い）</option>
+              <option value="gemini">Gemini（自然・約2秒遅い）</option>
+            </select>
+          </label>
+          <p className="small">PC はスペースキーを押している間だけ聞き取ります。</p>
+        </section>
+      )}
 
-      <div className="talk">
-        <button className={`talk-btn ${listening ? "on" : ""}`} disabled={busy || mic.state === "unsupported"} aria-pressed={listening} {...buttonHandlers}>
-          {label}
-        </button>
-        <p className="interim" aria-live="polite">{listening ? mic.interim || "…" : ""}</p>
-      </div>
+      <main>
+        <section className="hero">
+          <RotomFace speaking={speaking} />
+          <p className={`status ${listening ? "on" : ""}`} aria-live="polite">{status}</p>
+          {!shown && <p className="hint">例:「HB振りエンペルトにA特化ガブのじしん」「最速ドラパルト抜ける？」</p>}
+        </section>
 
-      {shown && (
-        <section className="card" aria-label="結果">
-          <p className="small">聞き取り: 「{shown.question}」</p>
-          <h2>{shown.title}</h2>
-          {/* ダメ計は結論だけを大きく出す（場合分け・前提はカードに出る。全文は読み上げる） */}
-          <p className="speech" data-testid="speech">{shown.card ? (shown.short ?? shown.speech) : shown.speech}</p>
-          <p className="small">
-            {shown.diagnostics?.provider === "rules" ? "ルールで即答" : shown.diagnostics?.provider ? `AI（${shown.diagnostics.provider}）` : ""} {Math.round(shown.ms)} ms
-          </p>
-          {shown.card && <CardView card={shown.card} />}
-          {shown.lines.length > 0 && (
-            <div className="lines">
-              {shown.lines.map((l, i) => (
-                <p key={i}>{l}</p>
-              ))}
+        {mic.state === "unsupported" && <p className="err">このブラウザは音声認識に対応していません。Chrome / Edge / Safari で開くか、下の文字入力を使ってください。</p>}
+        {mic.error && <p className="err" role="alert">{mic.error}</p>}
+
+        {shown && (
+          <section className="card result" aria-label="結果">
+            <div className="result-head">
+              <p className="small">「{shown.question}」</p>
+              <button type="button" className="chip" onClick={() => void announce(brief ? (shown.short ?? shown.speech) : shown.speech, voice, false)} aria-label="もう一度読む">
+                もう一度読む
+              </button>
             </div>
-          )}
-          <details>
-            <summary className="small">診断</summary>
-            <ul className="small lines">
-              <li>全体 {Math.round(shown.ms)} ms（サーバ {shown.diagnostics?.totalMs ?? "-"} ms）</li>
-              <li>AI: {shown.diagnostics?.provider ?? "なし"}</li>
-              {shown.diagnostics?.setup && (
-                <li>
-                  環境 {shown.diagnostics.setup.env}
-                  {shown.diagnostics.setup.commit && `（${shown.diagnostics.setup.commit}）`} / キー: GEMINI {shown.diagnostics.setup.keys.GEMINI_API_KEY ? "あり" : "なし"}・GROQ{" "}
-                  {shown.diagnostics.setup.keys.GROQ_API_KEY ? "あり" : "なし"} / 記録(ask_log) {shown.diagnostics.setup.log ? "あり" : "なし"}
-                </li>
-              )}
-              {shown.diagnostics?.attempts.map((a, i) => (
+            <h2>{shown.title}</h2>
+            {/* ダメ計は結論だけを大きく出す（場合分け・前提はカードに出る。全文は読み上げる） */}
+            <p className="speech" data-testid="speech">{shown.card ? (shown.short ?? shown.speech) : shown.speech}</p>
+            {shown.card && <CardView card={shown.card} />}
+            {shown.lines.length > 0 && (
+              <div className="lines">
+                {shown.lines.map((l, i) => (
+                  <p key={i}>{l}</p>
+                ))}
+              </div>
+            )}
+            <details>
+              <summary className="small">
+                診断（{shown.diagnostics?.provider === "rules" ? "ルールで即答" : shown.diagnostics?.provider ? `AI: ${shown.diagnostics.provider}` : "AI なし"}・{Math.round(shown.ms)} ms）
+              </summary>
+              <ul className="small lines">
+                <li>全体 {Math.round(shown.ms)} ms（サーバ {shown.diagnostics?.totalMs ?? "-"} ms）</li>
+                {shown.diagnostics?.setup && (
+                  <li>
+                    環境 {shown.diagnostics.setup.env}
+                    {shown.diagnostics.setup.commit && `（${shown.diagnostics.setup.commit}）`} / キー: GEMINI {shown.diagnostics.setup.keys.GEMINI_API_KEY ? "あり" : "なし"}・GROQ{" "}
+                    {shown.diagnostics.setup.keys.GROQ_API_KEY ? "あり" : "なし"} / 記録(ask_log) {shown.diagnostics.setup.log ? "あり" : "なし"}
+                  </li>
+                )}
+                {shown.diagnostics?.attempts.map((a, i) => (
+                  <li key={i}>
+                    {a.provider}: {a.ok ? "成功" : `失敗（${a.error}）`} {a.ms} ms
+                  </li>
+                ))}
+                {shown.desc && <li>計算: <code>{shown.desc}</code></li>}
+                <li>解釈: <code>{JSON.stringify(shown.extraction)}</code></li>
+              </ul>
+            </details>
+          </section>
+        )}
+
+        {log.length > 0 && (
+          <section className="history-wrap" aria-label="さっきの質問">
+            <h2 className="label">さっきの質問</h2>
+            <ul className="history">
+              {log.map((h, i) => (
                 <li key={i}>
-                  {a.provider}: {a.ok ? "成功" : `失敗（${a.error}）`} {a.ms} ms
+                  <span className="q">「{h.question}」</span>
+                  <span className="a">{h.card ? (h.short ?? h.speech) : h.speech}</span>
                 </li>
               ))}
-              {shown.desc && <li>計算: <code>{shown.desc}</code></li>}
-              <li>解釈: <code>{JSON.stringify(shown.extraction)}</code></li>
             </ul>
-          </details>
-        </section>
-      )}
+          </section>
+        )}
 
-      {log.length > 0 && (
-        <section aria-label="さっきの質問">
-          <h2 className="small">さっきの質問</h2>
-          <ul className="history">
-            {log.map((h, i) => (
-              <li key={i} className="small">
-                「{h.question}」→ {h.speech}
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
+        <p className="foot">
+          ポケモンチャンピオンズ（Lv50・SP）の仕様で、@smogon/calc を使って計算しています。振り方を言わなければ、攻撃側は使う能力に全振り（補正ありの場合も出す）、防御側は無振り（耐久に振った場合も出す）で計算します。日本語名: PokeAPI。
+        </p>
+      </main>
 
-      <form
-        className="bar"
-        onSubmit={(e) => {
-          e.preventDefault();
-          send(text);
-          setText("");
-        }}
-      >
-        <input value={text} onChange={(e) => setText(e.target.value)} placeholder="文字で聞く（例: ガブにミミッキュのじゃれつく）" aria-label="質問" maxLength={200} />
-        <button type="submit" disabled={busy || !text.trim()}>送る</button>
-      </form>
-
-      <div className="bar small">
-        <label><input type="checkbox" checked={tapMode} onChange={(e) => setTapMode(e.target.checked)} /> タップで開始／終了</label>
-        <label><input type="checkbox" checked={brief} onChange={(e) => setBrief(e.target.checked)} /> 短く読む</label>
-        <label><input type="checkbox" checked={mute} onChange={(e) => setMute(e.target.checked)} /> 読み上げない</label>
-        <label><input type="checkbox" checked={chimeOn} onChange={(e) => setChimeOn(e.target.checked)} /> 答えの前の合図</label>
-        <label>
-          声{" "}
-          <select value={voice} onChange={(e) => setVoice(e.target.value as Voice)}>
-            <option value="browser">ブラウザ（速い）</option>
-            <option value="gemini">Gemini（自然・約2秒遅い）</option>
-          </select>
-        </label>
-        {shown && <button type="button" className="ghost" onClick={() => void announce(brief ? (shown.short ?? shown.speech) : shown.speech, voice, false)}>もう一度読む</button>}
+      {/* 下に固定: 親指で押しやすい「押して話す」と文字入力 */}
+      <div className="dock">
+        <button className={`talk-btn ${listening ? "on" : ""}`} disabled={busy || mic.state === "unsupported"} aria-pressed={listening} {...buttonHandlers}>
+          <MicIcon />
+          <span>{label}</span>
+        </button>
+        <form
+          className="compose"
+          onSubmit={(e) => {
+            e.preventDefault();
+            send(text);
+            setText("");
+          }}
+        >
+          <input value={text} onChange={(e) => setText(e.target.value)} placeholder="文字で聞く（例: ガブにミミッキュのじゃれつく）" aria-label="質問" maxLength={200} />
+          <button type="submit" disabled={busy || !text.trim()} aria-label="送る">
+            送る
+          </button>
+        </form>
       </div>
+    </div>
+  );
+}
 
-      <p className="small">
-        ポケモンチャンピオンズ（Lv50・SP）の仕様で、@smogon/calc を使って計算しています。振り方を言わなければ、攻撃側は使う能力に全振り（補正ありの場合も出す）、防御側は無振り（耐久に振った場合も出す）で計算します。日本語名: PokeAPI。
-      </p>
-    </main>
+/** 上のバー: 左にロゴ、右に設定 */
+function Header({ onSettings, settingsOpen }: { onSettings?: () => void; settingsOpen?: boolean }) {
+  return (
+    <header className="topbar">
+      <Logo />
+      {onSettings && (
+        <button type="button" className="icon-btn" onClick={onSettings} aria-label="設定" aria-expanded={settingsOpen}>
+          <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0" />
+            <circle cx="16" cy="6" r="2" />
+            <circle cx="10" cy="12" r="2" />
+            <circle cx="18" cy="18" r="2" />
+          </svg>
+        </button>
+      )}
+    </header>
+  );
+}
+
+/** ロゴ（public/brand/logo.webp）。「Rotom」がオレンジなので、背景のオレンジに溶けないよう黒い帯に載せる */
+function Logo() {
+  return (
+    <span className="logo-wrap">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src="/brand/logo.webp" alt="ロトムアシスト" className="logo" width={915} height={120} />
+    </span>
+  );
+}
+
+function MicIcon() {
+  return (
+    <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="9" y="3" width="6" height="11" rx="3" />
+      <path d="M5 11a7 7 0 0 0 14 0M12 18v3" />
+    </svg>
   );
 }
 
