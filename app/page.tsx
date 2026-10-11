@@ -50,7 +50,6 @@ function deviceId(): string {
 }
 
 function speak(text: string) {
-  chimeEl?.pause(); // 合図の音が鳴っていたら止めて、読み上げと重ねない
   const s = window.speechSynthesis;
   if (!s) return;
   s.cancel();
@@ -60,14 +59,19 @@ function speak(text: string) {
   s.speak(u);
 }
 
-/** 合図の音（public/sounds/rotom.mp3、約 1.7 秒）。画面を開いたとき・質問を受け付けたとき（声・文字）に鳴らす。
- *  マイクが聞き始めたときは鳴らさない（スマホでは音声認識とぶつかって聞き取りが止まる）。答えのときも鳴らさない */
-let chimeEl: HTMLAudioElement | null = null;
-function chime() {
+/** 合図の音（public/sounds/rotom.mp3、約 1.7 秒）。画面を開いたときの確認で 1 回だけ鳴らす。
+ *  音声認識の前後では鳴らさない（スマホでは音の再生が音声認識とぶつかり、聞き取りが途中で止まる・次から聞かなくなる）。
+ *  鳴り終わったら片付けて、音の再生の状態をその後の音声認識に残さない */
+function startChime() {
   try {
-    chimeEl ??= new Audio("/sounds/rotom.mp3");
-    chimeEl.currentTime = 0;
-    void chimeEl.play().catch(() => {});
+    const a = new Audio("/sounds/rotom.mp3");
+    const done = () => {
+      a.pause();
+      a.removeAttribute("src");
+      a.load();
+    };
+    a.addEventListener("ended", done, { once: true });
+    void a.play().catch(done);
   } catch {
     /* 音が出せない環境では鳴らさない */
   }
@@ -87,8 +91,6 @@ export default function Home() {
   const send = useCallback(
     async (q: string) => {
       if (!q.trim()) return;
-      // 質問を受け付けた合図（声のときは聞き取りが終わった後なので、音声認識とはぶつからない）
-      if (!mute) chime();
       setBusy(true);
       const t0 = performance.now();
       try {
@@ -171,7 +173,7 @@ export default function Home() {
         <h1>ロトムアシスト</h1>
         <section className="card start" aria-label="はじめに">
           <p className="speech">このアプリは音が出ます</p>
-          <p>答えを読み上げるほか、質問を受け付けたときに合図の音が鳴ります。</p>
+          <p>答えを読み上げます。いまボタンを押すと、確認の音が鳴ります。</p>
           <p>
             <strong>マナーモード（消音）を解除して、音量を上げてください。</strong>
           </p>
@@ -179,7 +181,7 @@ export default function Home() {
             type="button"
             className="start-btn"
             onClick={() => {
-              chime();
+              startChime();
               setReady(true);
             }}
           >
@@ -283,7 +285,7 @@ export default function Home() {
       <div className="bar small">
         <label><input type="checkbox" checked={tapMode} onChange={(e) => setTapMode(e.target.checked)} /> タップで開始／終了</label>
         <label><input type="checkbox" checked={brief} onChange={(e) => setBrief(e.target.checked)} /> 短く読む</label>
-        <label><input type="checkbox" checked={mute} onChange={(e) => setMute(e.target.checked)} /> 音を出さない（読み上げ・合図）</label>
+        <label><input type="checkbox" checked={mute} onChange={(e) => setMute(e.target.checked)} /> 読み上げない</label>
         {shown && <button type="button" className="ghost" onClick={() => speak(brief ? (shown.short ?? shown.speech) : shown.speech)}>もう一度読む</button>}
       </div>
 
