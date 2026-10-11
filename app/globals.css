@@ -1,15 +1,16 @@
-:root { --bg:#fff; --fg:#1b1b1f; --muted:#666; --card:#f4f5f7; --accent:#2f6fed; --warn:#b3261e; --atk:#c2410c; --def:#1d4ed8; }
-@media (prefers-color-scheme: dark) { :root { --bg:#141416; --fg:#ececf0; --muted:#9a9aa3; --card:#1f2023; --accent:#7aa2ff; --warn:#ff8a80; --atk:#fb923c; --def:#7aa2ff; } }
+/* ベースの色 #ff7a00。オレンジの上の文字は暗い色（白だと読みにくい）、白地の上でオレンジの文字を使うときは濃いめ（--accent-text） */
+:root { --bg:#fff; --fg:#1b1b1f; --muted:#666; --card:#f4f5f7; --accent:#ff7a00; --on-accent:#1b1b1f; --accent-text:#b45300; --warn:#b3261e; --atk:#d62828; --def:#1d4ed8; }
+@media (prefers-color-scheme: dark) { :root { --bg:#141416; --fg:#ececf0; --muted:#9a9aa3; --card:#1f2023; --accent:#ff7a00; --on-accent:#1b1b1f; --accent-text:#ff7a00; --warn:#ff8a80; --atk:#ff6b6b; --def:#7aa2ff; } }
 * { box-sizing: border-box; }
 body { margin:0; background:var(--bg); color:var(--fg); font:16px/1.6 system-ui, "Hiragino Sans", "Noto Sans JP", sans-serif; }
 main { max-width: 720px; margin: 0 auto; padding: 16px; }
 h1 { font-size: 1.4rem; margin: .4em 0; } h2 { font-size: 1.05rem; margin: 1em 0 .4em; }
 .hint, .small { color: var(--muted); font-size: .9rem; }
 .bar { display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin:12px 0; }
-button { font:inherit; padding:8px 20px; border-radius:8px; border:1px solid var(--accent); background:var(--accent); color:#fff; cursor:pointer; }
+button { font:inherit; padding:8px 20px; border-radius:8px; border:1px solid var(--accent); background:var(--accent); color:var(--on-accent); cursor:pointer; }
 button:disabled { opacity:.4; cursor:default; }
 .badge { padding:4px 12px; border-radius:999px; background:var(--card); font-weight:600; }
-.badge.question, .badge.hearing { background:var(--accent); color:#fff; } .badge.calculating { outline:2px solid var(--accent); }
+.badge.question, .badge.hearing { background:var(--accent); color:var(--on-accent); } .badge.calculating { outline:2px solid var(--accent); }
 .card { background:var(--card); border-radius:12px; padding:4px 16px 12px; }
 dt { color:var(--muted); font-size:.85rem; margin-top:.6em; } dd { margin:0; } dd ul { margin:0; padding-left:1.2em; }
 .err { color:var(--warn); }
@@ -17,13 +18,13 @@ dt { color:var(--muted); font-size:.85rem; margin-top:.6em; } dd { margin:0; } d
 .note { color:var(--muted); }
 .talk { display:flex; flex-direction:column; align-items:center; margin:12px 0 8px; }
 .talk-btn { width:min(56vw, 220px); height:min(56vw, 220px); border-radius:50%; font-size:1.3rem; font-weight:700; touch-action:none; user-select:none; -webkit-user-select:none; -webkit-touch-callout:none; }
-.talk-btn.on { background:var(--warn); border-color:var(--warn); }
+.talk-btn.on { background:#b3261e; border-color:#b3261e; color:#fff; }
 .interim { min-height:1.6em; color:var(--muted); margin:8px 0 0; text-align:center; }
 .speech { font-size:1.15rem; font-weight:600; }
 .lines { margin:.4em 0; } .lines p { margin:.2em 0; font-size:.92rem; }
 /* ダメ計の計算条件カード */
 .dcard { margin:.6em 0; }
-.dresult { margin:.2em 0 0; font-size:1.1rem; } .drange { margin:0 0 .6em; } .dresult .ko { font-weight:700; color:var(--accent); margin-left:.4em; }
+.dresult { margin:.2em 0 0; font-size:1.1rem; } .drange { margin:0 0 .6em; } .dresult .ko { font-weight:700; color:var(--accent-text); margin-left:.4em; }
 .sides { display:grid; grid-template-columns:1fr auto 1fr; gap:8px; align-items:stretch; }
 .sides .arrow { align-self:center; color:var(--muted); }
 .side { background:var(--bg); border-radius:10px; padding:8px 10px; border-top:4px solid var(--atk); }
@@ -38,7 +39,7 @@ dt { color:var(--muted); font-size:.85rem; margin-top:.6em; } dd { margin:0; } d
 .drow { display:grid; grid-template-columns:7.5em 1fr; gap:4px 8px; margin-top:8px; font-size:.92rem; } .drow dd { margin:0; }
 @media (max-width: 520px) { .sides { grid-template-columns:1fr; } .sides .arrow { justify-self:center; transform:rotate(90deg); } }
 .bar input[type="text"], .bar input:not([type]) { flex:1; min-width:0; font:inherit; padding:8px 12px; border-radius:8px; border:1px solid var(--muted); background:var(--bg); color:var(--fg); }
-button.ghost { background:transparent; color:var(--accent); padding:4px 12px; }
+button.ghost { background:transparent; color:var(--accent-text); padding:4px 12px; }
 code { font-size:.8rem; word-break:break-all; }
 .start { text-align:center; padding:16px; } .start p { margin:.6em 0; }
 .start-btn { font-size:1.15rem; font-weight:700; padding:14px 28px; margin:8px 0; border-radius:999px; }

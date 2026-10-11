@@ -59,6 +59,22 @@ function speak(text: string) {
   s.speak(u);
 }
 
+// ---- 経過の記録（聞き取りが止まる原因を調べる用。roas.history に kind=event で送る。失敗しても何もしない）----
+const pageT0 = typeof performance !== "undefined" ? performance.now() : 0;
+function logEvent(name: string, detail = "") {
+  try {
+    const note = `${Math.round(performance.now() - pageT0)}ms ${detail}`.trim();
+    void fetch("/api/history", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ device_id: deviceId(), kind: "event", text: name, note }),
+      keepalive: true,
+    }).catch(() => {});
+  } catch {
+    /* 記録できなくてもアプリは動かす */
+  }
+}
+
 // ---- 音（合図の音・Gemini の声）----
 // 合図の音（public/sounds/rotom.mp3、約 1.7 秒）は「画面を開いたとき」と「答えの準備ができて読み上げる前」に鳴らす。
 // **音声認識の前後（聞き始め・聞き取り直後）では鳴らさない**: スマホでは音の再生が音声認識とぶつかり、聞き取りが止まる。
@@ -121,8 +137,12 @@ async function announce(text: string, voice: Voice, chime: boolean) {
   stopSound();
   const my = seq;
   const audio = voice === "gemini" ? fetchVoice(text) : null;
-  if (chime) await playUrl(CHIME);
+  if (chime) {
+    logEvent("sound-chime");
+    await playUrl(CHIME);
+  }
   const url = audio ? await audio : null;
+  if (voice === "gemini") logEvent(url ? "sound-gemini" : "sound-gemini-failed");
   if (my !== seq) {
     if (url) URL.revokeObjectURL(url);
     return; // 途中でマイクを使った・次の答えが来た
@@ -134,6 +154,7 @@ async function announce(text: string, voice: Voice, chime: boolean) {
     return;
   }
   releaseAudio();
+  logEvent("speak");
   speak(text);
 }
 
@@ -159,10 +180,11 @@ export default function Home() {
   const [mute, setMute] = useState(false);
   const [voice, setVoiceState] = useState<Voice>("browser");
   // 合図の音（答えの前）。端末によって音声認識とぶつかる場合に切れるようにする
-  const [chimeOn, setChimeOnState] = useState(true);
+  // 初期値はオフ: 聞き取りが止まる原因を切り分ける間は、答えの前の音も鳴らさない（オンにすると鳴る）
+  const [chimeOn, setChimeOnState] = useState(false);
   useEffect(() => {
     try {
-      if (localStorage.getItem("rotom-chime") === "off") setChimeOnState(false);
+      if (localStorage.getItem("rotom-chime") === "on") setChimeOnState(true);
     } catch {
       /* 保存できない環境 */
     }
@@ -203,6 +225,8 @@ export default function Home() {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ text: q, history: last.current ? [last.current] : [], device_id: deviceId() }),
+          // 返事が来ないと「考え中」のままボタンが押せなくなるので、時間を区切る
+          signal: AbortSignal.timeout(25_000),
         });
         const r = (await res.json()) as AskResult;
         if (!res.ok) {
@@ -221,6 +245,7 @@ export default function Home() {
         if (!mute) void announce(brief ? (r.short ?? r.speech) : r.speech, voice, chimeOn);
       } catch {
         const msg = "通信に失敗したロト";
+        logEvent("ask-failed", q.slice(0, 40));
         setShown({ question: q, speech: msg, title: "エラー", lines: [], intent: "error", ms: performance.now() - t0 });
       } finally {
         setBusy(false);
@@ -229,7 +254,9 @@ export default function Home() {
     [mute, brief, voice, chimeOn],
   );
 
-  const mic0 = usePushToTalk(send);
+  const mic0 = usePushToTalk(send, logEvent);
+  // 開いたときの環境（端末・ブラウザ）を記録
+  useEffect(() => logEvent("page-load", navigator.userAgent), []);
   // マイクを使う前に、鳴っている合図・読み上げを止める
   const mic = { ...mic0, start: () => (stopSoundForMic(), mic0.start()) };
   // 画面を開いたときの確認（音が出ること・マナーモードの解除）。押すと合図の音を鳴らす（ブラウザは操作の後でないと音を出せない）
@@ -272,6 +299,8 @@ export default function Home() {
         },
         onPointerUp: () => mic.stop(),
         onPointerLeave: () => listening && mic.stop(),
+        // スクロールや長押しの判定などで、指が離れた知らせが来ないことがある
+        onPointerCancel: () => mic.stop(),
         onContextMenu: (e: React.MouseEvent) => e.preventDefault(),
       };
 

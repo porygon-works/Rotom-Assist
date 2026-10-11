@@ -43,6 +43,16 @@ async function fetchRows(after: number): Promise<Row[]> {
   }
 }
 
+async function fetchEvents(since: string): Promise<{ device_id: string; text: string; note: string; created_at: string }[]> {
+  const url = process.env.SUPABASE_URL?.replace(/\/$/, "");
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!url || !key) return [];
+  const q = `select=device_id,text,note,created_at&kind=eq.event&order=id.asc&limit=5000${since ? `&created_at=gt.${encodeURIComponent(since)}` : ""}`;
+  const res = await fetch(`${url}/rest/v1/history?${q}`, { headers: { apikey: key, Authorization: `Bearer ${key}`, "Accept-Profile": "roas" } });
+  if (!res.ok) return [];
+  return ((await res.json()) as { device_id: string; text: string; note: string; created_at: string }[]).filter((e) => !e.device_id.startsWith("debug-"));
+}
+
 /** 解釈を比べられる形に（名前は正式名に直す） */
 function key(o: Record<string, unknown> | null): string {
   if (!o) return "-";
@@ -112,6 +122,17 @@ else {
   const repeated = [...count].filter(([, n]) => n > 1).sort((a, b) => b[1] - a[1]);
   out.push(`## 6. 同じ質問の繰り返し（言い直し・聞き直しの目安）`, "", ...repeated.map(([q, n]) => `- 「${q}」 ${n} 回`), "");
 }
+// 7. 聞き取りの経過（画面が roas.history に kind=event で送る）。止まった・残っていた・エラーを数える
+const ev = await fetchEvents(state.reviewedAt);
+const bad = ev.filter((e) => /mic-error|mic-stale|mic-start-failed|ask-failed|sound-gemini-failed/.test(e.text) || (e.text === "mic-end" && e.note.includes("timeout")));
+const count = new Map<string, number>();
+for (const e of bad) {
+  const k = e.text === "mic-error" ? `mic-error ${e.note.split(" ").slice(-1)[0]}` : e.text === "mic-end" ? "mic-end timeout（終わりの知らせが来なかった）" : e.text;
+  count.set(k, (count.get(k) ?? 0) + 1);
+}
+out.push(`## 7. 聞き取りの経過（前回の見直し以降、${ev.length} 件）`, "", ...[...count].map(([k, n]) => `- ${k} … ${n} 回`), "");
+const uas = [...new Set(ev.filter((e) => e.text === "page-load").map((e) => e.note.replace(/^\d+ms /, "")))];
+if (uas.length) out.push("端末:", ...uas.map((u) => `- ${u}`), "");
 console.log(out.join("\n"));
 
 if (argv.includes("--mark") && all.length) {
