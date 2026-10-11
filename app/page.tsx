@@ -59,22 +59,87 @@ function speak(text: string) {
   s.speak(u);
 }
 
-/** 合図の音（public/sounds/rotom.mp3、約 1.7 秒）。画面を開いたときの確認で 1 回だけ鳴らす。
- *  音声認識の前後では鳴らさない（スマホでは音の再生が音声認識とぶつかり、聞き取りが途中で止まる・次から聞かなくなる）。
- *  鳴り終わったら片付けて、音の再生の状態をその後の音声認識に残さない */
-function startChime() {
-  try {
-    const a = new Audio("/sounds/rotom.mp3");
+// ---- 音（合図の音・Gemini の声）----
+// 合図の音（public/sounds/rotom.mp3、約 1.7 秒）は「画面を開いたとき」と「答えの準備ができて読み上げる前」に鳴らす。
+// **音声認識の前後（聞き始め・聞き取り直後）では鳴らさない**: スマホでは音の再生が音声認識とぶつかり、聞き取りが止まる。
+// 再生には 1 つの audio 要素を使い回す（スマホは操作の後でないと音を出せないので、最初の「はじめる」で鳴らして使える状態にする）。
+// 鳴らし終わったら中身を外し、マイクを使うときは止める
+const CHIME = "/sounds/rotom.mp3";
+export type Voice = "browser" | "gemini";
+let player: HTMLAudioElement | null = null;
+let seq = 0;
+
+function playUrl(url: string): Promise<void> {
+  const a = (player ??= new Audio());
+  return new Promise((resolve) => {
     const done = () => {
-      a.pause();
-      a.removeAttribute("src");
-      a.load();
+      a.removeEventListener("ended", done);
+      a.removeEventListener("error", done);
+      resolve();
     };
-    a.addEventListener("ended", done, { once: true });
+    a.addEventListener("ended", done);
+    a.addEventListener("error", done);
+    a.src = url;
     void a.play().catch(done);
+  });
+}
+
+function releaseAudio() {
+  if (!player) return;
+  player.pause();
+  player.removeAttribute("src");
+  player.load();
+}
+
+/** 読み上げ・合図を止める（マイクを使う前、次の答えの前） */
+function stopSound() {
+  seq++;
+  releaseAudio();
+  window.speechSynthesis?.cancel();
+}
+
+/** Gemini の声（/api/tts）。失敗したら null（ブラウザの読み上げに戻す） */
+async function fetchVoice(text: string): Promise<string | null> {
+  try {
+    const res = await fetch("/api/tts", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ text }) });
+    if (!res.ok) return null;
+    return URL.createObjectURL(await res.blob());
   } catch {
-    /* 音が出せない環境では鳴らさない */
+    return null;
   }
+}
+
+/** 答えを読み上げる。chime: 先に合図の音を鳴らす（その間に Gemini の声を用意する） */
+async function announce(text: string, voice: Voice, chime: boolean) {
+  stopSound();
+  const my = seq;
+  const audio = voice === "gemini" ? fetchVoice(text) : null;
+  if (chime) await playUrl(CHIME);
+  const url = audio ? await audio : null;
+  if (my !== seq) {
+    if (url) URL.revokeObjectURL(url);
+    return; // 途中でマイクを使った・次の答えが来た
+  }
+  if (url) {
+    await playUrl(url);
+    URL.revokeObjectURL(url);
+    releaseAudio();
+    return;
+  }
+  releaseAudio();
+  speak(text);
+}
+
+/** 最初の「はじめる」: 合図の音を鳴らし、ブラウザの読み上げも使える状態にする（スマホは最初の読み上げも操作の後でないと出ない） */
+function unlockSound() {
+  try {
+    const u = new SpeechSynthesisUtterance(" ");
+    u.volume = 0;
+    window.speechSynthesis?.speak(u);
+  } catch {
+    /* 読み上げがない環境 */
+  }
+  void playUrl(CHIME).then(releaseAudio);
 }
 
 export default function Home() {
@@ -85,6 +150,22 @@ export default function Home() {
   const [text, setText] = useState("");
   const [tapMode, setTapMode] = useState(false);
   const [mute, setMute] = useState(false);
+  const [voice, setVoiceState] = useState<Voice>("browser");
+  useEffect(() => {
+    try {
+      if (localStorage.getItem("rotom-voice") === "gemini") setVoiceState("gemini");
+    } catch {
+      /* 保存できない環境 */
+    }
+  }, []);
+  const setVoice = (v: Voice) => {
+    setVoiceState(v);
+    try {
+      localStorage.setItem("rotom-voice", v);
+    } catch {
+      /* 保存できない環境 */
+    }
+  };
   const [brief, setBrief] = useState(false);
   const last = useRef<{ user: string; extraction: unknown } | null>(null);
 
@@ -103,7 +184,7 @@ export default function Home() {
         if (!res.ok) {
           const msg = r.error ?? `エラー（${res.status}）`;
           setShown({ question: q, speech: msg, title: "エラー", lines: [], intent: "error", ms: performance.now() - t0 });
-          if (!mute) speak(msg);
+          if (!mute) void announce(msg, "browser", false);
           return;
         }
         if (r.extraction) last.current = { user: q, extraction: r.extraction };
@@ -112,7 +193,8 @@ export default function Home() {
         if (prev && prev.intent !== "error") setLog((l) => [prev, ...l].slice(0, 5));
         shownRef.current = item;
         setShown(item);
-        if (!mute) speak(brief ? (r.short ?? r.speech) : r.speech);
+        // 答えの準備ができたら合図の音 → 読み上げ（聞き取りはもう終わっているので音声認識とはぶつからない）
+        if (!mute) void announce(brief ? (r.short ?? r.speech) : r.speech, voice, true);
       } catch {
         const msg = "通信に失敗したロト";
         setShown({ question: q, speech: msg, title: "エラー", lines: [], intent: "error", ms: performance.now() - t0 });
@@ -120,10 +202,12 @@ export default function Home() {
         setBusy(false);
       }
     },
-    [mute, brief],
+    [mute, brief, voice],
   );
 
-  const mic = usePushToTalk(send);
+  const mic0 = usePushToTalk(send);
+  // マイクを使う前に、鳴っている合図・読み上げを止める
+  const mic = { ...mic0, start: () => (stopSound(), mic0.start()) };
   // 画面を開いたときの確認（音が出ること・マナーモードの解除）。押すと合図の音を鳴らす（ブラウザは操作の後でないと音を出せない）
   const [ready, setReady] = useState(false);
   // マイクが聞き始めたら振動で合図（音は鳴らさない: スマホでは音の再生が音声認識とぶつかり、聞き取りが止まるため）
@@ -173,7 +257,7 @@ export default function Home() {
         <h1>ロトムアシスト</h1>
         <section className="card start" aria-label="はじめに">
           <p className="speech">このアプリは音が出ます</p>
-          <p>答えを読み上げます。いまボタンを押すと、確認の音が鳴ります。</p>
+          <p>答えの前に合図の音が鳴り、答えを読み上げます。いまボタンを押すと、確認の音が鳴ります。</p>
           <p>
             <strong>マナーモード（消音）を解除して、音量を上げてください。</strong>
           </p>
@@ -181,7 +265,7 @@ export default function Home() {
             type="button"
             className="start-btn"
             onClick={() => {
-              startChime();
+              unlockSound();
               setReady(true);
             }}
           >
@@ -286,7 +370,14 @@ export default function Home() {
         <label><input type="checkbox" checked={tapMode} onChange={(e) => setTapMode(e.target.checked)} /> タップで開始／終了</label>
         <label><input type="checkbox" checked={brief} onChange={(e) => setBrief(e.target.checked)} /> 短く読む</label>
         <label><input type="checkbox" checked={mute} onChange={(e) => setMute(e.target.checked)} /> 読み上げない</label>
-        {shown && <button type="button" className="ghost" onClick={() => speak(brief ? (shown.short ?? shown.speech) : shown.speech)}>もう一度読む</button>}
+        <label>
+          声{" "}
+          <select value={voice} onChange={(e) => setVoice(e.target.value as Voice)}>
+            <option value="browser">ブラウザ（速い）</option>
+            <option value="gemini">Gemini（自然・約2秒遅い）</option>
+          </select>
+        </label>
+        {shown && <button type="button" className="ghost" onClick={() => void announce(brief ? (shown.short ?? shown.speech) : shown.speech, voice, false)}>もう一度読む</button>}
       </div>
 
       <p className="small">
