@@ -517,12 +517,12 @@ function Header({ onSettings, settingsOpen }: { onSettings?: () => void; setting
   );
 }
 
-/** ロゴ（public/brand/logo.webp）。「Rotom」がオレンジなので、背景のオレンジに溶けないよう黒い帯に載せる */
+/** ロゴ（public/brand/logo.webp。元画像は assets/brand/logo-original.png）。白と紺のふち付きなので、オレンジの背景にそのまま載せる */
 function Logo() {
   return (
     <span className="logo-wrap">
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src="/brand/logo.webp" alt="ロトムアシスト" className="logo" width={915} height={120} />
+      <img src="/brand/logo.webp" alt="ロトムアシスト" className="logo" width={831} height={120} />
     </span>
   );
 }
