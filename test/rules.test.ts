@@ -14,6 +14,9 @@ describe("ルール解析（確実に分かるときだけ答える）", () => {
   it("素早さ・タイプ・種族値・わざ", () => {
     expect(parseRules("準速ガブリアスと最速ドラパルトどっちが速い？")).toMatchObject({ intent: "speed", ask: "compare", conditions: { attacker: { sp: { spe: 32 } }, defender: { nature_up: "spe" } } });
     expect(parseRules("サーフゴーの弱点は？")).toMatchObject({ intent: "type", pokemon: "サーフゴー" });
+    // 「何が」付きの言い方と、音声認識の漢字（ask_log より）
+    expect(parseRules("サーフ号って何が弱点")).toMatchObject({ intent: "type", pokemon: "サーフゴー" });
+    expect(parseRules("ガブリアスって弱点なに？")).toMatchObject({ intent: "type", pokemon: "ガブリアス" });
     expect(parseRules("カイリューの種族値教えて")).toMatchObject({ intent: "stats" });
     expect(parseRules("じゃれつくって何タイプ？")).toMatchObject({ intent: "move_info", move: "じゃれつく" });
   });

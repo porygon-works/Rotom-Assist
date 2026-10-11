@@ -12,6 +12,8 @@ describe("名前の解決", () => {
     expect(resolve("pokemon", "garchomp")).toMatchObject({ ok: true, en: "Garchomp" });
     expect(resolve("pokemon", "ガブ")).toMatchObject({ ok: true, en: "Garchomp" });
     expect(resolve("pokemon", "水ロトム")).toMatchObject({ ok: true, en: "Rotom-Wash" });
+    // 音声認識が漢字にする（ask_log より）
+    expect(resolve("pokemon", "サーフ号")).toMatchObject({ ok: true, en: "Gholdengo" });
     expect(resolve("pokemon", "メガルカリオZ")).toMatchObject({ ok: true, en: "Lucario-Mega-Z" });
     expect(resolve("pokemon", "めがるかりおぜっと")).toMatchObject({ ok: true, en: "Lucario-Mega-Z" });
     expect(resolve("items", "スカーフ")).toMatchObject({ ok: true, en: "Choice Scarf" });
