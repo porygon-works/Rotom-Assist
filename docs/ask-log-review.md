@@ -7,6 +7,8 @@
 
 ## 0. 守ること
 
+- 定期の見直しが push するのは作業ブランチ `claude/optimistic-faraday-mt19f6`（Vercel のプレビュー）だけ。**本番の `main` には push しない**。本番へは、プレビューで動きを確かめてから人が決めて入れる（リリース）
+
 - 計算は必ず @smogon/calc。数値を手で直さない
 - ルールは「確実に分かるときだけ答える」。**即答で誤り 0 件**を崩す変更は入れない（迷ったら AI に回すままにする）
 - 名前の補正は AI にさせない（構成設計 A6）。聞き間違いは `data/aliases.json`・`data/readings.json`・`lib/resolve.ts` で直す

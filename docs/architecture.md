@@ -242,3 +242,8 @@
 
 - 名前データの作り方: `npx tsx scripts/build-names.ts <PokeAPI の CSV のフォルダ>`（10 章。`species.json` などに分けず、名前だけを `names.json` にまとめた。種族値・タイプ・わざの性能は計算ライブラリから読む）
 - 動作確認: `npx tsx eval/replay.ts`（保存済みの AI の出力をアプリの処理に流す。AI を呼ばない）
+
+## リリース（本番）
+- 本番は `main` ブランチ（Vercel の Production Branch）。作業は `claude/optimistic-faraday-mt19f6`（プレビュー）で行い、プレビューで確かめてから `main` に入れる
+- 定期の見直し（docs/ask-log-review.md）は作業ブランチにだけ push し、`main` には入れない
+- 本番の環境変数（Vercel の Production）: `GEMINI_API_KEY`、`GROQ_API_KEY`、`SUPABASE_URL`、`SUPABASE_SERVICE_ROLE_KEY`
