@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { dropUnmentioned } from "../lib/mention";
 import { answerExtraction } from "../lib/ask";
 import { damage, speedOf, speedThreshold, speedVariants } from "../lib/battle";
 import { aiSetup, extract, providersFromEnv, type Provider } from "../lib/llm";
@@ -217,5 +218,33 @@ describe("AI 取り出しの切り替え", () => {
     expect(aiSetup({}).log).toBe(false);
     expect(aiSetup({ SUPABASE_URL: "u" }).log).toBe(false);
     expect(aiSetup({ SUPABASE_URL: "u", SUPABASE_SERVICE_ROLE_KEY: "k" }).log).toBe(true);
+  });
+});
+
+describe("AI の取り出しの確かめ・進化形・イカサマ（ask_log #65・#77・#82・#89）", () => {
+  it("質問にないポケモンを AI が補ったり置き換えたりしたら、その名前は使わずに聞き返す", () => {
+    // 撃つ側を言っていないのに、受ける側の名前の一部（メガカイリュー の カイリュー）を撃つ側にした
+    expect(dropUnmentioned("メガカイリューにつらら落とし打ったらどれぐらい入る", { intent: "damage", attacker: "カイリュー", defender: "メガカイリュー", move: "つららおとし" })).toMatchObject({ intent: "clarify", missing: ["attacker"] });
+    // 「メガヴォクシー」をメガボーマンダに置き換えた
+    expect(dropUnmentioned("ドリューズの受信がメガヴォクシーにどれぐらい入る", { intent: "damage", attacker: "ドリュウズ", defender: "メガボーマンダ", move: "じしん" })).toMatchObject({ intent: "clarify", missing: ["defender"] });
+    // あだ名（ガム = ガブ）や聞き間違いは通す
+    expect(dropUnmentioned("HBエンペルトに特化ガムの受診", { intent: "damage", attacker: "ガブリアス", defender: "エンペルト", move: "じしん" }).intent).toBe("damage");
+  });
+  it("チャンピオンズにいない進化前の名前は、それを含む進化後のポケモンにする（ヒドイデ → ドヒドイデ）", () => {
+    expect(resolve("pokemon", "ヒドイデ")).toMatchObject({ ok: true, en: "Toxapex", fuzzy: true });
+    expect(resolve("pokemon", "ハバタクカミ")).toMatchObject({ ok: false, notInGame: "ハバタクカミ" });
+  });
+  it("イカサマは防御側の攻撃で計算する。攻撃側の振り方は関係なく、防御側が A 特化の場合も出す", () => {
+    const r = damage({ species: "Grimmsnarl" }, { species: "Toxapex" }, "Foul Play");
+    expect(r.attackerBoosted).toBeUndefined();
+    expect(r.defenderAttackMax!.max).toBeGreaterThan(r.base.max);
+    expect(r.assumed).toContain("防御側の攻撃は無振り");
+    expect(answerExtraction({ intent: "damage", attacker: "オーロンゲ", defender: "ドヒドイデ", move: "イカサマ" }).speech).toContain("イカサマは防御側の攻撃で計算したロト");
+  });
+  it("特性・まとめ・わざの相性に答える", () => {
+    expect(answerExtraction({ intent: "ability", pokemon: "ポワルン" }).speech).toBe("ポワルンの特性はてんきやロト");
+    expect(answerExtraction({ intent: "ability", ability: "へんげんじざい" }).speech).toContain("マスカーニャ");
+    expect(answerExtraction({ intent: "about", pokemon: "メガグソクムシャ" }).speech).toContain("むし・はがねタイプ");
+    expect(answerExtraction({ intent: "type", pokemon: "ガブリアス", move: "れいとうビーム" }).speech).toContain("4倍で効果抜群");
   });
 });

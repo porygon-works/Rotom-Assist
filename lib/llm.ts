@@ -90,9 +90,10 @@ export function parseJson(text: string): Record<string, unknown> | null {
 
 type Fetch = typeof fetch;
 
-/** 上限（429）を返した候補は、しばらく飛ばす（毎回断られてから切り替える無駄を省く） */
+/** 上限（429）を返した候補は、しばらく飛ばす（毎回断られてから切り替える無駄を省く）。
+ *  無料枠は 1 日の上限に当たることが多く、1 分では毎回断られていた（ask_log: gemini-3.5-flash-lite の 429 が 21 回）ので 10 分 */
 const cooldown = new Map<string, number>();
-const COOLDOWN_MS = 60_000;
+const COOLDOWN_MS = 10 * 60_000;
 
 /** 候補を順に試す。上限（429）・サーバの不調（5xx）・時間切れ・読めない返答なら次へ */
 export async function extract(

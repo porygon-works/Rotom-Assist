@@ -22,8 +22,8 @@ describe("ルール解析（確実に分かるときだけ答える）", () => {
     expect(def("HB特化C下降補正のサーフゴーにガブリアスのじしん")).toEqual({ sp: { hp: 32, def: 32 }, nature_up: "def", nature_down: "spa" });
     expect(parseRules("A↑C↓のガブリアスのじしんでサーフゴー何発")).toMatchObject({ conditions: { attacker: { nature_up: "atk", nature_down: "spa" } } });
     expect(parseRules("絵特化ガブリアスのじしんでサーフゴー何発")).toMatchObject({ conditions: { attacker: { sp: { atk: 32 }, nature_up: "atk" } } });
-    // 技の後ろの「を」と条件を、技の聞き間違いとして吸わない（条件を黙って捨てない）
-    expect(parseRules("ドラパルトのドラゴンアローをHBメガリザードンワイは買えますか")).toBeNull();
+    // 技の後ろの「を」と条件を、技の聞き間違いとして吸わない（条件を黙って捨てない）。「HB」+名前は HB 振り
+    expect(parseRules("ドラパルトのドラゴンアローをHBメガリザードンワイは買えますか")).toMatchObject({ defender: "メガリザードンY", conditions: { defender: { sp: { hp: 32, def: 32 } } } });
     // 名前の最後の「シ」は略号にしない
     expect(parseRules("カエンジシのかえんほうしゃでガブリアス何発")).toMatchObject({ attacker: "カエンジシ", conditions: {} });
   });

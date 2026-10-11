@@ -39,7 +39,7 @@ export type DamageQuestion = "survive" | "ko" | "plain";
 
 export function damageQuestionOf(text: string | undefined): DamageQuestion {
   if (!text) return "plain";
-  if (/耐え|たえ|残る|のこる/.test(text)) return "survive";
+  if (/耐え|たえ|残る|のこる|タイル/.test(text)) return "survive";
   if (/落ち|おち|落とせ|おとせ|倒せ|たおせ|倒れ|たおれ|確定|ワンパン|一撃/.test(text)) return "ko";
   return "plain";
 }
@@ -95,6 +95,7 @@ export function damageSpeech(n: DamageNames, d: DamageAnswer, notes: string[], o
   const caseText = (label: string, r: DamageResult) => `${label}${koSpeech(r.ko)}、${p(r.minPercent)}から${p(r.maxPercent)}パーセント`;
   if (d.attackerBoosted) cases.push(caseText("攻撃側が補正ありなら", d.attackerBoosted));
   if (d.defenderBulky) cases.push(caseText("防御側が耐久に振っていたら", d.defenderBulky));
+  if (d.defenderAttackMax) cases.push(caseText("防御側がA特化なら", d.defenderAttackMax));
   // 「耐える？」「落ちる？」の結論が場合分けで変わるときは言い添える
   let caveat = "";
   if (q !== "plain") {

@@ -1,12 +1,14 @@
 // 1 往復の処理（構成設計 4.2）: AI 取り出し → 名前の解決 → 計算 → 回答文
 // answerExtraction は通信をしないので、保存済みの AI の出力を流し込んで確かめられる（eval/replay.ts）
-import { abilityMatters, abilityOf, allTypes, damage, effectiveness, hasSpread, isNotableAbility, isNotCalculated, learns, moveInfo, speciesInfo, speedOf, speedThreshold, speedVariants, type FieldInput, type SideInput, type Stat } from "./battle";
+import { abilitiesOf, abilityMatters, abilityOf, allTypes, damage, effectiveness, hasSpread, isNotableAbility, isNotCalculated, learns, moveInfo, speciesInfo, speedOf, speedThreshold, speedVariants, type FieldInput, type SideInput, type Stat } from "./battle";
 import { CATEGORY_JA, clarifySpeech, damageQuestionOf, damageSpeech, koText } from "./answer";
 import { aiSetup, extract, type AiSetup, type Attempt, type Turn } from "./llm";
 import { resolve, resolveField, toJa, type NameKind } from "./resolve";
 import { parseFollowUp, parseRules } from "./rules";
 import aliases from "../data/aliases.json";
+import names from "../data/names.json";
 import { damageCard, fieldTexts, spreadText, type DamageCard } from "./card";
+import { dropUnmentioned } from "./mention";
 
 export interface AskResult {
   /** 読み上げる文 */
@@ -176,6 +178,12 @@ function answerDamage(ex: Obj, text?: string): AskResult {
   // 変化技（つるぎのまいなど）はダメージがない。「効かない」と言うとタイプで無効に聞こえるので、別に答える
   if (moveInfo(m.en).category === "Status") return fail("damage", `${m.ja}は変化技`, [`${m.ja}は変化技だから、ダメージはないロト`]);
   const as = side(a.en, obj(c.attacker), pr);
+  // 能力を言わない「特化」（ルールの attack_max）: 使うわざに合わせて攻撃か特攻の特化
+  if (obj(c.attacker).attack_max === true) {
+    const st: Stat = moveInfo(m.en).category === "Special" ? "spa" : "atk";
+    as.sp = { ...as.sp, [st]: 32 };
+    as.natureUp ??= st;
+  }
   const ds = side(d.en, obj(c.defender), pr);
   const f = fieldOf(obj(c.field));
   const result = damage(as, ds, m.en, f);
@@ -188,6 +196,7 @@ function answerDamage(ex: Obj, text?: string): AskResult {
     return `${ja}の${toJa("abilities", ab)}で${own}として計算したロト`;
   });
   pr.notes.push(...autoNotes);
+  if (m.en === "Foul Play") pr.notes.push("イカサマは防御側の攻撃で計算したロト");
   // 場でタイプ・威力が変わるわざ（だいちのはどう・ウェザーボール）は前提を言う
   const mi = moveInfo(m.en);
   if (result.base.moveType && (result.base.moveType !== mi.type || (result.base.moveBp ?? mi.bp) !== mi.bp)) {
@@ -334,6 +343,19 @@ function answerType(ex: Obj): AskResult {
   const info = speciesInfo(p.en);
   if (!info) return fail("type", p.ja, [`${p.ja}のデータが見つからないロト`]);
   const tj = (t: string) => toJa("types", t);
+  // わざも言われたら、そのわざのタイプとの相性だけを答える（「ハッサムにインファイトって効果抜群？」）
+  const mv = str(ex.move) ? pr.name("moves", str(ex.move)) : undefined;
+  if (mv) {
+    const mt = moveInfo(mv.en).type;
+    const x = effectiveness(mt, info.types);
+    const word = x === 0 ? "効かない" : x >= 4 ? "4倍で効果抜群" : x >= 2 ? "効果抜群" : x <= 0.25 ? "4分の1で効果いまひとつ" : x < 1 ? "効果いまひとつ" : "等倍";
+    return {
+      speech: `${mv.ja}は${tj(mt)}タイプだから、${info.types.map(tj).join("・")}タイプの${p.ja}には${word}ロト`,
+      title: `${mv.ja} → ${p.ja}の相性`,
+      lines: [`${tj(mt)} → ${info.types.map(tj).join("・")}: ×${x}`, "特性（ふゆう など）や場の効果は考えていない"],
+      intent: "type",
+    };
+  }
   const by = new Map<number, string[]>();
   for (const t of allTypes()) {
     const x = effectiveness(t, info.types);
@@ -351,6 +373,44 @@ function answerType(ex: Obj): AskResult {
   if (protean) lines.push(protean);
   const speech = `${pr.notes.length ? pr.notes.join("。") + "。" : ""}${p.ja}は${types}タイプ。弱点は${weak}ロト${immune.length ? `。${immune.join("と")}は効かないロト` : ""}${protean ? `。${protean}` : ""}`;
   return { speech, title: `${p.ja}のタイプ`, lines, intent: "type" };
+}
+
+/** 特性: ポケモンを言われたらその特性、特性だけを言われたらそれを持つポケモン（効果の説明はまだ持っていない） */
+function answerAbility(ex: Obj): AskResult {
+  const pr = new Problems();
+  const pname = str(ex.pokemon) ?? str(ex.attacker);
+  if (pname) {
+    const p = pr.name("pokemon", pname);
+    if (!p) return fail("ability", "名前の確認", pr.list);
+    const list = abilitiesOf(p.en).map((a) => toJa("abilities", a));
+    if (!list.length) return fail("ability", p.ja, [`${p.ja}の特性のデータが見つからないロト`]);
+    return { speech: `${p.ja}の特性は${list.join("、")}ロト`, title: `${p.ja}の特性`, lines: [`特性: ${list.join("・")}`], intent: "ability" };
+  }
+  const aname = str(ex.ability) ?? str(obj(obj(ex.conditions).pokemon).ability);
+  const ab = aname ? resolve("abilities", aname) : undefined;
+  if (!ab?.ok) return fail("clarify", "聞き返し", ["どのポケモンの特性ロト？"]);
+  const holders = Object.keys(names.pokemon as Record<string, string>).filter((ja) => abilitiesOf((names.pokemon as Record<string, string>)[ja]).includes(ab.en));
+  const who = holders.length ? `${ab.ja}を持つのは${holders.slice(0, 6).join("、")}${holders.length > 6 ? `など${holders.length}匹` : ""}ロト` : `${ab.ja}を持つポケモンはチャンピオンズにいないロト`;
+  return { speech: `${who}。特性の効果の説明はまだ勉強中ロト`, title: ab.ja, lines: holders.length ? [`持つポケモン: ${holders.join("・")}`] : [], intent: "ability" };
+}
+
+/** 「〇〇のこと教えて」: タイプ・種族値・特性をまとめて */
+function answerAbout(ex: Obj): AskResult {
+  const pr = new Problems();
+  const p = pr.name("pokemon", str(ex.pokemon) ?? str(ex.attacker));
+  if (!p) return fail("about", "名前の確認", pr.list.length ? pr.list : ["どのポケモンのことロト？"]);
+  const info = speciesInfo(p.en)!;
+  const b = info.baseStats;
+  const total = Object.values(b).reduce((x, y) => x + y, 0);
+  const types = info.types.map((t) => toJa("types", t)).join("・");
+  const abil = abilitiesOf(p.en).map((a) => toJa("abilities", a));
+  const t = `H${b.hp} A${b.atk} B${b.def} C${b.spa} D${b.spd} S${b.spe}`;
+  return {
+    speech: `${p.ja}は${types}タイプ。種族値は${t.replace(/ /g, "、")}、合計${total}。特性は${abil.join("、") || "分からない"}ロト`,
+    title: p.ja,
+    lines: [`タイプ: ${types}`, `種族値: ${t}（合計 ${total}）`, `特性: ${abil.join("・")}`],
+    intent: "about",
+  };
 }
 
 function answerStats(ex: Obj): AskResult {
@@ -429,6 +489,10 @@ export function answerExtraction(ex: Obj, text?: string): AskResult {
         return answerType(ex);
       case "stats":
         return answerStats(ex);
+      case "ability":
+        return answerAbility(ex);
+      case "about":
+        return answerAbout(ex);
       case "move_info":
         return answerMove(ex);
       case "learnset":
@@ -510,8 +574,10 @@ export async function ask(text: string, opts: { history?: Turn[]; useRules?: boo
       diagnostics: { attempts: r.attempts, totalMs: Date.now() - t0, setup },
     };
   }
-  const out = answerExtraction(r.extraction, text);
-  return { ...out, extraction: r.extraction, diagnostics: { provider: r.provider, attempts: r.attempts, totalMs: Date.now() - t0, setup: aiSetup() } };
+  // AI が質問にないポケモンを補ったり置き換えたりしていたら、その名前は使わずに聞き返す
+  const checked = dropUnmentioned(text, r.extraction);
+  const out = answerExtraction(checked, text);
+  return { ...out, extraction: checked, diagnostics: { provider: r.provider, attempts: r.attempts, totalMs: Date.now() - t0, setup: aiSetup() } };
 }
 
 export { koText };

@@ -132,6 +132,20 @@ const tolerance = (len: number) => (len <= 3 ? 0 : len <= 5 ? 1 : 2);
 /** 読み（ローマ字）で許す違いの文字数。ローマ字はカタカナの約 2 倍の長さ */
 const readingTolerance = (len: number) => (len <= 4 ? 0 : len <= 9 ? 1 : 2);
 
+/**
+ * チャンピオンズにいない名前を、その名前を含むチャンピオンズのポケモンに置き換える（ヒドイデ → ドヒドイデ、リザード → リザードン）。
+ * メガシンカを除いて 1 つに決まるときだけ。言い間違い・聞き間違いで進化前の名前になることが多いため
+ */
+function evolvedInGame(kind: NameKind, ix: Index, ja: string, heard: string): Resolved | undefined {
+  if (kind !== "pokemon") return undefined;
+  const n = normalize(ja);
+  const found = new Map<string, string>();
+  for (const [norm, en, name] of ix.fuzzy) if (en && norm !== n && norm.includes(n) && !norm.startsWith("メガ")) found.set(en, name);
+  if (found.size !== 1) return undefined;
+  const [[en, name]] = [...found];
+  return { ok: true, en, ja: name, fuzzy: true, heard, dist: 1 };
+}
+
 export function resolve(kind: NameKind, heard: string): Resolved {
   const key = normalize(heard);
   if (!key) return { ok: false, heard, candidates: [] };
@@ -139,7 +153,7 @@ export function resolve(kind: NameKind, heard: string): Resolved {
   const hit = ix.exact.get(key);
   if (hit) return { ok: true, en: hit[0], ja: hit[1], fuzzy: false, heard };
   const other = ix.others.get(key);
-  if (other) return { ok: false, heard, candidates: [], notInGame: other };
+  if (other) return evolvedInGame(kind, ix, other, heard) ?? { ok: false, heard, candidates: [], notInGame: other };
 
   // 「ステロ込み」「スカーフ持ち」のような言い方の残りを落として再挑戦
   const trimmed = key.replace(/(込み|込|持ち|もち|持|型|入り)$/u, "");
@@ -159,7 +173,7 @@ export function resolve(kind: NameKind, heard: string): Resolved {
     else if (d === best && !found.some(([e, j]) => (e || j) === (en || ja))) found.push([en, ja]);
   }
   if (best < 99) {
-    if (found.length === 1 && !found[0][0]) return { ok: false, heard, candidates: [], notInGame: found[0][1] };
+    if (found.length === 1 && !found[0][0]) return evolvedInGame(kind, ix, found[0][1], heard) ?? { ok: false, heard, candidates: [], notInGame: found[0][1] };
     if (found.length === 1) return { ok: true, en: found[0][0], ja: found[0][1], fuzzy: true, heard, dist: best };
     return { ok: false, heard, candidates: found.map(([, ja]) => ja).slice(0, 3) };
   }

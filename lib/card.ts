@@ -146,6 +146,7 @@ export function damageCard(
       cases: [
         r.attackerBoosted && `攻撃側が補正ありなら ${r.attackerBoosted.minPercent}〜${r.attackerBoosted.maxPercent}%（${koText(r.attackerBoosted.ko, false)}）`,
         r.defenderBulky && `防御側が耐久に振っていたら ${r.defenderBulky.minPercent}〜${r.defenderBulky.maxPercent}%（${koText(r.defenderBulky.ko, false)}）`,
+        r.defenderAttackMax && `防御側がA特化なら ${r.defenderAttackMax.minPercent}〜${r.defenderAttackMax.maxPercent}%（${koText(r.defenderAttackMax.ko, false)}）`,
       ].filter(Boolean) as string[],
     },
   };

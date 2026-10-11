@@ -291,6 +291,9 @@ export default function Home() {
   // 画面を開いたときの確認（音が出ること・マナーモードの解除）。押すと合図の音を鳴らす（ブラウザは操作の後でないと音を出せない）
   const [ready, setReady] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
+  // LINE などアプリの中のブラウザでは、マイクが使えないことが多い（ask_log の端末: Line/、not-allowed のエラー）
+  const [inApp, setInApp] = useState(false);
+  useEffect(() => setInApp(/\bLine\/|FBAN|FBAV|Instagram/i.test(navigator.userAgent)), []);
   // マイクが聞き始めたら振動で合図（音は鳴らさない: スマホでは音の再生が音声認識とぶつかり、聞き取りが止まるため）
   useEffect(() => {
     if (mic.state === "listening") navigator.vibrate?.(40);
@@ -405,6 +408,11 @@ export default function Home() {
           {!shown && <p className="hint">例:「HB振りエンペルトにA特化ガブのじしん」「最速ドラパルト抜ける？」</p>}
         </section>
 
+        {inApp && (
+          <p className="err">
+            LINE などのアプリの中では、マイクが使えないことがあるロト。右上（または右下）のメニューから「ブラウザで開く」を選んで、Safari か Chrome で開いてほしいロト
+          </p>
+        )}
         {mic.state === "unsupported" && <p className="err">このブラウザは音声認識に対応していません。Chrome / Edge / Safari で開くか、下の文字入力を使ってください。</p>}
         {mic.error && <p className="err" role="alert">{mic.error}</p>}
 

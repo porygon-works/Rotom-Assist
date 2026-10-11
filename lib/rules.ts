@@ -20,12 +20,16 @@ function norm(s: string): string {
     .replace(/(良イ|ヨイ|イイ)(?=下降補正)/g, "C")
     // 「C下降補正」（しかこう）が 1 語の漢字になった（資格補正 など）
     .replace(/(資格|視覚|四角|死角|シカク|シカコウ|シカ|スイカ|西瓜)(?=補正)/g, "C下降")
-    // 「特化」の書き起こし違い（HB特価。ask_log #32）
-    .replace(/([HABCDS]{1,3})特価/g, "$1特化")
+    // 「特化」の書き起こし違い（HB特価、HBトッカ。ask_log #32・#61）
+    .replace(/([HABCDS]{1,3})(?:特価|トッカ)/g, "$1特化")
+    // 「HB振り」の「振り」がブリ・プリになった（HBブリエンペルト。ask_log #50）
+    .replace(/([HABCDS]{1,3})(?:ブリ|プリ)/g, "$1振リ")
+    // 「耐えますか」が「絶えますか」になった（ask_log #59）
+    .replace(/絶エ/g, "耐エ")
     // 「耐えれる」「耐えますか」の書き起こし違い（買えますか。ask_log #31〜#33）
     .replace(/買エ(マスカ|レル|ル)/g, "耐エ$1")
     // 「〇〇フィールド下の」「〇〇下で」の書き起こし違い（エレキフィールド化の。ask_log #34）
-    .replace(/(フィールド|晴レ|雨|砂嵐|雪)化(?=ノ|デ)/g, "$1下")
+    .replace(/(フィールド|晴レ|雨|砂嵐|雪)(?:化|カ)(?=ノ|デ)/g, "$1下")
     // 能力の略号の読み（音声認識がカタカナで書くことがある:「エー特化」「エイチビー振り」「エス二段階」）。
     // 特化・振り・段階・＋−・補正の直前に続くときだけ直す（「エースバーン」などを壊さない）
     .replace(/((?:エイチ|エッチ|エー|エイ|ビー|シー|ディー|デー|エス)+)(?=特化|振リ|段階|[+\-]|補正|252|ガ?[1-6一二三四五六]段階|ニ?(?:下降|上昇|マイナス|プラス|ダウン|アップ)補正|[↑↓])/g, (m) =>
@@ -55,7 +59,7 @@ type Tok =
   | { k: "ability"; ja: string } // 特性（直後のポケモン）
   | { k: "weather"; v: string }
   | { k: "terrain"; v: string }
-  | { k: "spread"; sp: Partial<Record<Stat, number>>; up?: Stat; down?: Stat; both?: boolean } // both: 「準速同士」
+  | { k: "spread"; sp: Partial<Record<Stat, number>>; up?: Stat; down?: Stat; both?: boolean; bare?: boolean } // both: 「準速同士」、bare: 能力を言わない「特化」
   | { k: "boost"; stat: Stat; n: number; conditional?: boolean } // conditional: 「上がったら」の形（付け先が前か後ろか決まらない）
   | { k: "sr" } // ステロ込み（防御側）
   | { k: "flag"; f: "reflect" | "critical" } // 壁・急所（場）
@@ -95,16 +99,19 @@ function dictionary(): [string, Tok][] {
   for (const ja of Object.keys(n.natures)) add(ja, { k: "nature", ja });
   // 特性（名前の前に付けて言う形:「マルチスケイルのカイリュー」）。わざ・ポケモンと同じ名前なら、そちらを優先（並べ替えで先に入れたものが勝つ）
   for (const ja of Object.keys(n.abilities)) add(ja, { k: "ability", ja });
+  for (const [al, ja] of Object.entries(a.abilities ?? {})) if (n.abilities[ja]) add(al, { k: "ability", ja });
   for (const [w, v] of Object.entries(a.weather)) add(w, { k: "weather", v: w });
   for (const [t] of Object.entries(a.terrain)) add(t, { k: "terrain", v: t });
   // 助詞・区切り
   for (const p of ["の", "に", "へ", "で", "が", "と", "から", "、", ",", "って", "は"]) add(p, { k: "p", v: norm(p) });
+  // 2 文字の助詞（「ガブリアスには」「晴れでは」）。役割は先頭の字（に・で）で決める
+  for (const p of ["には", "にも", "へは", "では"]) add(p, { k: "p", v: norm(p[0]) });
   // 質問の言い回し（意味を持たない、または質問の種類を表す語）
   for (const w of [
     "何発", "なんぱつ", "確定", "確定数", "耐える", "耐えれる", "耐えられる", "落ちる", "落とせる", "倒せる", "どれくらい", "どのくらい", "減る",
     "どっちが速い", "どっちがはやい", "どっちが早い", "どっちが先", "抜ける", "抜かれる", "素早さ", "すばやさ", "実数値", "いくつ",
     "タイプ", "弱点", "相性", "種族値", "威力", "何タイプ", "教えて", "？", "?", "。", "!", "！", "撃ったら", "うったら", "だと", "なら",
-    "んだけど", "だけど", "けど", "何が", "なにが", "何", "なに", "与える", "与えれる", "与え", "あたえる", "耐えますか", "耐えられますか", "耐えるか", "打ったときに", "打ったとき", "撃ったときに", "撃ったとき", "うったとき", "入る", "はいる", "入れる", "通る",
+    "んだけど", "だけど", "けど", "何が", "なにが", "何", "なに", "与える", "与えれる", "与え", "あたえる", "どれぐらい", "どんぐらい", "どのぐらい", "とかで", "とか", "タイル", "売ったら", "特性", "とくせい", "効果", "効果抜群", "抜群", "ばつぐん", "効く", "効かない", "いまひとつ", "今ひとつ", "のこと", "こと", "だっけ", "何だっけ", "って何", "どんな", "打ったら", "打って", "打つと", "入りますか", "耐えますか", "耐えられますか", "耐えるか", "打ったときに", "打ったとき", "撃ったときに", "撃ったとき", "うったとき", "入る", "はいる", "入れる", "通る",
     "じゃくてん", "しゅぞくち", "いりょく", "なんタイプ", "なんぱつ",
     "優先度", "ゆうせんど", "どっちが優先度高い", "どっちが威力高い", "高い",
     "何パーセント", "なんパーセント", "何%", "何割", "なんわり",
@@ -131,7 +138,13 @@ function pattern(s: string): [number, Tok] | null {
     if (nonH.length !== 1) return null; // 「CS特化」など補正の先が決まらないものは AI に回す
     return [m[0].length, { k: "spread", sp: Object.fromEntries(stats.map((x) => [x, 32])), up: nonH[0] }];
   }
+  // 能力を言わない「特化」（「特化ガブのじしん」）: 攻撃側なら使うわざに合わせて攻撃か特攻の特化。付け先は parseRules で確かめる
+  m = s.match(/^特化/);
+  if (m) return [m[0].length, { k: "spread", sp: {}, bare: true }];
   m = s.match(/^([HABCDS]{1,3})(?:振リ|252|極振リ)/);
+  if (m) return [m[0].length, { k: "spread", sp: Object.fromEntries([...m[1]].map((c) => [LETTER[c], 32])) }];
+  // 「HBエンペルト」: 能力を 2 つ以上並べてすぐ名前が続くときは、その能力に振った（「振り」を省いた言い方）
+  m = s.match(/^([HABCDS]{2,3})(?=[ァ-ヶ一-龯])/);
   if (m) return [m[0].length, { k: "spread", sp: Object.fromEntries([...m[1]].map((c) => [LETTER[c], 32])) }];
   // 性格補正: 「C下降補正」「Cマイナス補正」「C↓」= 性格で特攻が下がる（ようき・いじっぱり など）、「A上昇補正」「A↑」「A補正」= 上がる
   m = s.match(/^([ABCDS])ニ?(?:(下降|低下|マイナス|ダウン|[-−])補正|(上昇|プラス|アップ|[+＋])補正|(↓)|(↑)|補正)/);
@@ -281,6 +294,7 @@ interface Side {
 function applyMods(cond: Obj, mods: Tok[]) {
   for (const t of mods) {
     if (t.k === "spread") {
+      if (t.bare) cond.attack_max = true;
       // 性格補正だけ（「C↓」）のときは、振り方は指定なしのまま
       if (Object.keys(t.sp).length) cond.sp = { ...(cond.sp as Obj | undefined), ...t.sp };
       if (t.up) cond.nature_up = t.up;
@@ -378,8 +392,16 @@ export function parseRules(raw: string): Obj | null {
       continue;
     }
   }
+  // 特性だけの質問（「へんげんじざいってどんな特性」）: 特性の語が名前の前に付かずに残っている
+  if (!sides.length && !moves.length && mods.length === 1 && mods[0].k === "ability") {
+    const hasW = (re: RegExp) => words.some((w) => re.test(w));
+    if (hasW(/特性|トクセイ|効果/)) return { ability: mods[0].ja, intent: "ability" };
+  }
   if (mods.length) return null; // 付け先のない条件が残った
   const has = (re: RegExp) => words.some((w) => re.test(w));
+  // 能力を言わない「特化」はダメ計の攻撃側だけで使う。それ以外（素早さなど）では決まらないので AI に回す
+  const bareSpec = sides.some((x) => x.cond.attack_max);
+  if (bareSpec && !(sides.length === 2 && moves.length === 1)) return null;
   const conditions = (o: Obj) => {
     if (Object.keys(field).length) o.field = field;
     return o;
@@ -406,8 +428,14 @@ export function parseRules(raw: string): Obj | null {
     return { pokemon: sides[0].name, move: moves[0], intent: "learnset" };
   }
 
+  // 相性: 「ハッサムにインファイトって効果抜群？」→ わざのタイプとポケモンの相性
+  if (sides.length === 1 && moves.length === 1 && has(/効果|抜群|バツグン|効ク|効カナイ|イマヒトツ|今ヒトツ|相性/)) {
+    if (Object.keys(sides[0].cond).length) return null;
+    return { pokemon: sides[0].name, move: moves[0], intent: "type" };
+  }
+
   // 1 匹とわざだけ: 足りない側を聞き返す（「ミミッキュのじゃれつく」→ 防御側がない）
-  if (sides.length === 1 && moves.length === 1 && !has(/タイプ|威力|イリョク|覚エ|オボエ|弱点|種族値|素早サ/)) {
+  if (sides.length === 1 && moves.length === 1 && !has(/タイプ|威力|イリョク|覚エ|オボエ|弱点|種族値|素早サ|効果|抜群|効ク|効カナイ/)) {
     const sd = sides[0];
     const atkP = sd.particle === "ノ" || sd.particle === "ガ" || sd.particle === "カラ";
     const defP = sd.particle === "ニ" || sd.particle === "ヘ";
@@ -419,6 +447,8 @@ export function parseRules(raw: string): Obj | null {
   // 1 匹: タイプ・弱点・種族値・素早さ
   if (sides.length === 1 && !moves.length) {
     const p = sides[0];
+    if (has(/特性|トクセイ/)) return { pokemon: p.name, intent: "ability" };
+    if (has(/^ノコト$|^コト$/) && has(/教エテ/) && !has(/弱点|ジャクテン|タイプ|種族値|素早サ/)) return { pokemon: p.name, intent: "about" };
     if (has(/弱点|ジャクテン|タイプ|相性/) && !has(/素早サ|スバヤサ|種族値|シュゾクチ/)) return { pokemon: p.name, intent: "type" };
     if (has(/種族値|シュゾクチ/) && !has(/弱点|ジャクテン|タイプ/)) return { pokemon: p.name, intent: "stats" };
     if (has(/素早サ|スバヤサ|実数値/)) return { pokemon: p.name, conditions: conditions(Object.keys(p.cond).length ? { pokemon: p.cond } : {}), ask: "value", intent: "speed" };
@@ -452,6 +482,7 @@ export function parseRules(raw: string): Obj | null {
     if (!ra || !rb || ra === rb) return null;
     const atk = ra === "attacker" ? sides[0] : sides[1];
     const def = ra === "attacker" ? sides[1] : sides[0];
+    if (def.cond.attack_max) return null; // 防御側の「特化」は H・B か H・D か決まらない
     const c: Obj = {};
     if (sr) def.cond.stealth_rock = true;
     if (Object.keys(atk.cond).length) c.attacker = atk.cond;

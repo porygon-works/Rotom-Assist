@@ -219,6 +219,8 @@ export interface DamageAnswer {
   attackerBoosted?: DamageResult;
   /** 防御側の振り方を言わなかったとき: 耐久に振っていた（H32・防御か特防32・補正あり）ときの結果 */
   defenderBulky?: DamageResult;
+  /** イカサマ（相手の攻撃で計算するわざ）で防御側の攻撃を言わなかったとき: 防御側が A 特化のときの結果 */
+  defenderAttackMax?: DamageResult;
   /** 仮定した内容（読み上げ・表示用） */
   assumed: string[];
   category: "Physical" | "Special" | "Status";
@@ -251,11 +253,15 @@ export function damage(a0: SideInput, d: SideInput, move: string, f0: FieldInput
   const defStat: Stat = category === "Special" ? "spd" : "def";
   const L = STAT_LETTER;
   const assumed: string[] = [];
+  // イカサマは防御側の攻撃で計算するので、攻撃側の振り方・性格は関係ない
+  const foul = m.name === "Foul Play";
   // 攻撃側: 振り方を言わなければ、使う能力に全振り（SP32）。対戦では攻撃側はぶっぱが基本のため
-  const aSpOpen = a1.sp?.[atkStat] === undefined;
+  const aSpOpen = !foul && a1.sp?.[atkStat] === undefined;
   const a: SideInput = aSpOpen ? { ...a1, sp: { ...a1.sp, [atkStat]: 32 } } : a1;
   // 性格補正を言わなければ補正なしで計算し、補正ありも出す
-  const aNatureOpen = !a.nature && !a.natureUp && !a.natureDown;
+  const aNatureOpen = !foul && !a.nature && !a.natureUp && !a.natureDown;
+  const dAtkOpen = foul && d.sp?.atk === undefined && !d.nature && d.natureUp !== "atk" && d.natureDown !== "atk";
+  if (dAtkOpen) assumed.push("防御側の攻撃は無振り");
   const aParts = [aSpOpen && `${L[atkStat]}全振り`, aNatureOpen && "補正なし"].filter(Boolean);
   if (aParts.length) assumed.push(`攻撃側は${aParts.join("・")}`);
   const dOpen = !hasSpread(d, ["hp", defStat]);
@@ -266,7 +272,8 @@ export function damage(a0: SideInput, d: SideInput, move: string, f0: FieldInput
   if (base.immune) return { base, assumed, category, ...extra };
   const attackerBoosted = aNatureOpen ? one({ ...a, natureUp: atkStat }, d, move, f) : undefined;
   const defenderBulky = dOpen ? one(a, { ...d, sp: { ...d.sp, hp: 32, [defStat]: 32 }, natureUp: defStat }, move, f) : undefined;
-  return { base, attackerBoosted, defenderBulky, assumed, category, ...extra };
+  const defenderAttackMax = dAtkOpen ? one(a, { ...d, sp: { ...d.sp, atk: 32 }, natureUp: "atk" }, move, f) : undefined;
+  return { base, attackerBoosted, defenderBulky, defenderAttackMax, assumed, category, ...extra };
 }
 
 /** 素早さの実数値（スカーフ・ランク・天候の特性などを反映した値） */
@@ -298,6 +305,11 @@ export function speedThreshold(subject: number, other: SideInput, f: FieldInput 
     return { faster: null as number | null, tie };
   };
   return { neutral: find(), plus: find("spe") };
+}
+
+/** そのポケモンの特性（英語名。Showdown 本体の図鑑から。data/abilities.json） */
+export function abilitiesOf(species: string): string[] {
+  return (abilityTable as unknown as Record<string, string[]>)[toId(species)] ?? [];
 }
 
 export function speciesInfo(en: string) {

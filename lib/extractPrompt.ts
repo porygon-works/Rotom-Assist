@@ -15,8 +15,12 @@ export const EXTRACT_PROMPT = `あなたはポケモン対戦（シングル、�
   "missing": ["attacker" | "defender" | "move"],
   "queries": [ 複数の質問のときだけ、1 問ずつ同じ形で ],
   "ask": "compare" | "value" | "threshold",   // speed のときだけ
-  "intent": "damage" | "speed" | "type" | "stats" | "learnset" | "move_info" | "my_team" | "chat" | "clarify" | "multi"
+  "intent": "damage" | "speed" | "type" | "stats" | "ability" | "about" | "learnset" | "move_info" | "my_team" | "chat" | "clarify" | "multi",
+  "ability": "特性の名前（特性について聞かれたときだけ）"
 }
+- 特性を聞かれたら intent は ability（「ポワルンって特性何」→ {"intent":"ability","pokemon":"ポワルン"}、「へんげんじざいってどんな特性」→ {"intent":"ability","ability":"へんげんじざい"}）
+- 「〇〇のこと教えて」は intent about（タイプ・種族値・特性をまとめて答える）
+- 「〇〇に△△って効果抜群？」のような技の相性は intent type に pokemon と move を書く
 - missing が空でなければ intent は clarify。ダメージの質問で missing が空なら intent は damage
 側の条件 = {
   "item": "持ち物の正式名", "ability": "特性", "nature": "性格名（言われたときだけ）",
