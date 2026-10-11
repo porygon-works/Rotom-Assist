@@ -59,6 +59,19 @@ function speak(text: string) {
   s.speak(u);
 }
 
+/** 合図の音（public/sounds/rotom.mp3、約 1.7 秒）。画面を開いたとき・マイクが聞き始めたとき・文字で送ったときに鳴らす。
+ *  答えのときは鳴らさない（読み上げが音の長さだけ遅れるため） */
+let chimeEl: HTMLAudioElement | null = null;
+function chime() {
+  try {
+    chimeEl ??= new Audio("/sounds/rotom.mp3");
+    chimeEl.currentTime = 0;
+    void chimeEl.play().catch(() => {});
+  } catch {
+    /* 音が出せない環境では鳴らさない */
+  }
+}
+
 export default function Home() {
   const [shown, setShown] = useState<Shown | null>(null);
   const [log, setLog] = useState<Shown[]>([]);
@@ -106,6 +119,14 @@ export default function Home() {
   );
 
   const mic = usePushToTalk(send);
+  // 画面を開いたときの確認（音が出ること・マナーモードの解除）。押すと合図の音を鳴らす（ブラウザは操作の後でないと音を出せない）
+  const [ready, setReady] = useState(false);
+  const muteRef = useRef(mute);
+  muteRef.current = mute;
+  // マイクが聞き始めたら合図
+  useEffect(() => {
+    if (mic.state === "listening" && !muteRef.current) chime();
+  }, [mic.state]);
 
   // PC: スペースキーを押している間だけ聞き取る（文字入力中は除く）
   useEffect(() => {
@@ -142,6 +163,41 @@ export default function Home() {
         onPointerLeave: () => listening && mic.stop(),
         onContextMenu: (e: React.MouseEvent) => e.preventDefault(),
       };
+
+  if (!ready)
+    return (
+      <main>
+        <h1>ロトムアシスト</h1>
+        <section className="card start" aria-label="はじめに">
+          <p className="speech">このアプリは音が出ます</p>
+          <p>答えを読み上げるほか、マイクが聞き始めたときに合図の音が鳴ります。</p>
+          <p>
+            <strong>マナーモード（消音）を解除して、音量を上げてください。</strong>
+          </p>
+          <button
+            type="button"
+            className="start-btn"
+            onClick={() => {
+              chime();
+              setReady(true);
+            }}
+          >
+            音を鳴らしてはじめる
+          </button>
+          <p className="small">音が聞こえなければ、マナーモードと音量を確かめてください。</p>
+          <button
+            type="button"
+            className="ghost"
+            onClick={() => {
+              setMute(true);
+              setReady(true);
+            }}
+          >
+            音なしで使う
+          </button>
+        </section>
+      </main>
+    );
 
   return (
     <main>
@@ -215,6 +271,7 @@ export default function Home() {
         className="bar"
         onSubmit={(e) => {
           e.preventDefault();
+          if (!mute) chime();
           send(text);
           setText("");
         }}
@@ -226,7 +283,7 @@ export default function Home() {
       <div className="bar small">
         <label><input type="checkbox" checked={tapMode} onChange={(e) => setTapMode(e.target.checked)} /> タップで開始／終了</label>
         <label><input type="checkbox" checked={brief} onChange={(e) => setBrief(e.target.checked)} /> 短く読む</label>
-        <label><input type="checkbox" checked={mute} onChange={(e) => setMute(e.target.checked)} /> 読み上げない</label>
+        <label><input type="checkbox" checked={mute} onChange={(e) => setMute(e.target.checked)} /> 音を出さない（読み上げ・合図）</label>
         {shown && <button type="button" className="ghost" onClick={() => speak(brief ? (shown.short ?? shown.speech) : shown.speech)}>もう一度読む</button>}
       </div>
 
