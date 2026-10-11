@@ -2,6 +2,7 @@
 // 画面（構成設計 3 章）: 大きな「押して話す」ボタン、結果カード、文字入力、診断
 import { useCallback, useEffect, useRef, useState } from "react";
 import { usePushToTalk } from "./usePushToTalk";
+import type { DamageCard, SideCard } from "../lib/card";
 
 interface Attempt {
   provider: string;
@@ -21,6 +22,8 @@ interface AskResult {
   short?: string;
   title: string;
   lines: string[];
+  card?: DamageCard;
+  desc?: string;
   intent: string;
   extraction?: unknown;
   diagnostics?: { provider?: string; attempts: Attempt[]; totalMs: number; setup?: AiSetup };
@@ -163,12 +166,13 @@ export default function Home() {
           <p className="small">
             {shown.diagnostics?.provider === "rules" ? "ルールで即答" : shown.diagnostics?.provider ? `AI（${shown.diagnostics.provider}）` : ""} {Math.round(shown.ms)} ms
           </p>
+          {shown.card && <CardView card={shown.card} />}
           {shown.lines.length > 0 && (
-            <ul className="lines">
+            <div className="lines">
               {shown.lines.map((l, i) => (
-                <li key={i}>{l}</li>
+                <p key={i}>{l}</p>
               ))}
-            </ul>
+            </div>
           )}
           <details>
             <summary className="small">診断</summary>
@@ -187,6 +191,7 @@ export default function Home() {
                   {a.provider}: {a.ok ? "成功" : `失敗（${a.error}）`} {a.ms} ms
                 </li>
               ))}
+              {shown.desc && <li>計算: <code>{shown.desc}</code></li>}
               <li>解釈: <code>{JSON.stringify(shown.extraction)}</code></li>
             </ul>
           </details>
@@ -229,5 +234,52 @@ export default function Home() {
         ポケモンチャンピオンズ（Lv50・SP）の仕様で、@smogon/calc を使って計算しています。振り方を言わなかった側は無振りで計算し、振り方の幅も出します。日本語名: PokeAPI。
       </p>
     </main>
+  );
+}
+
+/** ダメ計の計算条件カード: 結果 → 攻撃側・防御側 → わざ → 場 */
+function CardView({ card }: { card: DamageCard }) {
+  return (
+    <div className="dcard">
+      <p className="dresult">
+        <strong>{card.result.damage}</strong> <span className="ko">{card.result.ko}</span>
+      </p>
+      {card.result.range && <p className="small drange">{card.result.range}（言われていない側の振り方を変えたとき）</p>}
+      <div className="sides">
+        <SideView side={card.attacker} />
+        <div className="arrow" aria-hidden>
+          ▶
+        </div>
+        <SideView side={card.defender} />
+      </div>
+      <dl className="drow">
+        <dt>わざ</dt>
+        <dd>
+          <strong>{card.move.name}</strong>　{card.move.type}・{card.move.category}・威力 {card.move.power}
+        </dd>
+        <dt>天候・フィールド</dt>
+        <dd>{card.field.length ? card.field.join("・") : <span className="assumed">なし</span>}</dd>
+      </dl>
+    </div>
+  );
+}
+
+function SideView({ side }: { side: SideCard }) {
+  return (
+    <div className={`side ${side.role === "攻撃側" ? "atk" : "def"}`}>
+      <p className="role">{side.role}</p>
+      <p className="pname">{side.name}</p>
+      <dl>
+        {side.items.map((it) => (
+          <div key={it.label} className="kv">
+            <dt>{it.label}</dt>
+            <dd className={it.assumed ? "assumed" : ""}>
+              {it.value}
+              {it.assumed && <span className="tag">仮定</span>}
+            </dd>
+          </div>
+        ))}
+      </dl>
+    </div>
   );
 }

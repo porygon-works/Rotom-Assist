@@ -6,6 +6,7 @@ import { aiSetup, extract, type AiSetup, type Attempt, type Turn } from "./llm";
 import { resolve, resolveField, toJa, type NameKind } from "./resolve";
 import { parseFollowUp, parseRules } from "./rules";
 import aliases from "../data/aliases.json";
+import { damageCard, spreadText, type DamageCard } from "./card";
 
 export interface AskResult {
   /** 読み上げる文 */
@@ -17,6 +18,10 @@ export interface AskResult {
   /** 画面に出す詳しい結果 */
   lines: string[];
   intent: string;
+  /** ダメ計の計算条件カード（攻撃側・防御側・わざ・場） */
+  card?: DamageCard;
+  /** 計算ライブラリの説明文（英語。診断用） */
+  desc?: string;
   /** 次の質問の文脈に使う取り出し結果 */
   extraction?: Record<string, unknown> | null;
   diagnostics?: { provider?: string; attempts: Attempt[]; totalMs: number; setup?: AiSetup };
@@ -129,8 +134,8 @@ const fail = (intent: string, title: string, msgs: string[]): AskResult => ({ sp
 /** 側の条件を短い文字にする（画面の見出し用） */
 function sideLabel(ja: string, s: SideInput): string {
   const parts: string[] = [];
-  const sp = Object.entries(s.sp ?? {}).filter(([, v]) => v).map(([k, v]) => `${({ hp: "H", atk: "A", def: "B", spa: "C", spd: "D", spe: "S" } as Record<string, string>)[k]}${v}`);
-  if (sp.length) parts.push(sp.join(""));
+  const sp = spreadText(s.sp);
+  if (sp) parts.push(sp);
   if (s.natureUp) parts.push(`${({ hp: "H", atk: "A", def: "B", spa: "C", spd: "D", spe: "S" } as Record<string, string>)[s.natureUp]}↑`);
   if (s.natureDown) parts.push(`${({ atk: "A", def: "B", spa: "C", spd: "D", spe: "S" } as Record<string, string>)[s.natureDown]}↓`);
   if (s.nature) parts.push(toJa("natures", s.nature));
@@ -203,18 +208,21 @@ function answerDamage(ex: Obj, text?: string): AskResult {
     open,
     stealthRock: ds.stealthRock,
   });
-  lines.push(...pr.quiet);
-  const abLine = (label: string, sd: SideInput) => `${label} ${toJa("abilities", abilityOf(sd) ?? "-")}${sd.ability ? "" : "（仮定）"}`;
-  lines.push(`特性: ${abLine("攻撃側", as)}、${abLine("防御側", ds)}`);
-  if (result.assumed.length) lines.push(`仮定: ${result.assumed.map((x) => (x.includes("振り方") ? `${x}は無振り（幅も表示）` : x)).join("、")}`);
-  lines.push(result.base.desc);
+  // 条件（振り方・性格・持ち物・特性・場）はカードで見せる。行には補足だけ残す
+  const rest = lines.filter((l) => !/^(ダメージ|振り方の幅)/.test(l));
+  lines.length = 0;
+  lines.push(...rest, ...pr.quiet);
+  const card = damageCard({ attacker: a.ja, defender: d.ja, move: m.ja }, as, ds, m.en, result, open);
   // 名前が分からない・チャンピオンズにないなどの注意は、短い読み上げでも言う
   const must = pr.list.length ? `${pr.list.join("。")}。` : "";
   return {
     speech,
     short: must + short,
-    title: `${sideLabel(a.ja, as)}の${m.ja} → ${sideLabel(d.ja, ds)}${fieldLabel(result.field)}`,
+    // 条件はカードに出すので、見出しは「誰の何 → 誰」だけ
+    title: `${a.ja}の${m.ja} → ${d.ja}`,
     lines,
+    card,
+    desc: result.base.desc,
     intent: "damage",
   };
 }

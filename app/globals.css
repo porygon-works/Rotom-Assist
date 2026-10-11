@@ -1,5 +1,5 @@
-:root { --bg:#fff; --fg:#1b1b1f; --muted:#666; --card:#f4f5f7; --accent:#2f6fed; --warn:#b3261e; }
-@media (prefers-color-scheme: dark) { :root { --bg:#141416; --fg:#ececf0; --muted:#9a9aa3; --card:#1f2023; --accent:#7aa2ff; --warn:#ff8a80; } }
+:root { --bg:#fff; --fg:#1b1b1f; --muted:#666; --card:#f4f5f7; --accent:#2f6fed; --warn:#b3261e; --atk:#c2410c; --def:#1d4ed8; }
+@media (prefers-color-scheme: dark) { :root { --bg:#141416; --fg:#ececf0; --muted:#9a9aa3; --card:#1f2023; --accent:#7aa2ff; --warn:#ff8a80; --atk:#fb923c; --def:#7aa2ff; } }
 * { box-sizing: border-box; }
 body { margin:0; background:var(--bg); color:var(--fg); font:16px/1.6 system-ui, "Hiragino Sans", "Noto Sans JP", sans-serif; }
 main { max-width: 720px; margin: 0 auto; padding: 16px; }
@@ -20,7 +20,23 @@ dt { color:var(--muted); font-size:.85rem; margin-top:.6em; } dd { margin:0; } d
 .talk-btn.on { background:var(--warn); border-color:var(--warn); }
 .interim { min-height:1.6em; color:var(--muted); margin:8px 0 0; text-align:center; }
 .speech { font-size:1.15rem; font-weight:600; }
-.lines { margin:.4em 0; padding-left:1.2em; }
+.lines { margin:.4em 0; } .lines p { margin:.2em 0; font-size:.92rem; }
+/* ダメ計の計算条件カード */
+.dcard { margin:.6em 0; }
+.dresult { margin:.2em 0 0; font-size:1.1rem; } .drange { margin:0 0 .6em; } .dresult .ko { font-weight:700; color:var(--accent); margin-left:.4em; }
+.sides { display:grid; grid-template-columns:1fr auto 1fr; gap:8px; align-items:stretch; }
+.sides .arrow { align-self:center; color:var(--muted); }
+.side { background:var(--bg); border-radius:10px; padding:8px 10px; border-top:4px solid var(--atk); }
+.side.def { border-top-color:var(--def); }
+.side .role { margin:0; font-size:.8rem; font-weight:700; color:var(--atk); } .side.def .role { color:var(--def); }
+.side .pname { margin:0 0 .3em; font-weight:700; font-size:1.05rem; }
+.side dl, .drow { margin:0; }
+.kv { display:grid; grid-template-columns:5.5em 1fr; gap:4px; padding:2px 0; border-top:1px solid var(--card); font-size:.9rem; }
+.kv dt, .drow dt { margin:0; color:var(--muted); font-size:.85rem; }
+.assumed { color:var(--muted); }
+.tag { font-size:.7rem; border:1px solid var(--muted); border-radius:4px; padding:0 4px; margin-left:6px; white-space:nowrap; }
+.drow { display:grid; grid-template-columns:7.5em 1fr; gap:4px 8px; margin-top:8px; font-size:.92rem; } .drow dd { margin:0; }
+@media (max-width: 520px) { .sides { grid-template-columns:1fr; } .sides .arrow { justify-self:center; transform:rotate(90deg); } }
 .bar input[type="text"], .bar input:not([type]) { flex:1; min-width:0; font:inherit; padding:8px 12px; border-radius:8px; border:1px solid var(--muted); background:var(--bg); color:var(--fg); }
 button.ghost { background:transparent; color:var(--accent); padding:4px 12px; }
 code { font-size:.8rem; word-break:break-all; }
