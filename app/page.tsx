@@ -50,6 +50,7 @@ function deviceId(): string {
 }
 
 function speak(text: string) {
+  chimeEl?.pause(); // 合図の音が鳴っていたら止めて、読み上げと重ねない
   const s = window.speechSynthesis;
   if (!s) return;
   s.cancel();
@@ -59,8 +60,8 @@ function speak(text: string) {
   s.speak(u);
 }
 
-/** 合図の音（public/sounds/rotom.mp3、約 1.7 秒）。画面を開いたとき・マイクが聞き始めたとき・文字で送ったときに鳴らす。
- *  答えのときは鳴らさない（読み上げが音の長さだけ遅れるため） */
+/** 合図の音（public/sounds/rotom.mp3、約 1.7 秒）。画面を開いたとき・質問を受け付けたとき（声・文字）に鳴らす。
+ *  マイクが聞き始めたときは鳴らさない（スマホでは音声認識とぶつかって聞き取りが止まる）。答えのときも鳴らさない */
 let chimeEl: HTMLAudioElement | null = null;
 function chime() {
   try {
@@ -86,6 +87,8 @@ export default function Home() {
   const send = useCallback(
     async (q: string) => {
       if (!q.trim()) return;
+      // 質問を受け付けた合図（声のときは聞き取りが終わった後なので、音声認識とはぶつからない）
+      if (!mute) chime();
       setBusy(true);
       const t0 = performance.now();
       try {
@@ -121,11 +124,9 @@ export default function Home() {
   const mic = usePushToTalk(send);
   // 画面を開いたときの確認（音が出ること・マナーモードの解除）。押すと合図の音を鳴らす（ブラウザは操作の後でないと音を出せない）
   const [ready, setReady] = useState(false);
-  const muteRef = useRef(mute);
-  muteRef.current = mute;
-  // マイクが聞き始めたら合図
+  // マイクが聞き始めたら振動で合図（音は鳴らさない: スマホでは音の再生が音声認識とぶつかり、聞き取りが止まるため）
   useEffect(() => {
-    if (mic.state === "listening" && !muteRef.current) chime();
+    if (mic.state === "listening") navigator.vibrate?.(40);
   }, [mic.state]);
 
   // PC: スペースキーを押している間だけ聞き取る（文字入力中は除く）
@@ -170,7 +171,7 @@ export default function Home() {
         <h1>ロトムアシスト</h1>
         <section className="card start" aria-label="はじめに">
           <p className="speech">このアプリは音が出ます</p>
-          <p>答えを読み上げるほか、マイクが聞き始めたときに合図の音が鳴ります。</p>
+          <p>答えを読み上げるほか、質問を受け付けたときに合図の音が鳴ります。</p>
           <p>
             <strong>マナーモード（消音）を解除して、音量を上げてください。</strong>
           </p>
@@ -271,7 +272,6 @@ export default function Home() {
         className="bar"
         onSubmit={(e) => {
           e.preventDefault();
-          if (!mute) chime();
           send(text);
           setText("");
         }}
