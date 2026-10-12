@@ -295,6 +295,9 @@ describe("ask_log #116〜#124（2026-10-12）: 特性もうかのエースバー
     expect(fixMishearing("特製 農家 の エース バーン")).toBe("特性もうかのエースバーン");
     expect(fixMishearing("特性 が 思う かの エース バーン")).toBe("特性もうかのエースバーン");
     expect(fixMishearing("HP 100のガブ")).toBe("HP 100のガブ");
+    // ご本人に確認: 「北区」= でんき（タイプ）、「走れる」= アシレーヌ
+    expect(fixMishearing("北区のマスカーニャがガブリアスの地震耐えれる")).toBe("でんきタイプのマスカーニャがガブリアスの地震耐えれる");
+    expect(fixMishearing("ダストシュートを走れるのを与える")).toBe("ダストシュートをアシレーヌのを与える");
   });
   it("もうかと言われたらリベロではなく、もうかで計算して、そう言う", () => {
     const ex = { move: "ダストシュート", intent: "damage", attacker: "エースバーン", defender: "アシレーヌ", conditions: { attacker: { ability: "もうか" } } };
