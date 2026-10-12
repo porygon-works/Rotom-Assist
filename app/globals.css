@@ -98,4 +98,46 @@ dd { margin: 0; }
 .face .eyes { display: flex; gap: calc(var(--eye) * 0.8); }
 .face .eye { width: var(--eye); height: auto; display: block; }
 .face .mouth { width: calc(var(--eye) * 0.95); height: auto; display: block; margin-top: calc(var(--eye) * -0.32); margin-bottom: 4px; }
-@media (prefers-reduced-motion: reduce) { .talk-btn.on { animation: none; } button:active { transform: none; } }
+/* 顔をタップ: 跳ねて揺れ、目が「^」になって、光の粒が飛ぶ */
+.face-btn { position: relative; background: none; border: none; padding: 0; color: inherit; border-radius: 24px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.face-btn:focus-visible { outline: 3px solid var(--btn); outline-offset: 4px; }
+.face.happy { animation: rotom-happy .9s cubic-bezier(.3, 1.6, .5, 1) 1; }
+@keyframes rotom-happy {
+  0% { transform: translateY(0) rotate(0) scale(1); }
+  20% { transform: translateY(-18px) rotate(-6deg) scale(1.06); }
+  40% { transform: translateY(0) rotate(5deg) scale(.98); }
+  60% { transform: translateY(-9px) rotate(-3deg) scale(1.03); }
+  80% { transform: translateY(0) rotate(2deg); }
+  100% { transform: translateY(0) rotate(0) scale(1); }
+}
+.sparks { position: absolute; inset: 0; pointer-events: none; }
+.sparks i { position: absolute; top: 30%; left: 50%; width: 12px; height: 12px; background: #fff7a8; border-radius: 2px; transform: rotate(45deg) scale(0); box-shadow: 0 0 10px #fff; animation: spark .9s ease-out forwards; }
+.sparks i:nth-child(1) { --dx: -110px; --dy: -50px; }
+.sparks i:nth-child(2) { --dx: 110px; --dy: -60px; animation-delay: .08s; }
+.sparks i:nth-child(3) { --dx: -80px; --dy: 40px; animation-delay: .16s; }
+.sparks i:nth-child(4) { --dx: 90px; --dy: 30px; animation-delay: .04s; }
+@keyframes spark {
+  0% { transform: translate(0, 0) rotate(45deg) scale(0); opacity: 1; }
+  60% { opacity: 1; }
+  100% { transform: translate(var(--dx), var(--dy)) rotate(45deg) scale(1.1); opacity: 0; }
+}
+
+/* PC（横幅が広い画面）: 左に顔と操作、右に結果と履歴の 2 列 */
+@media (min-width: 1024px) {
+  :root { --side: 400px; }
+  .topbar, .sheet { max-width: 1200px; }
+  main { max-width: 1200px; display: grid; grid-template-columns: var(--side) minmax(0, 1fr); column-gap: 40px; align-items: start; padding: 16px 24px 40px; }
+  main > * { grid-column: 2; }
+  main > .hero { grid-column: 1; grid-row: 1 / span 30; align-self: start; position: sticky; top: 84px; padding: 24px 0 220px; }
+  main > .card:first-of-type, main > .err { margin-top: 0; }
+  .face { --eye: 120px; }
+  .hint { font-size: .95rem; }
+  /* 押して話す・文字入力は左の列の下に置く */
+  .dock { left: max(24px, calc(50% - 600px + 24px)); right: auto; width: var(--side); bottom: 32px; padding: 0; background: none; }
+  .dock > * { max-width: none; }
+  .talk-btn { height: 64px; }
+  .speech { font-size: 1.45rem; }
+  .history { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (prefers-reduced-motion: reduce) { .talk-btn.on, .face.happy, .sparks i { animation: none; } button:active { transform: none; } }

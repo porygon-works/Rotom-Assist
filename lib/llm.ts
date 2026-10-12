@@ -99,8 +99,6 @@ export async function extract(
   text: string,
   opts: { history?: Turn[]; providers?: Provider[]; timeoutMs?: number; lastTimeoutMs?: number; fetchImpl?: Fetch } = {},
 ): Promise<ExtractResult> {
-  const providers = opts.providers ?? providersFromEnv();
-  const doFetch = opts.fetchImpl ?? fetch;
   const messages = [
     { role: "system", content: EXTRACT_PROMPT },
     ...(opts.history ?? []).slice(-1).flatMap((h) => [
@@ -109,6 +107,22 @@ export async function extract(
     ]),
     { role: "user", content: text },
   ];
+  const r = await callJson(messages, opts);
+  return { extraction: r.json, provider: r.provider, attempts: r.attempts };
+}
+
+export interface Message {
+  role: "system" | "user" | "assistant";
+  content: string;
+}
+
+/** 候補を順に呼び、最初に JSON を返したものを使う（429 の候補は 60 秒休ませる）。extract・雑談・説明文の翻訳で共通 */
+export async function callJson(
+  messages: Message[] | { role: string; content: string }[],
+  opts: { providers?: Provider[]; timeoutMs?: number; lastTimeoutMs?: number; fetchImpl?: Fetch; temperature?: number } = {},
+): Promise<{ json: Record<string, unknown> | null; provider?: string; attempts: Attempt[] }> {
+  const providers = opts.providers ?? providersFromEnv();
+  const doFetch = opts.fetchImpl ?? fetch;
   const attempts: Attempt[] = [];
   const now = Date.now();
   const ready = providers.filter((p) => (cooldown.get(p.name) ?? 0) <= now);
@@ -121,7 +135,7 @@ export async function extract(
       const res = await doFetch(p.url, {
         method: "POST",
         headers: { Authorization: `Bearer ${p.key}`, "Content-Type": "application/json" },
-        body: JSON.stringify({ model: p.model, messages, temperature: 0, response_format: { type: "json_object" }, ...p.extra }),
+        body: JSON.stringify({ model: p.model, messages, temperature: opts.temperature ?? 0, response_format: { type: "json_object" }, ...p.extra }),
         signal: AbortSignal.timeout(timeout),
       });
       if (!res.ok) {
@@ -130,17 +144,17 @@ export async function extract(
         continue;
       }
       const j = (await res.json()) as { choices?: { message?: { content?: string } }[] };
-      const extraction = parseJson(j.choices?.[0]?.message?.content ?? "");
-      if (!extraction) {
+      const json = parseJson(j.choices?.[0]?.message?.content ?? "");
+      if (!json) {
         attempts.push({ provider: p.name, ms: Date.now() - t0, ok: false, error: "JSON として読めない" });
         continue;
       }
       attempts.push({ provider: p.name, ms: Date.now() - t0, ok: true });
-      return { extraction, provider: p.name, attempts };
+      return { json, provider: p.name, attempts };
     } catch (e) {
       const err = e as Error;
       attempts.push({ provider: p.name, ms: Date.now() - t0, ok: false, error: err.name === "TimeoutError" ? "時間切れ" : err.message });
     }
   }
-  return { extraction: null, attempts };
+  return { json: null, attempts };
 }

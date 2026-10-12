@@ -6,6 +6,8 @@ import { aiSetup, extract, providersFromEnv, type Provider } from "../lib/llm";
 import { reading, resolve } from "../lib/resolve";
 import aliases from "../data/aliases.json";
 import names from "../data/names.json";
+import moveDesc from "../data/move-desc.json";
+import abilityDesc from "../data/ability-desc.json";
 
 describe("名前の解決", () => {
   it("正式名・英語名・あだ名", () => {
@@ -240,5 +242,24 @@ describe("実際のログ（roas.ask_log）で答えられなかった質問", (
     const r = answerExtraction({ intent: "clarify", missing: ["defender"], move: "インファイト", attacker: "ハッサム" }, "ハッサムにインファイト打ったら効果抜群");
     expect(r.speech).toContain("等倍");
     expect(answerExtraction({ intent: "type", move: "かえんほうしゃ", pokemon: "ハッサム" }, "ハッサムにかえんほうしゃは効く？").speech).toContain("4倍");
+  });
+});
+
+describe("技・特性の説明（data/move-desc.json・ability-desc.json）", () => {
+  it("技の性能に効果の説明を添える", () => {
+    const r = answerExtraction({ intent: "move_info", move: "イカサマ" }, "イカサマってどんな技");
+    expect(r.speech).toContain("こうげき");
+    expect(r.lines.some((l) => l.startsWith("効果:"))).toBe(true);
+  });
+  it("特性の説明と、特性が 1 つのポケモンは効果まで読む", () => {
+    expect(answerExtraction({ intent: "chat" }, "威嚇ってどんな特性").speech).toContain("こうげき");
+    expect(answerExtraction({ intent: "stats", pokemon: "ポワルン" }, "ポワルンって特性何").speech).toContain("天候");
+  });
+  it("Champions の技・特性は全部に説明がある", () => {
+    const md = moveDesc as unknown as Record<string, unknown>;
+    const ad = abilityDesc as unknown as Record<string, unknown>;
+    const n = names as unknown as Record<string, Record<string, string>>;
+    expect([...new Set(Object.values(n.moves))].filter((en) => !md[en])).toEqual([]);
+    expect([...new Set(Object.values(n.abilities))].filter((en) => !ad[en]).length).toBeLessThanOrEqual(1);
   });
 });

@@ -1,0 +1,2103 @@
+{
+ "_source": "Pokémon Showdown data/text の shortDesc（英語）を AI で日本語にしたもの（機械翻訳）。scripts/build-descriptions.ts で生成",
+ "Accelerock": {
+  "en": "Usually goes first.",
+  "ja": "必ず先制する。"
+ },
+ "Acid Armor": {
+  "en": "Raises the user's Defense by 2.",
+  "ja": "自分のぼうぎょを2段階上げる。"
+ },
+ "Acid Spray": {
+  "en": "100% chance to lower the target's Sp. Def by 2.",
+  "ja": "100パーセントの確率で相手のとくぼうを2段階下げる。"
+ },
+ "Acrobatics": {
+  "en": "Power doubles if the user has no held item.",
+  "ja": "持ち物がない場合、威力が2倍になる。"
+ },
+ "Acupressure": {
+  "en": "Raises a random stat of the user or an ally by 2.",
+  "ja": "自分か味方のステータスをランダムに2段階上げる。"
+ },
+ "Aerial Ace": {
+  "en": "This move does not check accuracy.",
+  "ja": "命中率は計算されない。"
+ },
+ "After You": {
+  "en": "The target makes its move right after the user.",
+  "ja": "相手の行動を自分の直後に行わせる。"
+ },
+ "Agility": {
+  "en": "Raises the user's Speed by 2.",
+  "ja": "自分のすばやさを2段階上げる。"
+ },
+ "Air Cutter": {
+  "en": "High critical hit ratio. Hits adjacent foes.",
+  "ja": "急所に当たりやすい。周りの相手に当たる。"
+ },
+ "Air Slash": {
+  "en": "30% chance to make the target flinch.",
+  "ja": "30パーセントの確率で相手をひるませる。"
+ },
+ "Alluring Voice": {
+  "en": "100% confuse target that had a stat rise this turn.",
+  "ja": "このターンにステータスが上がった相手を100パーセントの確率でこんらんさせる。"
+ },
+ "Ally Switch": {
+  "en": "User and ally swap positions; using again can fail.",
+  "ja": "自分と味方の位置を入れ替える。連続で使うと失敗しやすい。"
+ },
+ "Amnesia": {
+  "en": "Raises the user's Sp. Def by 2.",
+  "ja": "自分のとくぼうを2段階上げる。"
+ },
+ "Ancient Power": {
+  "en": "10% chance to raise all stats by 1 (not acc/eva).",
+  "ja": "10パーセントの確率で自分のすべてのステータスが1段階上がる。"
+ },
+ "Apple Acid": {
+  "en": "100% chance to lower the target's Sp. Def by 1.",
+  "ja": "100パーセントの確率で相手のとくぼうを1段階下げる。"
+ },
+ "Aqua Cutter": {
+  "en": "High critical hit ratio.",
+  "ja": "急所に当たりやすい。"
+ },
+ "Aqua Jet": {
+  "en": "Usually goes first.",
+  "ja": "必ず先制する。"
+ },
+ "Aqua Ring": {
+  "en": "User recovers 1/16 max HP per turn.",
+  "ja": "毎ターン自分の最大HPの16分の1が回復する。"
+ },
+ "Aqua Step": {
+  "en": "100% chance to raise the user's Speed by 1.",
+  "ja": "100パーセントの確率で自分のすばやさを1段階上げる。"
+ },
+ "Aqua Tail": {
+  "en": "No additional effect.",
+  "ja": "追加効果はない。"
+ },
+ "Armor Cannon": {
+  "en": "Lowers the user's Defense and Sp. Def by 1.",
+  "ja": "自分のぼうぎょととくぼうを1段階下げる。"
+ },
+ "Aromatic Mist": {
+  "en": "Raises an ally's Sp. Def by 1.",
+  "ja": "味方のとくぼうを1段階上げる。"
+ },
+ "Assurance": {
+  "en": "Power doubles if target was damaged this turn.",
+  "ja": "このターンにダメージを受けていると威力が2倍になる。"
+ },
+ "Attract": {
+  "en": "A target of the opposite gender gets infatuated.",
+  "ja": "異性の相手をメロメロにする。"
+ },
+ "Aura Sphere": {
+  "en": "This move does not check accuracy.",
+  "ja": "命中率は計算されない。"
+ },
+ "Aura Wheel": {
+  "en": "Morpeko: Electric; Hangry: Dark; 100% +1 Spe.",
+  "ja": "モルペコならでんき、腹ペコならあくタイプになり、100パーセントの確率ですばやさが1段階上がる。"
+ },
+ "Aurora Veil": {
+  "en": "For 5 turns, damage to allies halved. Snow only.",
+  "ja": "5ターンの間、味方が受けるダメージが半減する。雪の時のみ有効。"
+ },
+ "Avalanche": {
+  "en": "Power doubles if user is damaged by the target.",
+  "ja": "相手からダメージを受けていると威力が2倍になる。"
+ },
+ "Axe Kick": {
+  "en": "30% confusion. User loses 50% max HP if miss.",
+  "ja": "30パーセントの確率でこんらんさせる。外すと最大HPの50パーセントのダメージを受ける。"
+ },
+ "Baby-Doll Eyes": {
+  "en": "Lowers the target's Attack by 1.",
+  "ja": "相手のこうげきを1段階下げる。"
+ },
+ "Baneful Bunker": {
+  "en": "Protects from moves. Contact: poison.",
+  "ja": "すべての技を防ぐ。接触した相手をどくにする。"
+ },
+ "Barb Barrage": {
+  "en": "50% psn. 2× power if target already poisoned.",
+  "ja": "50パーセントの確率でどくにする。どく状態の相手には威力が2倍になる。"
+ },
+ "Baton Pass": {
+  "en": "User switches, passing stat changes and more.",
+  "ja": "能力変化を引き継いで交代する。"
+ },
+ "Beak Blast": {
+  "en": "Burns on contact with the user before it moves.",
+  "ja": "行動前に接触技を受けると相手をやけどにする。"
+ },
+ "Beat Up": {
+  "en": "All healthy allies aid in damaging the target.",
+  "ja": "元気な味方全員で相手を攻撃する。"
+ },
+ "Belch": {
+  "en": "Cannot be selected until the user eats a Berry.",
+  "ja": "きのみを食べるまで選択できない。"
+ },
+ "Belly Drum": {
+  "en": "User loses 50% max HP. Maximizes Attack.",
+  "ja": "最大HPの50パーセントを失い、こうげきを最大まで上げる。"
+ },
+ "Bind": {
+  "en": "Traps and damages the target for 4-5 turns.",
+  "ja": "4から5ターンの間、相手を拘束してダメージを与える。"
+ },
+ "Bite": {
+  "en": "30% chance to make the target flinch.",
+  "ja": "30パーセントの確率で相手をひるませる。"
+ },
+ "Bitter Blade": {
+  "en": "User recovers 50% of the damage dealt.",
+  "ja": "与えたダメージの半分のHPを回復する。"
+ },
+ "Bitter Malice": {
+  "en": "100% chance to lower the target's Attack by 1.",
+  "ja": "100パーセントの確率で相手のこうげきを1段階下げる。"
+ },
+ "Blast Burn": {
+  "en": "User cannot move next turn.",
+  "ja": "次のターン自分は動けなくなる。"
+ },
+ "Blaze Kick": {
+  "en": "High critical hit ratio. 10% chance to burn.",
+  "ja": "急所に当たりやすい。10パーセントの確率でやけどにする。"
+ },
+ "Blizzard": {
+  "en": "10% chance to freeze foe(s). Can't miss in Snow.",
+  "ja": "10パーセントの確率で相手をこおり状態にする。雪の時は必ず命中する。"
+ },
+ "Block": {
+  "en": "Prevents the target from switching out.",
+  "ja": "相手は交代できなくなる。"
+ },
+ "Body Press": {
+  "en": "Uses user's Def stat as Atk in damage calculation.",
+  "ja": "自分のぼうぎょのステータスを使ってダメージ計算をする。"
+ },
+ "Body Slam": {
+  "en": "30% chance to paralyze the target.",
+  "ja": "30パーセントの確率で相手をまひさせる。"
+ },
+ "Bone Rush": {
+  "en": "Hits 2-5 times in one turn.",
+  "ja": "1ターンの間に2回から5回ヒットする。"
+ },
+ "Boomburst": {
+  "en": "No additional effect. Hits adjacent Pokemon.",
+  "ja": "追加効果はない。周りのポケモンに当たる。"
+ },
+ "Bounce": {
+  "en": "Bounces turn 1. Hits turn 2. 30% paralyze.",
+  "ja": "1ターン目に飛び上がり、2ターン目に攻撃する。30パーセントの確率でまひさせる。"
+ },
+ "Brave Bird": {
+  "en": "Has 33% recoil.",
+  "ja": "与えたダメージの33パーセントの反動を受ける。"
+ },
+ "Breaking Swipe": {
+  "en": "100% chance to lower the foe(s) Attack by 1.",
+  "ja": "100パーセントの確率で相手のこうげきを1段階下げる。"
+ },
+ "Brick Break": {
+  "en": "Destroys screens, unless the target is immune.",
+  "ja": "相手が無効タイプでなければ、壁などを破壊する。"
+ },
+ "Brutal Swing": {
+  "en": "No additional effect. Hits adjacent Pokemon.",
+  "ja": "追加効果はない。周りのポケモンに当たる。"
+ },
+ "Bug Bite": {
+  "en": "User steals and eats the target's Berry.",
+  "ja": "相手の持っているきのみを盗んで食べる。"
+ },
+ "Bug Buzz": {
+  "en": "10% chance to lower the target's Sp. Def by 1.",
+  "ja": "10パーセントの確率で相手のとくぼうを1段階下げる。"
+ },
+ "Bulk Up": {
+  "en": "Raises the user's Attack and Defense by 1.",
+  "ja": "自分のこうげきとぼうぎょを1段階上げる。"
+ },
+ "Bulldoze": {
+  "en": "100% chance lower adjacent Pkmn Speed by 1.",
+  "ja": "100パーセントの確率で周りのポケモンのすばやさを1段階下げる。"
+ },
+ "Bullet Punch": {
+  "en": "Usually goes first.",
+  "ja": "先制攻撃できる。"
+ },
+ "Bullet Seed": {
+  "en": "Hits 2-5 times in one turn.",
+  "ja": "1ターンの間に2回から5回ヒットする。"
+ },
+ "Burn Up": {
+  "en": "User's Fire type becomes typeless; must be Fire.",
+  "ja": "自分のほのおタイプがなくなる。ほのおタイプでのみ使える。"
+ },
+ "Burning Jealousy": {
+  "en": "100% burns a target that had a stat rise this turn.",
+  "ja": "このターンに能力が上がった相手をやけど状態にする。"
+ },
+ "Calm Mind": {
+  "en": "Raises the user's Sp. Atk and Sp. Def by 1.",
+  "ja": "自分のとくこうととくぼうを1段階上げる。"
+ },
+ "Ceaseless Edge": {
+  "en": "Sets a layer of Spikes on the opposing side.",
+  "ja": "相手の場にまきびしを1層設置する。"
+ },
+ "Charge": {
+  "en": "+1 SpD, user's next Electric move 2× power.",
+  "ja": "とくぼうが1段階上がり、次の自分のでんきタイプの技の威力が2倍になる。"
+ },
+ "Charge Beam": {
+  "en": "70% chance to raise the user's Sp. Atk by 1.",
+  "ja": "70パーセントの確率で自分のとくこうを1段階上げる。"
+ },
+ "Charm": {
+  "en": "Lowers the target's Attack by 2.",
+  "ja": "相手のこうげきを2段階上げる。"
+ },
+ "Chilling Water": {
+  "en": "100% chance to lower the target's Attack by 1.",
+  "ja": "100パーセントの確率で相手のこうげきを1段階下げる。"
+ },
+ "Chilly Reception": {
+  "en": "Starts Snow. User switches out.",
+  "ja": "天候を雪にする。自分は交代する。"
+ },
+ "Circle Throw": {
+  "en": "Forces the target to switch to a random ally.",
+  "ja": "相手を控えのランダムなポケモンと強制的に交代させる。"
+ },
+ "Clanging Scales": {
+  "en": "Lowers the user's Defense by 1.",
+  "ja": "自分のぼうぎょを1段階下げる。"
+ },
+ "Clangorous Soul": {
+  "en": "User loses 33% of its max HP. +1 to all stats.",
+  "ja": "自分の最大HPの33パーセントのダメージを受ける。すべての能力が1段階上がる。"
+ },
+ "Clear Smog": {
+  "en": "Resets all of the target's stat stages to 0.",
+  "ja": "相手のすべての能力変化をリセットする。"
+ },
+ "Close Combat": {
+  "en": "Lowers the user's Defense and Sp. Def by 1.",
+  "ja": "自分のぼうぎょととくぼうを1段階下げる。"
+ },
+ "Coaching": {
+  "en": "Raises an ally's Attack and Defense by 1.",
+  "ja": "味方のこうげきとぼうぎょを1段階上げる。"
+ },
+ "Coil": {
+  "en": "Raises user's Attack, Defense, accuracy by 1.",
+  "ja": "自分のこうげき、ぼうぎょ、命中率を1段階上げる。"
+ },
+ "Comeuppance": {
+  "en": "If hit by an attack, returns 1.5× damage.",
+  "ja": "攻撃技を受けた場合、その1.5倍のダメージを返す。"
+ },
+ "Confuse Ray": {
+  "en": "Confuses the target.",
+  "ja": "相手をこんらん状態にする。"
+ },
+ "Copycat": {
+  "en": "Uses the last move used in the battle.",
+  "ja": "戦闘で最後に出された技を使う。"
+ },
+ "Corrosive Gas": {
+  "en": "Removes adjacent Pokemon's held items.",
+  "ja": "周りのポケモンの持ち物をなくす。"
+ },
+ "Cosmic Power": {
+  "en": "Raises the user's Defense and Sp. Def by 1.",
+  "ja": "自分のぼうぎょととくぼうを1段階上げる。"
+ },
+ "Cotton Guard": {
+  "en": "Raises the user's Defense by 3.",
+  "ja": "自分のぼうぎょを3段階上げる。"
+ },
+ "Cotton Spore": {
+  "en": "Lowers the target's Speed by 2.",
+  "ja": "相手のすばやさを2段階下げる。"
+ },
+ "Counter": {
+  "en": "If hit by physical attack, returns double damage.",
+  "ja": "物理技を受けた時、受けたダメージの2倍のダメージを返す。"
+ },
+ "Court Change": {
+  "en": "Swaps user's field effects with the opposing side.",
+  "ja": "自分と相手の場の効果を入れ替える。"
+ },
+ "Covet": {
+  "en": "If the user has no item, it steals the target's.",
+  "ja": "自分が持ち物を持っていない場合、相手の持ち物を盗む。"
+ },
+ "Crabhammer": {
+  "en": "High critical hit ratio.",
+  "ja": "急所に当たりやすい。"
+ },
+ "Cross Chop": {
+  "en": "High critical hit ratio.",
+  "ja": "急所に当たりやすい。"
+ },
+ "Cross Poison": {
+  "en": "High critical hit ratio. 10% chance to poison.",
+  "ja": "急所に当たりやすい。10パーセントの確率でどくにする。"
+ },
+ "Crunch": {
+  "en": "20% chance to lower the target's Defense by 1.",
+  "ja": "20パーセントの確率で相手のぼうぎょを1段階下げる。"
+ },
+ "Crush Claw": {
+  "en": "50% chance to lower the target's Defense by 1.",
+  "ja": "50パーセントの確率で相手のぼうぎょを1段階下げる。"
+ },
+ "Curse": {
+  "en": "Curses if Ghost, else -1 Spe, +1 Atk, +1 Def.",
+  "ja": "ゴーストタイプの時はのろい状態にする。それ以外の時はすばやさが1段階下がり、こうげきとぼうぎょが1段階上がる。"
+ },
+ "Dark Pulse": {
+  "en": "20% chance to make the target flinch.",
+  "ja": "20パーセントの確率で相手をひるませる。"
+ },
+ "Darkest Lariat": {
+  "en": "Ignores the target's stat stage changes.",
+  "ja": "相手の能力変化を無視して攻撃する。"
+ },
+ "Dazzling Gleam": {
+  "en": "No additional effect. Hits adjacent foes.",
+  "ja": "周りの相手にダメージを与える。"
+ },
+ "Decorate": {
+  "en": "Raises the target's Attack and Sp. Atk by 2.",
+  "ja": "相手のこうげきととくこうを2段階上げる。"
+ },
+ "Defog": {
+  "en": "-1 evasion; ends user and target hazards/terrain.",
+  "ja": "相手の回避率を1段階下げ、お互いの場のまきびしやフィールドなどを解除する。"
+ },
+ "Destiny Bond": {
+  "en": "If an opponent knocks out the user, it also faints.",
+  "ja": "この技を使った後、相手の攻撃でひんしになった時、相手もひんしにする。"
+ },
+ "Detect": {
+  "en": "Prevents moves from affecting the user this turn.",
+  "ja": "このターン、相手の技を受けない。"
+ },
+ "Dig": {
+  "en": "Digs underground turn 1, strikes turn 2.",
+  "ja": "1ターン目に地下に潜り、2ターン目に攻撃する。"
+ },
+ "Dire Claw": {
+  "en": "50% chance to sleep, poison, or paralyze target.",
+  "ja": "50パーセントの確率でねむり、どく、まひのいずれかにする。"
+ },
+ "Disable": {
+  "en": "For 4 turns, disables the target's last move used.",
+  "ja": "4ターンの間、相手が最後につかった技を出せなくする。"
+ },
+ "Discharge": {
+  "en": "30% chance to paralyze adjacent Pokemon.",
+  "ja": "30パーセントの確率で周りのポケモンをまひさせる。"
+ },
+ "Dive": {
+  "en": "Dives underwater turn 1, strikes turn 2.",
+  "ja": "1ターン目に水中に潜り、2ターン目に攻撃する。"
+ },
+ "Double Hit": {
+  "en": "Hits 2 times in one turn.",
+  "ja": "1ターンの間に2回攻撃する。"
+ },
+ "Double Shock": {
+  "en": "User's Electric type: typeless; must be Electric.",
+  "ja": "自分のでんきタイプがなくなる。でんきタイプでのみ使える。"
+ },
+ "Double Team": {
+  "en": "Raises the user's evasiveness by 1.",
+  "ja": "自分の回避率を1段階上げる。"
+ },
+ "Double-Edge": {
+  "en": "Has 33% recoil.",
+  "ja": "与えたダメージの33パーセントの反動を受ける。"
+ },
+ "Draco Meteor": {
+  "en": "Lowers the user's Sp. Atk by 2.",
+  "ja": "自分のとくこうを2段階下げる。"
+ },
+ "Dragon Cheer": {
+  "en": "Ally: Crit ratio +1, or +2 if ally is Dragon type.",
+  "ja": "味方の急所ランクを1上げる。味方がドラゴンの場合は2上げる。"
+ },
+ "Dragon Claw": {
+  "en": "No additional effect.",
+  "ja": "追加効果はない。"
+ },
+ "Dragon Dance": {
+  "en": "Raises the user's Attack and Speed by 1.",
+  "ja": "自分のこうげきとすばやさを1段階上げる。"
+ },
+ "Dragon Darts": {
+  "en": "Hits twice. Doubles: Tries to hit each foe once.",
+  "ja": "2回攻撃する。ダブルバトルでは相手それぞれに1回ずつ攻撃を試みる。"
+ },
+ "Dragon Pulse": {
+  "en": "No additional effect.",
+  "ja": "追加効果はない。"
+ },
+ "Dragon Rush": {
+  "en": "20% chance to make the target flinch.",
+  "ja": "20パーセントの確率で相手をひるませる。"
+ },
+ "Dragon Tail": {
+  "en": "Forces the target to switch to a random ally.",
+  "ja": "相手を強制的に控えのポケモンと交代させる。"
+ },
+ "Drain Punch": {
+  "en": "User recovers 50% of the damage dealt.",
+  "ja": "与えたダメージの50パーセントのHPを回復する。"
+ },
+ "Draining Kiss": {
+  "en": "User recovers 75% of the damage dealt.",
+  "ja": "与えたダメージの75パーセントのHPを回復する。"
+ },
+ "Drill Peck": {
+  "en": "No additional effect.",
+  "ja": "追加効果はない。"
+ },
+ "Drill Run": {
+  "en": "High critical hit ratio.",
+  "ja": "急所に当たりやすい。"
+ },
+ "Drum Beating": {
+  "en": "100% chance to lower the target's Speed by 1.",
+  "ja": "100パーセントの確率で相手のすばやさを1段階下げる。"
+ },
+ "Dual Wingbeat": {
+  "en": "Hits 2 times in one turn.",
+  "ja": "1ターンに2回攻撃する。"
+ },
+ "Dynamic Punch": {
+  "en": "100% chance to confuse the target.",
+  "ja": "100パーセントの確率で相手をこんらんさせる。"
+ },
+ "Earth Power": {
+  "en": "10% chance to lower the target's Sp. Def by 1.",
+  "ja": "10パーセントの確率で相手のとくぼうを1段階下げる。"
+ },
+ "Earthquake": {
+  "en": "Hits adjacent Pokemon. Double damage on Dig.",
+  "ja": "周りのポケモンを攻撃する。あなをほる状態の相手にはダメージが2倍になる。"
+ },
+ "Eerie Impulse": {
+  "en": "Lowers the target's Sp. Atk by 2.",
+  "ja": "相手のとくこうを2段階下げる。"
+ },
+ "Eerie Spell": {
+  "en": "Removes 3 PP from the target's last move.",
+  "ja": "相手の最後の技のPPを3減らす。"
+ },
+ "Electric Terrain": {
+  "en": "5 turns. Grounded: +Electric power, can't sleep.",
+  "ja": "5ターンの間、地面にいるポケモンはでんき技の威力が上がり、ねむり状態にならない。"
+ },
+ "Electrify": {
+  "en": "Changes the target's move to Electric this turn.",
+  "ja": "このターン、相手の技をでんきタイプに変える。"
+ },
+ "Electro Ball": {
+  "en": "More power the faster the user is than the target.",
+  "ja": "自分のすばやさが相手より高いほど威力が上がる。"
+ },
+ "Electro Shot": {
+  "en": "Raises Sp. Atk by 1, hits turn 2. Rain: no charge.",
+  "ja": "とくこうが1段階上がり、2ターン目に攻撃する。雨の時は溜めずに攻撃する。"
+ },
+ "Electroweb": {
+  "en": "100% chance to lower the foe(s) Speed by 1.",
+  "ja": "100パーセントの確率で相手のすばやさを1段階下げる。"
+ },
+ "Encore": {
+  "en": "Target repeats its last move for its next 3 turns.",
+  "ja": "相手は次の3ターンの間、直前に使った技しか出せなくなる。"
+ },
+ "Endeavor": {
+  "en": "Lowers the target's HP to the user's HP.",
+  "ja": "相手のHPを自分のHPと同じにする。"
+ },
+ "Endure": {
+  "en": "User survives attacks this turn with at least 1 HP.",
+  "ja": "このターン、どんな攻撃を受けてもHPを1残して耐える。"
+ },
+ "Energy Ball": {
+  "en": "10% chance to lower the target's Sp. Def by 1.",
+  "ja": "10パーセントの確率で相手のとくぼうを1段階下げる。"
+ },
+ "Entrainment": {
+  "en": "The target's Ability changes to match the user's.",
+  "ja": "相手の特性を自分と同じにする。"
+ },
+ "Eruption": {
+  "en": "Less power as user's HP decreases. Hits foe(s).",
+  "ja": "自分のHPが少ないほど威力が下がる。相手を攻撃する。"
+ },
+ "Expanding Force": {
+  "en": "User on Psychic Terrain: 1.5× power, hits foes.",
+  "ja": "自分がサイコフィールド上にいる時、威力が1.5倍になり、相手全員に当たる。"
+ },
+ "Explosion": {
+  "en": "Hits adjacent Pokemon. The user faints.",
+  "ja": "周りのポケモンを攻撃する。自分はひんしになる。"
+ },
+ "Extrasensory": {
+  "en": "10% chance to make the target flinch.",
+  "ja": "10パーセントの確率で相手をひんし状態にするのではなくひるませる。"
+ },
+ "Extreme Speed": {
+  "en": "Nearly always goes first.",
+  "ja": "非常に高い優先度で攻撃する。"
+ },
+ "Facade": {
+  "en": "Power doubles if user is burn/poison/paralyzed.",
+  "ja": "自分がやけど、どく、まひ状態の時、威力が倍になる。"
+ },
+ "Fairy Lock": {
+  "en": "Prevents all Pokemon from switching next turn.",
+  "ja": "次のターン、すべてのポケモンが交代できなくなる。"
+ },
+ "Fake Out": {
+  "en": "Hits first. First turn out only. 100% flinch chance.",
+  "ja": "最初に出したターンの最初に行動し、100パーセントの確率で相手をひるませる。"
+ },
+ "Fake Tears": {
+  "en": "Lowers the target's Sp. Def by 2.",
+  "ja": "相手のとくぼうを2段階下げる。"
+ },
+ "Feather Dance": {
+  "en": "Lowers the target's Attack by 2.",
+  "ja": "相手のこうげきを2段階下げる。"
+ },
+ "Feint": {
+  "en": "Nullifies Detect, Protect, and Quick/Wide Guard.",
+  "ja": "みきり、まもる、ワイドガードなどの効果を解除してダメージを与える。"
+ },
+ "Fell Stinger": {
+  "en": "Raises user's Attack by 3 if this KOes the target.",
+  "ja": "この技で相手をひんしにすると自分のこうげきが3段階上がる。"
+ },
+ "Fickle Beam": {
+  "en": "Has a 30% chance this move's power is doubled.",
+  "ja": "30パーセントの確率で威力が倍になる。"
+ },
+ "Fiery Dance": {
+  "en": "50% chance to raise the user's Sp. Atk by 1.",
+  "ja": "50パーセントの確率で自分のとくこうが1段階上がる。"
+ },
+ "Final Gambit": {
+  "en": "Does damage equal to the user's HP. User faints.",
+  "ja": "自分の残りHPと同じダメージを相手に与え、自分はひんしになる。"
+ },
+ "Fire Blast": {
+  "en": "10% chance to burn the target.",
+  "ja": "10パーセントの確率で相手をやけどにする。"
+ },
+ "Fire Fang": {
+  "en": "10% chance to burn. 10% chance to flinch.",
+  "ja": "10パーセントの確率でやけどにし、10パーセントの確率でひるませる。"
+ },
+ "Fire Lash": {
+  "en": "100% chance to lower the target's Defense by 1.",
+  "ja": "100パーセントの確率で相手のぼうぎょを1段階下げる。"
+ },
+ "Fire Punch": {
+  "en": "10% chance to burn the target.",
+  "ja": "10パーセントの確率で相手をやけどにする。"
+ },
+ "Fire Spin": {
+  "en": "Traps and damages the target for 4-5 turns.",
+  "ja": "4から5ターンの間、炎の渦で相手を閉じ込めてダメージを与える。"
+ },
+ "First Impression": {
+  "en": "Nearly always goes first. First turn out only.",
+  "ja": "最初に出したターンの最初に行動して攻撃する。"
+ },
+ "Fissure": {
+  "en": "OHKOs the target. Fails if user is a lower level.",
+  "ja": "一撃で相手をひんしにする。自分のレベルが相手より低いと失敗する。"
+ },
+ "Flail": {
+  "en": "More power the less HP the user has left.",
+  "ja": "自分の残りHPが少ないほど威力が上がる。"
+ },
+ "Flame Charge": {
+  "en": "100% chance to raise the user's Speed by 1.",
+  "ja": "100パーセントの確率で自分のすばやさが1段階上がる。"
+ },
+ "Flamethrower": {
+  "en": "10% chance to burn the target.",
+  "ja": "10パーセントの確率で相手をやけどにする。"
+ },
+ "Flare Blitz": {
+  "en": "Has 33% recoil. 10% chance to burn. Thaws user.",
+  "ja": "与えたダメージの33パーセントの反動を受ける。10パーセントの確率でやけどにする。自分のこおり状態を治す。"
+ },
+ "Flash Cannon": {
+  "en": "10% chance to lower the target's Sp. Def by 1.",
+  "ja": "10パーセントの確率で相手のとくぼうが1段階下がる。"
+ },
+ "Flatter": {
+  "en": "Raises the target's Sp. Atk by 1 and confuses it.",
+  "ja": "相手のとくこうを1段階上げ、こんらん状態にする。"
+ },
+ "Fling": {
+  "en": "Flings the user's item at the target. Power varies.",
+  "ja": "持っている持ち物を相手に投げつけて攻撃する。威力は持ち物によって変わる。"
+ },
+ "Flip Turn": {
+  "en": "User switches out after damaging the target.",
+  "ja": "攻撃した後、自分は控えのポケモンと交代する。"
+ },
+ "Flower Trick": {
+  "en": "Always results in a critical hit; no accuracy check.",
+  "ja": "必ず急所に当たる。命中率に関係なく当たる。"
+ },
+ "Fly": {
+  "en": "Flies up on first turn, then strikes the next turn.",
+  "ja": "1ターン目に空へ飛び、2ターン目に攻撃する。"
+ },
+ "Flying Press": {
+  "en": "Combines Flying in its type effectiveness.",
+  "ja": "ひこうタイプの相性をあわせて計算する。"
+ },
+ "Focus Blast": {
+  "en": "10% chance to lower the target's Sp. Def by 1.",
+  "ja": "10パーセントの確率で相手のとくぼうが1段階下がる。"
+ },
+ "Focus Energy": {
+  "en": "Raises the user's critical hit ratio by 2.",
+  "ja": "自分の急所ランクが2段階上がる。"
+ },
+ "Focus Punch": {
+  "en": "Fails if the user takes damage before it hits.",
+  "ja": "技が出る前にダメージを受けると失敗する。"
+ },
+ "Follow Me": {
+  "en": "The foes' moves target the user on the turn used.",
+  "ja": "そのターン、相手の技のターゲットが自分に向く。"
+ },
+ "Forest's Curse": {
+  "en": "Adds Grass to the target's type(s).",
+  "ja": "相手のタイプにくさタイプを追加する。"
+ },
+ "Foul Play": {
+  "en": "Uses target's Attack stat in damage calculation.",
+  "ja": "相手のこうげき実数値を使ってダメージを計算する。"
+ },
+ "Freeze-Dry": {
+  "en": "10% chance to freeze. Super effective on Water.",
+  "ja": "10パーセントの確率でこおり状態にする。みずタイプに対しては抜群になる。"
+ },
+ "Frenzy Plant": {
+  "en": "User cannot move next turn.",
+  "ja": "次のターン自分は動けなくなる。"
+ },
+ "Frost Breath": {
+  "en": "Always results in a critical hit.",
+  "ja": "必ず急所に当たる。"
+ },
+ "Future Sight": {
+  "en": "Hits two turns after being used.",
+  "ja": "使用した2ターン後に攻撃する。"
+ },
+ "Gastro Acid": {
+  "en": "Nullifies the target's Ability.",
+  "ja": "相手の特性の効果をなくす。"
+ },
+ "Giga Drain": {
+  "en": "User recovers 50% of the damage dealt.",
+  "ja": "与えたダメージの50パーセントのHPを回復する。"
+ },
+ "Giga Impact": {
+  "en": "User cannot move next turn.",
+  "ja": "次のターン自分は動けなくなる。"
+ },
+ "Gigaton Hammer": {
+  "en": "Cannot be selected the turn after it's used.",
+  "ja": "連続して選ぶことができない。"
+ },
+ "Glaive Rush": {
+  "en": "User takes sure-hit 2× damage until its next turn.",
+  "ja": "次のターンの終わりまで、自分が受けるダメージが2倍になり、技が必ず命中する。"
+ },
+ "Glare": {
+  "en": "Paralyzes the target.",
+  "ja": "相手をまひ状態にする。"
+ },
+ "Grass Knot": {
+  "en": "More power the heavier the target.",
+  "ja": "相手が重いほど威力が上がる。"
+ },
+ "Grassy Glide": {
+  "en": "User on Grassy Terrain: +1 priority.",
+  "ja": "グラスフィールドの上にいると優先度が1上がる。"
+ },
+ "Grassy Terrain": {
+  "en": "5 turns. Grounded: +Grass power, +1/16 max HP.",
+  "ja": "5ターンの間、地面にいるポケモンはくさタイプの威力が上がり、毎ターン最大HPの1/16回復する。"
+ },
+ "Grav Apple": {
+  "en": "Target: 100% -1 Def. During Gravity: 1.5× power.",
+  "ja": "相手のぼうぎょを1段階下げる。じゅうりょく状態の時は威力が1.5倍になる。"
+ },
+ "Gravity": {
+  "en": "5 turns: no Ground immunities, 1.67× accuracy.",
+  "ja": "5ターンの間、じめんタイプへの無効化が消え、命中率が1.67倍になる。"
+ },
+ "Growth": {
+  "en": "Raises user's Attack and Sp. Atk by 1; 2 in Sun.",
+  "ja": "自分のこうげきととくこうが1段階上がる。晴れの時は2段階上がる。"
+ },
+ "Guard Split": {
+  "en": "Averages Defense and Sp. Def stats with target.",
+  "ja": "自分と相手のぼうぎょととくぼうを足して半分にする。"
+ },
+ "Guard Swap": {
+  "en": "Swaps Defense and Sp. Def changes with target.",
+  "ja": "自分と相手のぼうぎょととくぼうの変化を入れ替える。"
+ },
+ "Guillotine": {
+  "en": "OHKOs the target. Fails if user is a lower level.",
+  "ja": "一撃でひん死にする。自分よりレベルが低い相手には失敗する。"
+ },
+ "Gunk Shot": {
+  "en": "30% chance to poison the target.",
+  "ja": "30パーセントの確率で相手をどくにする。"
+ },
+ "Gyro Ball": {
+  "en": "More power the slower the user than the target.",
+  "ja": "自分より相手のすばやさが低いほど威力が上がる。"
+ },
+ "Hammer Arm": {
+  "en": "Lowers the user's Speed by 1.",
+  "ja": "自分のすばやさが1段階下がる。"
+ },
+ "Hard Press": {
+  "en": "More power the more HP the target has left.",
+  "ja": "相手の残りのHPが多いほど威力が上がる。"
+ },
+ "Haze": {
+  "en": "Eliminates all stat changes.",
+  "ja": "すべてのポケモンの能力変化を元に戻す。"
+ },
+ "Head Smash": {
+  "en": "Has 1/2 recoil.",
+  "ja": "与えたダメージの半分の反動を受ける。"
+ },
+ "Headlong Rush": {
+  "en": "Lowers the user's Defense and Sp. Def by 1.",
+  "ja": "自分のぼうぎょととくぼうが1段階下がる。"
+ },
+ "Heal Bell": {
+  "en": "Cures the user's party of all status conditions.",
+  "ja": "味方全員のすどく・まひ・やけど・ねむり・こおりを治す。"
+ },
+ "Heal Pulse": {
+  "en": "Heals the target by 50% of its max HP.",
+  "ja": "相手のHPを最大HPの半分回復する。"
+ },
+ "Healing Wish": {
+  "en": "User faints. Next hurt Pokemon is fully healed.",
+  "ja": "自分はひんしになり、後続のポケモンのHPと状態異常を全回復する。"
+ },
+ "Heat Crash": {
+  "en": "More power the heavier the user than the target.",
+  "ja": "自分と相手の体重の差が大きいほど威力が上がる。"
+ },
+ "Heat Wave": {
+  "en": "10% chance to burn the foe(s).",
+  "ja": "10パーセントの確率で相手をやけど状態にする。"
+ },
+ "Heavy Slam": {
+  "en": "More power the heavier the user than the target.",
+  "ja": "自分と相手の体重の差が大きいほど威力が上がる。"
+ },
+ "Helping Hand": {
+  "en": "One adjacent ally's move power is 1.5× this turn.",
+  "ja": "このターン、味方の技の威力が1.5倍になる。"
+ },
+ "Hex": {
+  "en": "Power doubles if the target has a status ailment.",
+  "ja": "相手が状態異常のとき威力が2倍になる。"
+ },
+ "High Horsepower": {
+  "en": "No additional effect.",
+  "ja": "追加効果はない。"
+ },
+ "High Jump Kick": {
+  "en": "User is hurt by 50% of its max HP if it misses.",
+  "ja": "技を外すと自分の最大HPの半分のダメージを受ける。"
+ },
+ "Horn Drill": {
+  "en": "OHKOs the target. Fails if user is a lower level.",
+  "ja": "一撃でひんしにする。自分よりレベルが低い相手には失敗する。"
+ },
+ "Horn Leech": {
+  "en": "User recovers 50% of the damage dealt.",
+  "ja": "与えたダメージの半分のHPを回復する。"
+ },
+ "Howl": {
+  "en": "Raises the user's and ally's Attack by 1.",
+  "ja": "自分と味方のこうげきが1段階上がる。"
+ },
+ "Hurricane": {
+  "en": "30% chance to confuse target. Can't miss in rain.",
+  "ja": "30パーセントの確率で相手をこんらんさせる。雨のときは必ず命中する。"
+ },
+ "Hydro Cannon": {
+  "en": "User cannot move next turn.",
+  "ja": "次のターン自分は動けなくなる。"
+ },
+ "Hydro Pump": {
+  "en": "No additional effect.",
+  "ja": "追加効果はない。"
+ },
+ "Hyper Beam": {
+  "en": "User cannot move next turn.",
+  "ja": "次のターン自分は動けなくなる。"
+ },
+ "Hyper Voice": {
+  "en": "No additional effect. Hits adjacent foes.",
+  "ja": "追加効果はない。周りの相手に当た."
+ },
+ "Jet Punch": {
+  "en": "Usually goes first.",
+  "ja": "先制攻撃技。"
+ },
+ "King's Shield": {
+  "en": "Protects from damaging attacks. Contact: -1 Atk.",
+  "ja": "攻撃技を防ぐ。接触するとこうげきが1段階下がる。"
+ },
+ "Knock Off": {
+  "en": "1.5× damage if foe holds an item. Removes item.",
+  "ja": "相手が持ち物を持っていると威力が1.5倍になり、持ち物を落とさせる。"
+ },
+ "Kowtow Cleave": {
+  "en": "This move does not check accuracy.",
+  "ja": "命中率は計算に入れない。"
+ },
+ "Lash Out": {
+  "en": "2× power if the user had a stat lowered this turn.",
+  "ja": "このターンに自分の能力が下がっていると威力が2倍になる。"
+ },
+ "Last Resort": {
+  "en": "Fails unless each known move has been used.",
+  "ja": "覚えている他の技をすべて使っていなければ失敗する。"
+ },
+ "Last Respects": {
+  "en": "+50 power for each time a party member fainted.",
+  "ja": "ひんしになっている味方の数×50威力が増す。"
+ },
+ "Lava Plume": {
+  "en": "30% chance to burn adjacent Pokemon.",
+  "ja": "30パーセントの確率で周りのポケモンをやけど状態にする。"
+ },
+ "Leaf Blade": {
+  "en": "High critical hit ratio.",
+  "ja": "急所に当たりやすい。"
+ },
+ "Leaf Storm": {
+  "en": "Lowers the user's Sp. Atk by 2.",
+  "ja": "自分のとくこうが2段階下がる。"
+ },
+ "Leech Life": {
+  "en": "User recovers 50% of the damage dealt.",
+  "ja": "与えたダメージの半分のHPを回復する。"
+ },
+ "Leech Seed": {
+  "en": "1/8 of target's HP is restored to user every turn.",
+  "ja": "毎ターン相手の最大HPの8分の1を吸収し自分のHPを回復する。"
+ },
+ "Life Dew": {
+  "en": "Heals the user and its allies by 1/4 their max HP.",
+  "ja": "自分と味方の最大HPの4分の1を回復する。"
+ },
+ "Light Screen": {
+  "en": "For 5 turns, special damage to allies is halved.",
+  "ja": "5ターンの間、味方が受ける特殊ダメージを半減する。"
+ },
+ "Light of Ruin": {
+  "en": "Has 1/2 recoil.",
+  "ja": "与えたダメージの半分の反動を受ける。"
+ },
+ "Liquidation": {
+  "en": "20% chance to lower the target's Defense by 1.",
+  "ja": "20パーセントの確率で相手のぼうぎょを1段階下がる。"
+ },
+ "Lock-On": {
+  "en": "User's next move will not miss the target.",
+  "ja": "次の攻撃が必ず命中する。"
+ },
+ "Low Kick": {
+  "en": "More power the heavier the target.",
+  "ja": "相手が重いほど威力が上がる。"
+ },
+ "Low Sweep": {
+  "en": "100% chance to lower the target's Speed by 1.",
+  "ja": "100パーセントの確率で相手のすばやさを1段階下がる。"
+ },
+ "Lumina Crash": {
+  "en": "100% chance to lower the target's Sp. Def by 2.",
+  "ja": "100パーセントの確率で相手のとくぼうを2段階下がる。"
+ },
+ "Lunge": {
+  "en": "100% chance to lower the target's Attack by 1.",
+  "ja": "100パーセントの確率で相手のこうげきを1段階下がる。"
+ },
+ "Mach Punch": {
+  "en": "Usually goes first.",
+  "ja": "先制攻撃技。"
+ },
+ "Magic Powder": {
+  "en": "Changes the target's type to Psychic.",
+  "ja": "相手のタイプをサイキックに変更する。"
+ },
+ "Magic Room": {
+  "en": "For 5 turns, all held items have no effect.",
+  "ja": "5ターンの間、すべての持ち物の効果がなくなる。"
+ },
+ "Magnet Rise": {
+  "en": "For 5 turns, the user has immunity to Ground.",
+  "ja": "5ターンの間、じめんタイプの技を受けなくなる。"
+ },
+ "Magnetic Flux": {
+  "en": "Raises Def, Sp. Def of allies with Plus/Minus by 1.",
+  "ja": "特性プラスかマイナスの味方のぼうぎょ、とくぼうを1段階上げる。"
+ },
+ "Make It Rain": {
+  "en": "Lowers the user's Sp. Atk by 1. Hits foe(s).",
+  "ja": "自分のとくこうが1段階下がる。相手にダメージを与える。"
+ },
+ "Matcha Gotcha": {
+  "en": "20% burn. Recovers 50% dmg dealt. Thaws foe(s).",
+  "ja": "20パーセントでやけど。与えたダメージの半分のHPを回復。氷状態を治す。"
+ },
+ "Mean Look": {
+  "en": "Prevents the target from switching out.",
+  "ja": "相手は交代できなくなる。"
+ },
+ "Mega Kick": {
+  "en": "No additional effect.",
+  "ja": "追加効果はない。"
+ },
+ "Megahorn": {
+  "en": "No additional effect.",
+  "ja": "追加効果はない。"
+ },
+ "Memento": {
+  "en": "Lowers target's Attack, Sp. Atk by 2. User faints.",
+  "ja": "相手のこうげきととくこうを2段階下げ、自分はひんしになる。"
+ },
+ "Metal Burst": {
+  "en": "If hit by an attack, returns 1.5× damage.",
+  "ja": "受けたダメージの1.5倍のダメージを相手に返す。"
+ },
+ "Metal Sound": {
+  "en": "Lowers the target's Sp. Def by 2.",
+  "ja": "相手のとくぼうを2段階下がる。"
+ },
+ "Meteor Assault": {
+  "en": "User cannot move next turn.",
+  "ja": "次のターン自分は動けなくなる。"
+ },
+ "Meteor Beam": {
+  "en": "Raises user's Sp. Atk by 1 on turn 1. Hits turn 2.",
+  "ja": "1ターン目で自分のとくこうを1段階上げ、2ターン目で攻撃する。"
+ },
+ "Meteor Mash": {
+  "en": "20% chance to raise the user's Attack by 1.",
+  "ja": "20パーセントの確率で自分のこうげきを1段階上げる。"
+ },
+ "Milk Drink": {
+  "en": "Heals the user by 50% of its max HP.",
+  "ja": "最大HPの半分のHPを回復する。"
+ },
+ "Minimize": {
+  "en": "Raises the user's evasiveness by 2.",
+  "ja": "自分の回避率を2段階上げる。"
+ },
+ "Mirror Coat": {
+  "en": "If hit by special attack, returns double damage.",
+  "ja": "受けた特殊攻撃の2倍のダメージを相手に返す。"
+ },
+ "Misty Explosion": {
+  "en": "User faints. User on Misty Terrain: 1.5× power.",
+  "ja": "自分がひんしになる。ミストフィールド上の時は威力が1.5倍になる。"
+ },
+ "Misty Terrain": {
+  "en": "5 turns. Can't status,-Dragon power vs grounded.",
+  "ja": "5ターンの間、状態異常にならない。地面にいるポケモンはドラゴンの威力が下がる。"
+ },
+ "Moonblast": {
+  "en": "30% chance to lower the target's Sp. Atk by 1.",
+  "ja": "30パーセントの確率で相手のとくこうを1段階下げる。"
+ },
+ "Moonlight": {
+  "en": "Heals the user by a weather-dependent amount.",
+  "ja": "天候に応じた量だけ自分のHPを回復する。"
+ },
+ "Morning Sun": {
+  "en": "Heals the user by a weather-dependent amount.",
+  "ja": "天候に応じた量だけ自分のHPを回復する。"
+ },
+ "Mortal Spin": {
+  "en": "Poisons foes, frees user from hazards/bind/leech.",
+  "ja": "相手をどく状態にし、トラップ、束縛、やどりぎのタネ状態を解除する。"
+ },
+ "Mountain Gale": {
+  "en": "30% chance to make the target flinch.",
+  "ja": "30パーセントの確率で相手をひるませる。"
+ },
+ "Mud Shot": {
+  "en": "100% chance to lower the target's Speed by 1.",
+  "ja": "100パーセントの確率で相手のすばやさを1段階下げる。"
+ },
+ "Mud-Slap": {
+  "en": "100% chance to lower the target's accuracy by 1.",
+  "ja": "100パーセントの確率で相手の命中率を1段階下げる。"
+ },
+ "Muddy Water": {
+  "en": "30% chance to lower the foe(s) accuracy by 1.",
+  "ja": "30パーセントの確率で相手の命中率を1段階下げる。"
+ },
+ "Mystical Fire": {
+  "en": "100% chance to lower the target's Sp. Atk by 1.",
+  "ja": "100パーセントの確率で相手のとくこうを1段階下げる。"
+ },
+ "Nasty Plot": {
+  "en": "Raises the user's Sp. Atk by 2.",
+  "ja": "自分のとくこうを2段階上げる。"
+ },
+ "Night Daze": {
+  "en": "40% chance to lower the target's accuracy by 1.",
+  "ja": "40パーセントの確率で相手の命中率を1段階下げる。"
+ },
+ "Night Shade": {
+  "en": "Does damage equal to the user's level.",
+  "ja": "自分のレベルと同じダメージを与える。"
+ },
+ "Night Slash": {
+  "en": "High critical hit ratio.",
+  "ja": "急所に当たりやすい。"
+ },
+ "No Retreat": {
+  "en": "Raises all stats by 1 (not acc/eva). Traps user.",
+  "ja": "命中率と回避率を除くすべての能力を1段階上げる。交代できなくなる。"
+ },
+ "Noble Roar": {
+  "en": "Lowers the target's Attack and Sp. Atk by 1.",
+  "ja": "相手のこうげきととくこうを1段階下げる。"
+ },
+ "Nuzzle": {
+  "en": "100% chance to paralyze the target.",
+  "ja": "100パーセントの確率で相手をまひさせる。"
+ },
+ "Octolock": {
+  "en": "Traps target, lowers Def and SpD by 1 each turn.",
+  "ja": "相手を交代できなくし、毎ターンぼうぎょととくぼうを1段階下げる。"
+ },
+ "Outrage": {
+  "en": "Lasts 2-3 turns. Confuses the user afterwards.",
+  "ja": "2から3ターンの間攻撃し続ける。その後こんらん状態になる。"
+ },
+ "Overdrive": {
+  "en": "No additional effect. Hits foe(s).",
+  "ja": "追加効果はない。相手に当たる。"
+ },
+ "Overheat": {
+  "en": "Lowers the user's Sp. Atk by 2.",
+  "ja": "自分のとくこうを2段階下げる。"
+ },
+ "Pain Split": {
+  "en": "Shares HP of user and target equally.",
+  "ja": "自分と相手のHPを足して分け合う。"
+ },
+ "Parabolic Charge": {
+  "en": "User recovers 50% of the damage dealt.",
+  "ja": "与えたダメージの半分を自分のHPとして回復する。"
+ },
+ "Parting Shot": {
+  "en": "Lowers target's Atk, Sp. Atk by 1. User switches.",
+  "ja": "相手のこうげきととくこうを1段階下げて交代する。"
+ },
+ "Payback": {
+  "en": "Power doubles if the user moves after the target.",
+  "ja": "相手より後に攻撃すると威力が2倍になる。"
+ },
+ "Perish Song": {
+  "en": "All active Pokemon will faint in 3 turns.",
+  "ja": "場にいるすべてのポケモンが3ターン後にひんしになる。"
+ },
+ "Petal Blizzard": {
+  "en": "No additional effect. Hits adjacent Pokemon.",
+  "ja": "追加効果はない。周りのポケモンに当たる。"
+ },
+ "Petal Dance": {
+  "en": "Lasts 2-3 turns. Confuses the user afterwards.",
+  "ja": "2から3ターンの間攻撃し続ける。その後こんらん状態になる。"
+ },
+ "Phantom Force": {
+  "en": "Disappears turn 1. Hits turn 2. Breaks protection.",
+  "ja": "1ターン目に姿を消し、2ターン目に攻撃する。まもる状態を貫通する。"
+ },
+ "Pin Missile": {
+  "en": "Hits 2-5 times in one turn.",
+  "ja": "1ターンの間に2から5回連続で攻撃する。"
+ },
+ "Play Rough": {
+  "en": "10% chance to lower the target's Attack by 1.",
+  "ja": "10パーセントの確率で相手のこうげきを1段階下げる。"
+ },
+ "Pluck": {
+  "en": "User steals and eats the target's Berry.",
+  "ja": "相手のきのみを奪って食べる。"
+ },
+ "Poison Fang": {
+  "en": "50% chance to badly poison the target.",
+  "ja": "50パーセントの確率で相手をもうどく状態にする。"
+ },
+ "Poison Jab": {
+  "en": "30% chance to poison the target.",
+  "ja": "30パーセントの確率で相手をどく状態にする。"
+ },
+ "Poison Powder": {
+  "en": "Poisons the target.",
+  "ja": "相手をどく状態にする。"
+ },
+ "Pollen Puff": {
+  "en": "If the target is an ally, heals 50% of its max HP.",
+  "ja": "味方が対象の場合、最大HPの半分を回復する。"
+ },
+ "Poltergeist": {
+  "en": "Fails if the target has no held item.",
+  "ja": "相手が持ち物を持っていないと失敗する。"
+ },
+ "Population Bomb": {
+  "en": "Hits 10 times. Each hit can miss.",
+  "ja": "10回連続で攻撃する。それぞれの攻撃に命中判定がある。"
+ },
+ "Pounce": {
+  "en": "100% chance to lower the target's Speed by 1.",
+  "ja": "100パーセントの確率で相手のすばやさを1段階下げる。"
+ },
+ "Power Gem": {
+  "en": "No additional effect.",
+  "ja": "追加効果はない。"
+ },
+ "Power Shift": {
+  "en": "Switches user's Attack and Defense stats.",
+  "ja": "自分のこうげきとぼうぎょを入れ替える。"
+ },
+ "Power Split": {
+  "en": "Averages Attack and Sp. Atk stats with target.",
+  "ja": "自分のこうげきととくこうを相手と平均化する。"
+ },
+ "Power Swap": {
+  "en": "Swaps Attack and Sp. Atk stat stages with target.",
+  "ja": "自分のこうげきととくこうの段階変化を相手と入れ替える。"
+ },
+ "Power Trick": {
+  "en": "Switches user's Attack and Defense stats.",
+  "ja": "自分のこうげきとぼうぎょを入れ替える。"
+ },
+ "Power Trip": {
+  "en": " + 20 power for each of the user's stat boosts.",
+  "ja": "自分の能力上昇1つにつき威力が20上がる。"
+ },
+ "Power Whip": {
+  "en": "No additional effect.",
+  "ja": "追加効果はない。"
+ },
+ "Protect": {
+  "en": "Prevents moves from affecting the user this turn.",
+  "ja": "このターン、相手の技を受けない。"
+ },
+ "Psych Up": {
+  "en": "Copies the target's current stat stages.",
+  "ja": "相手の現在の能力変化をコピーする。"
+ },
+ "Psychic": {
+  "en": "10% chance to lower the target's Sp. Def by 1.",
+  "ja": "10パーセントの確率で相手のとくぼうを1段階下げる。"
+ },
+ "Psychic Fangs": {
+  "en": "Destroys screens, unless the target is immune.",
+  "ja": "相手が無効化タイプでなければ、壁などを破壊する。"
+ },
+ "Psychic Noise": {
+  "en": "For 2 turns, the target is prevented from healing.",
+  "ja": "2ターンの間、相手は回復できなくなる。"
+ },
+ "Psychic Terrain": {
+  "en": "5 turns. Grounded: +Psychic power, priority-safe.",
+  "ja": "5ターンの間、足場のいいポケモンはサイコキネシスの威力が上がり、先制技を受けなくなる。"
+ },
+ "Psycho Cut": {
+  "en": "High critical hit ratio.",
+  "ja": "急所に当たりやすい。"
+ },
+ "Psyshield Bash": {
+  "en": "100% chance to raise the user's Defense by 1.",
+  "ja": "100パーセントの確率で自分のぼうぎょが1段階上がる。"
+ },
+ "Psyshock": {
+  "en": "Damages target based on Defense, not Sp. Def.",
+  "ja": "とくぼうではなくぼうぎょでダメージを与える。"
+ },
+ "Pyro Ball": {
+  "en": "10% chance to burn the target. Thaws user.",
+  "ja": "10パーセントの確率で相手をやけどにする。こおり状態を治す。"
+ },
+ "Quash": {
+  "en": "Forces the target to move last this turn.",
+  "ja": "このターン、相手の行動順を一番最後にさせる。"
+ },
+ "Quick Attack": {
+  "en": "Usually goes first.",
+  "ja": "先制しやすい。"
+ },
+ "Quick Guard": {
+  "en": "Protects allies from priority attacks this turn.",
+  "ja": "このターン、味方を先制技から守る。"
+ },
+ "Quiver Dance": {
+  "en": "Raises the user's Sp. Atk, Sp. Def, Speed by 1.",
+  "ja": "自分のとくこう、とくぼう、すばやさを1段階上げる。"
+ },
+ "Rage Fist": {
+  "en": "+50 power for each time user was hit. Max 6 hits.",
+  "ja": "攻撃を受けた回数につき威力が50上がる。最大6回。"
+ },
+ "Rage Powder": {
+  "en": "The foes' moves target the user on the turn used.",
+  "ja": "使ったターン、相手の技のターゲットが自分に向く。"
+ },
+ "Raging Bull": {
+  "en": "Destroys screens. Type depends on user's form.",
+  "ja": "壁などを破壊する。タイプは自分のフォルムによる。"
+ },
+ "Raging Fury": {
+  "en": "Lasts 2-3 turns. Confuses the user afterwards.",
+  "ja": "2から3ターンの間続き、その後自分をこんらんさせる。"
+ },
+ "Rain Dance": {
+  "en": "For 5 turns, heavy rain powers Water moves.",
+  "ja": "5ターンの間雨が降り、みずタイプの威力が上がる。"
+ },
+ "Rapid Spin": {
+  "en": "Free user from hazards/bind/Leech Seed; +1 Spe.",
+  "ja": "設置技、バインド、やどりぎのタネ状態から抜け出し、すばやさが1段階上がる。"
+ },
+ "Razor Shell": {
+  "en": "50% chance to lower the target's Defense by 1.",
+  "ja": "50パーセントの確率で相手のぼうぎょを1段階下げる。"
+ },
+ "Recover": {
+  "en": "Heals the user by 50% of its max HP.",
+  "ja": "最大HPの半分を回復する。"
+ },
+ "Recycle": {
+  "en": "Restores the item the user last used.",
+  "ja": "最後につかった持ち物を復活させる。"
+ },
+ "Reflect": {
+  "en": "For 5 turns, physical damage to allies is halved.",
+  "ja": "5ターンの間、味方が受ける物理ダメージを半分にする。"
+ },
+ "Reflect Type": {
+  "en": "User becomes the same type as the target.",
+  "ja": "自分を相手と同じタイプにする。"
+ },
+ "Rest": {
+  "en": "User sleeps 2 turns and restores HP and status.",
+  "ja": "2ターンの間ねむり状態になり、HPと状態異常を全回復する。"
+ },
+ "Reversal": {
+  "en": "More power the less HP the user has left.",
+  "ja": "自分のHPが少ないほど威力が上がる。"
+ },
+ "Revival Blessing": {
+  "en": "Revives a fainted Pokemon to 50% HP.",
+  "ja": "ひんし状態のポケモンをHP半分で復活させる。"
+ },
+ "Rising Voltage": {
+  "en": "2× power if target is grounded in Electric Terrain.",
+  "ja": "エレキフィールドで足場のいい相手には威力が2倍になる。"
+ },
+ "Roar": {
+  "en": "Forces the target to switch to a random ally.",
+  "ja": "相手をランダムな控えのポケモンと交代させる。"
+ },
+ "Rock Blast": {
+  "en": "Hits 2-5 times in one turn.",
+  "ja": "1ターンの間に2から5回連続で攻撃する。"
+ },
+ "Rock Polish": {
+  "en": "Raises the user's Speed by 2.",
+  "ja": "自分のすばやさを2段階上げる。"
+ },
+ "Rock Slide": {
+  "en": "30% chance to make the foe(s) flinch.",
+  "ja": "30パーセントの確率で相手をひるませる。"
+ },
+ "Rock Tomb": {
+  "en": "100% chance to lower the target's Speed by 1.",
+  "ja": "100パーセントの確率で相手のすばやさが1段階下がる。"
+ },
+ "Rock Wrecker": {
+  "en": "User cannot move next turn.",
+  "ja": "次のターンは行動できない。"
+ },
+ "Role Play": {
+  "en": "User replaces its Ability with the target's.",
+  "ja": "自分の特性を相手と同じにする。"
+ },
+ "Roost": {
+  "en": "Heals 50% HP. Flying-type removed 'til turn ends.",
+  "ja": "最大HPの半分のHPを回復する。ターン終了時までひこうタイプがなくなる。"
+ },
+ "Round": {
+  "en": "Power doubles if others used Round this turn.",
+  "ja": "他のポケモンがこのターンにりんしょうを使っていた場合、威力剤が2倍になる。"
+ },
+ "Sacred Sword": {
+  "en": "Ignores the target's stat stage changes.",
+  "ja": "相手の能力変化を無視して攻撃する。"
+ },
+ "Safeguard": {
+  "en": "For 5 turns, protects user's party from status.",
+  "ja": "5ターンの間、味方全員が状態異常にならない。"
+ },
+ "Salt Cure": {
+  "en": "Deals 1/8 max HP each turn; 1/4 on Steel, Water.",
+  "ja": "毎ターン最大HPの8分の1のダメージを与える。はがね、みずタイプには4分の1のダメージになる。"
+ },
+ "Sand Tomb": {
+  "en": "Traps and damages the target for 4-5 turns.",
+  "ja": "4から5ターンの間、相手を閉じ込めてダメージを与える。"
+ },
+ "Sandstorm": {
+  "en": "For 5 turns, a sandstorm rages. Rock: 1.5× SpD.",
+  "ja": "5ターンの間、すなあらしをこおらせる。いわタイプの特防が1.5倍になる。"
+ },
+ "Scald": {
+  "en": "30% chance to burn the target. Thaws target.",
+  "ja": "30パーセントの確率で相手をやけどにする。こおり状態の相手に当てると氷が解ける。"
+ },
+ "Scale Shot": {
+  "en": "Hits 2-5 times. User: -1 Def, +1 Spe after last hit.",
+  "ja": "2から5回連続で攻撃する。最後のヒット後、自分のぼうぎょが1段階下がり、すばやさが1段階上がる。"
+ },
+ "Scary Face": {
+  "en": "Lowers the target's Speed by 2.",
+  "ja": "相手のすばやさが2段階下がる。"
+ },
+ "Scorching Sands": {
+  "en": "30% chance to burn the target. Thaws target.",
+  "ja": "30パーセントの確率で相手をやけどにする。こおり状態の相手に当てると氷が解ける。"
+ },
+ "Screech": {
+  "en": "Lowers the target's Defense by 2.",
+  "ja": "相手のぼうぎょが2段階下がる。"
+ },
+ "Seed Bomb": {
+  "en": "No additional effect.",
+  "ja": "追加効果はない。"
+ },
+ "Seismic Toss": {
+  "en": "Does damage equal to the user's level.",
+  "ja": "自分のレベルと同じだけのダメージを与える。"
+ },
+ "Self-Destruct": {
+  "en": "Hits adjacent Pokemon. The user faints.",
+  "ja": "周りのポケモンに攻撃し、自分はひんし状態になる。"
+ },
+ "Shadow Ball": {
+  "en": "20% chance to lower the target's Sp. Def by 1.",
+  "ja": "20パーセントの確率で相手のとくぼうが1段階下がる。"
+ },
+ "Shadow Claw": {
+  "en": "High critical hit ratio.",
+  "ja": "急所に当たりやすい。"
+ },
+ "Shadow Punch": {
+  "en": "This move does not check accuracy.",
+  "ja": "命中率に関係なく必ず命中する。"
+ },
+ "Shadow Sneak": {
+  "en": "Usually goes first.",
+  "ja": "先制攻撃できる。"
+ },
+ "Shed Tail": {
+  "en": "User takes 1/2 its max HP to pass a substitute.",
+  "ja": "最大HPの半分のHPを削って身代わりを作り、控えのポケモンと交代する。"
+ },
+ "Sheer Cold": {
+  "en": "OHKOs non-Ice targets. Fails if user's lower level.",
+  "ja": "こおりタイプ以外の相手を一撃でひんし状態にする。自分のレベルが相手より低いと失敗する。"
+ },
+ "Shell Side Arm": {
+  "en": "20% psn. Physical+contact if it would be stronger.",
+  "ja": "20パーセントの確率でどくにする。物理技の方がダメージが大きくなる場合は物理技になり、接触技になる。"
+ },
+ "Shell Smash": {
+  "en": "Lowers Def, SpD by 1; raises Atk, SpA, Spe by 2.",
+  "ja": "ぼうぎょととくぼうが1段階下がり、こうげき、とくこう、すばやさが2段階上がる。"
+ },
+ "Shelter": {
+  "en": "Raises the user's Defense by 2.",
+  "ja": "自分のぼうぎょが2段階上がる。"
+ },
+ "Shift Gear": {
+  "en": "Raises the user's Speed by 2 and Attack by 1.",
+  "ja": "自分のすばやさが2段階、こうげきが1段階上がる。"
+ },
+ "Simple Beam": {
+  "en": "The target's Ability becomes Simple.",
+  "ja": "相手の特性をたんじゅんにする。"
+ },
+ "Sing": {
+  "en": "Causes the target to fall asleep.",
+  "ja": "相手をねむり状態にする。"
+ },
+ "Skill Swap": {
+  "en": "The user and the target trade Abilities.",
+  "ja": "自分と相手の特性を入れ替える。"
+ },
+ "Skitter Smack": {
+  "en": "100% chance to lower target's Sp. Atk by 1.",
+  "ja": "100パーセントの確率で相手のとくこうが1段階下がる。"
+ },
+ "Sky Attack": {
+  "en": "Charges, then hits turn 2. 30% flinch. High crit.",
+  "ja": "1ターン目にためて2ターン目に攻撃する。30パーセントの確率でひるませ、急所に当たりやすい。"
+ },
+ "Slack Off": {
+  "en": "Heals the user by 50% of its max HP.",
+  "ja": "最大HPの半分のHPを回復する。"
+ },
+ "Slash": {
+  "en": "High critical hit ratio.",
+  "ja": "急所に当たりやすい。"
+ },
+ "Sleep Powder": {
+  "en": "Causes the target to fall asleep.",
+  "ja": "相手をねむり状態にする。"
+ },
+ "Sleep Talk": {
+  "en": "User must be asleep. Uses another known move.",
+  "ja": "自分がねむり状態の時のみ、自分が覚えている別の技をランダムで出す。"
+ },
+ "Sludge Bomb": {
+  "en": "30% chance to poison the target.",
+  "ja": "30パーセントの確率で相手をどくにする。"
+ },
+ "Sludge Wave": {
+  "en": "10% chance to poison adjacent Pokemon.",
+  "ja": "10パーセントの確率で周りのポケモンをどくにする。"
+ },
+ "Smack Down": {
+  "en": "Removes the target's Ground immunity.",
+  "ja": "相手のじめんタイプの技を受ける耐性をなくす。"
+ },
+ "Smart Strike": {
+  "en": "This move does not check accuracy.",
+  "ja": "命中率は無視する。"
+ },
+ "Snap Trap": {
+  "en": "Traps and damages the target for 4-5 turns.",
+  "ja": "4から5ターンの間、相手を逃げられなくしダメージを与える。"
+ },
+ "Snarl": {
+  "en": "100% chance to lower the foe(s) Sp. Atk by 1.",
+  "ja": "100パーセントの確率で相手のとくこうを1段階下げる。"
+ },
+ "Snipe Shot": {
+  "en": "High critical hit ratio. Cannot be redirected.",
+  "ja": "急所に当たりやすい。技の対象を吸い寄せられない。"
+ },
+ "Snore": {
+  "en": "User must be asleep. 30% chance to flinch target.",
+  "ja": "自分がねむり状態の時のみ使える。30パーセントの確率で相手をひるませる。"
+ },
+ "Snowscape": {
+  "en": "For 5 turns, snow falls. Ice: 1.5× Def.",
+  "ja": "5ターンの間、雪を降らせる。こおりタイプのぼうぎょが1.5倍になる。"
+ },
+ "Soak": {
+  "en": "Changes the target's type to Water.",
+  "ja": "相手のタイプをみずタイプに変える。"
+ },
+ "Soft-Boiled": {
+  "en": "Heals the user by 50% of its max HP.",
+  "ja": "自分の最大HPの50パーセントを回復する。"
+ },
+ "Solar Beam": {
+  "en": "Charges turn 1. Hits turn 2. No charge in sunlight.",
+  "ja": "1ターン目にじゅうでんし、2ターン目に攻撃する。晴れの時はじゅうでん不要。"
+ },
+ "Solar Blade": {
+  "en": "Charges turn 1. Hits turn 2. No charge in sunlight.",
+  "ja": "1ターン目にじゅうでんし、2ターン目に攻撃する。晴れの時はじゅうでん不要。"
+ },
+ "Sparkling Aria": {
+  "en": "The target is cured of its burn.",
+  "ja": "相手のやけど状態を治す。"
+ },
+ "Speed Swap": {
+  "en": "Swaps Speed stat with target.",
+  "ja": "相手と自分のすばやさを入れ替える。"
+ },
+ "Spicy Extract": {
+  "en": "Raises target's Atk by 2 and lowers its Def by 2.",
+  "ja": "相手のこうげきを2段階上げ、ぼうぎょを2段階下げる。"
+ },
+ "Spikes": {
+  "en": "Hurts grounded foes on switch-in. Max 3 layers.",
+  "ja": "交代で出てきた相手にダメージを与える。最大3回まで重ねがけ可能。"
+ },
+ "Spiky Shield": {
+  "en": "Protects from moves. Contact: loses 1/8 max HP.",
+  "ja": "相手の技を防ぐ。接触技を受けた場合、相手は最大HPの8分の1のダメージを受ける。"
+ },
+ "Spirit Break": {
+  "en": "100% chance to lower the target's Sp. Atk by 1.",
+  "ja": "100パーセントの確率で相手のとくこうを1段階下げる。"
+ },
+ "Spirit Shackle": {
+  "en": "Prevents the target from switching out.",
+  "ja": "相手は交代できなくなる。"
+ },
+ "Spit Up": {
+  "en": "More power with more uses of Stockpile.",
+  "ja": "たくわえるを使った回数が多いほど威力が上がる。"
+ },
+ "Spite": {
+  "en": "Lowers the PP of the target's last move by 4.",
+  "ja": "相手が最後に使った技のPPを4減らす。"
+ },
+ "Spore": {
+  "en": "Causes the target to fall asleep.",
+  "ja": "相手をねむり状態にする。"
+ },
+ "Stealth Rock": {
+  "en": "Hurts foes on switch-in. Factors Rock weakness.",
+  "ja": "交代で出てきた相手にダメージを与える。いわタイプの弱点の影響を受ける。"
+ },
+ "Steel Beam": {
+  "en": "User loses 50% max HP.",
+  "ja": "自分の最大HPの50パーセントのダメージを受ける。"
+ },
+ "Steel Roller": {
+  "en": "Fails if there is no terrain active. Ends the terrain.",
+  "ja": "フィールドが出ていないと失敗する。フィールドを解除する。"
+ },
+ "Steel Wing": {
+  "en": "10% chance to raise the user's Defense by 1.",
+  "ja": "10パーセントの確率で自分のぼうぎょを1段階上げる。"
+ },
+ "Sticky Web": {
+  "en": "Lowers Speed of grounded foes by 1 on switch-in.",
+  "ja": "交代で出てきた相手のすばやさを1段階下げる。"
+ },
+ "Stockpile": {
+  "en": "Raises user's Defense, Sp. Def by 1. Max 3 uses.",
+  "ja": "自分のぼうぎょととくぼうを1段階上げる。最大3回まで。"
+ },
+ "Stomping Tantrum": {
+  "en": "Power doubles if the user's last move failed.",
+  "ja": "前のターンに技が失敗していた場合、威力が2倍になる。"
+ },
+ "Stone Axe": {
+  "en": "Sets Stealth Rock on the target's side.",
+  "ja": "相手の場にステルスロックを設置する。"
+ },
+ "Stone Edge": {
+  "en": "High critical hit ratio.",
+  "ja": "急所に当たりやすい。"
+ },
+ "Stored Power": {
+  "en": " + 20 power for each of the user's stat boosts.",
+  "ja": "自分の能力ランクが上がるたびに威力が20ずつ上がる。"
+ },
+ "Storm Throw": {
+  "en": "Always results in a critical hit.",
+  "ja": "必ず急所に当たる。"
+ },
+ "Strength Sap": {
+  "en": "User heals HP=target's Atk stat. Lowers Atk by 1.",
+  "ja": "相手のこうげき実数値分だけ自分のHPを回復し、相手のこうげきを1段階下げる。"
+ },
+ "String Shot": {
+  "en": "Lowers the foe(s) Speed by 2.",
+  "ja": "相手のすばやさを2段階下げる。"
+ },
+ "Struggle": {
+  "en": "User loses 1/4 of its max HP.",
+  "ja": "自分の最大HPの4分の1のダメージを受ける。"
+ },
+ "Struggle Bug": {
+  "en": "100% chance to lower the foe(s) Sp. Atk by 1.",
+  "ja": "100パーセントの確率で相手のとくこうを1段階下げる。"
+ },
+ "Stuff Cheeks": {
+  "en": "Must hold Berry to use. User eats Berry, Def +2.",
+  "ja": "きのみを持っている時のみ使える。きのみを食べて自分のぼうぎょを2段階上げる。"
+ },
+ "Stun Spore": {
+  "en": "Paralyzes the target.",
+  "ja": "相手をまひ状態にする。"
+ },
+ "Substitute": {
+  "en": "User takes 1/4 its max HP to put in a substitute.",
+  "ja": "自分の最大HPの4分の1を削り、みがわりを作る。"
+ },
+ "Sucker Punch": {
+  "en": "Usually goes first. Fails if target is not attacking.",
+  "ja": "優先度が高い。相手が攻撃技を選んでいないと失敗する。"
+ },
+ "Sunny Day": {
+  "en": "For 5 turns, intense sunlight powers Fire moves.",
+  "ja": "5ターンの間、日差しが強くなりほのおタイプの技の威力が上がる。"
+ },
+ "Super Fang": {
+  "en": "Does damage equal to 1/2 target's current HP.",
+  "ja": "相手の現在のHPの2分の1のダメージを与える。"
+ },
+ "Supercell Slam": {
+  "en": "User is hurt by 50% of its max HP if it misses.",
+  "ja": "外すと自分の最大HPの50パーセントのダメージを受ける。"
+ },
+ "Superpower": {
+  "en": "Lowers the user's Attack and Defense by 1.",
+  "ja": "自分のこうげきとぼうぎょが1段階下がる。"
+ },
+ "Surf": {
+  "en": "Hits adjacent Pokemon. Double damage on Dive.",
+  "ja": "周りのポケモンに攻撃する。ダイビング状態の相手にはダメージが2倍になる。"
+ },
+ "Swagger": {
+  "en": "Raises the target's Attack by 2 and confuses it.",
+  "ja": "相手のこうげきを2段階上げ、こんらん状態にする。"
+ },
+ "Swallow": {
+  "en": "Heals the user based on uses of Stockpile.",
+  "ja": "たくわえた回数に応じて自分のHPを回復する。"
+ },
+ "Sweet Kiss": {
+  "en": "Causes the target to become confused.",
+  "ja": "相手をこんらん状態にする。"
+ },
+ "Sweet Scent": {
+  "en": "Lowers the foe(s) evasiveness by 2.",
+  "ja": "相手の回避率を2段階下げる。"
+ },
+ "Switcheroo": {
+  "en": "User switches its held item with the target's.",
+  "ja": "自分の持ち物と相手の持ち物を入れ替える。"
+ },
+ "Swords Dance": {
+  "en": "Raises the user's Attack by 2.",
+  "ja": "自分のこうげきを2段階上げる。"
+ },
+ "Synthesis": {
+  "en": "Heals the user by a weather-dependent amount.",
+  "ja": "天候に応じて自分のHPを回復する。"
+ },
+ "Syrup Bomb": {
+  "en": "Target's Speed is lowered by 1 stage for 3 turns.",
+  "ja": "3ターンの間、相手のすばやさを1段階下げる。"
+ },
+ "Tail Slap": {
+  "en": "Hits 2-5 times in one turn.",
+  "ja": "1ターンの間に2回から5回連続で攻撃する。"
+ },
+ "Tailwind": {
+  "en": "For 4 turns, allies' Speed is doubled.",
+  "ja": "4ターンの間、味方のすばやさが2倍になる。"
+ },
+ "Taunt": {
+  "en": "Target can't use status moves its next 3 turns.",
+  "ja": "3ターンの間、相手は変化技を使えなくなる。"
+ },
+ "Tearful Look": {
+  "en": "Lowers the target's Attack and Sp. Atk by 1.",
+  "ja": "相手のこうげきととくこうを1段階下げる。"
+ },
+ "Teatime": {
+  "en": "All active Pokemon consume held Berries.",
+  "ja": "場にいるすべてのポケモンが持っているきのみを食べる。"
+ },
+ "Teeter Dance": {
+  "en": "Confuses adjacent Pokemon.",
+  "ja": "周りのポケモンをこんらん状態にする。"
+ },
+ "Temper Flare": {
+  "en": "Power doubles if the user's last move failed.",
+  "ja": "直前の技が失敗していた場合、威力が2倍になる。"
+ },
+ "Terrain Pulse": {
+  "en": "User on terrain: power doubles, type varies.",
+  "ja": "フィールドにいる場合、威力が2倍になりタイプが変化する。"
+ },
+ "Thief": {
+  "en": "If the user has no item, it steals the target's.",
+  "ja": "自分が持ち物を持っていない場合、相手の持ち物を奪う。"
+ },
+ "Thrash": {
+  "en": "Lasts 2-3 turns. Confuses the user afterwards.",
+  "ja": "2から3ターン連続で攻撃し、その後自分はこんらん状態になる。"
+ },
+ "Throat Chop": {
+  "en": "For 2 turns, the target cannot use sound moves.",
+  "ja": "2ターンの間、相手は音系の技を使えなくなる。"
+ },
+ "Thunder": {
+  "en": "30% chance to paralyze. Can't miss in rain.",
+  "ja": "30パーセントの確率でまひ状態にする。雨の時は必ず命中する。"
+ },
+ "Thunder Fang": {
+  "en": "10% chance to paralyze. 10% chance to flinch.",
+  "ja": "10パーセントの確率でまひ状態にし、10パーセントの確率でひるませる。"
+ },
+ "Thunder Punch": {
+  "en": "10% chance to paralyze the target.",
+  "ja": "10パーセントの確率で相手をまひ状態にする。"
+ },
+ "Thunder Wave": {
+  "en": "Paralyzes the target.",
+  "ja": "相手をまひ状態にする。"
+ },
+ "Thunderbolt": {
+  "en": "10% chance to paralyze the target.",
+  "ja": "10パーセントの確率で相手をまひ状態にする。"
+ },
+ "Tickle": {
+  "en": "Lowers the target's Attack and Defense by 1.",
+  "ja": "相手のこうげきとぼうぎょを1段階下げる。"
+ },
+ "Tidy Up": {
+  "en": "User +1 Atk, Spe. Clears all substitutes/hazards.",
+  "ja": "自分のこうげきとすばやさを1段階上げ、場のみがわりや設置技を解除する。"
+ },
+ "Topsy-Turvy": {
+  "en": "Inverts the target's stat stages.",
+  "ja": "相手の能力変化を逆転させる。"
+ },
+ "Torch Song": {
+  "en": "100% chance to raise the user's Sp. Atk by 1.",
+  "ja": "100パーセントの確率で自分のとくこうが1段階上がる。"
+ },
+ "Torment": {
+  "en": "Target can't select the same move twice in a row.",
+  "ja": "相手は同じ技を連続で出せなくなる。"
+ },
+ "Toxic": {
+  "en": "Badly poisons the target. Poison types can't miss.",
+  "ja": "相手をもうどく状態にする。どくタイプのポケモンが使うと必ず命中する。"
+ },
+ "Toxic Spikes": {
+  "en": "Poisons grounded foes on switch-in. Max 2 layers.",
+  "ja": "地面にいる相手が交代で出た時にどく状態にする。最大2回まで重ねられる。"
+ },
+ "Toxic Thread": {
+  "en": "Lowers the target's Speed by 1 and poisons it.",
+  "ja": "相手のすばやさを1段階下げ、どく状態にする。"
+ },
+ "Trailblaze": {
+  "en": "100% chance to raise the user's Speed by 1.",
+  "ja": "100パーセントの確率で自分のすばやさが1段階上がる。"
+ },
+ "Transform": {
+  "en": "Copies target's stats, moves, types, and Ability.",
+  "ja": "相手の能力、技、タイプ、特性に変身する。"
+ },
+ "Tri Attack": {
+  "en": "20% chance to paralyze or burn or freeze target.",
+  "ja": "20パーセントの確率で相手をまひ、やけど、こおりのいずれかの状態にする。"
+ },
+ "Trick": {
+  "en": "User switches its held item with the target's.",
+  "ja": "自分の持ち物と相手の持ち物を入れ替える。"
+ },
+ "Trick Room": {
+  "en": "Goes last. For 5 turns, turn order is reversed.",
+  "ja": "5ターンの間、行動順が逆になる。"
+ },
+ "Trick-or-Treat": {
+  "en": "Adds Ghost to the target's type(s).",
+  "ja": "相手のタイプにゴーストを追加する。"
+ },
+ "Triple Arrows": {
+  "en": "High crit. Target: 50% -1 Defense, 30% flinch.",
+  "ja": "急所率高め。相手のぼうぎょを50パーセントで1段階下げ、30パーセントでひるみさせる。"
+ },
+ "Triple Axel": {
+  "en": "Hits 3 times. Each hit can miss, but power rises.",
+  "ja": "3回連続で当たる。各ヒットは外れる可能性があるが、威力が上がる。"
+ },
+ "Trop Kick": {
+  "en": "100% chance to lower the target's Attack by 1.",
+  "ja": "相手のこうげきを1段階下げる。"
+ },
+ "Twin Beam": {
+  "en": "Hits 2 times in one turn.",
+  "ja": "1ターンで2回当たる。"
+ },
+ "U-turn": {
+  "en": "User switches out after damaging the target.",
+  "ja": "相手にダメージを与えた後、交代する。"
+ },
+ "Upper Hand": {
+  "en": "100% flinch. Fails unless target using priority attack.",
+  "ja": "相手が優先度技を使っていないとき、100パーセントでひるみさせる。失敗することがある。"
+ },
+ "Uproar": {
+  "en": "Lasts 3 turns. Active Pokemon cannot fall asleep.",
+  "ja": "3ターン続く。場にいるポケモンはねむりになれない。"
+ },
+ "Vacuum Wave": {
+  "en": "Usually goes first.",
+  "ja": "通常は優先度が高くなる。"
+ },
+ "Venoshock": {
+  "en": "Power doubles if the target is poisoned.",
+  "ja": "相手がどく状態だと威力が2倍になる。"
+ },
+ "Volt Switch": {
+  "en": "User switches out after damaging the target.",
+  "ja": "相手にダメージを与えた後、交代する。"
+ },
+ "Volt Tackle": {
+  "en": "Has 33% recoil. 10% chance to paralyze target.",
+  "ja": "33パーセントの反動がある。10パーセントで相手をまひさせる。"
+ },
+ "Water Pulse": {
+  "en": "20% chance to confuse the target.",
+  "ja": "20パーセントで相手をこんらんさせる。"
+ },
+ "Water Shuriken": {
+  "en": "Usually goes first. Hits 2-5 times in one turn.",
+  "ja": "通常は優先度が高くなる。1ターンで2〜5回当たる。"
+ },
+ "Water Spout": {
+  "en": "Less power as user's HP decreases. Hits foe(s).",
+  "ja": "自分のHPが減るほど威力が下がる。相手全体に当たる。"
+ },
+ "Waterfall": {
+  "en": "20% chance to make the target flinch.",
+  "ja": "20パーセントで相手をひるみさせる。"
+ },
+ "Wave Crash": {
+  "en": "Has 33% recoil.",
+  "ja": "33パーセントの反動がある。"
+ },
+ "Weather Ball": {
+  "en": "Power doubles and type varies in each weather.",
+  "ja": "天候に応じて威力が2倍になり、タイプが変わる。"
+ },
+ "Whirlpool": {
+  "en": "Traps and damages the target for 4-5 turns.",
+  "ja": "4〜5ターン相手を閉じ込めてダメージを与える。"
+ },
+ "Whirlwind": {
+  "en": "Forces the target to switch to a random ally.",
+  "ja": "相手をランダムな味方に交代させる。"
+ },
+ "Wide Guard": {
+  "en": "Protects allies from multi-target moves this turn.",
+  "ja": "このターン、味方全員を全体技から守る。"
+ },
+ "Wild Charge": {
+  "en": "Has 1/4 recoil.",
+  "ja": "1/4の反動がある。"
+ },
+ "Will-O-Wisp": {
+  "en": "Burns the target.",
+  "ja": "相手をやけどさせる。"
+ },
+ "Wish": {
+  "en": "Next turn, 50% of the user's max HP is restored.",
+  "ja": "次のターンに自分の最大HPの50パーセントを回復する。"
+ },
+ "Wonder Room": {
+  "en": "For 5 turns, all Defense and Sp. Def stats switch.",
+  "ja": "5ターンの間、ぼうぎょととくぼうが入れ替わる。"
+ },
+ "Wood Hammer": {
+  "en": "Has 33% recoil.",
+  "ja": "33パーセントの反動がある。"
+ },
+ "Worry Seed": {
+  "en": "The target's Ability becomes Insomnia.",
+  "ja": "相手の特性をふみんに変える。"
+ },
+ "Wrap": {
+  "en": "Traps and damages the target for 4-5 turns.",
+  "ja": "4〜5ターン相手を閉じ込めてダメージを与える。"
+ },
+ "X-Scissor": {
+  "en": "No additional effect.",
+  "ja": "追加効果なし。"
+ },
+ "Yawn": {
+  "en": "Puts the target to sleep after 1 turn.",
+  "ja": "1ターン後に相手をねむり状態にする。"
+ },
+ "Zap Cannon": {
+  "en": "100% chance to paralyze the target.",
+  "ja": "100パーセントで相手をまひさせる。"
+ },
+ "Zen Headbutt": {
+  "en": "20% chance to make the target flinch.",
+  "ja": "20パーセントで相手をひるみさせる。"
+ },
+ "Zing Zap": {
+  "en": "30% chance to make the target flinch.",
+  "ja": "30パーセントで相手をひるみさせる。"
+ },
+ "Anchor Shot": {
+  "en": "Prevents the target from switching out.",
+  "ja": "相手の交代を封じる。"
+ },
+ "Astral Barrage": {
+  "en": "No additional effect. Hits adjacent foes.",
+  "ja": "追加効果なし。周りの相手に当たる。"
+ },
+ "Blood Moon": {
+  "en": "Cannot be selected the turn after it's used.",
+  "ja": "使用した次のターンは選択できない。"
+ },
+ "Bolt Beak": {
+  "en": "Power doubles if user moves before the target.",
+  "ja": "自分が相手より先に行動すると威力が2倍になる。"
+ },
+ "Dragon Hammer": {
+  "en": "No additional effect.",
+  "ja": "追加効果なし。"
+ },
+ "Fishious Rend": {
+  "en": "Power doubles if user moves before the target.",
+  "ja": "自分が相手より先に行動すると威力が2倍になる。"
+ },
+ "Gear Grind": {
+  "en": "Hits 2 times in one turn.",
+  "ja": "1ターンで2回当たる"
+ },
+ "Hyper Drill": {
+  "en": "Bypasses protection without breaking it.",
+  "ja": "まもるを無視できるが破壊しない"
+ },
+ "Metal Claw": {
+  "en": "10% chance to raise the user's Attack by 1.",
+  "ja": "10パーセントの確率で自分のこうげきが1段階上がる"
+ },
+ "Revelation Dance": {
+  "en": "Type varies based on the user's primary type.",
+  "ja": "タイプは自分の主タイプに合わせて変わる"
+ },
+ "Triple Dive": {
+  "en": "Hits 3 times.",
+  "ja": "3回当たる"
+ },
+ "Hypnosis": {
+  "en": "Causes the target to fall asleep.",
+  "ja": "相手をねむりにさせる"
+ },
+ "Ice Beam": {
+  "en": "10% chance to freeze the target.",
+  "ja": "10パーセントの確率で相手をこおりにさせる"
+ },
+ "Ice Fang": {
+  "en": "10% chance to freeze. 10% chance to flinch.",
+  "ja": "10パーセントの確率でこおりにさせる。10パーセントの確率でひるむ"
+ },
+ "Ice Hammer": {
+  "en": "Lowers the user's Speed by 1.",
+  "ja": "自分のすばやさを1段階さげる"
+ },
+ "Ice Punch": {
+  "en": "10% chance to freeze the target.",
+  "ja": "10パーセントの確率で相手をこおりにさせる"
+ },
+ "Ice Shard": {
+  "en": "Usually goes first.",
+  "ja": "たいてい先制で出す"
+ },
+ "Ice Spinner": {
+  "en": "Ends the effects of terrain.",
+  "ja": "エレキ/グラス/ミスト/サイコフィールドの効果を消す"
+ },
+ "Icicle Crash": {
+  "en": "30% chance to make the target flinch.",
+  "ja": "30パーセントの確率で相手をひるませる"
+ },
+ "Icicle Spear": {
+  "en": "Hits 2-5 times in one turn.",
+  "ja": "1ターンで2～5回連続で当たる"
+ },
+ "Icy Wind": {
+  "en": "100% chance to lower the foe(s) Speed by 1.",
+  "ja": "必ず相手のすばやさを1段階さげる"
+ },
+ "Imprison": {
+  "en": "No foe can use any move known by the user.",
+  "ja": "相手は自分が覚えている技を使えなくなる"
+ },
+ "Infernal Parade": {
+  "en": "30% burn. 2× power if target is already statused.",
+  "ja": "30パーセントの確率でやけどさせる。相手がすでに状態異常なら威力が2倍になる"
+ },
+ "Inferno": {
+  "en": "100% chance to burn the target.",
+  "ja": "必ず相手をやけどさせる"
+ },
+ "Infestation": {
+  "en": "Traps and damages the target for 4-5 turns.",
+  "ja": "相手を4～5ターン閉じ込めてダメージを与える"
+ },
+ "Ingrain": {
+  "en": "Traps/grounds user; heals 1/16 max HP per turn.",
+  "ja": "自分を地面に固定し、1ターンで最大HPの1/16回復する"
+ },
+ "Instruct": {
+  "en": "The target immediately uses its last used move.",
+  "ja": "相手はすぐに前回使った技を使用する"
+ },
+ "Iron Defense": {
+  "en": "Raises the user's Defense by 2.",
+  "ja": "自分のぼうぎょを2段階上げる"
+ },
+ "Iron Head": {
+  "en": "30% chance to make the target flinch.",
+  "ja": "30パーセントの確率で相手をひるませる"
+ },
+ "Iron Tail": {
+  "en": "30% chance to lower the target's Defense by 1.",
+  "ja": "30パーセントの確率で相手のぼうぎょを1段階さげる"
+ },
+ "Jaw Lock": {
+  "en": "Prevents both user and target from switching out.",
+  "ja": "自分と相手の交代をできなくする"
+ }
+}

@@ -4,10 +4,13 @@ import { abilitiesOf, abilityMatters, abilityOf, allTypes, damage, effectiveness
 import { CATEGORY_JA, clarifySpeech, damageQuestionOf, damageSpeech, koText } from "./answer";
 import { aiSetup, extract, type AiSetup, type Attempt, type Turn } from "./llm";
 import { resolve, resolveField, toJa, type NameKind } from "./resolve";
+import { chatReply } from "./chat";
 import { fixMishearing } from "./misheard";
 import { parseFollowUp, parseRules } from "./rules";
 import aliases from "../data/aliases.json";
 import names from "../data/names.json";
+import abilityDesc from "../data/ability-desc.json";
+import moveDesc from "../data/move-desc.json";
 import { damageCard, fieldTexts, spreadText, type DamageCard } from "./card";
 
 export interface AskResult {
@@ -385,18 +388,25 @@ function answerAbility(ex: Obj, text: string): AskResult | undefined {
       .map((en) => toJa("pokemon", en))
       .filter((ja) => !/^[A-Za-z]/.test(ja));
     const shown = holders.slice(0, 6).join("、");
+    const desc = descOf("abilities", ab.en);
+    const who = holders.length ? `持っているのは${shown}${holders.length > 6 ? "など" : ""}ロト` : "";
     return {
-      speech: `${ab.ja}の効果の説明はまだ入っていないロト。${holders.length ? `持っているのは${shown}${holders.length > 6 ? "など" : ""}ロト` : ""}`,
+      speech: desc ? `${ab.ja}は、${desc}ロト。${who}` : `${ab.ja}の効果の説明はまだ入っていないロト。${who}`,
       title: `${ab.ja}`,
-      lines: holders.length ? [`持っているポケモン: ${holders.join("、")}`] : [],
+      lines: [...(desc ? [`効果: ${desc}`] : []), ...(holders.length ? [`持っているポケモン: ${holders.join("、")}`] : []), ...(desc ? [DESC_NOTE] : [])],
       intent: "ability",
     };
   }
   const p = heardPoke ? pr.name("pokemon", heardPoke) : undefined;
   if (!p) return undefined;
-  const list = abilitiesOf(p.en).map((a) => toJa("abilities", a));
+  const ens = abilitiesOf(p.en);
+  const list = ens.map((a) => toJa("abilities", a));
   if (!list.length) return fail("ability", p.ja, [`${p.ja}の特性のデータが見つからないロト`]);
-  return { speech: `${p.ja}の特性は${list.join("、")}ロト`, title: `${p.ja}の特性`, lines: [`特性: ${list.join("、")}`], intent: "ability" };
+  const descs = ens.map((a) => descOf("abilities", a));
+  // 特性が 1 つなら効果まで読む。複数なら名前だけ読み、効果は画面に出す
+  const speech = list.length === 1 && descs[0] ? `${p.ja}の特性は${list[0]}。${descs[0]}ロト` : `${p.ja}の特性は${list.join("、")}ロト`;
+  const lines = list.map((ja, i) => (descs[i] ? `${ja}: ${descs[i]}` : ja));
+  return { speech, title: `${p.ja}の特性`, lines: descs.some(Boolean) ? [...lines, DESC_NOTE] : lines, intent: "ability" };
 }
 
 function answerStats(ex: Obj): AskResult {
@@ -409,6 +419,14 @@ function answerStats(ex: Obj): AskResult {
   return { speech: `${p.ja}の種族値は、H${b.hp}、A${b.atk}、B${b.def}、C${b.spa}、D${b.spd}、S${b.spe}。合計${total}ロト`, title: `${p.ja}の種族値`, lines: [`${t}（合計 ${total}）`], intent: "stats" };
 }
 
+/** 技・特性の説明（data/move-desc.json・ability-desc.json。Showdown の説明の機械翻訳）。読み上げ用に末尾の句点を落とす */
+function descOf(kind: "moves" | "abilities", en: string): string | undefined {
+  const t = (kind === "moves" ? moveDesc : abilityDesc) as unknown as Record<string, { ja?: string } | string>;
+  const d = t[en];
+  return typeof d === "object" && d.ja ? d.ja.replace(/。$/, "") : undefined;
+}
+const DESC_NOTE = "説明は Showdown の説明文を機械翻訳したもの";
+
 function answerMove(ex: Obj): AskResult {
   const pr = new Problems();
   const m = pr.name("moves", str(ex.move));
@@ -418,7 +436,13 @@ function answerMove(ex: Obj): AskResult {
   const cat = CATEGORY_JA[i.category] ?? i.category;
   const pri = i.priority ? `、優先度${i.priority > 0 ? "+" : ""}${i.priority}` : "";
   const bp = i.bp ? `威力${i.bp}` : "威力なし";
-  return { speech: `${m.ja}は${type}タイプの${cat}技。${bp}${pri}ロト`, title: `${m.ja}の性能`, lines: [`${type}・${cat}・${bp}${pri}`], intent: "move_info" };
+  const desc = descOf("moves", m.en);
+  return {
+    speech: `${m.ja}は${type}タイプの${cat}技。${bp}${pri}ロト${desc ? `。${desc}ロト` : ""}`,
+    title: `${m.ja}の性能`,
+    lines: [`${type}・${cat}・${bp}${pri}`, ...(desc ? [`効果: ${desc}`, DESC_NOTE] : [])],
+    intent: "move_info",
+  };
 }
 
 function answerLearnset(ex: Obj): AskResult {
@@ -545,6 +569,13 @@ function setupLines(s: AiSetup): string[] {
   ];
 }
 
+/** 雑談なら AI にロトムの返事を作らせる（失敗したら決まった返事のまま） */
+async function withChat(out: AskResult, text: string, history?: Turn[]): Promise<AskResult> {
+  if (out.intent !== "chat") return out;
+  const c = await chatReply(text, history);
+  return c.reply ? { ...out, speech: c.reply, short: c.reply } : out;
+}
+
 /** 文字の質問に答える（AI 取り出しを含む 1 往復） */
 export async function ask(text: string, opts: { history?: Turn[]; useRules?: boolean } = {}): Promise<AskResult> {
   const t0 = Date.now();
@@ -556,7 +587,7 @@ export async function ask(text: string, opts: { history?: Turn[]; useRules?: boo
   const fixed = text !== heard ? text : undefined;
   const ruled = opts.useRules === false ? null : (parseRules(text) ?? parseFollowUp(text, prev));
   if (ruled) {
-    const out = answerExtraction(ruled, text);
+    const out = await withChat(answerExtraction(ruled, text), text, opts.history);
     return { ...out, extraction: ruled, diagnostics: { provider: "rules", attempts: [], totalMs: Date.now() - t0, setup: aiSetup(), fixed } };
   }
   const r = await extract(text, { history: opts.history });
@@ -574,7 +605,7 @@ export async function ask(text: string, opts: { history?: Turn[]; useRules?: boo
       diagnostics: { attempts: r.attempts, totalMs: Date.now() - t0, setup, fixed },
     };
   }
-  const out = answerExtraction(r.extraction, text);
+  const out = await withChat(answerExtraction(r.extraction, text), text, opts.history);
   return { ...out, extraction: r.extraction, diagnostics: { provider: r.provider, attempts: r.attempts, totalMs: Date.now() - t0, setup: aiSetup(), fixed } };
 }
 

@@ -1,0 +1,1239 @@
+{
+ "_source": "Pokémon Showdown data/text の shortDesc（英語）を AI で日本語にしたもの（機械翻訳）。scripts/build-descriptions.ts で生成",
+ "Stench": {
+  "en": "This Pokemon's attacks without a chance to flinch gain a 10% chance to flinch.",
+  "ja": "自分のひるみしない技は10パーセントでひるむようになる。"
+ },
+ "Drizzle": {
+  "en": "On switch-in, this Pokemon summons Rain.",
+  "ja": "交代時に雨を降らせる。"
+ },
+ "Speed Boost": {
+  "en": "This Pokemon's Speed is raised 1 stage at the end of each full turn on the field.",
+  "ja": "自分のすばやさが毎ターン終了時に1段階上がる。"
+ },
+ "Battle Armor": {
+  "en": "This Pokemon cannot be struck by a critical hit.",
+  "ja": "急所が当たらない。"
+ },
+ "Sturdy": {
+  "en": "If this Pokemon is at full HP, it survives one hit with at least 1 HP. Immune to OHKO.",
+  "ja": "HPが満タンのとき、1撃で残りHPが1になる。OHKOが効かない。"
+ },
+ "Damp": {
+  "en": "Prevents Explosion/Mind Blown/Misty Explosion/Self-Destruct/Aftermath while active.",
+  "ja": "だいばくはつ・ミストバースト・じばく・ゆうばくの発動を防ぐ。"
+ },
+ "Limber": {
+  "en": "This Pokemon cannot be paralyzed. Gaining this Ability while paralyzed cures it.",
+  "ja": "まひにならない。まひ状態でこの特性を得ると治る。"
+ },
+ "Sand Veil": {
+  "en": "If Sandstorm is active, this Pokemon's evasiveness is 1.25×; immunity to Sandstorm.",
+  "ja": "すなあらしが続くと回避率が1.25倍になる。すなあらしが無効になる。"
+ },
+ "Static": {
+  "en": "30% chance a Pokemon making contact with this Pokemon will be paralyzed.",
+  "ja": "接触した相手に30パーセントでまひを付与する。"
+ },
+ "Volt Absorb": {
+  "en": "This Pokemon heals 1/4 of its max HP when hit by Electric moves; Electric immunity.",
+  "ja": "でんき技を受けたとき最大HPの1/4回復し、でんきが無効になる。"
+ },
+ "Water Absorb": {
+  "en": "This Pokemon heals 1/4 of its max HP when hit by Water moves; Water immunity.",
+  "ja": "みず技を受けたとき最大HPの1/4回復し、みずが無効になる。"
+ },
+ "Oblivious": {
+  "en": "This Pokemon cannot be infatuated or taunted. Immune to Intimidate.",
+  "ja": "とくせいがあやしい・ちょうはつできない。いかくが無効になる。"
+ },
+ "Cloud Nine": {
+  "en": "While this Pokemon is active, the effects of weather conditions are disabled.",
+  "ja": "天候の効果が無効になる。"
+ },
+ "Compound Eyes": {
+  "en": "This Pokemon's moves have their accuracy multiplied by 1.3.",
+  "ja": "命中率が1.3倍になる。"
+ },
+ "Insomnia": {
+  "en": "This Pokemon cannot fall asleep. Gaining this Ability while asleep cures it.",
+  "ja": "ねむりにならない。ねむり状態でこの特性を得ると治る。"
+ },
+ "Color Change": {
+  "en": "This Pokemon's type changes to the type of a move it's hit by, unless it has the type.",
+  "ja": "受けた技のタイプに自分のタイプが変わる（同タイプは除く）。"
+ },
+ "Immunity": {
+  "en": "This Pokemon cannot be poisoned. Gaining this Ability while poisoned cures it.",
+  "ja": "どくが無効になる。どく状態でこの特性を得ると治る。"
+ },
+ "Flash Fire": {
+  "en": "This Pokemon's Fire attacks do 1.5× damage if hit by one Fire move; Fire immunity.",
+  "ja": "ほのお技で受けたとき、ほのお技の威力が1.5倍になる。ほのおが無効になる。"
+ },
+ "Shield Dust": {
+  "en": "This Pokemon is not affected by the secondary effect of another Pokemon's attack.",
+  "ja": "他のポケモンの技の追加効果を受けない。"
+ },
+ "Own Tempo": {
+  "en": "This Pokemon cannot be confused. Immune to Intimidate.",
+  "ja": "こんらんにならない。いかくが無効になる。"
+ },
+ "Suction Cups": {
+  "en": "This Pokemon cannot be forced to switch out by another Pokemon's attack or item.",
+  "ja": "相手の技や持ち物で交代させられない。"
+ },
+ "Intimidate": {
+  "en": "On switch-in, this Pokemon lowers the Attack of opponents by 1 stage.",
+  "ja": "交代時に相手のこうげきを1段階下げる。"
+ },
+ "Shadow Tag": {
+  "en": "Prevents foes from choosing to switch unless they also have this Ability.",
+  "ja": "相手が交代できなくなる（同じ特性持ちは除く）。"
+ },
+ "Rough Skin": {
+  "en": "Pokemon making contact with this Pokemon lose 1/8 of their max HP.",
+  "ja": "接触した相手は最大HPの1/8のダメージを受ける。"
+ },
+ "Wonder Guard": {
+  "en": "This Pokemon can only be damaged by supereffective moves and indirect damage.",
+  "ja": "効果抜群の技と間接ダメージしか受けない。"
+ },
+ "Levitate": {
+  "en": "This Pokemon is immune to Ground; Gravity/Ingrain/Smack Down/Iron Ball nullify it.",
+  "ja": "じめんが無効になる。じゅうりょく・ねをはる・うちおとす・くろいてっきゅうで無効化される。"
+ },
+ "Effect Spore": {
+  "en": "30% chance of poison/paralysis/sleep on others making contact with this Pokemon.",
+  "ja": "接触した相手に30パーセントでどく・まひ・ねむりを付与する。"
+ },
+ "Synchronize": {
+  "en": "If another Pokemon burns/poisons/paralyzes this Pokemon, it also gets that status.",
+  "ja": "相手にやけど・どく・まひを与えると自分も同じ状態になる。"
+ },
+ "Clear Body": {
+  "en": "Prevents other Pokemon from lowering this Pokemon's stat stages.",
+  "ja": "他のポケモンが自分のステージを下げられない。"
+ },
+ "Natural Cure": {
+  "en": "This Pokemon has its non-volatile status condition cured when it switches out.",
+  "ja": "交代時に状態異常が治る。"
+ },
+ "Lightning Rod": {
+  "en": "This Pokemon draws Electric moves to itself to raise Sp. Atk by 1; Electric immunity.",
+  "ja": "でんき技を引き寄せてとくこうが1段階上がり、でんきが無効になる。"
+ },
+ "Serene Grace": {
+  "en": "This Pokemon's moves have their secondary effect chance doubled.",
+  "ja": "追加効果の発動率が2倍になる。"
+ },
+ "Swift Swim": {
+  "en": "If Rain is active, this Pokemon's Speed is doubled.",
+  "ja": "雨が続くとすばやさが2倍になる。"
+ },
+ "Chlorophyll": {
+  "en": "If Sun is active, this Pokemon's Speed is doubled.",
+  "ja": "晴れが続くとすばやさが2倍になる。"
+ },
+ "Illuminate": {
+  "en": "This Pokemon's accuracy can't be lowered by others; ignores their evasiveness stat.",
+  "ja": "相手に命中率を下げられない。相手の回避率を無視する。"
+ },
+ "Trace": {
+  "en": "On switch-in, or when it can, this Pokemon copies a random adjacent foe's Ability.",
+  "ja": "交代時または可能時に、周りの相手の特性をランダムにコピーする。"
+ },
+ "Huge Power": {
+  "en": "This Pokemon's Attack is doubled.",
+  "ja": "こうげきが2倍になる。"
+ },
+ "Poison Point": {
+  "en": "30% chance a Pokemon making contact with this Pokemon will be poisoned.",
+  "ja": "接触した相手に30パーセントでどくを付与する。"
+ },
+ "Inner Focus": {
+  "en": "This Pokemon cannot be made to flinch. Immune to Intimidate.",
+  "ja": "ひるませない。いかくが無効になる。"
+ },
+ "Magma Armor": {
+  "en": "This Pokemon cannot be frozen. Gaining this Ability while frozen cures it.",
+  "ja": "こおりにならない。こおり状態でこの特性を得ると治る。"
+ },
+ "Water Veil": {
+  "en": "This Pokemon cannot be burned. Gaining this Ability while burned cures it.",
+  "ja": "このポケモンはやけどにならない。やけど状態でこの特性を得ると回復する。"
+ },
+ "Magnet Pull": {
+  "en": "Prevents opposing Steel-type Pokemon from choosing to switch out.",
+  "ja": "相手のはがねタイプが交代できなくなる。"
+ },
+ "Soundproof": {
+  "en": "This Pokemon is immune to sound-based moves, unless it used the move.",
+  "ja": "このポケモンは音技に無効になる（自分が技を使ったときは除く）。"
+ },
+ "Rain Dish": {
+  "en": "If Rain is active, this Pokemon heals 1/16 of its max HP each turn.",
+  "ja": "雨が降っていると毎ターン最大HPの1/16回復する。"
+ },
+ "Sand Stream": {
+  "en": "On switch-in, this Pokemon summons Sandstorm.",
+  "ja": "交代時にすなあらしを発生させる。"
+ },
+ "Pressure": {
+  "en": "If this Pokemon is the target of a foe's move, that move loses one additional PP.",
+  "ja": "相手がこのポケモンを対象に技を使うとPPが1回余分に減る。"
+ },
+ "Thick Fat": {
+  "en": "Fire-/Ice-type moves against this Pokemon deal damage with a halved offensive stat.",
+  "ja": "ほのお・こおり技の威力が半減する。"
+ },
+ "Early Bird": {
+  "en": "This Pokemon's sleep counter drops by 2 instead of 1.",
+  "ja": "ねむりカウントが1ではなく2減る。"
+ },
+ "Flame Body": {
+  "en": "30% chance a Pokemon making contact with this Pokemon will be burned.",
+  "ja": "接触した相手に30パーセントの確率でやけどさせる。"
+ },
+ "Run Away": {
+  "en": "No competitive use.",
+  "ja": "競技上の効果なし。"
+ },
+ "Keen Eye": {
+  "en": "This Pokemon's accuracy can't be lowered by others; ignores their evasiveness stat.",
+  "ja": "このポケモンの命中率は下がらず、相手の回避率を無視する。"
+ },
+ "Hyper Cutter": {
+  "en": "Prevents other Pokemon from lowering this Pokemon's Attack stat stage.",
+  "ja": "相手にこうげきの段階を下げさせない。"
+ },
+ "Pickup": {
+  "en": "If this Pokemon has no item, it finds one used by an adjacent Pokemon this turn.",
+  "ja": "持ち物がないとき、隣のポケモンが使用した道具を1回取得する。"
+ },
+ "Truant": {
+  "en": "This Pokemon skips every other turn instead of using a move.",
+  "ja": "毎ターン交代で技を使わずにスキップする。"
+ },
+ "Hustle": {
+  "en": "This Pokemon's Attack is 1.5× and accuracy of its physical attacks is 0.8×.",
+  "ja": "こうげきが1.5倍になり、物理技の命中率が0.8倍になる。"
+ },
+ "Cute Charm": {
+  "en": "30% chance of infatuating Pokemon of the opposite gender if they make contact.",
+  "ja": "接触した異性に30パーセントの確率でメロメロにさせる。"
+ },
+ "Plus": {
+  "en": "If an active ally has this Ability or the Minus Ability, this Pokemon's Sp. Atk is 1.5×.",
+  "ja": "味方がプラスまたはマイナス特性を持つと、とくこうが1.5倍になる。"
+ },
+ "Minus": {
+  "en": "If an active ally has this Ability or the Plus Ability, this Pokemon's Sp. Atk is 1.5×.",
+  "ja": "味方がプラスまたはマイナス特性を持つと、とくこうが1.5倍になる。"
+ },
+ "Forecast": {
+  "en": "Castform's type changes to the current weather condition's type, except Sandstorm.",
+  "ja": "ポワルンは天候に応じてタイプが変化する（すなあらしは除く）。"
+ },
+ "Sticky Hold": {
+  "en": "This Pokemon cannot lose its held item due to another Pokemon's Ability or attack.",
+  "ja": "他のポケモンの特性や攻撃で持ち物が奪われない。"
+ },
+ "Shed Skin": {
+  "en": "This Pokemon has a 33% chance to have its status cured at the end of each turn.",
+  "ja": "毎ターン33パーセントの確率で状態異常が治る。"
+ },
+ "Guts": {
+  "en": "If this Pokemon is statused, its Attack is 1.5×; ignores burn halving physical damage.",
+  "ja": "状態異常時にこうげきが1.5倍になる。やけどによるこうげき半減を無視する。"
+ },
+ "Marvel Scale": {
+  "en": "If this Pokemon has a non-volatile status condition, its Defense is multiplied by 1.5.",
+  "ja": "状態異常時にぼうぎょが1.5倍になる。"
+ },
+ "Liquid Ooze": {
+  "en": "This Pokemon damages those draining HP from it for as much as they would heal.",
+  "ja": "HPを吸い取る技を受けた相手に同等のダメージを与える。"
+ },
+ "Overgrow": {
+  "en": "At 1/3 or less of its max HP, this Pokemon's offensive stat is 1.5× with Grass attacks.",
+  "ja": "HPが最大HPの3分の1以下のとき、くさタイプの技を使うとこうげき・とくこうが1.5倍になる。"
+ },
+ "Blaze": {
+  "en": "At 1/3 or less of its max HP, this Pokemon's offensive stat is 1.5× with Fire attacks.",
+  "ja": "HPが最大HPの3分の1以下のとき、ほのおタイプの技を使うとこうげき・とくこうが1.5倍になる。"
+ },
+ "Torrent": {
+  "en": "At 1/3 or less of its max HP, this Pokemon's offensive stat is 1.5× with Water attacks.",
+  "ja": "HPが最大HPの3分の1以下のとき、みずタイプの技を使うとこうげき・とくこうが1.5倍になる。"
+ },
+ "Swarm": {
+  "en": "At 1/3 or less of its max HP, this Pokemon's offensive stat is 1.5× with Bug attacks.",
+  "ja": "HPが最大HPの3分の1以下のとき、むしタイプの技を使うとこうげき・とくこうが1.5倍になる。"
+ },
+ "Rock Head": {
+  "en": "This Pokemon does not take recoil damage besides Struggle/Life Orb/crash damage.",
+  "ja": "わるあがき・いのちのたま・とびひざげりなどの失敗ダメージ以外の反動ダメージを受けない。"
+ },
+ "Drought": {
+  "en": "On switch-in, this Pokemon summons Sun.",
+  "ja": "交代時に晴れを発生させる。"
+ },
+ "Arena Trap": {
+  "en": "Prevents opposing Pokemon from choosing to switch out unless they are airborne.",
+  "ja": "相手が空中にいない限り交代できなくなる。"
+ },
+ "Vital Spirit": {
+  "en": "This Pokemon cannot fall asleep. Gaining this Ability while asleep cures it.",
+  "ja": "ねむりにならない。ねむり状態でこの特性を得ると回復する。"
+ },
+ "White Smoke": {
+  "en": "Prevents other Pokemon from lowering this Pokemon's stat stages.",
+  "ja": "相手にステータス段階を下げさせない。"
+ },
+ "Pure Power": {
+  "en": "This Pokemon's Attack is doubled.",
+  "ja": "こうげきが2倍になる。"
+ },
+ "Shell Armor": {
+  "en": "This Pokemon cannot be struck by a critical hit.",
+  "ja": "急所が当たらない。"
+ },
+ "Air Lock": {
+  "en": "While this Pokemon is active, the effects of weather conditions are disabled.",
+  "ja": "天候の効果が無効になる。"
+ },
+ "Tangled Feet": {
+  "en": "This Pokemon's evasiveness is doubled as long as it is confused.",
+  "ja": "こんらん時に回避率が2倍になる。"
+ },
+ "Motor Drive": {
+  "en": "This Pokemon's Speed is raised 1 stage if hit by an Electric move; Electric immunity.",
+  "ja": "でんき技を受けるとすばやさが1段階上がり、でんきに無効になる。"
+ },
+ "Rivalry": {
+  "en": "This Pokemon's attacks do 1.25× on same gender targets; 0.75× on opposite gender.",
+  "ja": "同性に対して1.25倍、異性に対して0.75倍の威力になる。"
+ },
+ "Steadfast": {
+  "en": "If this Pokemon flinches, its Speed is raised by 1 stage.",
+  "ja": "ひるむとすばやさが1段階上がる。"
+ },
+ "Snow Cloak": {
+  "en": "If Snow is active, this Pokemon's evasiveness is 1.25×.",
+  "ja": "雪が場にあると、相手の回避率が1.25倍になる。"
+ },
+ "Gluttony": {
+  "en": "This Pokemon eats Berries at 1/2 max HP or less instead of their usual 1/4 max HP.",
+  "ja": "HPが最大の1/2以下になると、ベリーを1/4ではなく1/2で食べる。"
+ },
+ "Anger Point": {
+  "en": "If this Pokemon (not its substitute) takes a critical hit, its Attack is raised 12 stages.",
+  "ja": "急所を受けると、こうげきが12段階上がる。"
+ },
+ "Unburden": {
+  "en": "Speed is doubled on held item loss; boost is lost if it switches, gets new item/Ability.",
+  "ja": "持ち物を失うとすばやさが2倍になるが、交代や新しい持ち物・特性で失う。"
+ },
+ "Heatproof": {
+  "en": "Fire damage against this Pokemon is dealt with 1/2 offensive stat; 1/2 burn damage.",
+  "ja": "ほのおのダメージがこうげきの1/2で計算され、やけどダメージが1/2になる。"
+ },
+ "Simple": {
+  "en": "When one of this Pokemon's stat stages is raised or lowered, the amount is doubled.",
+  "ja": "ステージが上がる・下がると、その変化量が2倍になる。"
+ },
+ "Dry Skin": {
+  "en": "This Pokemon is healed 1/4 by Water, 1/8 by Rain; is hurt 1.25× by Fire, 1/8 by Sun.",
+  "ja": "みずで1/4回復、雨で1/8回復するが、ほのおで1.25倍のダメージを受け、晴れで1/8のダメージを受ける。"
+ },
+ "Download": {
+  "en": "On switch-in, Attack or Sp. Atk is raised 1 stage based on the foes' weaker Defense.",
+  "ja": "交代時に、相手のぼうぎょ・とくぼうの弱い方を基準にこうげきまたはとくこうが1段階上がる。"
+ },
+ "Iron Fist": {
+  "en": "This Pokemon's punch-based attacks have 1.2× power. Sucker Punch is not boosted.",
+  "ja": "パンチ系技の威力が1.2倍になる。ふいうちは上がらない。"
+ },
+ "Poison Heal": {
+  "en": "This Pokemon is healed by 1/8 of its max HP each turn when poisoned; no HP loss.",
+  "ja": "どく状態のとき、毎ターン最大HPの1/8回復し、HPは減らない。"
+ },
+ "Adaptability": {
+  "en": "This Pokemon's same-type attack bonus (STAB) is 2 instead of 1.5.",
+  "ja": "同タイプの技のSTABが2になる。"
+ },
+ "Skill Link": {
+  "en": "This Pokemon's multi-hit attacks always hit the maximum number of times.",
+  "ja": "連続技は常に最大回数ヒットする。"
+ },
+ "Hydration": {
+  "en": "This Pokemon has its status cured at the end of each turn if Rain is active.",
+  "ja": "雨が場にあると、毎ターン状態異常が治る。"
+ },
+ "Solar Power": {
+  "en": "If Sun is active, this Pokemon's Sp. Atk is 1.5×; loses 1/8 max HP per turn.",
+  "ja": "晴れのとき、とくこうが1.5倍になるが、毎ターン最大HPの1/8失う。"
+ },
+ "Quick Feet": {
+  "en": "If this Pokemon is statused, its Speed is 1.5×; ignores Speed drop from paralysis.",
+  "ja": "状態異常時、すばやさが1.5倍になる。まひによるすばやさ低下は無視する。"
+ },
+ "Normalize": {
+  "en": "This Pokemon's moves are changed to be Normal type and have 1.2× power.",
+  "ja": "技がノーマルタイプに変わり、威力が1.2倍になる。"
+ },
+ "Sniper": {
+  "en": "If this Pokemon strikes with a critical hit, the damage is multiplied by 1.5.",
+  "ja": "急所が出たとき、ダメージが1.5倍になる。"
+ },
+ "Magic Guard": {
+  "en": "This Pokemon can only be damaged by direct attacks.",
+  "ja": "直接攻撃以外でダメージを受けない。"
+ },
+ "No Guard": {
+  "en": "Every move used by or against this Pokemon will always hit.",
+  "ja": "自分と相手の技は必ず命中する。"
+ },
+ "Stall": {
+  "en": "This Pokemon moves last among Pokemon using the same or greater priority moves.",
+  "ja": "同じか高い優先度の技を使うポケモンの中で最後に行動する。"
+ },
+ "Technician": {
+  "en": "This Pokemon's moves of 60 power or less have 1.5× power, including Struggle.",
+  "ja": "威力60以下の技（わるあがき含む）の威力が1.5倍になる。"
+ },
+ "Leaf Guard": {
+  "en": "If Sun is active, this Pokemon cannot be statused and Rest will fail for it.",
+  "ja": "晴れのとき、状態異常にならず、ねむるは失敗する。"
+ },
+ "Klutz": {
+  "en": "This Pokemon's held item has no effect, except Macho Brace. Fling cannot be used.",
+  "ja": "持ち物の効果がなくなる（マチョブレス除く）。なげつけるは使えない。"
+ },
+ "Mold Breaker": {
+  "en": "This Pokemon's moves and their effects ignore the Abilities of other Pokemon.",
+  "ja": "自分の技と効果は相手の特性を無視する。"
+ },
+ "Super Luck": {
+  "en": "This Pokemon's critical hit ratio is raised by 1 stage.",
+  "ja": "急所率が1段階上がる。"
+ },
+ "Aftermath": {
+  "en": "If this Pokemon is KOed with a contact move, that move's user loses 1/4 its max HP.",
+  "ja": "接触技でKOになると、相手は最大HPの1/4失う。"
+ },
+ "Anticipation": {
+  "en": "On switch-in, this Pokemon shudders if any foe has a supereffective or OHKO move.",
+  "ja": "交代時、相手が効果抜群や一撃必殺技を持つとしびれる。"
+ },
+ "Forewarn": {
+  "en": "On switch-in, this Pokemon is alerted to the foes' move with the highest power.",
+  "ja": "交代時、相手の最も威力の高い技を把握する。"
+ },
+ "Unaware": {
+  "en": "This Pokemon ignores other Pokemon's stat stages when taking or doing damage.",
+  "ja": "ダメージ計算時に相手のステージ変化を無視し、相手に自分のステージ変化も無視させる。"
+ },
+ "Tinted Lens": {
+  "en": "This Pokemon's attacks that are not very effective on a target deal double damage.",
+  "ja": "効果が薄い技のダメージが2倍になる。"
+ },
+ "Filter": {
+  "en": "This Pokemon receives 3/4 damage from supereffective attacks.",
+  "ja": "効果抜群の技のダメージが3/4になる。"
+ },
+ "Slow Start": {
+  "en": "On switch-in, this Pokemon's Attack and Speed are halved for 5 turns.",
+  "ja": "交代時、こうげきとすばやさが半分になるが、5ターンで解除される。"
+ },
+ "Scrappy": {
+  "en": "Fighting, Normal moves hit Ghost. Immune to Intimidate.",
+  "ja": "かくとう・ノーマル技がゴーストに当たり、いかくを受けない。"
+ },
+ "Storm Drain": {
+  "en": "This Pokemon draws Water moves to itself to raise Sp. Atk by 1; Water immunity.",
+  "ja": "みず技が自分に集まり、とくこうが1段階上がり、みずに対する耐性を得る。"
+ },
+ "Ice Body": {
+  "en": "If Snow is active, this Pokemon heals 1/16 of its max HP each turn.",
+  "ja": "雪が場にあると、毎ターン最大HPの1/16回復する。"
+ },
+ "Solid Rock": {
+  "en": "This Pokemon receives 3/4 damage from supereffective attacks.",
+  "ja": "効果抜群の技のダメージが3/4になる。"
+ },
+ "Snow Warning": {
+  "en": "On switch-in, this Pokemon summons Snow.",
+  "ja": "交代時に雪を降らせる。"
+ },
+ "Honey Gather": {
+  "en": "No competitive use.",
+  "ja": "競技用では効果なし。"
+ },
+ "Frisk": {
+  "en": "On switch-in, this Pokemon identifies the held items of all opposing Pokemon.",
+  "ja": "交代時に相手全員の持ち物を確認できる。"
+ },
+ "Reckless": {
+  "en": "This Pokemon's attacks with recoil or crash damage have 1.2× power; not Struggle.",
+  "ja": "反動やクラッシュダメージがある技の威力が1.2倍になるが、わるあがきは対象外。"
+ },
+ "Multitype": {
+  "en": "If this Pokemon is an Arceus, its type changes to match its held Plate.",
+  "ja": "アルセウスが持っているプレートの種類によって自分のタイプが変わる"
+ },
+ "Flower Gift": {
+  "en": "If user is Cherrim and Sun is active, it and allies' Attack and Sp. Def are 1.5×.",
+  "ja": "チェリムのとき晴れだと自分と味方のこうげきととくぼうが1.5倍になる"
+ },
+ "Bad Dreams": {
+  "en": "Causes sleeping foes to lose 1/8 of their max HP at the end of each turn.",
+  "ja": "毎ターンの終わりにあくびなどでねむっている相手のHPを最大HPの8分の1ずつ減らす"
+ },
+ "Pickpocket": {
+  "en": "If this Pokemon has no item and is hit by a contact move, it steals the attacker's item.",
+  "ja": "持ち物を持っていないとき接触技を受けると攻撃した相手の持ち物を奪う"
+ },
+ "Sheer Force": {
+  "en": "This Pokemon's attacks with secondary effects have 1.3× power; nullifies the effects.",
+  "ja": "追加効果がある技の威力が1.3倍になるが追加効果が出なくなる"
+ },
+ "Contrary": {
+  "en": "If this Pokemon has a stat stage raised it is lowered instead, and vice versa.",
+  "ja": "能力変化が逆になり上がるはずの下がり下がるはずの上がり方をする"
+ },
+ "Unnerve": {
+  "en": "While this Pokemon is active, it prevents opposing Pokemon from using their Berries.",
+  "ja": "場に出ている間相手はきのみを使えなくなる"
+ },
+ "Defiant": {
+  "en": "This Pokemon's Attack is raised by 2 for each of its stats that is lowered by a foe.",
+  "ja": "相手によって能力を下げられるたびにこうげきが2段階上がる"
+ },
+ "Defeatist": {
+  "en": "While this Pokemon has 1/2 or less of its max HP, its Attack and Sp. Atk are halved.",
+  "ja": "最大HPが半分以下になるとこうげきととくぼうが半分になる"
+ },
+ "Cursed Body": {
+  "en": "If this Pokemon is hit by an attack, there is a 30% chance that move gets disabled.",
+  "ja": "技を受けると30パーセントの確率でその技をかなしばり状態にする"
+ },
+ "Healer": {
+  "en": "30% chance this Pokemon's ally has its status cured at the end of each turn.",
+  "ja": "毎ターンの終わりに30パーセントの確率で味方の状態異常が治る"
+ },
+ "Friend Guard": {
+  "en": "This Pokemon's allies receive 3/4 damage from other Pokemon's attacks.",
+  "ja": "味方が受ける技のダメージが4分の3になる"
+ },
+ "Weak Armor": {
+  "en": "If a physical attack hits this Pokemon, Defense is lowered by 1, Speed is raised by 2.",
+  "ja": "物理技を受けるとぼうぎょが1段階下がりすばやさが2段階上がる"
+ },
+ "Heavy Metal": {
+  "en": "This Pokemon's weight is doubled.",
+  "ja": "自分の重さが2倍になる"
+ },
+ "Light Metal": {
+  "en": "This Pokemon's weight is halved.",
+  "ja": "自分の重さが半分になる"
+ },
+ "Multiscale": {
+  "en": "If this Pokemon is at full HP, damage taken from attacks is halved.",
+  "ja": "HPが満タンのとき受けるダメージが半分になる"
+ },
+ "Toxic Boost": {
+  "en": "While this Pokemon is poisoned, its physical attacks have 1.5× power.",
+  "ja": "どく状態のとき物理技の威力が1.5倍になる"
+ },
+ "Flare Boost": {
+  "en": "While this Pokemon is burned, its special attacks have 1.5× power.",
+  "ja": "やけど状態のとき特殊技の威力が1.5倍になる"
+ },
+ "Harvest": {
+  "en": "If last item used is a Berry, 50% chance to restore it each end of turn. 100% in Sun.",
+  "ja": "使ったきのみが毎ターンの終わりに50パーセントの確率で復活する。晴れなら100パーセント"
+ },
+ "Telepathy": {
+  "en": "This Pokemon does not take damage from attacks made by its allies.",
+  "ja": "味方の技のダメージを受けない"
+ },
+ "Moody": {
+  "en": "Boosts a random stat (except accuracy/evasion) +2 and another stat -1 every turn.",
+  "ja": "毎ターンの終わりにどれか一つの能力が2段階上がり別の能力が1段階下がる"
+ },
+ "Overcoat": {
+  "en": "This Pokemon is immune to powder moves, Sandstorm damage, and Effect Spore.",
+  "ja": "粉系の技とすなあらしのダメージとほうしを受けない"
+ },
+ "Poison Touch": {
+  "en": "This Pokemon's contact moves have a 30% chance of poisoning.",
+  "ja": "接触技を使うと30パーセントの確率で相手をどくにする"
+ },
+ "Regenerator": {
+  "en": "This Pokemon restores 1/3 of its maximum HP, rounded down, when it switches out.",
+  "ja": "手持ちに戻ると最大HPの3分の1が回復する"
+ },
+ "Big Pecks": {
+  "en": "Prevents other Pokemon from lowering this Pokemon's Defense stat stage.",
+  "ja": "相手にぼうぎょを下げられない"
+ },
+ "Sand Rush": {
+  "en": "If Sandstorm is active, this Pokemon's Speed is doubled; immunity to Sandstorm.",
+  "ja": "すなあらしのときすばやさが2倍になりすなあらしのダメージを受けない"
+ },
+ "Wonder Skin": {
+  "en": "Status moves with accuracy checks are 50% accurate when used on this Pokemon.",
+  "ja": "変化技の命中率が50パーセントになる"
+ },
+ "Analytic": {
+  "en": "This Pokemon's attacks have 1.3× power if it is the last to move in a turn.",
+  "ja": "そのターンで最後に行動すると技の威力が1.3倍になる"
+ },
+ "Illusion": {
+  "en": "This Pokemon appears as the last Pokemon in the party until it takes direct damage.",
+  "ja": "直接ダメージを受けるまで手持ちの最後のポケモンに化けて登場する"
+ },
+ "Imposter": {
+  "en": "On switch-in, this Pokemon Transforms into the opposing Pokemon that is facing it.",
+  "ja": "場に出たとき目の前の相手にへんしンする"
+ },
+ "Infiltrator": {
+  "en": "Moves ignore substitutes and foe's Reflect/Light Screen/Safeguard/Mist/Aurora Veil.",
+  "ja": "相手の身代わりやリフレクターひかりのかべしんぴのまもりオーロラベールを無視して攻撃する"
+ },
+ "Mummy": {
+  "en": "Pokemon making contact with this Pokemon have their Ability changed to Mummy.",
+  "ja": "接触した相手の特性をミイラにする"
+ },
+ "Moxie": {
+  "en": "This Pokemon's Attack is raised by 1 stage if it attacks and KOes another Pokemon.",
+  "ja": "技で相手を倒すとこうげきが1段階上がる"
+ },
+ "Justified": {
+  "en": "This Pokemon's Attack is raised by 1 stage after it is damaged by a Dark-type move.",
+  "ja": "あくタイプの技のダメージを受けるとこうげきが1段階上がる"
+ },
+ "Rattled": {
+  "en": "Speed is raised 1 stage if hit by a Bug-, Dark-, or Ghost-type attack, or Intimidated.",
+  "ja": "むしあくゴーストタイプの攻撃を受けるか、いかくを受けるとすばやさが1段階上がる"
+ },
+ "Magic Bounce": {
+  "en": "This Pokemon blocks certain Status moves and bounces them back to the user.",
+  "ja": "変化技を跳ね返す"
+ },
+ "Sap Sipper": {
+  "en": "This Pokemon's Attack is raised 1 stage if hit by a Grass move; Grass immunity.",
+  "ja": "くさタイプの技を受けるとダメージを受けずにこうげきが1段階上がる"
+ },
+ "Prankster": {
+  "en": "This Pokemon's Status moves have priority raised by 1, but Dark types are immune.",
+  "ja": "変化技の優先度が1上がるが、あくタイプのポケモンには効かない"
+ },
+ "Sand Force": {
+  "en": "This Pokemon's Ground/Rock/Steel attacks do 1.3× in Sandstorm; immunity to it.",
+  "ja": "すなあらしのときじめんいわはがねタイプの威力が1.3倍になりすなあらしのダメージを受けない"
+ },
+ "Iron Barbs": {
+  "en": "Pokemon making contact with this Pokemon lose 1/8 of their max HP.",
+  "ja": "接触した相手に最大HPの8分の1のダメージを与える"
+ },
+ "Zen Mode": {
+  "en": "If Darmanitan, at end of turn changes Mode to Standard if > 1/2 max HP, else Zen.",
+  "ja": "ヒヒダルマのとき、ターン終了時にHPが最大HPの半分より多ければスタンダードモードに、そうでなければダルマモードになる。"
+ },
+ "Victory Star": {
+  "en": "This Pokemon and its allies' moves have their accuracy multiplied by 1.1.",
+  "ja": "自分と味方の技の命中率が1.1倍になる。"
+ },
+ "Turboblaze": {
+  "en": "This Pokemon's moves and their effects ignore the Abilities of other Pokemon.",
+  "ja": "自分の技とその効果は他のポケモンの特性を無視して攻撃できる。"
+ },
+ "Teravolt": {
+  "en": "This Pokemon's moves and their effects ignore the Abilities of other Pokemon.",
+  "ja": "自分の技とその効果は他のポケモンの特性を無視して攻撃できる。"
+ },
+ "Aroma Veil": {
+  "en": "Protects user/allies from Attract, Disable, Encore, Heal Block, Taunt, and Torment.",
+  "ja": "自分と味方はメロメロ、かなしばり、アンコール、かいふくふうじ、ちょうはつ、いちゃもん状態にならない。"
+ },
+ "Flower Veil": {
+  "en": "This side's Grass types can't have stats lowered or status inflicted by other Pokemon.",
+  "ja": "味方のくさタイプのポケモンは能力が下がらず、状態異常にならない。"
+ },
+ "Cheek Pouch": {
+  "en": "If this Pokemon eats a Berry, it restores 1/3 of its max HP after the Berry's effect.",
+  "ja": "きのみを食べると、その効果のあとに最大HPの3分の1が回復する。"
+ },
+ "Protean": {
+  "en": "This Pokemon's type changes to the type of the move it is using. Once per switch-in.",
+  "ja": "自分が使う技と同じタイプに変化する。交代して場に出るたび1回だけ発動する。"
+ },
+ "Fur Coat": {
+  "en": "This Pokemon's Defense is doubled.",
+  "ja": "自分のぼうぎょが2倍になる。"
+ },
+ "Magician": {
+  "en": "If this Pokemon has no item, it steals the item off a Pokemon it hits with an attack.",
+  "ja": "持ち物がないとき、攻撃を命中させた相手の持ち物を盗む。"
+ },
+ "Bulletproof": {
+  "en": "This Pokemon is immune to bullet moves.",
+  "ja": "弾を使う技を受けない。"
+ },
+ "Competitive": {
+  "en": "This Pokemon's Sp. Atk is raised by 2 for each of its stats that is lowered by a foe.",
+  "ja": "相手に能力を下げられたとき、下がった能力ごとにときのとくこうが2段階上がる。"
+ },
+ "Strong Jaw": {
+  "en": "This Pokemon's bite-based attacks have 1.5× power. Bug Bite is not boosted.",
+  "ja": "かみつく系の技の威力が1.5倍になる。むしくいは強化されない。"
+ },
+ "Refrigerate": {
+  "en": "This Pokemon's Normal-type moves become Ice type and have 1.2× power.",
+  "ja": "ノーマルタイプの技がこおりタイプになり、威力が1.2倍になる。"
+ },
+ "Sweet Veil": {
+  "en": "This Pokemon and its allies cannot fall asleep; those already asleep do not wake up.",
+  "ja": "自分と味方はねむり状態にならない。すでに眠っているポケモンは起おきない。"
+ },
+ "Stance Change": {
+  "en": "If Aegislash, changes Forme to Blade before attacks and Shield before King's Shield.",
+  "ja": "ギルガルドのとき、攻撃技を使うときはブレードフォルムに、キングシールドを使うときはシールドフォルムになる。"
+ },
+ "Gale Wings": {
+  "en": "If this Pokemon is at full HP, its Flying-type moves have their priority increased by 1.",
+  "ja": "HPが満タンのとき、ひこうタイプの技の優先度が1増える。"
+ },
+ "Mega Launcher": {
+  "en": "This Pokemon's pulse moves have 1.5× power. Heal Pulse heals 3/4 target's max HP.",
+  "ja": "波動技の威力が1.5倍になる。いやしのはどうの回復量が最大HPの4分の3になる。"
+ },
+ "Grass Pelt": {
+  "en": "If Grassy Terrain is active, this Pokemon's Defense is multiplied by 1.5.",
+  "ja": "グラスフィールドのとき、自分のぼうぎょが1.5倍になる。"
+ },
+ "Symbiosis": {
+  "en": "If an ally uses its item, this Pokemon gives its item to that ally immediately.",
+  "ja": "味方が持ち物を消費したとき、その味方に自分の持ち物を即座に渡す。"
+ },
+ "Tough Claws": {
+  "en": "This Pokemon's contact moves have their power multiplied by 1.3.",
+  "ja": "接触する技の威力が1.3倍になる。"
+ },
+ "Pixilate": {
+  "en": "This Pokemon's Normal-type moves become Fairy type and have 1.2× power.",
+  "ja": "ノーマルタイプの技がフェアリータイプになり、威力が1.2倍になる。"
+ },
+ "Gooey": {
+  "en": "Pokemon making contact with this Pokemon have their Speed lowered by 1 stage.",
+  "ja": "このポケモンに接触したポケモンはすばやさが1段階下がる。"
+ },
+ "Aerilate": {
+  "en": "This Pokemon's Normal-type moves become Flying type and have 1.2× power.",
+  "ja": "ノーマルタイプの技がひこうタイプになり、威力が1.2倍になる。"
+ },
+ "Parental Bond": {
+  "en": "This Pokemon's damaging moves hit twice. The second hit has its damage quartered.",
+  "ja": "ダメージを与える技が2回ヒットする。2回目のダメージは4分の1になる。"
+ },
+ "Dark Aura": {
+  "en": "While this Pokemon is active, a Dark move used by any Pokemon has 1.33× power.",
+  "ja": "場にいる間、すべてのポケモンのあくタイプの技の威力が1.33倍になる。"
+ },
+ "Fairy Aura": {
+  "en": "While this Pokemon is active, a Fairy move used by any Pokemon has 1.33× power.",
+  "ja": "場にいる間、すべてのポケモンのフェアリータイプの技の威力が1.33倍になる。"
+ },
+ "Aura Break": {
+  "en": "While this Pokemon is active, the Dark Aura and Fairy Aura power modifier is 0.75×.",
+  "ja": "場にいる間、ダークオーラとフェアリーオーラの威力が0.75倍になる。"
+ },
+ "Primordial Sea": {
+  "en": "On switch-in, heavy rain begins until this Ability is not active in battle.",
+  "ja": "登場したとき、この特性が消えるまで大雨の天気にする。"
+ },
+ "Desolate Land": {
+  "en": "On switch-in, extremely harsh sunlight begins until this Ability is not active in battle.",
+  "ja": "登場したとき、この特性が消えるまで大日照りの天気にする。"
+ },
+ "Delta Stream": {
+  "en": "On switch-in, strong winds begin until this Ability is not active in battle.",
+  "ja": "登場したとき、この特性が消えるまで乱気流の天気にする。"
+ },
+ "Stamina": {
+  "en": "This Pokemon's Defense is raised by 1 stage after it is damaged by a move.",
+  "ja": "技のダメージを受けたとき、ぼうぎょが1段階上がる。"
+ },
+ "Wimp Out": {
+  "en": "This Pokemon switches out when it reaches 1/2 or less of its maximum HP.",
+  "ja": "HPが最大HPの半分以下になったとき、交代して引っ込む。"
+ },
+ "Emergency Exit": {
+  "en": "This Pokemon switches out when it reaches 1/2 or less of its maximum HP.",
+  "ja": "HPが最大HPの半分以下になったとき、交代して引っ込む。"
+ },
+ "Water Compaction": {
+  "en": "This Pokemon's Defense is raised 2 stages after it is damaged by a Water-type move.",
+  "ja": "みずタイプの技のダメージを受けたとき、ぼうぎょが2段階上がる。"
+ },
+ "Merciless": {
+  "en": "This Pokemon's attacks are critical hits if the target is poisoned.",
+  "ja": "相手がどく状態のとき、自分の攻撃は必ず急所に当たる。"
+ },
+ "Shields Down": {
+  "en": "If Minior, switch-in/end of turn it changes to Core at 1/2 max HP or less, else Meteor.",
+  "ja": "メテノのとき、登場時またはターン終了時にHPが最大HPの半分以下ならコアの姿に、それ以外なら流れ星の姿になる。"
+ },
+ "Stakeout": {
+  "en": "This Pokemon's offensive stat is doubled against a target that switched in this turn.",
+  "ja": "このターンに交代して出てきた相手に対し、与えるダメージが2倍になる。"
+ },
+ "Water Bubble": {
+  "en": "This Pokemon's Water power is 2×; it can't be burned; Fire power against it is halved.",
+  "ja": "みずタイプの威力が2倍になり、やけど状態にならず、受けるほのうタイプの技のダメージが半分になる。"
+ },
+ "Steelworker": {
+  "en": "This Pokemon's offensive stat is multiplied by 1.5 while using a Steel-type attack.",
+  "ja": "はがねタイプの技を使うとき、攻撃の威力が1.5倍になる。"
+ },
+ "Berserk": {
+  "en": "This Pokemon's Sp. Atk is raised by 1 when it reaches 1/2 or less of its max HP.",
+  "ja": "HPが最大HPの半分以下になったとき、とくこうが1段階上がる。"
+ },
+ "Slush Rush": {
+  "en": "If Snow is active, this Pokemon's Speed is doubled.",
+  "ja": "雪のとき、すばやさが2倍になる。"
+ },
+ "Long Reach": {
+  "en": "This Pokemon's attacks do not make contact with the target.",
+  "ja": "相手に接触しないで技を出すことができる。"
+ },
+ "Liquid Voice": {
+  "en": "This Pokemon's sound-based moves become Water type.",
+  "ja": "音の技がみずタイプになる。"
+ },
+ "Triage": {
+  "en": "This Pokemon's healing moves have their priority increased by 3.",
+  "ja": "回復技の優先度が3上がる。"
+ },
+ "Galvanize": {
+  "en": "This Pokemon's Normal-type moves become Electric type and have 1.2× power.",
+  "ja": "ノーマルタイプの技がでんきタイプになり、威力が1.2倍になる。"
+ },
+ "Surge Surfer": {
+  "en": "If Electric Terrain is active, this Pokemon's Speed is doubled.",
+  "ja": "エレキフィールドのとき、すばやさが2倍になる。"
+ },
+ "Schooling": {
+  "en": "If user is Wishiwashi, changes to School Form if it has > 1/4 max HP, else Solo Form.",
+  "ja": "ヨワシのとき、HPが4分の1より多ければむれたすがたに、それ以外なら単独のすがたになる。"
+ },
+ "Disguise": {
+  "en": "(Mimikyu only) The first hit it takes is blocked, and it takes 1/8 HP damage instead.",
+  "ja": "ミミッキュのとき、最初に受ける技のダメージを防ぎ、最大HPの8分の1のダメージを受ける。"
+ },
+ "Battle Bond": {
+  "en": "After KOing a Pokemon: raises Attack, Sp. Atk, Speed by 1 stage. Once per battle.",
+  "ja": "ポケモンを倒したとき、こうげき、とくこう、すばやさが1段階上がる。バトル中1回のみ発動する。"
+ },
+ "Power Construct": {
+  "en": "If Zygarde 10%/50%, changes to Complete if at 1/2 max HP or less at end of turn.",
+  "ja": "ジガルデが10パーセントまたは50パーセントのとき、ターン終了時にHPが最大HPの半分以下になるとパーフェクトフォルムに変わる。"
+ },
+ "Corrosion": {
+  "en": "This Pokemon can poison or badly poison a Pokemon regardless of its typing.",
+  "ja": "タイプに関係なく相手をどくやもうどくの状態にできる。"
+ },
+ "Comatose": {
+  "en": "This Pokemon cannot be statused, and is considered to be asleep.",
+  "ja": "状態異常にならず、ねむり状態として扱われる。"
+ },
+ "Queenly Majesty": {
+  "en": "This Pokemon and its allies are protected from opposing priority moves.",
+  "ja": "自分と味方は相手の優先度が高い技を受けない。"
+ },
+ "Innards Out": {
+  "en": "If this Pokemon is KOed with a move, that move's user loses an equal amount of HP.",
+  "ja": "技を受けてひんしになったとき、その技を出したポケモンに自分の最大HPと同じダメージを与える。"
+ },
+ "Dancer": {
+  "en": "After another Pokemon uses a dance move, this Pokemon uses the same move.",
+  "ja": "他のポケモンがダンス技を使ったあと、自分も同じ技を使う。"
+ },
+ "Battery": {
+  "en": "This Pokemon's allies have the power of their special attacks multiplied by 1.3.",
+  "ja": "味方の特殊技の威力が1.3倍になる。"
+ },
+ "Fluffy": {
+  "en": "This Pokemon takes 1/2 damage from contact moves, 2× damage from Fire moves.",
+  "ja": "接触する技のダメージを半減し、ほのおタイプの技のダメージを2倍受ける。"
+ },
+ "Dazzling": {
+  "en": "This Pokemon and its allies are protected from opposing priority moves.",
+  "ja": "自分と味方は相手の優先度が高い技を受けない。"
+ },
+ "Soul Heart": {
+  "en": "This Pokemon's Special Attack is raised by 1 stage when another Pokemon faints.",
+  "ja": "他のポケモンがひんしになるたび、とくこうが1段階上がる。"
+ },
+ "Tangling Hair": {
+  "en": "Pokemon making contact with this Pokemon have their Speed lowered by 1 stage.",
+  "ja": "このポケモンに接触したポケモンのすばやさを1段階下げる。"
+ },
+ "Receiver": {
+  "en": "This Pokemon copies the Ability of an ally that faints.",
+  "ja": "ひんしになった味方の特性を受け継ぐ。"
+ },
+ "Power Of Alchemy": {
+  "en": "This Pokemon copies the Ability of an ally that faints.",
+  "ja": "ひんしになった味方の特性を受け継ぐ。"
+ },
+ "Beast Boost": {
+  "en": "This Pokemon's highest stat is raised by 1 if it attacks and KOes another Pokemon.",
+  "ja": "技で他のポケモンを倒したとき、一番高い能力が1段階上がる。"
+ },
+ "Rks System": {
+  "en": "If this Pokemon is a Silvally, its type changes to match its held Memory.",
+  "ja": "シルヴァディのとき、持っているメモリに応じてタイプが変わる。"
+ },
+ "Electric Surge": {
+  "en": "On switch-in, this Pokemon summons Electric Terrain.",
+  "ja": "場に出たとき、エレキフィールドにする。"
+ },
+ "Psychic Surge": {
+  "en": "On switch-in, this Pokemon summons Psychic Terrain.",
+  "ja": "場に出たとき、サイコフィールドにする。"
+ },
+ "Misty Surge": {
+  "en": "On switch-in, this Pokemon summons Misty Terrain.",
+  "ja": "場に出たとき、ミストフィールドにする。"
+ },
+ "Grassy Surge": {
+  "en": "On switch-in, this Pokemon summons Grassy Terrain.",
+  "ja": "場に出たとき、グラスフィールドにする。"
+ },
+ "Full Metal Body": {
+  "en": "Prevents other Pokemon from lowering this Pokemon's stat stages.",
+  "ja": "他のポケモンに能力を下げられない。"
+ },
+ "Shadow Shield": {
+  "en": "If this Pokemon is at full HP, damage taken from attacks is halved.",
+  "ja": "HPが満タンのとき、受けるダメージが半分になる。"
+ },
+ "Prism Armor": {
+  "en": "This Pokemon receives 3/4 damage from supereffective attacks.",
+  "ja": "効果バツグンの技で受けるダメージが4分の3になる。"
+ },
+ "Neuroforce": {
+  "en": "This Pokemon's attacks that are super effective against the target do 1.25× damage.",
+  "ja": "効果バツグンの技のダメージが1.25倍になる。"
+ },
+ "Intrepid Sword": {
+  "en": "On switch-in, this Pokemon's Attack is raised by 1 stage. Once per battle.",
+  "ja": "場に出たとき、こうげきが1段階上がる。バトル中1回のみ発動する。"
+ },
+ "Dauntless Shield": {
+  "en": "On switch-in, this Pokemon's Defense is raised by 1 stage. Once per battle.",
+  "ja": "場に出たとき、ぼうぎょが1段階上がる。バトル中1回のみ発動する。"
+ },
+ "Libero": {
+  "en": "This Pokemon's type changes to the type of the move it is using. Once per switch-in.",
+  "ja": "使う技と同じタイプに変わる。交代して出てきたとき1回のみ発動する。"
+ },
+ "Ball Fetch": {
+  "en": "No competitive use.",
+  "ja": "対戦での効果はない。"
+ },
+ "Cotton Down": {
+  "en": "If this Pokemon is hit, it lowers the Speed of all other Pokemon on the field 1 stage.",
+  "ja": "技を受けたとき、場にいる他のポケモンのすばやさを1段階下げる。"
+ },
+ "Propeller Tail": {
+  "en": "This Pokemon's moves cannot be redirected to a different target by any effect.",
+  "ja": "効果によって自分の技のターゲットが別のポケモンに変更されない。"
+ },
+ "Mirror Armor": {
+  "en": "If this Pokemon's stat stages would be lowered, the attacker's are lowered instead.",
+  "ja": "能力を下げられるとき、代わりに相手の能力を下げる。"
+ },
+ "Gulp Missile": {
+  "en": "When hit after Surf/Dive, attacker takes 1/4 max HP and -1 Defense or paralysis.",
+  "ja": "なみのりかダイビングの後でダメージを受けると、相手は最大HPの4分の1のダメージを受け、ぼうぎょが1段階下がるかまひ状態になる。"
+ },
+ "Stalwart": {
+  "en": "This Pokemon's moves cannot be redirected to a different target by any effect.",
+  "ja": "このポケモンの技は、効果によって別の対象に方向を変えられない。"
+ },
+ "Steam Engine": {
+  "en": "This Pokemon's Speed is raised by 6 stages after it is damaged by Fire/Water moves.",
+  "ja": "ほのおかみずタイプの技でダメージを受けると、すばやさが6段階上がる。"
+ },
+ "Punk Rock": {
+  "en": "This Pokemon receives 1/2 damage from sound moves. Its own have 1.3× power.",
+  "ja": "音系の技で受けるダメージが半減し、自分の使う音系の技の威力が1.3倍になる。"
+ },
+ "Sand Spit": {
+  "en": "When this Pokemon is hit by an attack, the effect of Sandstorm begins.",
+  "ja": "攻撃を受けると、すなあらし状態にする。"
+ },
+ "Ice Scales": {
+  "en": "This Pokemon receives 1/2 damage from special attacks.",
+  "ja": "特殊攻撃で受けるダメージが半減する。"
+ },
+ "Ripen": {
+  "en": "When this Pokemon eats certain Berries, the effects are doubled.",
+  "ja": "特定のきのみを食べた時、その効果が2倍になる。"
+ },
+ "Ice Face": {
+  "en": "If Eiscue, the first physical hit it takes deals 0 damage. Effect is restored in Snow.",
+  "ja": "アイスフェイスの場合、最初に受ける物理攻撃のダメージが0になる。雪で効果が復活する。"
+ },
+ "Power Spot": {
+  "en": "This Pokemon's allies have the power of their moves multiplied by 1.3.",
+  "ja": "味方の使う技の威力が1.3倍になる。"
+ },
+ "Mimicry": {
+  "en": "This Pokemon's types change to match the Terrain. Type reverts when Terrain ends.",
+  "ja": "フィールドに合わせて自分のタイプが変わり、フィールドが終了すると元に戻る。"
+ },
+ "Screen Cleaner": {
+  "en": "On switch-in, the effects of Aurora Veil, Light Screen, and Reflect end for both sides.",
+  "ja": "場に出た時、お互いの場のオーロラベール、ひかりのかべ、リフレクターの効果が消える。"
+ },
+ "Steely Spirit": {
+  "en": "This Pokemon and its allies' Steel-type moves have their power multiplied by 1.5.",
+  "ja": "自分と味方のいななきタイプの技の威力が1.5倍になる。"
+ },
+ "Perish Body": {
+  "en": "Making contact with this Pokemon starts the Perish Song effect for it and the attacker.",
+  "ja": "接触した自分と相手はほろびのうた状態になる。"
+ },
+ "Wandering Spirit": {
+  "en": "Pokemon making contact with this Pokemon have their Ability swapped with this one.",
+  "ja": "接触してきたポケモンの特性と入れ替わる。"
+ },
+ "Gorilla Tactics": {
+  "en": "This Pokemon's Attack is 1.5×, but it can only select the first move it executes.",
+  "ja": "こうげきが1.5倍になるが、最初に出した技しか選べなくなる。"
+ },
+ "Neutralizing Gas": {
+  "en": "While this Pokemon is active, Abilities have no effect.",
+  "ja": "このポケモンが場にいる間、特性の効果がなくなる。"
+ },
+ "Pastel Veil": {
+  "en": "This Pokemon and its allies cannot be poisoned. On switch-in, cures poisoned allies.",
+  "ja": "自分と味方はどく状態にならない。場に出た時、味方のどくを治す。"
+ },
+ "Hunger Switch": {
+  "en": "If Morpeko, it changes between Full Belly and Hangry Mode at the end of each turn.",
+  "ja": "モルペコの場合、毎ターンの終わりにまんぷくもようともうじゃもようが入れ替わる。"
+ },
+ "Quick Draw": {
+  "en": "This Pokemon has a 30% chance to move first in its priority bracket with attacking moves.",
+  "ja": "30パーセントの確率で、攻撃技をその優先度の中で最初に繰り出す。"
+ },
+ "Unseen Fist": {
+  "en": "This Pokemon's contact moves ignore the target's protection, except Max Guard.",
+  "ja": "接触する攻撃技は、マックスガード以外のまもるの効果を無視する。"
+ },
+ "Curious Medicine": {
+  "en": "On switch-in, this Pokemon's allies have their stat stages reset to 0.",
+  "ja": "場に出た時、味方の能力変化を元に戻す。"
+ },
+ "Transistor": {
+  "en": "This Pokemon's offensive stat is multiplied by 1.3 while using an Electric-type attack.",
+  "ja": "でんきタイプの技を使う時、攻撃のステータスが1.3倍になる。"
+ },
+ "Dragons Maw": {
+  "en": "This Pokemon's offensive stat is multiplied by 1.5 while using a Dragon-type attack.",
+  "ja": "ドラゴンタイプの技を使う時、攻撃のステータスが1.5倍になる。"
+ },
+ "Chilling Neigh": {
+  "en": "This Pokemon's Attack is raised by 1 stage if it attacks and KOes another Pokemon.",
+  "ja": "技で相手を倒すと、こうげきが1段階上がる。"
+ },
+ "Grim Neigh": {
+  "en": "This Pokemon's Sp. Atk is raised by 1 stage if it attacks and KOes another Pokemon.",
+  "ja": "技で相手を倒すと、とくこうが1段階上がる。"
+ },
+ "As One Spectrier": {
+  "en": "Combination of the Unnerve and Grim Neigh Abilities.",
+  "ja": "きんちょうかんとくろのいななきの特性をあわせ持つ。"
+ },
+ "Lingering Aroma": {
+  "en": "Making contact with this Pokemon has the attacker's Ability become Lingering Aroma.",
+  "ja": "接触した相手の特性をとれないにおいに変える。"
+ },
+ "Seed Sower": {
+  "en": "When this Pokemon is hit by an attack, the effect of Grassy Terrain begins.",
+  "ja": "攻撃を受けると、グラスフィールド状態にする。"
+ },
+ "Thermal Exchange": {
+  "en": "This Pokemon's Attack is raised by 1 when damaged by Fire moves; can't be burned.",
+  "ja": "ほのおタイプの技のダメージを受けるとこうげきが1上がり、やけど状態にならない。"
+ },
+ "Anger Shell": {
+  "en": "At 1/2 or less of this Pokemon's max HP: +1 Atk, Sp. Atk, Spe, and -1 Def, Sp. Def.",
+  "ja": "最大HPの半分以下になった時、こうげき・とくこう・すばやさが1段階上がり、ぼうぎょ・とくぼうが1段階下がる。"
+ },
+ "Purifying Salt": {
+  "en": "Ghost damage to this Pokemon dealt with a halved offensive stat; can't be statused.",
+  "ja": "ゴーストタイプの技で受けるダメージが半分になり、状態異常にならない。"
+ },
+ "Well Baked Body": {
+  "en": "This Pokemon's Defense is raised 2 stages if hit by a Fire move; Fire immunity.",
+  "ja": "ほのおタイプの技を受けるとぼうぎょが2段階上がり、ほのおタイプの技を受けない。"
+ },
+ "Wind Rider": {
+  "en": "Attack raised by 1 if hit by a wind move or Tailwind begins. Wind move immunity.",
+  "ja": "風の技を受けるかおいかぜが始まるとこうげきが1上がり、風の技を受けない。"
+ },
+ "Guard Dog": {
+  "en": "Immune to Intimidate. Intimidated: +1 Attack. Cannot be forced to switch out.",
+  "ja": "いかくの効果を受けない。いかくを受けるとこうげきが1上がる。強制的に交代させられない。"
+ },
+ "Rocky Payload": {
+  "en": "This Pokemon's offensive stat is multiplied by 1.5 while using a Rock-type attack.",
+  "ja": "いわタイプの技を使う時、攻撃のステータスが1.5倍になる。"
+ },
+ "Wind Power": {
+  "en": "This Pokemon gains the Charge effect when hit by a wind move or Tailwind begins.",
+  "ja": "風の技を受けるかおいかぜが始まるとじゅうねん状態になる。"
+ },
+ "Zero to Hero": {
+  "en": "If this Pokemon is a Palafin in Zero Form, switching out has it change to Hero Form.",
+  "ja": "イルカマンのナイギフターのとき、交代するとマイティフターに姿を変える。"
+ },
+ "Commander": {
+  "en": "If ally is Dondozo: this Pokemon cannot act or be hit, +2 to all Dondozo's stats.",
+  "ja": "味方がヘイラッシャの場合、行動できず攻撃を受けなくなり、ヘイラッシャのすべての能力が2段階上がる。"
+ },
+ "Electromorphosis": {
+  "en": "This Pokemon gains the Charge effect when it takes a hit from an attack.",
+  "ja": "攻撃を受けるとじゅうでん状態になる。"
+ },
+ "Protosynthesis": {
+  "en": "Sun active or Booster Energy used: highest stat is 1.3×, or 1.5× if Speed.",
+  "ja": "晴れかブーストエナジーの効果で、一番高いステータスが1.3倍、すばやさの場合は1.5倍になる。"
+ },
+ "Quark Drive": {
+  "en": "Electric Terrain active or Booster Energy used: highest stat is 1.3×, or 1.5× if Speed.",
+  "ja": "エレキフィールド状態かブーストエナジーを使った時、一番高い能力が1.3倍、すばやさの場合は1.5倍になる"
+ },
+ "Good as Gold": {
+  "en": "This Pokemon is immune to Status moves.",
+  "ja": "変化技を受けない"
+ },
+ "Vessel Of Ruin": {
+  "en": "Active Pokemon without this Ability have their Special Attack multiplied by 0.75.",
+  "ja": "この特性以外のポケモンはとくこうが0.75倍になる"
+ },
+ "Sword Of Ruin": {
+  "en": "Active Pokemon without this Ability have their Defense multiplied by 0.75.",
+  "ja": "この特性以外のポケモンはぼうぎょが0.75倍になる"
+ },
+ "Tablets Of Ruin": {
+  "en": "Active Pokemon without this Ability have their Attack multiplied by 0.75.",
+  "ja": "この特性以外のポケモンはこうげきが0.75倍になる"
+ },
+ "Beads Of Ruin": {
+  "en": "Active Pokemon without this Ability have their Special Defense multiplied by 0.75.",
+  "ja": "この特性以外のポケモンはとくぼうが0.75倍になる"
+ },
+ "Orichalcum Pulse": {
+  "en": "On switch-in, summons Sun. During Sun, Attack is 1.3333×.",
+  "ja": "登場した時に天候を晴れにする。晴れの間はこうげきが1.3333倍になる"
+ },
+ "Hadron Engine": {
+  "en": "On switch-in, summons Electric Terrain. During Electric Terrain, Sp. Atk is 1.3333×.",
+  "ja": "登場した時にエレキフィールドにする。エレキフィールドの間はとくこうが1.3333倍になる"
+ },
+ "Opportunist": {
+  "en": "When an opposing Pokemon has a stat stage raised, this Pokemon copies the effect.",
+  "ja": "相手の能力が上がった時、自分も同じように能力が上がる"
+ },
+ "Cud Chew": {
+  "en": "If this Pokemon eats a Berry, it will eat that Berry again at the end of the next turn.",
+  "ja": "きのみをたべた時、次のターンの終了時に同じきのみをもう一度たべる"
+ },
+ "Sharpness": {
+  "en": "This Pokemon's slicing moves have their power multiplied by 1.5.",
+  "ja": "きるといふうの技の威力が1.5倍になる"
+ },
+ "Supreme Overlord": {
+  "en": "This Pokemon's moves have 10% more power for each fainted ally, up to 5 allies.",
+  "ja": "ひんし状態の味方の数×10パーセント、技の威力が上がる（最大5匹まで）"
+ },
+ "Costar": {
+  "en": "On switch-in, this Pokemon copies all of its ally's stat stage changes.",
+  "ja": "登場した時、味方のすべての能力変化をコピーする"
+ },
+ "Toxic Debris": {
+  "en": "If this Pokemon is hit by a physical attack, Toxic Spikes are set on the opposing side.",
+  "ja": "物理技を受けた時、相手の足元にどくびしを散らす"
+ },
+ "Armor Tail": {
+  "en": "This Pokemon and its allies are protected from opposing priority moves.",
+  "ja": "自分と味方は相手の優先度の高い技を受けない"
+ },
+ "Earth Eater": {
+  "en": "This Pokemon heals 1/4 of its max HP when hit by Ground moves; Ground immunity.",
+  "ja": "じめん技を受けると最大HPの4分の1回復する。じめん技が無効になる"
+ },
+ "Mycelium Might": {
+  "en": "This Pokemon's Status moves go last in their priority bracket and ignore Abilities.",
+  "ja": "自分の変化技の順番が一番最後になり、特性を無視して技を出せる"
+ },
+ "Minds Eye": {
+  "en": "Fighting, Normal moves hit Ghost. Accuracy can't be lowered, ignores evasiveness.",
+  "ja": "かくとう、ノーマル技がゴーストタイプに当たる。命中率が下げられず、回避率を無視する"
+ },
+ "Supersweet Syrup": {
+  "en": "On switch-in, this Pokemon lowers the evasiveness of opponents 1 stage. Once per battle.",
+  "ja": "登場した時、相手の回避率を1段階下げる。バトル中1回のみ"
+ },
+ "Hospitality": {
+  "en": "On switch-in, this Pokemon restores 1/4 of its ally's maximum HP, rounded down.",
+  "ja": "登場した時、味方の最大HPの4分の1を切り捨てで回復する"
+ },
+ "Toxic Chain": {
+  "en": "This Pokemon's attacks have a 30% chance of badly poisoning.",
+  "ja": "攻撃した時、30パーセントの確率でもうどくにする"
+ },
+ "Tera Shift": {
+  "en": "If this Pokemon is a Terapagos, it transforms into its Terastal Form on entry.",
+  "ja": "テラパゴスの場合、登場時にステラフォルムに変化する"
+ },
+ "Tera Shell": {
+  "en": "Terapagos: If full HP, attacks taken have 0.5× effectiveness unless naturally immune.",
+  "ja": "テラパゴス：HPが満タンの時、効果のないタイプ以外は受ける技の相性が0.5倍になる"
+ },
+ "Teraform Zero": {
+  "en": "Terapagos: Terastallizing ends the effects of weather and terrain. Once per battle.",
+  "ja": "テラパゴス：テラスタルすると天候とフィールドの効果をなくす。バトル中1回のみ"
+ },
+ "Poison Puppeteer": {
+  "en": "Pecharunt: If this Pokemon poisons a target, the target also becomes confused.",
+  "ja": "モモワロウ：ポケモンをどく状態にした時、こんらん状態にもする"
+ },
+ "Piercing Drill": {
+  "en": "This Pokemon's contact moves ignore a target's protection and deal 1/4 the usual damage.",
+  "ja": "接触技を使う時、相手のまもる状態を無視して通常の4分の1のダメージを与える"
+ },
+ "Dragonize": {
+  "en": "This Pokemon's Normal-type moves become Dragon type and have 1.2× power.",
+  "ja": "自分のノーマルタイプの技がドラゴンタイプになり、威力が1.2倍になる"
+ },
+ "Mega Sol": {
+  "en": "This Pokemon's moves are used as if the effects of Sun were active.",
+  "ja": "晴れの効果が続いているかのように技を使用する"
+ },
+ "Spicy Spray": {
+  "en": "If this Pokemon is hit by an attack, the attacker becomes burned.",
+  "ja": "攻撃を受けた時、攻撃してきた相手をやけど状態にする"
+ }
+}
