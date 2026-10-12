@@ -306,3 +306,17 @@ describe("ask_log #116〜#124（2026-10-12）: 特性もうかのエースバー
     expect(r.speech).toContain("もうかで計算");
   });
 });
+
+describe("ask_log #140〜#144（2026-10-12）: イダイトウ・おはかまいり", () => {
+  it("「偉大党」「偉大と」= イダイトウ、「お墓参り」= おはかまいり、「メガリザードン前」= Y", () => {
+    expect(fixMishearing("偉大 党 の アクア ジェット で メガ リザードンワイ")).toBe("イダイトウのアクアジェットでメガリザードンY");
+    expect(fixMishearing("偉大 と の え お 墓参り を メガリザードン 前 は 耐えれる")).toBe("イダイトウのえおはかまいりをメガリザードンYは耐えれる");
+  });
+  it("おはかまいりは倒れた味方の数で威力が変わる（言わなければ 0 匹・威力 50 と言う）", () => {
+    const ex = { move: "おはかまいり", intent: "damage", attacker: "イダイトウ", defender: "メガリザードンY" };
+    expect(answerExtraction(ex).speech).toContain("倒れた味方0匹（威力50）");
+    const r = answerExtraction({ ...ex, conditions: { attacker: { allies_fainted: 2 } } });
+    expect(r.speech).toContain("威力150");
+    expect(r.speech).toContain("確定1発");
+  });
+});

@@ -31,6 +31,8 @@ export interface SideInput {
   disguiseBroken?: boolean;
   /** タイプが変わった状態（へんげんじざい・リベロ・テラスタルなど）。英語のタイプ名。言われたときだけ */
   types?: string[];
+  /** 倒れた味方の数（おはかまいりの威力・そうだいしょう）。言われたときだけ */
+  alliesFainted?: number;
 }
 
 export interface FieldInput {
@@ -136,6 +138,7 @@ function build(s: SideInput): Pokemon {
     evs: s.sp ?? {},
     boosts: s.boosts,
     status: s.status,
+    alliesFainted: s.alliesFainted,
     // タイプが変わった状態は、図鑑のタイプを上書きして計算する（相性・タイプ一致の両方に効く）
     ...(s.types?.length ? { overrides: { types: s.types } } : {}),
   };
@@ -190,7 +193,9 @@ function one(a: SideInput, d: SideInput, move: string, f: FieldInput): DamageRes
   }
   const attacker = build(a);
   const defender = build(d);
-  const m = new Move(gen, move, { isCrit: !!f.critical });
+  // おはかまいり: 威力は 50 ×（1 + 倒れた味方の数、5 まで）。計算ライブラリは倒れた数を見ないので、威力を上書きする
+  const lastRespects = move === "Last Respects" ? { overrides: { basePower: 50 * (1 + Math.min(5, a.alliesFainted ?? 0)) } } : {};
+  const m = new Move(gen, move, { isCrit: !!f.critical, ...lastRespects } as never);
   const r = calculate(gen, attacker, defender, m, field(f, a, d));
   // 連続技（ドラゴンアローなど）は全部当たったときの合計（range() が合計を返す）
   const [min, max] = r.range();

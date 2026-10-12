@@ -120,6 +120,8 @@ function side(species: string, c: Obj, pr: Problems): SideInput {
   const st = STATUS[str(c.status) ?? ""];
   if (st) s.status = st;
   if (c.disguise_broken === true) s.disguiseBroken = true;
+  const fainted = num(c.allies_fainted);
+  if (fainted !== undefined && fainted >= 0) s.alliesFainted = clamp(Math.round(fainted), 0, 5);
   // タイプが変わった状態（「でんきタイプになったマスカーニャ」、へんげんじざい・リベロ）
   const types = (Array.isArray(c.type) ? c.type : [c.type]).map((t) => str(t)).filter((t): t is string => !!t);
   const resolved = types.map((t) => resolve("types", t.replace(/タイプ$/, ""))).filter((r) => r.ok).map((r) => (r as { en: string }).en);
@@ -204,7 +206,9 @@ function answerDamage(ex: Obj, text?: string): AskResult {
     return `${ja}の${toJa("abilities", ab)}で${own}として計算したロト`;
   });
   pr.notes.push(...autoNotes);
-  // 場でタイプ・威力が変わるわざ（だいちのはどう・ウェザーボール）は前提を言う
+  // おはかまいり: 倒れた味方の数を言わなければ 0 匹（威力 50）で計算し、そう言う
+  if (m.en === "Last Respects" && as.alliesFainted === undefined) pr.notes.push(`${m.ja}は倒れた味方0匹（威力50）で計算したロト。倒れた数を言ってくれたら変えるロト`);
+  // 場でタイプ・威力が変わるわざ（だいちのはどう・ウェザーボール・おはかまいり）は前提を言う
   const mi = moveInfo(m.en);
   if (result.base.moveType && (result.base.moveType !== mi.type || (result.base.moveBp ?? mi.bp) !== mi.bp)) {
     pr.notes.push(`${m.ja}は${toJa("types", result.base.moveType)}タイプ・威力${result.base.moveBp}で計算したロト`);
