@@ -400,7 +400,15 @@ export default function Home() {
 
       <main>
         <section className="hero">
-          <RotomFace speaking={speaking} onTap={(line) => (mute ? undefined : void announce(line, voice, false))} />
+          <RotomFace
+            speaking={speaking}
+            onTap={() => {
+              // 合図の音（rotom.mp3）を鳴らす。「読み上げない」のときは動きだけ
+              if (mute) return;
+              stopSound();
+              void playUrl(CHIME).then(releaseAudio);
+            }}
+          />
           <p className={`status ${listening ? "on" : ""}`} aria-live="polite">{status}</p>
           {!shown && <p className="hint">例:「HB振りエンペルトにA特化ガブのじしん」「最速ドラパルト抜ける？」</p>}
         </section>

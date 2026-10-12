@@ -17,15 +17,6 @@ export function Eye({ flip }: { flip?: boolean }) {
   );
 }
 
-/** 喜んだ目（「^」の形。タップされたときに出す） */
-export function HappyEye() {
-  return (
-    <svg viewBox="0 0 100 140" className="eye" aria-hidden>
-      <path d="M18 92 Q50 30 82 92" fill="none" stroke="#111" strokeWidth="9" strokeLinecap="round" />
-    </svg>
-  );
-}
-
 export type MouthShape = "smile" | "teeth" | "open" | "o";
 
 /** 口の絵（viewBox は 4 種類で共通にして、切り替えても位置がずれないようにする） */
@@ -81,22 +72,21 @@ export function Mouth({ shape }: { shape: MouthShape }) {
 const IDLE: MouthShape = "teeth";
 const TALK: MouthShape[] = ["open", "o", "smile", "open"];
 
-/** 顔をタップしたときの返事（どれか 1 つを読む） */
-const TAP_LINES = ["ロトッ！くすぐったいロト！", "えへへ、うれしいロト！", "ビビビッ！元気いっぱいロト！", "なにか計算するロト？", "呼んだロト？いつでも任せてロト！"];
-const HAPPY_MS = 1600;
+/** タップの動き（びゅびゅっと移動して戻る）の長さ。globals.css の rotom-zip と合わせる */
+const ZIP_MS = 1100;
 
-export function RotomFace({ speaking, onTap }: { speaking: boolean; onTap?: (line: string) => void }) {
+export function RotomFace({ speaking, onTap }: { speaking: boolean; onTap?: () => void }) {
   const [shape, setShape] = useState<MouthShape>(IDLE);
   const [happy, setHappy] = useState(0);
   useEffect(() => {
     if (!happy) return;
-    const t = window.setTimeout(() => setHappy(0), HAPPY_MS);
+    const t = window.setTimeout(() => setHappy(0), ZIP_MS);
     return () => window.clearTimeout(t);
   }, [happy]);
   const tap = () => {
     setHappy(Date.now());
     navigator.vibrate?.(30);
-    onTap?.(TAP_LINES[Math.floor(Math.random() * TAP_LINES.length)]);
+    onTap?.();
   };
   useEffect(() => {
     if (!speaking) {
@@ -115,18 +105,13 @@ export function RotomFace({ speaking, onTap }: { speaking: boolean; onTap?: (lin
     <>
       {/* いただいた右目の絵（てっぺんが右に傾く）は見る側の右。左はそれを左右反転して使い、てっぺんが外へ開く「\ /」の形にする */}
       <div className="eyes">
-        {happy ? <HappyEye /> : <Eye flip />}
-        {happy ? <HappyEye /> : <Eye />}
+        <Eye flip />
+        <Eye />
       </div>
-      <Mouth shape={happy && !speaking ? "open" : shape} />
-      {happy ? (
-        <span className="sparks" aria-hidden>
-          <i /><i /><i /><i />
-        </span>
-      ) : null}
+      <Mouth shape={shape} />
     </>
   );
-  // タップできるときはボタンにする（喜んで、ひとこと話す）。key で毎回アニメーションをやり直す
+  // タップできるときはボタンにする（音を鳴らし、電気のように画面をびゅびゅっと動き回って戻る）。key で毎回アニメーションをやり直す
   return onTap ? (
     <button type="button" key={happy || "idle"} className={`face face-btn ${speaking ? "speaking" : ""} ${happy ? "happy" : ""}`} onClick={tap} aria-label="ロトムをタップ">
       {face}
