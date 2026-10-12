@@ -53,14 +53,18 @@ const KANA: Record<string, string> = {};
   ];
   for (const [chars, rs] of rows) [...chars].forEach((c, i) => (KANA[c] = rs[i]));
 }
-const READINGS = Object.entries(readings as Record<string, string>)
-  .filter(([k]) => !k.startsWith("_"))
-  .sort((a, b) => b[0].length - a[0].length);
+// 表の見出しも正規化しておく（「頭突き」のように送り仮名を含む見出しは、正規化した文と同じ形でないと見つからない）
+let readingsCache: [string, string][] | null = null;
+const READINGS_LIST = () =>
+  (readingsCache ??= Object.entries(readings as Record<string, string>)
+    .filter(([k]) => !k.startsWith("_"))
+    .map(([k, v]) => [normalize(k), v] as [string, string])
+    .sort((a, b) => b[0].length - a[0].length));
 
 /** 読み（ローマ字に近い形）。漢字は data/readings.json の読みに置き換え、小さい字は前の音に付け、促音・伸ばす音は落とす */
 export function reading(s: string): string {
   let k = normalize(s);
-  for (const [kanji, kana] of READINGS) k = k.split(kanji).join(kana);
+  for (const [kanji, kana] of READINGS_LIST()) k = k.split(kanji).join(kana);
   let out = "";
   const chars = [...k];
   for (let i = 0; i < chars.length; i++) {

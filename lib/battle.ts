@@ -44,6 +44,8 @@ export interface FieldInput {
   reflect?: boolean;
   lightScreen?: boolean;
   critical?: boolean;
+  /** わざの威力を言われたとき（「威力150で」）。わざの威力を上書きする */
+  bp?: number;
 }
 
 /** 上がる・下がる能力から性格を選ぶ。下がる能力の指定がなければ、計算に響きにくい方（攻撃↔特攻の反対側）を下げる */
@@ -198,8 +200,9 @@ function one(a: SideInput, d: SideInput, move: string, f: FieldInput): DamageRes
   const defender = build(d);
   // おはかまいり: 威力は 50 ×（1 + 倒れた味方の数、5 まで）。計算ライブラリは倒れた数を見ないので、威力を上書きする。
   // 言わなければ 2 匹倒れた状態（威力 150）で計算する（ご本人の要望。撃つのは終盤が多いため）
-  const lastRespects = move === "Last Respects" ? { overrides: { basePower: 50 * (1 + Math.min(5, a.alliesFainted ?? LAST_RESPECTS_DEFAULT)) } } : {};
-  const m = new Move(gen, move, { isCrit: !!f.critical, ...lastRespects } as never);
+  const lastRespects = move === "Last Respects" ? 50 * (1 + Math.min(5, a.alliesFainted ?? LAST_RESPECTS_DEFAULT)) : undefined;
+  const bpOverride = f.bp ?? lastRespects;
+  const m = new Move(gen, move, { isCrit: !!f.critical, ...(bpOverride ? { overrides: { basePower: bpOverride } } : {}) } as never);
   const r = calculate(gen, attacker, defender, m, field(f, a, d));
   // 連続技（ドラゴンアローなど）は全部当たったときの合計（range() が合計を返す）
   const [min, max] = r.range();

@@ -331,3 +331,22 @@ describe("ask_log #132: 防御側を言っていないのに AI が攻撃側と�
     expect(answerExtraction({ move: "じしん", intent: "damage", attacker: "ガブリアス", defender: "ガブリアス" }, "ガブのじしんでガブリアス何発").intent).toBe("damage");
   });
 });
+
+describe("ask_log 全件の見直し（2026-10-13 夜間）", () => {
+  it("AI が持ち物・特性に「なし」と書いても「なしは分からない」と言わない（#101）", () => {
+    const r = answerExtraction({ move: "じしん", intent: "damage", attacker: "ガブリアス", defender: "エンペルト", conditions: { attacker: { item: "なし", ability: "なし" } } }, "ガブのじしんでエンペルト");
+    expect(r.speech).not.toContain("分からない");
+  });
+  it("漢字の技名（氷のつぶて・思念の頭突き）と「メガリオ Z」「腹ばり」「HDぶり」「偉大とう」（#91・#147〜#151）", () => {
+    expect(resolve("moves", "氷のつぶて")).toMatchObject({ ok: true, en: "Ice Shard" });
+    expect(resolve("moves", "思念の頭突き")).toMatchObject({ ok: true, en: "Zen Headbutt" });
+    expect(fixMishearing("メガリオ Z を与える")).toBe("メガルカリオZを与える");
+    expect(fixMishearing("悪 の 波動 が 腹 ばりHD ぶり に")).toBe("悪の波動がハラバリーHD振りに");
+    expect(fixMishearing("偉大 とう の お 墓参り")).toBe("イダイトウのおはかまいり");
+  });
+  it("「威力150」と言われたらその威力で計算する（おはかまいりは倒れた味方の数に直す）", () => {
+    const ex = { move: "おはかまいり", intent: "damage", attacker: "イダイトウ", defender: "ハラバリー" };
+    expect(answerExtraction(ex, "イダイトウのおはかまいり威力100をハラバリーは耐えますか").speech).toContain("倒れた味方1匹（威力100）");
+    expect(answerExtraction({ move: "じだんだ", intent: "damage", attacker: "ガブリアス", defender: "エンペルト" }, "威力150のじだんだ").speech).toContain("威力150");
+  });
+});

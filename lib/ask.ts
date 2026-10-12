@@ -83,9 +83,14 @@ class Problems {
 
 function side(species: string, c: Obj, pr: Problems): SideInput {
   const s: SideInput = { species };
-  const item = pr.name("items", str(c.item));
+  // 「なし」は言っていないのと同じ（AI が持ち物・特性に「なし」と書くことがある。ask_log #101）
+  const given = (v: unknown) => {
+    const t = str(v);
+    return t && !/^(なし|無し|ない|持ち物なし|特性なし|-|none)$/i.test(t) ? t : undefined;
+  };
+  const item = pr.name("items", given(c.item));
   if (item) s.item = item.en;
-  const ability = pr.soft("abilities", str(c.ability));
+  const ability = pr.soft("abilities", given(c.ability));
   if (ability) s.ability = ability.en;
   const natureName = str(c.nature);
   if (natureName) {
@@ -207,6 +212,12 @@ function answerDamage(ex: Obj, text?: string): AskResult {
   const as = side(a.en, obj(c.attacker), pr);
   const ds = side(d.en, obj(c.defender), pr);
   const f = fieldOf(obj(c.field));
+  // 「威力150で」のように威力を言われたら、その威力で計算する（おはかまいりなら倒れた味方の数に直す。ask_log #150・#151）
+  const saidBp = num((text ?? "").normalize("NFKC").match(/威力(?:は|が)?\s*(\d{2,3})/)?.[1]);
+  if (saidBp) {
+    if (m.en === "Last Respects" && saidBp % 50 === 0) as.alliesFainted = clamp(saidBp / 50 - 1, 0, 5);
+    else f.bp = saidBp;
+  }
   const result = damage(as, ds, m.en, f);
   // 特性で天気・フィールドを変えたら言う（「メガリザードンYのひでりで晴れとして計算したロト」）
   const autoNotes = result.autoField.map((x) => {
@@ -217,9 +228,11 @@ function answerDamage(ex: Obj, text?: string): AskResult {
     return `${ja}の${toJa("abilities", ab)}で${own}として計算したロト`;
   });
   pr.notes.push(...autoNotes);
-  // おはかまいり: 倒れた味方の数を言わなければ 2 匹（威力 150）で計算し、そう言う
-  if (m.en === "Last Respects" && as.alliesFainted === undefined)
-    pr.notes.push(`${m.ja}は倒れた味方${LAST_RESPECTS_DEFAULT}匹（威力${50 * (1 + LAST_RESPECTS_DEFAULT)}）で計算したロト。違ったら倒れた数を言ってロト`);
+  // おはかまいり: 倒れた味方の数（言わなければ 2 匹）と威力を言う
+  if (m.en === "Last Respects") {
+    const n = as.alliesFainted ?? LAST_RESPECTS_DEFAULT;
+    pr.notes.push(`${m.ja}は倒れた味方${n}匹（威力${50 * (1 + n)}）で計算したロト${as.alliesFainted === undefined ? "。違ったら倒れた数を言ってロト" : ""}`);
+  }
   // 場でタイプ・威力が変わるわざ（だいちのはどう・ウェザーボール・おはかまいり）は前提を言う
   const mi = moveInfo(m.en);
   if (m.en !== "Last Respects" && result.base.moveType && (result.base.moveType !== mi.type || (result.base.moveBp ?? mi.bp) !== mi.bp)) {
