@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { answerExtraction } from "../lib/ask";
+import { answerExtraction, looksLikeFollowUp } from "../lib/ask";
 import { fixMishearing } from "../lib/misheard";
 import { damage, speedOf, speedThreshold, speedVariants } from "../lib/battle";
 import { aiSetup, extract, providersFromEnv, type Provider } from "../lib/llm";
@@ -261,5 +261,30 @@ describe("技・特性の説明（data/move-desc.json・ability-desc.json）", (
     const n = names as unknown as Record<string, Record<string, string>>;
     expect([...new Set(Object.values(n.moves))].filter((en) => !md[en])).toEqual([]);
     expect([...new Set(Object.values(n.abilities))].filter((en) => !ad[en]).length).toBeLessThanOrEqual(1);
+  });
+});
+
+describe("ask_log #105〜#115（2026-10-12）", () => {
+  it("タイプが変わった状態（でんきタイプになったマスカーニャ）で計算する", () => {
+    const ex = { move: "じしん", intent: "damage", attacker: "ガブリアス", defender: "マスカーニャ", conditions: { defender: { type: "でんき" } } };
+    const r = answerExtraction(ex, "電気タイプに変化したマスカーニャにガブリアスのじしん");
+    expect(r.speech).toContain("確定1発");
+    expect(r.speech).toContain("でんきタイプとして計算");
+    expect(answerExtraction({ ...ex, conditions: { defender: { type: "ひこう" } } }).speech).toContain("効かない");
+  });
+  it("AI が特性名をひらがなで返しても、文の特性名で特性の説明に答える", () => {
+    const r = answerExtraction({ intent: "chat", ability: "かちき" }, "勝ちきと言う特性について教えて");
+    expect(r.intent).toBe("ability");
+    expect(r.speech).toContain("とくこう");
+  });
+  it("前の質問を AI に渡すのは続きの質問のときだけ", () => {
+    expect(looksLikeFollowUp("じゃあスカーフなら？")).toBe(true);
+    expect(looksLikeFollowUp("HPが半分だったら？")).toBe(true);
+    expect(looksLikeFollowUp("勝ちきってどんな特性")).toBe(false);
+    expect(looksLikeFollowUp("ガブリアスのじしんでマスカーニャ何発")).toBe(false);
+  });
+  it("「自信」はじしん（じしんかじょうは変えない）", () => {
+    expect(fixMishearing("マスカーニャにガブの自信")).toBe("マスカーニャにガブのじしん");
+    expect(fixMishearing("自信過剰ってどんな特性")).toBe("自信過剰ってどんな特性");
   });
 });

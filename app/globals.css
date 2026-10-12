@@ -98,11 +98,13 @@ dd { margin: 0; }
 .face .eyes { display: flex; gap: calc(var(--eye) * 0.8); }
 .face .eye { width: var(--eye); height: auto; display: block; }
 .face .mouth { width: calc(var(--eye) * 0.95); height: auto; display: block; margin-top: calc(var(--eye) * -0.32); margin-bottom: 4px; }
-/* 顔をタップ: 電気のように、画面の上をびゅびゅっと高速で移動して元の場所に戻る（目と口はそのまま） */
+/* 顔をタップ: 電気のように、画面の上をびゅびゅっと高速で移動して元の場所に戻る（目と口はそのまま）。
+   顔はロゴ・上のバー・結果の白いカード・下の操作より下を通る（z-index: 顔 1 < カード 2 < バー 10 < 操作 20） */
+main > .card, main > .history-wrap, main > .err, main > .foot { position: relative; z-index: 2; }
 .app { overflow: clip; }
-.face-btn { position: relative; z-index: 30; background: none; border: none; padding: 0; color: inherit; border-radius: 24px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.face-btn { position: relative; z-index: 1; background: none; border: none; padding: 0; color: inherit; border-radius: 24px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
 .face-btn:focus-visible { outline: 3px solid var(--btn); outline-offset: 4px; }
-.face.happy { animation: rotom-zip 1.1s linear 1, rotom-spark .11s steps(2) 10; }
+.face.happy { animation: rotom-zip .6s linear 1, rotom-spark .08s steps(2) 8; }
 @keyframes rotom-zip {
   0% { transform: translate(0, 0); }
   7% { transform: translate(34vw, -12vh) skewX(-12deg); }

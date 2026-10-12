@@ -686,7 +686,7 @@
  },
  "Competitive": {
   "en": "This Pokemon's Sp. Atk is raised by 2 for each of its stats that is lowered by a foe.",
-  "ja": "相手に能力を下げられたとき、下がった能力ごとにときのとくこうが2段階上がる。"
+  "ja": "相手に能力を下げられると、下がった能力1つにつき、とくこうが2段階上がる。"
  },
  "Strong Jaw": {
   "en": "This Pokemon's bite-based attacks have 1.5× power. Bug Bite is not boosted.",

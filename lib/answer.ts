@@ -77,7 +77,7 @@ export function damageSpeech(n: DamageNames, d: DamageAnswer, notes: string[], o
   const b = d.base;
   if (b.immune) {
     const t = `${n.attacker}の${n.move}は${n.defender}に効かないロト！`;
-    return { speech: [t, ...notes].join("。"), short: t, lines: ["ダメージなし（タイプで無効、または特性など）"] };
+    return { speech: notes.length ? `${t}${notes.join("。")}` : t, short: t, lines: ["ダメージなし（タイプで無効、または特性など）"] };
   }
   const lines: string[] = [];
   if (b.curHP < b.hp) lines.push(`防御側の HP: ${b.curHP} / ${b.hp} で計算`);

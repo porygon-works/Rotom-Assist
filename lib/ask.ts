@@ -120,6 +120,13 @@ function side(species: string, c: Obj, pr: Problems): SideInput {
   const st = STATUS[str(c.status) ?? ""];
   if (st) s.status = st;
   if (c.disguise_broken === true) s.disguiseBroken = true;
+  // タイプが変わった状態（「でんきタイプになったマスカーニャ」、へんげんじざい・リベロ）
+  const types = (Array.isArray(c.type) ? c.type : [c.type]).map((t) => str(t)).filter((t): t is string => !!t);
+  const resolved = types.map((t) => resolve("types", t.replace(/タイプ$/, ""))).filter((r) => r.ok).map((r) => (r as { en: string }).en);
+  if (resolved.length) {
+    s.types = [...new Set(resolved)].slice(0, 2);
+    pr.notes.push(`${toJa("pokemon", species)}は${s.types.map((t) => toJa("types", t)).join("・")}タイプとして計算したロト`);
+  }
   return s;
 }
 
@@ -153,6 +160,7 @@ function sideLabel(ja: string, s: SideInput): string {
   if (s.stealthRock) parts.push("ステロ込み");
   if (s.status) parts.push(({ brn: "やけど", par: "まひ", psn: "どく", tox: "もうどく", slp: "ねむり", frz: "こおり" } as const)[s.status]);
   if (s.disguiseBroken) parts.push("ばけのかわなし");
+  if (s.types?.length) parts.push(`${s.types.map((t) => toJa("types", t)).join("・")}タイプ`);
   return parts.length ? `${ja}（${parts.join("・")}）` : ja;
 }
 
@@ -378,9 +386,10 @@ function answerAbility(ex: Obj, text: string): AskResult | undefined {
   const heardPoke = str(ex.pokemon) ?? str(ex.attacker) ?? str(ex.defender);
   const cond = obj(obj(ex.conditions).pokemon);
   const spoken = [...Object.keys(obj((names as unknown as Obj).abilities)), ...Object.keys(obj((aliases as unknown as Obj).abilities))];
-  const heardAb = str(cond.ability) ?? spoken.find((ja) => text.includes(ja));
+  // 文に書いてある特性名を優先する（AI はひらがなに直して返すことがある）
+  const heardAb = spoken.find((ja) => text.includes(ja)) ?? str(cond.ability) ?? str(ex.ability);
   // 特性の名前が文にあれば、特性について聞いている（AI がポケモンを補っていても特性を優先）
-  const aboutAbility = /効果|説明|どんな/.test(text) || (!!heardAb && text.includes(heardAb));
+  const aboutAbility = /効果|説明|どんな|について|教えて|とは/.test(text) || (!!heardAb && text.includes(heardAb));
   const ab = heardAb && aboutAbility ? pr.soft("abilities", heardAb) : undefined;
   if (ab) {
     // 日本語名がない（チャンピオンズにいない）ポケモンは除く
@@ -569,10 +578,20 @@ function setupLines(s: AiSetup): string[] {
   ];
 }
 
-/** 雑談なら AI にロトムの返事を作らせる（失敗したら決まった返事のまま） */
-async function withChat(out: AskResult, text: string, history?: Turn[]): Promise<AskResult> {
+/**
+ * 前の質問の続きか（「じゃあスカーフなら？」「HPが半分だったら？」）。続きのときだけ前の質問を AI に渡す。
+ * 毎回渡すと、新しい質問に前の質問のポケモン・条件が混ざることがあった（2026-10-12 ask_log #108〜#112）
+ */
+export function looksLikeFollowUp(text: string): boolean {
+  const t = text.normalize("NFKC").trim();
+  if (/^(じゃあ|じゃ|では|なら|だったら|それ|今度|もし|あと|さっきの|同じ|逆に|そっち|こっち|そいつ|その)/.test(t)) return true;
+  return t.length <= 25 && /(なら|だったら|だと|場合は?|たら|では)[?？]?$/.test(t);
+}
+
+/** 雑談なら AI にロトムの返事を作らせる（失敗したら決まった返事のまま）。前の質問は渡さない（前の話題に引きずられるため） */
+async function withChat(out: AskResult, text: string): Promise<AskResult> {
   if (out.intent !== "chat") return out;
-  const c = await chatReply(text, history);
+  const c = await chatReply(text);
   return c.reply ? { ...out, speech: c.reply, short: c.reply } : out;
 }
 
@@ -587,10 +606,10 @@ export async function ask(text: string, opts: { history?: Turn[]; useRules?: boo
   const fixed = text !== heard ? text : undefined;
   const ruled = opts.useRules === false ? null : (parseRules(text) ?? parseFollowUp(text, prev));
   if (ruled) {
-    const out = await withChat(answerExtraction(ruled, text), text, opts.history);
+    const out = await withChat(answerExtraction(ruled, text), text);
     return { ...out, extraction: ruled, diagnostics: { provider: "rules", attempts: [], totalMs: Date.now() - t0, setup: aiSetup(), fixed } };
   }
-  const r = await extract(text, { history: opts.history });
+  const r = await extract(text, { history: looksLikeFollowUp(text) ? opts.history : [] });
   if (!r.extraction) {
     const setup = aiSetup();
     return {
@@ -605,7 +624,7 @@ export async function ask(text: string, opts: { history?: Turn[]; useRules?: boo
       diagnostics: { attempts: r.attempts, totalMs: Date.now() - t0, setup, fixed },
     };
   }
-  const out = await withChat(answerExtraction(r.extraction, text), text, opts.history);
+  const out = await withChat(answerExtraction(r.extraction, text), text);
   return { ...out, extraction: r.extraction, diagnostics: { provider: r.provider, attempts: r.attempts, totalMs: Date.now() - t0, setup: aiSetup(), fixed } };
 }
 

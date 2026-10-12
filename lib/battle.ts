@@ -29,6 +29,8 @@ export interface SideInput {
   status?: "brn" | "par" | "psn" | "tox" | "slp" | "frz";
   /** ばけのかわが剥がれた（ミミッキュ）: 剥がれた姿で、残り HP を言わなければ 7/8 で計算する */
   disguiseBroken?: boolean;
+  /** タイプが変わった状態（へんげんじざい・リベロ・テラスタルなど）。英語のタイプ名。言われたときだけ */
+  types?: string[];
 }
 
 export interface FieldInput {
@@ -134,8 +136,10 @@ function build(s: SideInput): Pokemon {
     evs: s.sp ?? {},
     boosts: s.boosts,
     status: s.status,
+    // タイプが変わった状態は、図鑑のタイプを上書きして計算する（相性・タイプ一致の両方に効く）
+    ...(s.types?.length ? { overrides: { types: s.types } } : {}),
   };
-  const p = new Pokemon(gen, s.species, opts);
+  const p = new Pokemon(gen, s.species, opts as never);
   const max = p.maxHP();
   const cur = s.hpLeft ?? (s.hpLeftPercent !== undefined ? Math.floor((max * s.hpLeftPercent) / 100) : undefined);
   if (cur === undefined) return p;

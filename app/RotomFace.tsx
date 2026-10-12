@@ -73,7 +73,7 @@ const IDLE: MouthShape = "teeth";
 const TALK: MouthShape[] = ["open", "o", "smile", "open"];
 
 /** タップの動き（びゅびゅっと移動して戻る）の長さ。globals.css の rotom-zip と合わせる */
-const ZIP_MS = 1100;
+const ZIP_MS = 600;
 
 export function RotomFace({ speaking, onTap }: { speaking: boolean; onTap?: () => void }) {
   const [shape, setShape] = useState<MouthShape>(IDLE);
