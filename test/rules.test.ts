@@ -2,6 +2,31 @@ import { describe, expect, it } from "vitest";
 import { parseFollowUp, parseRules } from "../lib/rules";
 
 describe("ルール解析（確実に分かるときだけ答える）", () => {
+  it("聞き間違い・言い間違いの名前は読みの近さで直し、聞こえた形のまま渡す（読み上げでは言わず、画面にだけ出す）", () => {
+    // 「ミミ」（あだ名）+「ック」と切ると行き詰まるので、戻って「ミミック」を 1 語として読む
+    expect(parseRules("ミミックのじゃれつくでガブリアス何発")).toMatchObject({ intent: "damage", attacker: "ミミック", defender: "ガブリアス", move: "じゃれつく" });
+    expect(parseRules("ミミックって何が弱点")).toMatchObject({ intent: "type", pokemon: "ミミック" });
+    expect(parseRules("ドラパルドのドラゴンアローでカイリュウ何発")).toMatchObject({ intent: "damage", attacker: "ドラパルド", defender: "カイリュウ" });
+    expect(parseRules("エースバンとマスカニャどっちが速い")).toMatchObject({ intent: "speed", attacker: "エースバン", defender: "マスカニャ" });
+  });
+  it("性格補正の上げ下げ（C下降補正・Cマイナス補正・C↓・A↑）と、音声認識が略号を日本語にしたとき（し・市・絵）", () => {
+    const def = (q: string) => (parseRules(q) as { conditions?: { defender?: unknown } } | null)?.conditions?.defender;
+    expect(def("C下降補正のガブリアスにサーフゴーのシャドーボール")).toEqual({ nature_down: "spa" });
+    expect(def("Cマイナス補正のガブリアスにサーフゴーのシャドーボール")).toEqual({ nature_down: "spa" });
+    expect(def("C↓のガブリアスにサーフゴーのシャドーボール")).toEqual({ nature_down: "spa" });
+    expect(def("し下降補正のガブリアスにサーフゴーのシャドーボール")).toEqual({ nature_down: "spa" });
+    expect(def("市下降補正のガブリアスにサーフゴーのシャドーボール")).toEqual({ nature_down: "spa" });
+    expect(def("資格補正のガブリアスにサーフゴーのシャドーボール")).toEqual({ nature_down: "spa" });
+    expect(def("私加工補正のガブリアスにサーフゴーのシャドーボール")).toEqual({ nature_down: "spa" });
+    expect(def("良い過去補正のガブリアスにサーフゴーのシャドーボール")).toEqual({ nature_down: "spa" });
+    expect(def("HB特化C下降補正のサーフゴーにガブリアスのじしん")).toEqual({ sp: { hp: 32, def: 32 }, nature_up: "def", nature_down: "spa" });
+    expect(parseRules("A↑C↓のガブリアスのじしんでサーフゴー何発")).toMatchObject({ conditions: { attacker: { nature_up: "atk", nature_down: "spa" } } });
+    expect(parseRules("絵特化ガブリアスのじしんでサーフゴー何発")).toMatchObject({ conditions: { attacker: { sp: { atk: 32 }, nature_up: "atk" } } });
+    // 技の後ろの「を」と条件を、技の聞き間違いとして吸わない（条件を黙って捨てない）
+    expect(parseRules("ドラパルトのドラゴンアローをHBメガリザードンワイは買えますか")).toBeNull();
+    // 名前の最後の「シ」は略号にしない
+    expect(parseRules("カエンジシのかえんほうしゃでガブリアス何発")).toMatchObject({ attacker: "カエンジシ", conditions: {} });
+  });
   it("よくあるダメージの言い方", () => {
     expect(parseRules("ガブリアスにミミッキュのじゃれつく")).toMatchObject({ intent: "damage", attacker: "ミミッキュ", defender: "ガブリアス", move: "じゃれつく" });
     expect(parseRules("A特化ガブのじしん、HB特化エンペルトに")).toMatchObject({
@@ -14,6 +39,9 @@ describe("ルール解析（確実に分かるときだけ答える）", () => {
   it("素早さ・タイプ・種族値・わざ", () => {
     expect(parseRules("準速ガブリアスと最速ドラパルトどっちが速い？")).toMatchObject({ intent: "speed", ask: "compare", conditions: { attacker: { sp: { spe: 32 } }, defender: { nature_up: "spe" } } });
     expect(parseRules("サーフゴーの弱点は？")).toMatchObject({ intent: "type", pokemon: "サーフゴー" });
+    // 「何が」付きの言い方と、音声認識の漢字（ask_log より）
+    expect(parseRules("サーフ号って何が弱点")).toMatchObject({ intent: "type", pokemon: "サーフゴー" });
+    expect(parseRules("ガブリアスって弱点なに？")).toMatchObject({ intent: "type", pokemon: "ガブリアス" });
     expect(parseRules("カイリューの種族値教えて")).toMatchObject({ intent: "stats" });
     expect(parseRules("じゃれつくって何タイプ？")).toMatchObject({ intent: "move_info", move: "じゃれつく" });
   });

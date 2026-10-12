@@ -21,10 +21,6 @@ export function koText(ko: Ko, immune: boolean): string {
   return "確定数なし（4発以上）";
 }
 
-function rangeText(r: DamageResult) {
-  return `${r.min}〜${r.max}（${r.minPercent}〜${r.maxPercent}%）`;
-}
-
 /** 1 発目を耐える・防ぐ持ち物と特性の呼び方 */
 const ENDURE: Record<string, { name: string; short: string; verb: string }> = {
   "Focus Sash": { name: "きあいのタスキ", short: "タスキ", verb: "1回耐える" },
@@ -70,47 +66,49 @@ function verdict(ko: Ko, q: DamageQuestion): string {
 
 export interface DamageOptions {
   question?: DamageQuestion;
-  /** 振り方の指定がない側 */
-  open?: { attacker: boolean; defender: boolean };
   stealthRock?: boolean;
 }
 
+/**
+ * ダメ計の読み上げ。順番は「結論 → 場合分け（補正あり・耐久振り）→ 前提（仮定・特性など）」。
+ * 前提は notes（特性・天候などの一言）と d.assumed（言われていないので仮定したこと）
+ */
 export function damageSpeech(n: DamageNames, d: DamageAnswer, notes: string[], opt: DamageOptions = {}): { speech: string; short: string; lines: string[] } {
   const b = d.base;
   if (b.immune) {
     const t = `${n.attacker}の${n.move}は${n.defender}に効かないロト！`;
-    return { speech: t, short: t, lines: ["ダメージなし（タイプで無効、または特性など）"] };
+    return { speech: [t, ...notes].join("。"), short: t, lines: ["ダメージなし（タイプで無効、または特性など）"] };
   }
-  const lines = [`ダメージ ${rangeText(b)}・${koText(b.ko, false)}${opt.stealthRock ? "（ステロ込み）" : ""}`];
+  const lines: string[] = [];
   if (b.curHP < b.hp) lines.push(`防御側の HP: ${b.curHP} / ${b.hp} で計算`);
   const en = b.endured ? ENDURE[b.endured] : undefined;
   if (en) lines.push(b.endured === "Disguise" ? "ばけのかわで 1 発目を防ぐ（満タンのとき。剥がれると最大 HP の 1/8 減る）。確定数はこれを含む" : `${en.name}で 1 発目は耐える（満タンのとき）`);
   const sr = opt.stealthRock ? "ステロ込みで" : "";
-  const ko = `${sr}${koSpeech(b.ko)}`;
-  const v = verdict(b.ko, opt.question ?? "plain");
+  const q = opt.question ?? "plain";
+  const v = verdict(b.ko, q);
   // 結論で確率を言ったときは繰り返さない
   const chance = b.ko.kind === "chance" && b.ko.n < 5 && !v.includes("確率") ? `倒せるのは${chanceSpeech(b.ko.chance)}。` : "";
-  let speech: string;
-  if (d.range) {
-    const lo = d.range.low;
-    const hi = d.range.high;
-    lines.push(`振り方の幅: ${lo.minPercent}%（${koText(lo.ko, lo.immune)}）〜 ${hi.maxPercent}%（${koText(hi.ko, hi.immune)}）`);
-    const who = opt.open?.attacker && opt.open?.defender ? "無振り同士なら" : opt.open?.attacker ? "攻撃側が無振りなら" : "防御側が無振りなら";
-    // 結論が振り方しだいで変わるときは言い切らない
-    let caveat = "";
-    if ((opt.question ?? "plain") !== "plain") {
-      if (b.ko.n !== 1 && hi.ko.n === 1) caveat = "ただ、振り方しだいで1発で落ちることがあるロト。";
-      if (b.ko.n === 1 && lo.ko.n !== 1) caveat = "ただ、振り方しだいで耐えることがあるロト。";
-    }
-    speech = `${v}${caveat}${who}${ko}ロト。${chance}${p(b.minPercent)}から${p(b.maxPercent)}パーセント。振り方しだいで${p(lo.minPercent)}から${p(hi.maxPercent)}パーセントロト`;
-  } else {
-    speech = `${v}${ko}ロト！ ${chance}${p(b.minPercent)}から${p(b.maxPercent)}パーセントロト`;
+  // 1. 結論
+  const head = `${v}${sr}${koSpeech(b.ko)}ロト。${chance}${p(b.minPercent)}から${p(b.maxPercent)}パーセント`;
+  // 2. 場合分け（言われていない条件で結果が変わる幅）
+  const cases: string[] = [];
+  const caseText = (label: string, r: DamageResult) => `${label}${koSpeech(r.ko)}、${p(r.minPercent)}から${p(r.maxPercent)}パーセント`;
+  if (d.attackerBoosted) cases.push(caseText("攻撃側が補正ありなら", d.attackerBoosted));
+  if (d.defenderBulky) cases.push(caseText("防御側が耐久に振っていたら", d.defenderBulky));
+  // 「耐える？」「落ちる？」の結論が場合分けで変わるときは言い添える
+  let caveat = "";
+  if (q !== "plain") {
+    if (b.ko.n !== 1 && d.attackerBoosted?.ko.n === 1) caveat = "ただ、攻撃側が補正ありだと1発で落ちることがあるロト";
+    else if (b.ko.n === 1 && d.defenderBulky && d.defenderBulky.ko.n !== 1) caveat = "ただ、防御側が耐久に振っていたら耐えることがあるロト";
   }
-  if (b.curHP < b.hp) speech += `。残りHP${b.curHP}で計算したロト`;
-  // 短い読み上げ: 結論・確定数・ダメージ範囲だけ（振り方の幅や特性の一言は画面だけ）
-  const short = `${v}${ko}ロト。${p(b.minPercent)}から${p(b.maxPercent)}パーセント${en ? `。${en.short}で${en.verb}ロト` : ""}`;
-  if (en) notes = [...notes, `${n.defender}は${en.short}で${en.verb}ロト`];
-  if (notes.length) speech = `${notes.join("。")}。${speech}`;
+  // 3. 前提
+  const premise = [...notes];
+  if (en) premise.push(`${n.defender}は${en.short}で${en.verb}ロト`);
+  if (d.assumed.length) premise.push(`${d.assumed.join("、")}で計算したロト`);
+  if (b.curHP < b.hp) premise.push(`残りHP${b.curHP}で計算したロト`);
+  const speech = [head, caveat, ...cases, ...premise].filter(Boolean).join("。");
+  // 短い読み上げ: 結論・確定数・ダメージ範囲だけ（場合分けと前提は画面だけ）
+  const short = `${v}${sr}${koSpeech(b.ko)}ロト。${p(b.minPercent)}から${p(b.maxPercent)}パーセント${en ? `。${en.short}で${en.verb}ロト` : ""}`;
   return { speech, short, lines };
 }
 

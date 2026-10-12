@@ -3,6 +3,7 @@
 // （試作版のルール解析が「HPに32振った」を黙って落とした反省。eval-plan.md 7.6）
 import names from "../data/names.json";
 import aliases from "../data/aliases.json";
+import { resolve } from "./resolve";
 
 type Obj = Record<string, unknown>;
 type Stat = "hp" | "atk" | "def" | "spa" | "spd" | "spe";
@@ -13,13 +14,33 @@ function norm(s: string): string {
     .normalize("NFKC")
     .replace(/[ぁ-ゖ]/g, (c) => String.fromCharCode(c.charCodeAt(0) + 0x60))
     .replace(/\s+/g, "")
+    // 「下降補正」の書き起こし違い（加工補正 など。ask_log #10）
+    .replace(/(加工|河口|火口|下向|過去)(?=補正)/g, "下降")
+    // 「C下降補正」の「C」が「良い」になった（良い過去補正。ask_log #25）
+    .replace(/(良イ|ヨイ|イイ)(?=下降補正)/g, "C")
+    // 「C下降補正」（しかこう）が 1 語の漢字になった（資格補正 など）
+    .replace(/(資格|視覚|四角|死角|シカク|シカコウ|シカ|スイカ|西瓜)(?=補正)/g, "C下降")
+    // 「特化」の書き起こし違い（HB特価。ask_log #32）
+    .replace(/([HABCDS]{1,3})特価/g, "$1特化")
+    // 「耐えれる」「耐えますか」の書き起こし違い（買えますか。ask_log #31〜#33）
+    .replace(/買エ(マスカ|レル|ル)/g, "耐エ$1")
+    // 「〇〇フィールド下の」「〇〇下で」の書き起こし違い（エレキフィールド化の。ask_log #34）
+    .replace(/(フィールド|晴レ|雨|砂嵐|雪)化(?=ノ|デ)/g, "$1下")
     // 能力の略号の読み（音声認識がカタカナで書くことがある:「エー特化」「エイチビー振り」「エス二段階」）。
     // 特化・振り・段階・＋−・補正の直前に続くときだけ直す（「エースバーン」などを壊さない）
-    .replace(/((?:エイチ|エッチ|エー|エイ|ビー|シー|ディー|デー|エス)+)(?=特化|振リ|段階|[+\-]|補正|252|ガ?[1-6一二三四五六]段階)/g, (m) =>
+    .replace(/((?:エイチ|エッチ|エー|エイ|ビー|シー|ディー|デー|エス)+)(?=特化|振リ|段階|[+\-]|補正|252|ガ?[1-6一二三四五六]段階|ニ?(?:下降|上昇|マイナス|プラス|ダウン|アップ)補正|[↑↓])/g, (m) =>
       LETTER_READING.reduce((x, [re, l]) => x.replace(re, l), m),
     )
-    .replace(/([hbacds]+)(?=特化|振リ|段階|[+\-]|補正|252)/g, (m) => m.toUpperCase());
+    // 1 字だけの読み・漢字（音声認識が「C」を「し」「市」「氏」、「A」を「え」「絵」「英」と書く）。
+    // 名前の一部（カエンジシ、アヤシシ）を壊さないよう、文頭・助詞・区切り・略号の直後で、後ろに特化・振り・補正などが続くときだけ
+    .replace(new RegExp(`(?<=^|[ノニデガトハヲモ、,\\s]|[HABCDS])(シ|エ|[${Object.keys(LETTER_KANJI).join("")}])(?=${STAT_TRIGGER})`, "g"), (m) => (m === "シ" ? "C" : m === "エ" ? "A" : LETTER_KANJI[m]))
+    .replace(/([hbacds]+)(?=特化|振リ|段階|[+\-]|補正|252|[↑↓])/g, (m) => m.toUpperCase());
 }
+
+/** 能力の略号の後ろに続く語（この前にあるときだけ、読みや漢字を略号に直す） */
+const STAT_TRIGGER = "特化|振リ|補正|ニ?(?:下降|上昇|マイナス|プラス|ダウン|アップ|低下)補正|[↑↓]|[+\\-][1-6]|ガ?[1-6一二三四五六]段階";
+/** 音声認識が略号を書き換える漢字 → 略号 */
+const LETTER_KANJI: Record<string, string> = { 私: "C", 市: "C", 氏: "C", 誌: "C", 紙: "C", 師: "C", 史: "C", 絵: "A", 英: "A", 栄: "A" };
 
 /** 能力の略号の読み → 略号 */
 const LETTER_READING: [RegExp, string][] = [
@@ -27,8 +48,8 @@ const LETTER_READING: [RegExp, string][] = [
 ];
 
 type Tok =
-  | { k: "pokemon"; ja: string }
-  | { k: "move"; ja: string }
+  | { k: "pokemon"; ja: string; heard?: string } // heard: 聞き間違いを読みの近さで直したとき、聞こえた形（回答は直した名前で答え、画面にだけ「〇〇として計算した」と出す）
+  | { k: "move"; ja: string; heard?: string }
   | { k: "item"; ja: string }
   | { k: "nature"; ja: string }
   | { k: "ability"; ja: string } // 特性（直後のポケモン）
@@ -40,12 +61,16 @@ type Tok =
   | { k: "flag"; f: "reflect" | "critical" } // 壁・急所（場）
   | { k: "hp"; percent?: number; value?: number; left?: boolean } // 残り HP（直後のポケモン）。left: 「残り」「残ってる」が付いていた
   | { k: "status"; v: string } // 状態異常（直後のポケモン）
+  | { k: "busted" } // ばけのかわが剥がれた（直後のポケモン）
   | { k: "p"; v: string } // 助詞・区切り
   | { k: "w"; v: string }; // 質問の言い回し
 
 const LETTER: Record<string, Stat> = { H: "hp", A: "atk", B: "def", C: "spa", D: "spd", S: "spe" };
 
 let dict: [string, Tok][] | null = null;
+let surfaceSet: Set<string> | null = null;
+/** 辞書の語の表記（完全一致の確認用） */
+const surfaces = () => (surfaceSet ??= new Set(dictionary().map(([w]) => w)));
 function dictionary(): [string, Tok][] {
   if (dict) return dict;
   const n = names as unknown as Record<string, Record<string, string>>;
@@ -79,7 +104,7 @@ function dictionary(): [string, Tok][] {
     "何発", "なんぱつ", "確定", "確定数", "耐える", "耐えれる", "耐えられる", "落ちる", "落とせる", "倒せる", "どれくらい", "どのくらい", "減る",
     "どっちが速い", "どっちがはやい", "どっちが早い", "どっちが先", "抜ける", "抜かれる", "素早さ", "すばやさ", "実数値", "いくつ",
     "タイプ", "弱点", "相性", "種族値", "威力", "何タイプ", "教えて", "？", "?", "。", "!", "！", "撃ったら", "うったら", "だと", "なら",
-    "んだけど", "だけど", "けど",
+    "んだけど", "だけど", "けど", "何が", "なにが", "何", "なに", "与える", "与えれる", "与え", "あたえる", "耐えますか", "耐えられますか", "耐えるか", "打ったときに", "打ったとき", "撃ったときに", "撃ったとき", "うったとき", "入る", "はいる", "入れる", "通る",
     "じゃくてん", "しゅぞくち", "いりょく", "なんタイプ", "なんぱつ",
     "優先度", "ゆうせんど", "どっちが優先度高い", "どっちが威力高い", "高い",
     "何パーセント", "なんパーセント", "何%", "何割", "なんわり",
@@ -108,6 +133,12 @@ function pattern(s: string): [number, Tok] | null {
   }
   m = s.match(/^([HABCDS]{1,3})(?:振リ|252|極振リ)/);
   if (m) return [m[0].length, { k: "spread", sp: Object.fromEntries([...m[1]].map((c) => [LETTER[c], 32])) }];
+  // 性格補正: 「C下降補正」「Cマイナス補正」「C↓」= 性格で特攻が下がる（ようき・いじっぱり など）、「A上昇補正」「A↑」「A補正」= 上がる
+  m = s.match(/^([ABCDS])ニ?(?:(下降|低下|マイナス|ダウン|[-−])補正|(上昇|プラス|アップ|[+＋])補正|(↓)|(↑)|補正)/);
+  if (m) {
+    const stat = LETTER[m[1]];
+    return [m[0].length, m[2] || m[4] ? { k: "spread", sp: {}, down: stat } : { k: "spread", sp: {}, up: stat }];
+  }
   // 無振り: すべての SP が 0・補正なし（指定ありとして扱い、幅は出さない）
   m = s.match(/^(?:無振リ|ムフリ)/);
   if (m) return [m[0].length, { k: "spread", sp: { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 } }];
@@ -118,6 +149,8 @@ function pattern(s: string): [number, Tok] | null {
   }
   m = s.match(/^(?:イカク|威嚇)(?:ヲ|ガ)?(?:受ケタ|入ッタ|入レラレタ|込ミ|後)/);
   if (m) return [m[0].length, { k: "boost", stat: "atk", n: -1 }];
+  m = s.match(/^(?:化ケノ皮|バケノカワ|化ケノカワ|バケノ皮)(?:ガ|ノ)?(?:剥ガレタ|ハガレタ|剥ゲタ|ハゲタ|ナイ|ナシ|無シ|割レタ|ワレタ)/);
+  if (m) return [m[0].length, { k: "busted" }];
   m = s.match(/^(ヤケド|火傷|マヒ|麻痺)(?:状態)?(?:シタ|シテル|シテイル)?/);
   if (m) return [m[0].length, { k: "status", v: /ヤケド|火傷/.test(m[1]) ? "やけど" : "まひ" }];
   m = s.match(/^リフレクター(?:アリ|有リ|込ミ)?/);
@@ -159,36 +192,84 @@ function pattern(s: string): [number, Tok] | null {
 /** 左から最長一致で語に分ける。説明できない文字が残れば null */
 export function tokenize(text: string): Tok[] | null {
   const s = norm(text);
-  const d = dictionary();
-  const out: Tok[] = [];
-  let i = 0;
-  outer: while (i < s.length) {
-    const rest = s.slice(i);
-    const pt = pattern(rest);
-    if (pt) {
-      out.push(pt[1]);
-      i += pt[0];
-      continue;
+  const failed = new Set<string>();
+  // 助詞は文頭や助詞の直後には来ない（「トヒドイデ」を「と」+ヒドイデ、「カラルヤドラン」を「から」+… と切らない）
+  // 読点（、）は区切りなので、助詞の後にも来てよく、前の状態を引き継ぐ（「ステロ込みで、」）
+  const isComma = (t: Tok) => t.k === "p" && /^[、,]$/.test(t.v);
+  const isParticle = (t: Tok) => (t.k === "p" && !isComma(t)) || (t.k === "w" && t.v === "ヲ");
+  // 先頭から順に語を当てる。行き詰まったら手前に戻って別の切り方を試す（「ミミック」を「ミミ」+「ック」と切って行き詰まる など）
+  const walk = (i: number, afterParticle: boolean): Tok[] | null => {
+    if (i >= s.length) return [];
+    const memo = `${i}:${afterParticle}`;
+    if (failed.has(memo)) return null;
+    const next = (len: number, toks: Tok[]): Tok[] | null => {
+      if (isParticle(toks[0]) && afterParticle) return null;
+      const last = toks[toks.length - 1];
+      const rest = walk(i + len, isComma(last) ? afterParticle : isParticle(last));
+      return rest ? [...toks, ...rest] : null;
+    };
+    for (const [len, toks] of candidates(s, i)) {
+      const r = next(len, toks);
+      if (r) return r;
     }
-    for (const [surface, t] of d) {
-      if (rest.startsWith(surface)) {
-        // 持ち物の後ろの「持ち」「もち」は読み飛ばす
-        out.push(t);
-        i += surface.length;
-        if (t.k === "item") {
-          const mm = s.slice(i).match(/^(持チ|モチ)/);
-          if (mm) i += mm[0].length;
-        }
-        if (t.k === "ability") {
-          const mm = s.slice(i).match(/^(込ミ|コミ|持チ|アリ)/);
-          if (mm) i += mm[0].length;
-        }
-        continue outer;
-      }
+    // 辞書で読めないときだけ: ポケモン・わざの聞き間違いかを読みの近さで調べる（「ミミックのじゃれつく」→ミミッキュ）
+    for (const [len, t] of guessName(s.slice(i))) {
+      const r = next(len, [t]);
+      if (r) return r;
     }
+    // 言い直し: 名前を言いかけて言い直した（「リザ、メガリザードンY」の「リザ」）。直後の名前に含まれる 1〜4 文字なら読み飛ばす
+    for (let k = 1; k <= 4 && i + k < s.length; k++) {
+      const frag = s.slice(i, i + k);
+      const nx = candidates(s, i + k).find(([, ts]) => ts[0].k === "pokemon" || ts[0].k === "move");
+      if (!nx || !norm((nx[1][0] as { ja: string }).ja).includes(frag)) continue;
+      const rest = walk(i + k, afterParticle);
+      if (rest) return rest;
+    }
+    failed.add(memo);
     return null;
+  };
+  return walk(0, true);
+}
+
+/** 位置 i から当てはまる語の候補（決まった言い回し → 辞書の長い順） */
+function candidates(s: string, i: number): [number, Tok[]][] {
+  const rest = s.slice(i);
+  const out: [number, Tok[]][] = [];
+  const pt = pattern(rest);
+  if (pt) out.push([pt[0], [pt[1]]]);
+  for (const [surface, t] of dictionary()) {
+    if (!rest.startsWith(surface)) continue;
+    let len = surface.length;
+    // 持ち物・特性の後ろの「持ち」「込み」などは読み飛ばす
+    if (t.k === "item") len += s.slice(i + len).match(/^(持チ|モチ)/)?.[0].length ?? 0;
+    if (t.k === "ability") len += s.slice(i + len).match(/^(込ミ|コミ|持チ|アリ)/)?.[0].length ?? 0;
+    out.push([len, [t]]);
   }
   return out;
+}
+
+/**
+ * 文の先頭の 4〜10 文字（漢字を含めば 3 文字から）を、ポケモン・わざの名前の聞き間違いとして読みの近さで照合する。
+ * 候補が 1 つに決まる長さだけを、違いの小さい順（同じなら長い順）に返す。後ろが読めない切り方は tokenize が捨てる
+ */
+function guessName(rest: string): [number, Tok][] {
+  const found: { len: number; dist: number; tok: Tok }[] = [];
+  // 名前の頭に来ない字（助詞の「ヲ」、ン・ッ・ー・小さい字）で始まる切り方は取らない（「をリザ」→オリーヴァ の誤り）
+  if (!/^[ァ-ヶ一-龯]/.test(rest) || /^[ヲンッーァィゥェォャュョヮ]/.test(rest)) return [];
+  // カナ 3 文字以下は別の名前に当たりやすいので 4 文字から（漢字を含むときは 3 文字も: 月光蛾）
+  for (let len = Math.min(10, rest.length); len >= 3; len--) {
+    const heard = rest.slice(0, len);
+    if (/[、,?？!！。]/.test(heard) || (len === 3 && !/[一-龯]/.test(heard))) continue;
+    // 英字・数字を含む切り方は取らない（「ドラゴンアローヲHB」の HB を名前に吸わせない）
+    if (/[A-Za-z0-9]/.test(heard)) continue;
+    // 辞書にある語 + 助詞（「ジシンヲ」「ドラゴンアローヲ…」）は聞き間違いではない。助詞から先を名前に吸わせない
+    if ([...Array(heard.length).keys()].some((k) => k >= 2 && /[ノヲニデガトハヘモ]/.test(heard[k]) && surfaces().has(heard.slice(0, k)))) continue;
+    for (const kind of ["pokemon", "moves"] as const) {
+      const r = resolve(kind, heard);
+      if (r.ok && r.fuzzy) found.push({ len, dist: r.dist ?? 0, tok: { k: kind === "pokemon" ? "pokemon" : "move", ja: r.ja, heard } });
+    }
+  }
+  return found.sort((a, b) => a.dist - b.dist || b.len - a.len).map((f) => [f.len, f.tok]);
 }
 
 interface Side {
@@ -200,7 +281,8 @@ interface Side {
 function applyMods(cond: Obj, mods: Tok[]) {
   for (const t of mods) {
     if (t.k === "spread") {
-      cond.sp = { ...(cond.sp as Obj | undefined), ...t.sp };
+      // 性格補正だけ（「C↓」）のときは、振り方は指定なしのまま
+      if (Object.keys(t.sp).length) cond.sp = { ...(cond.sp as Obj | undefined), ...t.sp };
       if (t.up) cond.nature_up = t.up;
       if (t.down) cond.nature_down = t.down;
     } else if (t.k === "item") cond.item = t.ja;
@@ -208,6 +290,7 @@ function applyMods(cond: Obj, mods: Tok[]) {
     else if (t.k === "boost") cond.boosts = { ...(cond.boosts as Obj | undefined), [t.stat]: t.n };
     else if (t.k === "status") cond.status = t.v;
     else if (t.k === "ability") cond.ability = t.ja;
+    else if (t.k === "busted") cond.disguise_broken = true;
     else if (t.k === "hp") {
       if (t.percent !== undefined) cond.hp_left_percent = t.percent;
       if (t.value !== undefined) cond.hp_left = t.value;
@@ -271,7 +354,7 @@ export function parseRules(raw: string): Obj | null {
       last.particle = next?.k === "p" ? next.v : undefined;
       continue;
     }
-    if (t.k === "spread" || t.k === "item" || t.k === "nature" || t.k === "boost" || t.k === "hp" || t.k === "status" || t.k === "ability") {
+    if (t.k === "spread" || t.k === "item" || t.k === "nature" || t.k === "boost" || t.k === "hp" || t.k === "status" || t.k === "ability" || t.k === "busted") {
       mods.push(t);
       continue;
     }
@@ -279,12 +362,19 @@ export function parseRules(raw: string): Obj | null {
       const cond: Obj = {};
       applyMods(cond, mods);
       mods = [];
-      sides.push({ name: t.ja, cond, particle: next?.k === "p" ? next.v : undefined });
+      // 「ミミッキュを（倒せる）」の「を」も助詞として見る（防御側の印）
+      sides.push({ name: t.heard ?? t.ja, cond, particle: next?.k === "p" ? next.v : next?.k === "w" && next.v === "ヲ" ? "ヲ" : undefined });
       continue;
     }
     if (t.k === "move") {
+      // 「メガリザードンYのいのちのたまかえんほうしゃ」: 名前の直後（〜の）とわざの間の持ち物は、その名前のもの
+      const lastSide = sides[sides.length - 1];
+      if (mods.length && mods.every((x) => x.k === "item") && lastSide && lastSide.particle === "ノ" && toks[i - mods.length - 1]?.k === "p") {
+        applyMods(lastSide.cond, mods);
+        mods = [];
+      }
       if (mods.length) return null; // わざの前の条件は付け先が分からない
-      moves.push(t.ja);
+      moves.push(t.heard ?? t.ja);
       continue;
     }
   }
@@ -355,7 +445,7 @@ export function parseRules(raw: string): Obj | null {
     if (has(/タイプ|弱点|種族値|素早サ|スバヤサ|抜ケ|ドッチ|ヨリ速イ|ヨリハヤイ|ヨリ早イ|ヨリ遅イ/)) return null;
     if (sides.some((s) => s.particle === "ト")) return null; // 「AとBの〇〇」は向きが決まらない
     const role = (s: Side): "attacker" | "defender" | undefined =>
-      s.particle === "ノ" || s.particle === "ガ" || s.particle === "カラ" ? "attacker" : s.particle === "ニ" || s.particle === "ヘ" ? "defender" : undefined;
+      s.particle === "ノ" || s.particle === "ガ" || s.particle === "カラ" ? "attacker" : s.particle === "ニ" || s.particle === "ヘ" || s.particle === "ヲ" ? "defender" : undefined;
     let [ra, rb] = sides.map(role);
     if (ra && !rb) rb = ra === "attacker" ? "defender" : "attacker";
     if (rb && !ra) ra = rb === "attacker" ? "defender" : "attacker";

@@ -38,6 +38,8 @@ export interface AiSetup {
   commit: string;
   keys: { GEMINI_API_KEY: boolean; GROQ_API_KEY: boolean; LLM_API_KEY: boolean };
   providers: string[];
+  /** SUPABASE_URL と SUPABASE_SERVICE_ROLE_KEY が両方見えているか（false なら roas.ask_log に記録されない） */
+  log: boolean;
 }
 
 export function aiSetup(env: Record<string, string | undefined> = process.env): AiSetup {
@@ -46,6 +48,7 @@ export function aiSetup(env: Record<string, string | undefined> = process.env): 
     commit: (env.VERCEL_GIT_COMMIT_SHA ?? "").slice(0, 7),
     keys: { GEMINI_API_KEY: !!env.GEMINI_API_KEY, GROQ_API_KEY: !!env.GROQ_API_KEY, LLM_API_KEY: !!env.LLM_API_KEY },
     providers: providersFromEnv(env).map((p) => p.name),
+    log: !!(env.SUPABASE_URL && env.SUPABASE_SERVICE_ROLE_KEY),
   };
 }
 

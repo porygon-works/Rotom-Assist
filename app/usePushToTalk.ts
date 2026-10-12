@@ -10,6 +10,9 @@ interface Rec {
   onresult: ((e: { resultIndex: number; results: ArrayLike<{ isFinal: boolean; 0: { transcript: string } }> }) => void) | null;
   onerror: ((e: { error: string }) => void) | null;
   onend: (() => void) | null;
+  onaudiostart?: (() => void) | null;
+  onspeechstart?: (() => void) | null;
+  onnomatch?: (() => void) | null;
   start(): void;
   stop(): void;
   abort(): void;
@@ -32,8 +35,16 @@ const ERROR_TEXT: Record<string, string> = {
   network: "音声認識の通信に失敗しました",
 };
 
-/** onText: 聞き取れた文字（確定）を渡す */
-export function usePushToTalk(onText: (text: string) => void) {
+/** 聞き取りの経過（調べる用。画面から roas.history に送る） */
+export type MicEvent = (name: string, detail?: string) => void;
+
+/** 離してから「終わった」の知らせ（onend）を待つ長さ。来なければ止まったとみなして片付ける */
+const END_TIMEOUT_MS = 4000;
+/** 押しっぱなしの上限（押したまま放置されたとき） */
+const MAX_LISTEN_MS = 30_000;
+
+/** onText: 聞き取れた文字（確定）を渡す。onEvent: 経過の記録 */
+export function usePushToTalk(onText: (text: string) => void, onEvent: MicEvent = () => {}) {
   const [state, setState] = useState<MicState>("idle");
   const [interim, setInterim] = useState("");
   const [error, setError] = useState("");
@@ -41,14 +52,51 @@ export function usePushToTalk(onText: (text: string) => void) {
   const textRef = useRef("");
   const onTextRef = useRef(onText);
   onTextRef.current = onText;
+  const onEventRef = useRef(onEvent);
+  onEventRef.current = onEvent;
+  const timers = useRef<number[]>([]);
+  const t0 = useRef(0);
 
   useEffect(() => {
     if (!getCtor()) setState("unsupported");
   }, []);
 
+  const clearTimers = () => {
+    timers.current.forEach((t) => window.clearTimeout(t));
+    timers.current = [];
+  };
+
+  /** 1 回の聞き取りを終える（onend が来たとき、または来ないまま時間が過ぎたとき）。同じ rec で 2 回は動かない */
+  const finish = useCallback((rec: Rec, why: string) => {
+    if (recRef.current !== rec) return;
+    clearTimers();
+    recRef.current = null;
+    const ms = Math.round(performance.now() - t0.current);
+    onEventRef.current("mic-end", `${why} ${ms}ms 文字数${textRef.current.trim().length}`);
+    setState((s) => (s === "error" ? s : "idle"));
+    const t = textRef.current.trim();
+    if (t) onTextRef.current(t);
+  }, []);
+
   const start = useCallback(() => {
     const Ctor = getCtor();
-    if (!Ctor || recRef.current) return;
+    if (!Ctor) return;
+    // 前の聞き取りが「終わった」の知らせを返さずに残っていたら、捨ててやり直す
+    // （以前はここで何もせずに戻っていたため、一度止まると押しても聞かなくなった）
+    if (recRef.current) {
+      onEventRef.current("mic-stale", "前の聞き取りが残っていたので捨てた");
+      const old = recRef.current;
+      recRef.current = null;
+      clearTimers();
+      try {
+        old.onend = null;
+        old.onresult = null;
+        old.onerror = null;
+        old.abort();
+      } catch {
+        /* すでに止まっている */
+      }
+    }
     window.speechSynthesis?.cancel(); // 読み上げ中なら止める
     const rec = new Ctor();
     rec.lang = "ja-JP";
@@ -68,31 +116,43 @@ export function usePushToTalk(onText: (text: string) => void) {
       textRef.current = finalText + interimText;
       setInterim(textRef.current);
     };
+    rec.onaudiostart = () => onEventRef.current("mic-audiostart", `${Math.round(performance.now() - t0.current)}ms`);
+    rec.onspeechstart = () => onEventRef.current("mic-speechstart", `${Math.round(performance.now() - t0.current)}ms`);
+    rec.onnomatch = () => onEventRef.current("mic-nomatch");
     rec.onerror = (e) => {
+      onEventRef.current("mic-error", e.error);
       if (e.error === "aborted") return;
       setError(ERROR_TEXT[e.error] ?? `音声認識のエラー: ${e.error}`);
       setState("error");
     };
-    rec.onend = () => {
-      recRef.current = null;
-      setState((s) => (s === "error" ? s : "idle"));
-      const t = textRef.current.trim();
-      if (t) onTextRef.current(t);
-    };
+    rec.onend = () => finish(rec, "onend");
     recRef.current = rec;
+    t0.current = performance.now();
     try {
       rec.start();
       setState("listening");
+      onEventRef.current("mic-start");
+      timers.current.push(window.setTimeout(() => rec === recRef.current && rec.stop(), MAX_LISTEN_MS));
     } catch (err) {
       recRef.current = null;
+      onEventRef.current("mic-start-failed", String(err));
       setError(String(err));
       setState("error");
     }
-  }, []);
+  }, [finish]);
 
   const stop = useCallback(() => {
-    recRef.current?.stop();
-  }, []);
+    const rec = recRef.current;
+    if (!rec) return;
+    onEventRef.current("mic-stop", `${Math.round(performance.now() - t0.current)}ms`);
+    try {
+      rec.stop();
+    } catch {
+      /* すでに止まっている */
+    }
+    // 「終わった」の知らせが来ないまま止まることがある。来なければ片付けて、次に押せるようにする
+    timers.current.push(window.setTimeout(() => finish(rec, "timeout"), END_TIMEOUT_MS));
+  }, [finish]);
 
   // 画面が隠れたら止める
   useEffect(() => {

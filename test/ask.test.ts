@@ -2,8 +2,8 @@ import { describe, expect, it } from "vitest";
 import { answerExtraction } from "../lib/ask";
 import { fixMishearing } from "../lib/misheard";
 import { damage, speedOf, speedThreshold, speedVariants } from "../lib/battle";
-import { extract, providersFromEnv, type Provider } from "../lib/llm";
-import { resolve } from "../lib/resolve";
+import { aiSetup, extract, providersFromEnv, type Provider } from "../lib/llm";
+import { reading, resolve } from "../lib/resolve";
 import aliases from "../data/aliases.json";
 import names from "../data/names.json";
 
@@ -13,6 +13,8 @@ describe("名前の解決", () => {
     expect(resolve("pokemon", "garchomp")).toMatchObject({ ok: true, en: "Garchomp" });
     expect(resolve("pokemon", "ガブ")).toMatchObject({ ok: true, en: "Garchomp" });
     expect(resolve("pokemon", "水ロトム")).toMatchObject({ ok: true, en: "Rotom-Wash" });
+    // 音声認識が漢字にする（ask_log より）
+    expect(resolve("pokemon", "サーフ号")).toMatchObject({ ok: true, en: "Gholdengo" });
     expect(resolve("pokemon", "メガルカリオZ")).toMatchObject({ ok: true, en: "Lucario-Mega-Z" });
     expect(resolve("pokemon", "めがるかりおぜっと")).toMatchObject({ ok: true, en: "Lucario-Mega-Z" });
     expect(resolve("items", "スカーフ")).toMatchObject({ ok: true, en: "Choice Scarf" });
@@ -21,6 +23,13 @@ describe("名前の解決", () => {
     expect(resolve("pokemon", "ガフリアス")).toMatchObject({ ok: true, en: "Garchomp", fuzzy: true });
     expect(resolve("pokemon", "ミッキュ")).toMatchObject({ ok: true, en: "Mimikyu", fuzzy: true });
     expect(resolve("pokemon", "サアナイトウ")).toMatchObject({ ok: true, en: "Gardevoir", fuzzy: true });
+    // 読み（ローマ字）で比べる: 小さい字・促音・伸ばす音のゆれ、漢字の書き起こし
+    expect(resolve("pokemon", "ミミック")).toMatchObject({ ok: true, en: "Mimikyu", fuzzy: true });
+    expect(resolve("pokemon", "エースバン")).toMatchObject({ ok: true, en: "Cinderace", fuzzy: true });
+    expect(resolve("pokemon", "カイリュウ")).toMatchObject({ ok: true, en: "Dragonite", fuzzy: true });
+    expect(resolve("pokemon", "月光蛾")).toMatchObject({ ok: true, en: "Greninja", fuzzy: true });
+    expect(reading("ミミッキュ")).toBe("mimikyu");
+    expect(reading("サーフゴウ")).toBe(reading("サーフゴー"));
   });
   it("知らない名前・チャンピオンズにいないもの", () => {
     expect(resolve("pokemon", "アロロ")).toMatchObject({ ok: false, candidates: [] });
@@ -38,11 +47,21 @@ describe("名前の解決", () => {
 });
 
 describe("計算（チャンピオンズ・第0世代）", () => {
-  it("ミミッキュのじゃれつく → ガブリアス（無振り）は Showdown と同じ 98-116", () => {
-    const r = damage({ species: "Mimikyu" }, { species: "Garchomp" }, "Play Rough");
+  it("ミミッキュのじゃれつく → ガブリアス（無振り同士）は Showdown と同じ 98-116", () => {
+    const r = damage({ species: "Mimikyu", sp: { atk: 0 } }, { species: "Garchomp" }, "Play Rough");
     expect([r.base.min, r.base.max]).toEqual([98, 116]);
     expect(r.base.ko).toMatchObject({ kind: "guaranteed", n: 2 });
-    expect(r.range).toBeDefined(); // 振り方の指定がないので幅も出す
+    expect(r.attackerBoosted).toBeDefined(); // 性格補正の指定がないので補正ありも出す
+    expect(r.defenderBulky).toBeDefined(); // 防御側の振り方の指定がないので耐久振りも出す
+  });
+  it("攻撃側の振り方を言わなければ全振り（SP32）・補正なしで計算し、補正ありも出す", () => {
+    const r = damage({ species: "Mimikyu" }, { species: "Garchomp" }, "Play Rough");
+    const full = damage({ species: "Mimikyu", sp: { atk: 32 } }, { species: "Garchomp" }, "Play Rough");
+    expect(r.base.max).toBe(full.base.max);
+    expect(r.attackerBoosted!.max).toBeGreaterThan(r.base.max);
+    expect(r.assumed).toContain("攻撃側はA全振り・補正なし");
+    // 性格補正を言ったら補正ありの場合分けはしない
+    expect(damage({ species: "Mimikyu", natureDown: "spa" }, { species: "Garchomp" }, "Play Rough").attackerBoosted).toBeUndefined();
   });
   it("残り HP を確定数に反映する", () => {
     const a = { species: "Garchomp", sp: { atk: 32 }, natureUp: "atk" as const };
@@ -50,12 +69,20 @@ describe("計算（チャンピオンズ・第0世代）", () => {
     const hurt = damage(a, { species: "Empoleon", sp: { hp: 32, def: 32 }, hpLeft: 120 }, "Earthquake");
     expect(full.base.ko.kind).toBe("chance");
     expect(hurt.base.ko).toMatchObject({ kind: "guaranteed", n: 1 });
-    expect(hurt.range).toBeUndefined(); // 両方とも振り方の指定がある
+    expect(hurt.attackerBoosted).toBeUndefined(); // 両方とも振り方の指定がある
+    expect(hurt.defenderBulky).toBeUndefined();
   });
   it("連続技は全部当たったときの合計（ドラゴンアロー）", () => {
-    const r = damage({ species: "Dragapult", item: "Life Orb" }, { species: "Dragonite", ability: "Inner Focus" }, "Dragon Darts");
+    const r = damage({ species: "Dragapult", item: "Life Orb", sp: { atk: 0 } }, { species: "Dragonite", ability: "Inner Focus" }, "Dragon Darts");
     expect([r.base.min, r.base.max]).toEqual([176, 218]);
     expect(r.base.ko).toMatchObject({ kind: "guaranteed", n: 1 });
+  });
+  it("へんげんじざい・リベロ: 言わなかったら使い、どのわざもタイプ一致になる", () => {
+    const pro = damage({ species: "Meowscarada" }, { species: "Garchomp" }, "Play Rough");
+    expect(pro.abilities.attacker).toBe("Protean");
+    expect(pro.base.max).toBeGreaterThan(damage({ species: "Meowscarada", ability: "Overgrow" }, { species: "Garchomp" }, "Play Rough").base.max);
+    expect(damage({ species: "Cinderace" }, { species: "Kingambit" }, "High Jump Kick").abilities.attacker).toBe("Libero");
+    expect(damage({ species: "Greninja" }, { species: "Garchomp" }, "Ice Beam").abilities.attacker).toBe("Protean");
   });
   it("特性: 言わなかったら計算に効く代表的な特性（フェアリースキン・マルチスケイル）、天気を変える特性は天気に反映", () => {
     expect(damage({ species: "Sylveon" }, { species: "Garchomp" }, "Hyper Voice").abilities.attacker).toBe("Pixilate");
@@ -74,9 +101,24 @@ describe("計算（チャンピオンズ・第0世代）", () => {
     expect(sash.endured).toBe("Focus Sash");
     expect(damage(a, { species: "Kingambit", item: "Focus Sash", hpLeftPercent: 90 }, "Earthquake").base.endured).toBeUndefined();
   });
+  it("だいちのはどう: エレキフィールドででんきタイプ・威力 100、メガランチャーも乗る。カードと読み上げに前提を出す", () => {
+    const r = damage({ species: "Blastoise-Mega" }, { species: "Charizard-Mega-Y" }, "Terrain Pulse", { terrain: "Electric" });
+    expect([r.base.moveType, r.base.moveBp, r.abilities.attacker]).toEqual(["Electric", 100, "Mega Launcher"]);
+    expect(r.base.ko).toMatchObject({ kind: "guaranteed", n: 1 });
+    const a = answerExtraction({ intent: "damage", attacker: "メガカメックス", defender: "メガリザードンY", move: "だいちのはどう", conditions: { field: { terrain: "エレキフィールド" } } });
+    expect(a.speech).toContain("だいちのはどうはでんきタイプ・威力100で計算したロト");
+    expect(a.card?.move.type).toBe("でんき（エレキフィールドでノーマルから変化）");
+    expect(a.speech).toContain("ひでりで晴れとして計算");
+  });
+  it("ばけのかわが剥がれた: 1 発目を防がず、剥がれた姿・残り HP 7/8 で計算する", () => {
+    const broken = damage({ species: "Garchomp" }, { species: "Mimikyu", disguiseBroken: true }, "Earthquake").base;
+    expect(broken.endured).toBeUndefined();
+    expect(broken.curHP).toBe(broken.hp - Math.floor(broken.hp / 8));
+    expect(damage({ species: "Garchomp" }, { species: "Mimikyu" }, "Earthquake").base.endured).toBe("Disguise");
+  });
   it("ばけのかわ: 満タンなら 1 発目を防ぎ、確定数を 1 つ増やす（連続技・満タンでないときは対象外）", () => {
-    const base = damage({ species: "Garchomp" }, { species: "Mimikyu", ability: "Pressure" }, "Earthquake").base;
-    const disguise = damage({ species: "Garchomp" }, { species: "Mimikyu" }, "Earthquake").base;
+    const base = damage({ species: "Garchomp", sp: { atk: 0 } }, { species: "Mimikyu", ability: "Pressure" }, "Earthquake").base;
+    const disguise = damage({ species: "Garchomp", sp: { atk: 0 } }, { species: "Mimikyu" }, "Earthquake").base;
     expect(disguise.endured).toBe("Disguise");
     expect(disguise.ko.n).toBeGreaterThan(base.ko.n);
     expect(damage({ species: "Garchomp" }, { species: "Mimikyu", hpLeftPercent: 50 }, "Earthquake").base.endured).toBeUndefined();
@@ -116,6 +158,12 @@ describe("回答（AI の出力から）", () => {
   });
   it("聞き返し・知らない名前・チャンピオンズにいない", () => {
     expect(answerExtraction({ intent: "clarify", attacker: "ミミッキュ", move: "じゃれつく", missing: ["defender"] }).speech).toBe("どのポケモンに撃つロト？");
+    // 聞き間違いを直したことは画面にだけ出す。へんげんじざいでタイプ一致にしたことは言う
+    const pro = answerExtraction({ intent: "damage", attacker: "ミミック", defender: "ガブリアス", move: "じゃれつく" });
+    expect(pro.speech).not.toContain("ミミック");
+    expect(pro.lines).toContain("「ミミック」はミミッキュとして計算した");
+    expect(answerExtraction({ intent: "damage", attacker: "マスカーニャ", defender: "ガブリアス", move: "じゃれつく" }).speech).toContain("マスカーニャはへんげんじざいでタイプ一致として計算したロト");
+    expect(answerExtraction({ intent: "type", pokemon: "ゲッコウガ" }).speech).toContain("わざを出すとそのわざのタイプに変わる");
     expect(answerExtraction({ intent: "damage", attacker: "アロロ", defender: "ガブリアス", move: "じゃれつく" }).speech).toBe("アロロは分からないロト");
     expect(answerExtraction({ intent: "damage", attacker: "ハバタクカミ", defender: "ガブリアス", move: "ムーンフォース" }).speech).toContain("チャンピオンズにいない");
   });
@@ -165,6 +213,11 @@ describe("AI 取り出しの切り替え", () => {
   it("環境変数から候補を作る（キーがなければ空）", () => {
     expect(providersFromEnv({})).toEqual([]);
     expect(providersFromEnv({ GEMINI_API_KEY: "g", GROQ_API_KEY: "q" }).map((x) => x.name)).toEqual(["gemini-3.5-flash-lite", "gemini-3.1-flash-lite", "groq-gpt-oss-120b"]);
+  });
+  it("記録先（Supabase）が見えているかを診断に出す（URL とキーの両方が要る）", () => {
+    expect(aiSetup({}).log).toBe(false);
+    expect(aiSetup({ SUPABASE_URL: "u" }).log).toBe(false);
+    expect(aiSetup({ SUPABASE_URL: "u", SUPABASE_SERVICE_ROLE_KEY: "k" }).log).toBe(true);
   });
 });
 

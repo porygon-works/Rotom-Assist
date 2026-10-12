@@ -8,6 +8,7 @@ type Stat = "hp" | "atk" | "def" | "spa" | "spd" | "spe";
 interface SideSpec {
   sp?: Partial<Record<Stat, number>>;
   up?: Stat; // 性格で上がる能力
+  down?: Stat; // 性格で下がる能力（C下降補正 など）
   neutralSpe?: true; // 準速: S に補正なし
   minSpe?: true; // 最遅
   boosts?: Partial<Record<Exclude<Stat, "hp">, number>>;
@@ -70,6 +71,7 @@ function checkSide(label: string, side: Out, w: SideSpec): string[] {
   const e: string[] = [];
   for (const [s, v] of Object.entries(w.sp ?? {})) if (spOf(side, s as Stat) !== v) e.push(`${label}.sp.${s}=${spOf(side, s as Stat)}（正解 ${v}）`);
   if (w.up && natureUp(side) !== w.up) e.push(`${label} の性格補正=${natureUp(side)}（正解 ${w.up}）`);
+  if (w.down && natureDown(side) !== w.down) e.push(`${label} の下降補正=${natureDown(side)}（正解 ${w.down}）`);
   if (w.neutralSpe && natureUp(side) === "spe") e.push(`${label} が準速なのに S 補正あり`);
   if (w.minSpe && !(spOf(side, "spe") === 0 && natureDown(side) === "spe")) e.push(`${label} が最遅になっていない`);
   for (const [s, v] of Object.entries(w.boosts ?? {})) if (Number(side.boosts?.[s]) !== v) e.push(`${label}.boosts.${s}=${side.boosts?.[s]}（正解 ${v}）`);

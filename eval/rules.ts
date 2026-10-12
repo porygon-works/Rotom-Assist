@@ -1,13 +1,15 @@
 // ルール解析（lib/rules.ts）だけで、テストの質問のうちどれを正しく即答できるかを数える（AI は呼ばない）
 // 大事なのは「即答した問題で間違いが 0 件」であること。答えられない問題は AI に回るだけ
-// 使い方: npx tsx eval/rules.ts [fresh]（fresh: ルール作りに使っていない組 eval/cases3.ts だけで測る）
+// 使い方: npx tsx eval/rules.ts [fresh|log]（fresh: ルール作りに使っていない組 eval/cases3.ts だけ、log: 実際の質問から作った組 eval/cases-log.ts だけ）
 import { parseFollowUp, parseRules } from "../lib/rules";
 import { CASES } from "./cases";
 import { CASES2 } from "./cases2";
 import { CASES3 } from "./cases3";
+import { CASES_LOG } from "./cases-log";
 
 let ok = 0, wrong = 0, pass = 0;
-for (const c of process.argv[2] === "fresh" ? CASES3 : [...CASES, ...CASES2]) {
+const arg = process.argv[2];
+for (const c of arg === "fresh" ? CASES3 : arg === "log" ? CASES_LOG : [...CASES, ...CASES2, ...CASES_LOG]) {
   // 前の会話を使う質問は、直前の解釈に条件を足すルール（parseFollowUp）で測る
   const o = c.history ? parseFollowUp(c.text, JSON.parse(c.history.assistant)) : parseRules(c.text);
   if (!o) {

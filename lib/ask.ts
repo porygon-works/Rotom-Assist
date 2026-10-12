@@ -8,6 +8,7 @@ import { fixMishearing } from "./misheard";
 import { parseFollowUp, parseRules } from "./rules";
 import aliases from "../data/aliases.json";
 import names from "../data/names.json";
+import { damageCard, fieldTexts, spreadText, type DamageCard } from "./card";
 
 export interface AskResult {
   /** 読み上げる文 */
@@ -19,6 +20,10 @@ export interface AskResult {
   /** 画面に出す詳しい結果 */
   lines: string[];
   intent: string;
+  /** ダメ計の計算条件カード（攻撃側・防御側・わざ・場） */
+  card?: DamageCard;
+  /** 計算ライブラリの説明文（英語。診断用） */
+  desc?: string;
   /** 次の質問の文脈に使う取り出し結果 */
   extraction?: Record<string, unknown> | null;
   diagnostics?: { provider?: string; attempts: Attempt[]; totalMs: number; setup?: AiSetup; /** 聞き間違いを直した文（直したときだけ） */ fixed?: string };
@@ -62,7 +67,8 @@ class Problems {
     if (!heard) return undefined;
     const r = resolve(kind, heard);
     if (r.ok) {
-      if (r.fuzzy) this.notes.push(`${r.ja}のことだと思って計算したロト`);
+      // 聞き間違いを直したことは読み上げない（毎回言うとうるさい）。見出しと画面の詳しい結果で分かる
+      if (r.fuzzy) this.quiet.push(`「${heard}」は${r.ja}として計算した`);
       return { en: r.en, ja: r.ja };
     }
     if (r.notInGame) this.list.push(`${r.notInGame}はチャンピオンズに${kind === "pokemon" ? "いない" : "ない"}ロト`);
@@ -110,6 +116,7 @@ function side(species: string, c: Obj, pr: Problems): SideInput {
   if (c.stealth_rock === true) s.stealthRock = true;
   const st = STATUS[str(c.status) ?? ""];
   if (st) s.status = st;
+  if (c.disguise_broken === true) s.disguiseBroken = true;
   return s;
 }
 
@@ -130,8 +137,8 @@ const fail = (intent: string, title: string, msgs: string[]): AskResult => ({ sp
 /** 側の条件を短い文字にする（画面の見出し用） */
 function sideLabel(ja: string, s: SideInput): string {
   const parts: string[] = [];
-  const sp = Object.entries(s.sp ?? {}).filter(([, v]) => v).map(([k, v]) => `${({ hp: "H", atk: "A", def: "B", spa: "C", spd: "D", spe: "S" } as Record<string, string>)[k]}${v}`);
-  if (sp.length) parts.push(sp.join(""));
+  const sp = spreadText(s.sp);
+  if (sp) parts.push(sp);
   if (s.natureUp) parts.push(`${({ hp: "H", atk: "A", def: "B", spa: "C", spd: "D", spe: "S" } as Record<string, string>)[s.natureUp]}↑`);
   if (s.natureDown) parts.push(`${({ atk: "A", def: "B", spa: "C", spd: "D", spe: "S" } as Record<string, string>)[s.natureDown]}↓`);
   if (s.nature) parts.push(toJa("natures", s.nature));
@@ -142,6 +149,7 @@ function sideLabel(ja: string, s: SideInput): string {
   if (s.hpLeftPercent) parts.push(`残りHP${s.hpLeftPercent}%`);
   if (s.stealthRock) parts.push("ステロ込み");
   if (s.status) parts.push(({ brn: "やけど", par: "まひ", psn: "どく", tox: "もうどく", slp: "ねむり", frz: "こおり" } as const)[s.status]);
+  if (s.disguiseBroken) parts.push("ばけのかわなし");
   return parts.length ? `${ja}（${parts.join("・")}）` : ja;
 }
 
@@ -177,14 +185,23 @@ function answerDamage(ex: Obj, text?: string): AskResult {
   const autoNotes = result.autoField.map((x) => {
     const [sp, ab] = x.split(":");
     const ja = sp === as.species ? a.ja : d.ja;
-    return `${ja}の${toJa("abilities", ab)}で${fieldLabel(result.field).replace(/[［］\s]/g, "")}として計算したロト`;
+    // その特性が入れた天候かフィールドだけを言う（言われたフィールドまで特性のせいに聞こえないように）
+    const own = fieldTexts(/Surge|Hadron/.test(ab) ? { terrain: result.field.terrain } : { weather: result.field.weather }).join("・");
+    return `${ja}の${toJa("abilities", ab)}で${own}として計算したロト`;
   });
   pr.notes.push(...autoNotes);
+  // 場でタイプ・威力が変わるわざ（だいちのはどう・ウェザーボール）は前提を言う
+  const mi = moveInfo(m.en);
+  if (result.base.moveType && (result.base.moveType !== mi.type || (result.base.moveBp ?? mi.bp) !== mi.bp)) {
+    pr.notes.push(`${m.ja}は${toJa("types", result.base.moveType)}タイプ・威力${result.base.moveBp}で計算したロト`);
+  }
   // 言わなかったのに計算に効く特性を使ったら添える（「カイリューはマルチスケイルで計算したロト」）
   for (const [sd, ja, role] of [[as, a.ja, "attacker"], [ds, d.ja, "defender"]] as const) {
     const ab = abilityOf(sd);
     if (!sd.ability && isNotableAbility(ab, role) && !result.autoField.some((x) => x.endsWith(`:${ab}`)) && abilityMatters(as, ds, m.en, f, role)) {
-      pr.notes.push(`${ja}は${toJa("abilities", ab!)}で計算したロト`);
+      // へんげんじざい・リベロ: わざを出す前にそのわざのタイプに変わるので、どのわざもタイプ一致になる
+      const protean = ab === "Protean" || ab === "Libero";
+      pr.notes.push(`${ja}は${toJa("abilities", ab!)}${protean ? "でタイプ一致として" : "で"}計算したロト`);
     }
     if (sd === ds && isNotCalculated(ab)) pr.notes.push(`${ja}の${toJa("abilities", ab!)}は計算に入れてないロト`);
   }
@@ -195,25 +212,25 @@ function answerDamage(ex: Obj, text?: string): AskResult {
     else if (result.intimidate === 0) pr.notes.push(`${a.ja}は${aab}で、${d.ja}のいかくを受けないロト`);
     else pr.notes.push(`${d.ja}のいかくで${a.ja}の${aab}が発動して、攻撃+${result.intimidate}で計算したロト`);
   }
-  const special = result.category === "Special";
-  const open = { attacker: !hasSpread(as, [special ? "spa" : "atk"]), defender: !hasSpread(ds, ["hp", special ? "spd" : "def"]) };
   const { speech, short, lines } = damageSpeech({ attacker: a.ja, defender: d.ja, move: m.ja }, result, [...pr.notes, ...pr.list], {
     question: damageQuestionOf(text),
-    open,
     stealthRock: ds.stealthRock,
   });
-  lines.push(...pr.quiet);
-  const abLine = (label: string, sd: SideInput) => `${label} ${toJa("abilities", abilityOf(sd) ?? "-")}${sd.ability ? "" : "（仮定）"}`;
-  lines.push(`特性: ${abLine("攻撃側", as)}、${abLine("防御側", ds)}`);
-  if (result.assumed.length) lines.push(`仮定: ${result.assumed.map((x) => (x.includes("振り方") ? `${x}は無振り（幅も表示）` : x)).join("、")}`);
-  lines.push(result.base.desc);
+  // 条件（振り方・性格・持ち物・特性・場）はカードで見せる。行には補足だけ残す
+  const rest = lines.filter((l) => !/^(ダメージ|振り方の幅)/.test(l));
+  lines.length = 0;
+  lines.push(...rest, ...pr.quiet);
+  const card = damageCard({ attacker: a.ja, defender: d.ja, move: m.ja }, as, ds, m.en, result);
   // 名前が分からない・チャンピオンズにないなどの注意は、短い読み上げでも言う
   const must = pr.list.length ? `${pr.list.join("。")}。` : "";
   return {
     speech,
     short: must + short,
-    title: `${sideLabel(a.ja, as)}の${m.ja} → ${sideLabel(d.ja, ds)}${fieldLabel(result.field)}`,
+    // 条件はカードに出すので、見出しは「誰の何 → 誰」だけ
+    title: `${a.ja}の${m.ja} → ${d.ja}`,
     lines,
+    card,
+    desc: result.base.desc,
     intent: "damage",
   };
 }
@@ -344,7 +361,11 @@ function answerType(ex: Obj): AskResult {
   const types = info.types.map(tj).join("・");
   const weak = [...weak4.map((t) => `${t}（4倍）`), ...weak2].join("、") || "なし";
   const lines = [`タイプ: ${types}`, `弱点: ${weak}`, `半減: ${[...(by.get(0.25) ?? []).map((t) => `${t}（1/4）`), ...(by.get(0.5) ?? [])].join("、") || "なし"}`, `無効: ${immune.join("、") || "なし"}`];
-  const speech = `${pr.notes.length ? pr.notes.join("。") + "。" : ""}${p.ja}は${types}タイプ。弱点は${weak}ロト${immune.length ? `。${immune.join("と")}は効かないロト` : ""}`;
+  // へんげんじざい・リベロ: わざを出すとそのわざのタイプに変わるので、元のタイプの弱点が当てにならない
+  const ab = abilityOf({ species: p.en });
+  const protean = ab === "Protean" || ab === "Libero" ? `ただし、${toJa("abilities", ab)}で、わざを出すとそのわざのタイプに変わるロト` : "";
+  if (protean) lines.push(protean);
+  const speech = `${pr.notes.length ? pr.notes.join("。") + "。" : ""}${p.ja}は${types}タイプ。弱点は${weak}ロト${immune.length ? `。${immune.join("と")}は効かないロト` : ""}${protean ? `。${protean}` : ""}`;
   return { speech, title: `${p.ja}のタイプ`, lines, intent: "type" };
 }
 
@@ -353,7 +374,8 @@ function answerAbility(ex: Obj, text: string): AskResult | undefined {
   const pr = new Problems();
   const heardPoke = str(ex.pokemon) ?? str(ex.attacker) ?? str(ex.defender);
   const cond = obj(obj(ex.conditions).pokemon);
-  const heardAb = str(cond.ability) ?? Object.keys(obj((names as unknown as Obj).abilities)).find((ja) => text.includes(ja));
+  const spoken = [...Object.keys(obj((names as unknown as Obj).abilities)), ...Object.keys(obj((aliases as unknown as Obj).abilities))];
+  const heardAb = str(cond.ability) ?? spoken.find((ja) => text.includes(ja));
   // 特性の名前が文にあれば、特性について聞いている（AI がポケモンを補っていても特性を優先）
   const aboutAbility = /効果|説明|どんな/.test(text) || (!!heardAb && text.includes(heardAb));
   const ab = heardAb && aboutAbility ? pr.soft("abilities", heardAb) : undefined;
@@ -518,7 +540,7 @@ function setupLines(s: AiSetup): string[] {
   const has = (b: boolean) => (b ? "あり" : "なし");
   return [
     `このデプロイ（環境: ${s.env}${s.commit ? `、コミット ${s.commit}` : ""}）から AI のキーが見えていない`,
-    `GEMINI_API_KEY: ${has(s.keys.GEMINI_API_KEY)} / GROQ_API_KEY: ${has(s.keys.GROQ_API_KEY)}`,
+    `GEMINI_API_KEY: ${has(s.keys.GEMINI_API_KEY)} / GROQ_API_KEY: ${has(s.keys.GROQ_API_KEY)} / 記録(SUPABASE_*): ${has(s.log)}`,
     "Vercel の Environment Variables で、この環境にチェックが入っているか確認し、登録後に Redeploy する",
   ];
 }

@@ -10,7 +10,11 @@ const MAX = 1000;
 export async function logAsk(question: string, deviceId: string, r: AskResult): Promise<void> {
   const url = process.env.SUPABASE_URL?.replace(/\/$/, "");
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  if (!url || !key) return;
+  if (!url || !key) {
+    // 未設定だと何も残らず、記録が 0 件の理由が分からなくなるので Vercel の Logs に出す（値は出さない）
+    console.warn(`ask_log skipped: SUPABASE_URL ${url ? "set" : "missing"}, SUPABASE_SERVICE_ROLE_KEY ${key ? "set" : "missing"} (env ${process.env.VERCEL_ENV ?? "local"})`);
+    return;
+  }
   const row = {
     device_id: deviceId,
     question: question.slice(0, MAX),
