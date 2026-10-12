@@ -35,6 +35,9 @@ main { max-width: 720px; margin: 0 auto; padding: 8px 16px calc(var(--dock-h) + 
 .sheet .row { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--line); }
 .sheet .row:last-of-type { border-bottom: none; }
 .sheet input[type="checkbox"] { width: 22px; height: 22px; accent-color: var(--btn); }
+.sheet .vol { display: grid; grid-template-columns: 7.5em 1fr 2.5em; }
+.sheet .vol input[type="range"] { width: 100%; accent-color: var(--btn); }
+.sheet .vol output { text-align: right; font-variant-numeric: tabular-nums; color: var(--muted); }
 .sheet select { border: 1px solid var(--line); border-radius: 10px; padding: 6px 8px; background: #fff; }
 
 /* 顔と今の状態 */

@@ -65,6 +65,9 @@ function setSpeaking(b: boolean) {
   }, 300);
 }
 
+/** 音量（0〜1）。声（読み上げ・Gemini の声）と効果音（合図の rotom.mp3）を別々に。設定で変え、端末に覚える */
+const volume = { voice: 1, sfx: 1 };
+
 function speak(text: string) {
   const s = window.speechSynthesis;
   if (!s) return;
@@ -72,6 +75,7 @@ function speak(text: string) {
   const u = new SpeechSynthesisUtterance(text);
   u.lang = "ja-JP";
   u.rate = 1.15;
+  u.volume = volume.voice;
   u.onstart = () => setSpeaking(true);
   u.onend = () => setSpeaking(false);
   u.onerror = () => setSpeaking(false);
@@ -105,8 +109,9 @@ export type Voice = "browser" | "gemini";
 let player: HTMLAudioElement | null = null;
 let seq = 0;
 
-function playUrl(url: string): Promise<void> {
+function playUrl(url: string, kind: "voice" | "sfx" = "sfx"): Promise<void> {
   const a = (player ??= new Audio());
+  a.volume = volume[kind];
   return new Promise((resolve) => {
     const done = () => {
       a.removeEventListener("ended", done);
@@ -171,7 +176,7 @@ async function announce(text: string, voice: Voice, chime: boolean) {
   }
   if (url) {
     setSpeaking(true);
-    await playUrl(url);
+    await playUrl(url, "voice");
     setSpeaking(false);
     URL.revokeObjectURL(url);
     releaseAudio();
@@ -193,6 +198,8 @@ function unlockSound() {
   }
   void playUrl(CHIME).then(releaseAudio);
 }
+
+const clampVol = (n: unknown) => (typeof n === "number" && Number.isFinite(n) ? Math.max(0, Math.min(100, Math.round(n))) : 100);
 
 export default function Home() {
   const [shown, setShown] = useState<Shown | null>(null);
@@ -232,6 +239,31 @@ export default function Home() {
     setVoiceState(v);
     try {
       localStorage.setItem("rotom-voice", v);
+    } catch {
+      /* 保存できない環境 */
+    }
+  };
+  // 音量（声・効果音）。0〜100 で持ち、端末に覚える
+  const [vol, setVolState] = useState({ voice: 100, sfx: 100 });
+  useEffect(() => {
+    try {
+      const v = JSON.parse(localStorage.getItem("rotom-volume") ?? "null") as { voice?: number; sfx?: number } | null;
+      if (v) {
+        const next = { voice: clampVol(v.voice), sfx: clampVol(v.sfx) };
+        setVolState(next);
+        volume.voice = next.voice / 100;
+        volume.sfx = next.sfx / 100;
+      }
+    } catch {
+      /* 保存できない環境 */
+    }
+  }, []);
+  const setVol = (kind: "voice" | "sfx", n: number) => {
+    const next = { ...vol, [kind]: clampVol(n) };
+    setVolState(next);
+    volume[kind] = next[kind] / 100;
+    try {
+      localStorage.setItem("rotom-volume", JSON.stringify(next));
     } catch {
       /* 保存できない環境 */
     }
@@ -387,6 +419,16 @@ export default function Home() {
           <label className="row"><span>短く読む</span><input type="checkbox" checked={brief} onChange={(e) => setBrief(e.target.checked)} /></label>
           <label className="row"><span>読み上げない</span><input type="checkbox" checked={mute} onChange={(e) => setMute(e.target.checked)} /></label>
           <label className="row"><span>答えの前の合図</span><input type="checkbox" checked={chimeOn} onChange={(e) => setChimeOn(e.target.checked)} /></label>
+          <label className="row vol">
+            <span>声の音量</span>
+            <input type="range" min={0} max={100} step={5} value={vol.voice} onChange={(e) => setVol("voice", Number(e.target.value))} aria-label="声の音量" />
+            <output>{vol.voice}</output>
+          </label>
+          <label className="row vol">
+            <span>効果音の音量</span>
+            <input type="range" min={0} max={100} step={5} value={vol.sfx} onChange={(e) => setVol("sfx", Number(e.target.value))} onPointerUp={() => void playUrl(CHIME).then(releaseAudio)} aria-label="効果音の音量" />
+            <output>{vol.sfx}</output>
+          </label>
           <label className="row">
             <span>声</span>
             <select value={voice} onChange={(e) => setVoice(e.target.value as Voice)}>
@@ -394,7 +436,7 @@ export default function Home() {
               <option value="gemini">Gemini（自然・約2秒遅い）</option>
             </select>
           </label>
-          <p className="small">PC はスペースキーを押している間だけ聞き取ります。</p>
+          <p className="small">PC はスペースキーを押している間だけ聞き取ります。iPhone は音量をアプリから変えられないので、本体の音量ボタンで調整してください。</p>
         </section>
       )}
 
