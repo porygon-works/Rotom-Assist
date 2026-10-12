@@ -350,3 +350,10 @@ describe("ask_log 全件の見直し（2026-10-13 夜間）", () => {
     expect(answerExtraction({ move: "じだんだ", intent: "damage", attacker: "ガブリアス", defender: "エンペルト" }, "威力150のじだんだ").speech).toContain("威力150");
   });
 });
+
+describe("ask_log #154: 「最速」で AI が S↑だけ書いたら S の SP 32 も足す", () => {
+  it("最速ドラパルトは 213", () => {
+    const r = answerExtraction({ pokemon: "ドラパルト", intent: "speed", ask: "value", conditions: { pokemon: { nature_up: "spe" } } }, "最速ドラパルトの素早さ");
+    expect(r.speech).toContain("213");
+  });
+});

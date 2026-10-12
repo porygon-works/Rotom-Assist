@@ -533,7 +533,27 @@ function speedRanking(qs: Obj[]): AskResult | null {
 }
 
 /** 取り出し結果から答えを作る（通信なし） */
-export function answerExtraction(ex: Obj, text?: string): AskResult {
+/**
+ * 「最速」と言ったのに、AI が性格（S↑）だけ書いて SP を落としたときは、S の SP 32 を足す（「最速」= S の SP 32 ＋ S↑）。
+ * ask_log #154「最速ドラパルト」→ S↑だけで 178 と答えていた（最速は 213）
+ */
+function fillFastest(ex: Obj, text?: string): Obj {
+  if (!text || !/最速/.test(text)) return ex;
+  const c = obj(ex.conditions);
+  let changed = false;
+  const out: Obj = {};
+  for (const [k, v] of Object.entries(c)) {
+    const side = obj(v);
+    if (side.nature_up === "spe" && obj(side.sp).spe === undefined) {
+      out[k] = { ...side, sp: { ...obj(side.sp), spe: 32 } };
+      changed = true;
+    } else out[k] = v;
+  }
+  return changed ? { ...ex, conditions: out } : ex;
+}
+
+export function answerExtraction(ex0: Obj, text?: string): AskResult {
+  const ex = fillFastest(ex0, text);
   const intent = str(ex.intent) ?? "clarify";
   const missing = Array.isArray(ex.missing) ? (ex.missing as string[]) : [];
   try {
