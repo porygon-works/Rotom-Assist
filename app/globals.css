@@ -128,22 +128,76 @@ main > .card, main > .history-wrap, main > .err, main > .foot { position: relati
   100% { filter: drop-shadow(0 0 2px #fff59a) drop-shadow(0 0 10px #ffe600); }
 }
 
-/* PC（横幅が広い画面）: 左に顔と操作、右に結果と履歴の 2 列 */
+.operator { display: none; }
+
+/* PC（横幅が広い画面）: 配信用の表示。
+   左に「映す枠」（縦長 480×1080 の比率。顔・結論・計算条件カードだけ）、右は映さない操作の場所（押して話す・文字入力・聞き取った文・さっきの質問・設定）。
+   OBS ではブラウザのウィンドウをキャプチャし、左の枠だけを切り抜いて、ゲーム画面（1440×810）の右の帯（480×1080）に置く。
+   枠の中の大きさは枠の高さに合わせる（--u = 枠の高さ / 1080）ので、ウィンドウの大きさを変えても見え方は同じ */
 @media (min-width: 1024px) {
-  :root { --side: 400px; }
-  .topbar, .sheet { max-width: 1200px; }
-  main { max-width: 1200px; display: grid; grid-template-columns: var(--side) minmax(0, 1fr); column-gap: 40px; align-items: start; padding: 16px 24px 40px; }
-  main > * { grid-column: 2; }
-  main > .hero { grid-column: 1; grid-row: 1 / span 30; align-self: start; position: sticky; top: 84px; padding: 24px 0 220px; }
-  main > .card:first-of-type, main > .err { margin-top: 0; }
-  .face { --eye: 120px; }
-  .hint { font-size: .95rem; }
-  /* 押して話す・文字入力は左の列の下に置く */
-  .dock { left: max(24px, calc(50% - 600px + 24px)); right: auto; width: var(--side); bottom: 32px; padding: 0; background: none; }
+  :root { --stagew: calc(100dvh * 4 / 9); --u: calc(100dvh / 1080); --op: #1f1f23; --op-fg: #f3f3f5; --op-muted: #a9a9b2; }
+  body { overflow: hidden; background: var(--op); }
+  .app { overflow: visible; }
+  /* 映す枠（左） */
+  main { max-width: none; margin: 0; padding: 0; height: 100dvh; display: grid; grid-template-columns: var(--stagew) minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr); }
+  main::before { content: ""; position: fixed; left: 0; top: 0; width: var(--stagew); height: 100dvh; background: var(--bg); }
+  main > .hero { grid-column: 1; grid-row: 1; position: relative; padding: calc(var(--u) * 36) 0 calc(var(--u) * 10); font-size: calc(var(--u) * 22); }
+  .face { --eye: calc(var(--u) * 100); }
+  .hint { display: none; }
+  .status { font-size: 1em; }
+  main > .result { grid-column: 1; grid-row: 2; align-self: start; margin: 0 calc(var(--u) * 20) calc(var(--u) * 20); padding: calc(var(--u) * 20) calc(var(--u) * 22); font-size: calc(var(--u) * 21); max-height: 100%; overflow: hidden; }
+  .result .is-none { display: none; }
+  .result .result-head, .result details { display: none; }
+  .result h2 { font-size: .9em; margin: 0 0 .2em; }
+  .speech { font-size: 1.7em; line-height: 1.25; margin: 0 0 .3em; }
+  .dresult { font-size: 1em; } .dresult .ko { white-space: nowrap; }
+  .drange { font-size: .85em; }
+  .sides { grid-template-columns: 1fr; gap: calc(var(--u) * 10); }
+  .sides .arrow { display: none; }
+  .side { padding: calc(var(--u) * 10) calc(var(--u) * 14); border-radius: calc(var(--u) * 14); }
+  .side .role { font-size: .7em; }
+  .side .pname { font-size: 1.05em; margin-bottom: .15em; }
+  .kv { grid-template-columns: 5em 1fr; font-size: .8em; line-height: 1.4; padding: calc(var(--u) * 2) 0; }
+  .kv dt, .drow dt { font-size: .95em; }
+  .drow { grid-template-columns: 6.5em 1fr; font-size: .8em; margin-top: calc(var(--u) * 12); }
+  .tag { font-size: .7em; }
+  .lines p { font-size: .85em; }
+  .card { border-radius: calc(var(--u) * 22); }
+
+  /* 映さない操作の場所（右） */
+  .topbar { position: fixed; left: var(--stagew); right: 0; top: 0; max-width: none; margin: 0; padding: 16px 32px; background: none; }
+  .icon-btn { background: rgba(255, 255, 255, .12); color: var(--op-fg); }
+  .sheet { position: fixed; right: 32px; top: 72px; width: 420px; margin: 0; }
+  main > .operator, main > .history-wrap, main > .err, main > .foot { grid-column: 2; margin: 0 32px; max-width: 720px; color: var(--op-fg); }
+  main > .operator { display: block; grid-row: 1 / span 2; align-self: start; margin-top: 96px; }
+  .operator .label, .history-wrap .label { color: var(--op-muted); margin: 0 0 4px; }
+  .op-q { font-size: 1.3rem; font-weight: 700; margin: 0 0 4px; }
+  .operator .small { color: var(--op-muted); margin: 0 0 8px; }
+  main > .history-wrap { grid-row: 2; align-self: end; margin-bottom: 220px; }
+  .history li { background: rgba(255, 255, 255, .08); }
+  .history .q { color: var(--op-muted); }
+  main > .foot { position: fixed; left: calc(var(--stagew) + 32px); right: 32px; bottom: 8px; max-width: none; margin: 0; color: var(--op-muted); font-size: .72rem; }
+  main > .foot:has(+ .foot) { display: none; }
+  main > .err { grid-row: 2; align-self: start; }
+  .dock { left: calc(var(--stagew) + 32px); right: auto; width: min(640px, calc(100vw - var(--stagew) - 64px)); bottom: 48px; padding: 0; background: none; }
   .dock > * { max-width: none; }
-  .talk-btn { height: 64px; }
-  .speech { font-size: 1.45rem; }
-  .history { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .talk-btn { background: var(--bg); border-color: var(--bg); color: #1b1b1f; }
+  /* 顔のタップの動きは映す枠の中だけ（はみ出すと切り抜きで消えるため） */
+  .face.happy { animation-name: rotom-zip-pc, rotom-spark; }
+}
+@keyframes rotom-zip-pc {
+  0% { transform: translate(0, 0); }
+  8% { transform: translate(calc(var(--stagew) * .28), calc(var(--u) * 120)) skewX(-12deg); }
+  15% { transform: translate(calc(var(--stagew) * .28), calc(var(--u) * 120)); }
+  23% { transform: translate(calc(var(--stagew) * -.28), calc(var(--u) * 40)) skewX(12deg); }
+  30% { transform: translate(calc(var(--stagew) * -.28), calc(var(--u) * 40)); }
+  38% { transform: translate(calc(var(--stagew) * .22), calc(var(--u) * -30)) skewX(-12deg); }
+  45% { transform: translate(calc(var(--stagew) * .22), calc(var(--u) * -30)); }
+  55% { transform: translate(calc(var(--stagew) * -.2), calc(var(--u) * 90)) skewX(10deg); }
+  63% { transform: translate(calc(var(--stagew) * -.2), calc(var(--u) * 90)); }
+  75% { transform: translate(calc(var(--stagew) * .08), calc(var(--u) * 10)) skewX(-6deg); }
+  88% { transform: translate(calc(var(--stagew) * -.02), 0); }
+  100% { transform: translate(0, 0); }
 }
 
 @media (prefers-reduced-motion: reduce) { .talk-btn.on, .face.happy { animation: none; } button:active { transform: none; } }

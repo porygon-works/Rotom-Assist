@@ -461,6 +461,21 @@ export default function Home() {
           </section>
         )}
 
+        {/* PC（配信用の表示）だけ: 映さない右側に、聞き取った文・もう一度読む・診断の要約を出す（結果カードの見出しと診断は映す枠から外す） */}
+        {shown && (
+          <section className="operator" aria-label="聞き取り">
+            <p className="label">聞き取り</p>
+            <p className="op-q">「{shown.question}」</p>
+            <p className="small">
+              {shown.diagnostics?.provider === "rules" ? "ルールで即答" : shown.diagnostics?.provider ? `AI: ${shown.diagnostics.provider}` : "AI なし"}・{Math.round(shown.ms)} ms
+              {shown.diagnostics?.fixed ? `・直した文「${shown.diagnostics.fixed}」` : ""}
+            </p>
+            <button type="button" className="chip" onClick={() => void announce(brief ? (shown.short ?? shown.speech) : shown.speech, voice, false)}>
+              もう一度読む
+            </button>
+          </section>
+        )}
+
         {log.length > 0 && (
           <section className="history-wrap" aria-label="さっきの質問">
             <h2 className="label">さっきの質問</h2>
@@ -569,8 +584,8 @@ function CardView({ card }: { card: DamageCard }) {
         <dd>
           <strong>{card.move.name}</strong>　{card.move.type}・{card.move.category}・威力 {card.move.power}
         </dd>
-        <dt>天候・フィールド</dt>
-        <dd>{card.field.length ? card.field.join("・") : <span className="assumed">なし</span>}</dd>
+        <dt className={card.field.length ? "" : "is-none"}>天候・フィールド</dt>
+        <dd className={card.field.length ? "" : "is-none"}>{card.field.length ? card.field.join("・") : <span className="assumed">なし</span>}</dd>
       </dl>
     </div>
   );
@@ -583,7 +598,8 @@ function SideView({ side }: { side: SideCard }) {
       <p className="pname">{side.name}</p>
       <dl>
         {side.items.map((it) => (
-          <div key={it.label} className="kv">
+          // 仮定で「なし」の行（持ち物なし・ランクなし）は、配信用の枠では省いて場所を空ける
+          <div key={it.label} className={`kv ${it.assumed && (it.value === "なし" || it.value === "-") ? "is-none" : ""}`}>
             <dt>{it.label}</dt>
             <dd className={it.assumed ? "assumed" : ""}>
               {it.value}
