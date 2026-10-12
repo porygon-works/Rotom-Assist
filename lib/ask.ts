@@ -1,6 +1,6 @@
 // 1 往復の処理（構成設計 4.2）: AI 取り出し → 名前の解決 → 計算 → 回答文
 // answerExtraction は通信をしないので、保存済みの AI の出力を流し込んで確かめられる（eval/replay.ts）
-import { abilitiesOf, abilityMatters, abilityOf, allTypes, damage, effectiveness, hasSpread, isNotableAbility, isNotCalculated, learns, moveInfo, speciesInfo, speedOf, speedThreshold, speedVariants, speciesWithAbility, type FieldInput, type SideInput, type Stat } from "./battle";
+import { abilitiesOf, abilityMatters, abilityOf, defaultAbility, allTypes, damage, effectiveness, hasSpread, isNotableAbility, isNotCalculated, learns, moveInfo, speciesInfo, speedOf, speedThreshold, speedVariants, speciesWithAbility, type FieldInput, type SideInput, type Stat } from "./battle";
 import { CATEGORY_JA, clarifySpeech, damageQuestionOf, damageSpeech, koText } from "./answer";
 import { aiSetup, extract, type AiSetup, type Attempt, type Turn } from "./llm";
 import { resolve, resolveField, toJa, type NameKind } from "./resolve";
@@ -175,6 +175,9 @@ function fieldLabel(f: FieldInput): string {
   return parts.length ? ` ［${parts.join("・")}］` : "";
 }
 
+/** HP が 3 分の 1 以下で、そのタイプの技が強くなる特性 */
+const PINCH: Record<string, string> = { Blaze: "Fire", Torrent: "Water", Overgrow: "Grass", Swarm: "Bug" };
+
 function answerDamage(ex: Obj, text?: string): AskResult {
   const pr = new Problems();
   const c = obj(ex.conditions);
@@ -215,6 +218,12 @@ function answerDamage(ex: Obj, text?: string): AskResult {
       pr.notes.push(`${ja}は${toJa("abilities", ab!)}${protean ? "でタイプ一致として" : "で"}計算したロト`);
     }
     if (sd === ds && isNotCalculated(ab)) pr.notes.push(`${ja}の${toJa("abilities", ab!)}は計算に入れてないロト`);
+    // 言われた特性が、言わなかったときの特性と違うなら、その特性で計算したことを言う（「エースバーンはもうかで計算したロト」。リベロではなく）
+    const def = defaultAbility(sd.species);
+    if (sd.ability && def && sd.ability !== def && isNotableAbility(def, role)) {
+      const pinch = PINCH[sd.ability];
+      pr.notes.push(`${ja}は${toJa("abilities", sd.ability)}で計算したロト${pinch ? `（HPが3分の1以下のときだけ${toJa("types", pinch)}技が1.5倍）` : ""}`);
+    }
   }
   // いかく（防御側）: 攻撃側の攻撃ランクを変えて計算したことを言う
   if (result.intimidate !== undefined) {
@@ -500,8 +509,10 @@ export function answerExtraction(ex: Obj, text?: string): AskResult {
   const missing = Array.isArray(ex.missing) ? (ex.missing as string[]) : [];
   try {
     // ダメージや素早さを聞いていない質問は、AI の分類がぶれても文の言葉で振り分ける
-    const calcWords = /入る|入れ|耐え|何発|ダメ|倒せ|落ち|確定|乱数|パーセント|抜け|速い|早い|素早/;
-    if (text && !calcWords.test(text)) {
+    const calcWords = /入る|入れ|耐え|何発|ダメ|倒せ|落ち|確定|乱数|パーセント|抜け|速い|早い|素早|与え/;
+    // わざと攻撃側・防御側がそろったダメージの質問は、「特性もうかの〜」のように特性を言っていても計算する
+    const damageReady = intent === "damage" && !!str(ex.move) && !!str(ex.attacker) && !!str(ex.defender);
+    if (text && !damageReady && !calcWords.test(text)) {
       // 「〇〇の特性は？」「〇〇って特性の効果は？」
       if (/特性/.test(text)) {
         const a = answerAbility(ex, text);

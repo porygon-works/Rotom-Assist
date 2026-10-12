@@ -5,5 +5,7 @@ const RULES = (table.rules as [string, string][]).map(([p, r]) => [new RegExp(p,
 
 /** 聞き間違いを直した文を返す。直していなければ同じ文 */
 export function fixMishearing(text: string): string {
-  return RULES.reduce((t, [re, r]) => t.replace(re, r), text);
+  // 音声認識（Android など）が日本語の単語の間に入れる空白を外す（「エース バーン」→「エースバーン」）。英数字どうしの空白は残す
+  const joined = text.replace(/(?<=[^\x00-\x7F])[ \u3000]+(?=[^\x00-\x7F])/g, "");
+  return RULES.reduce((t, [re, r]) => t.replace(re, r), joined);
 }

@@ -288,3 +288,18 @@ describe("ask_log #105〜#115（2026-10-12）", () => {
     expect(fixMishearing("自信過剰ってどんな特性")).toBe("自信過剰ってどんな特性");
   });
 });
+
+describe("ask_log #116〜#124（2026-10-12）: 特性もうかのエースバーン", () => {
+  it("「もうか」の聞き間違いと、単語の間の空白を直す", () => {
+    expect(fixMishearing("特性 真 華 の エース バーン の ダスト シュート")).toBe("特性もうかのエースバーンのダストシュート");
+    expect(fixMishearing("特製 農家 の エース バーン")).toBe("特性もうかのエースバーン");
+    expect(fixMishearing("特性 が 思う かの エース バーン")).toBe("特性もうかのエースバーン");
+    expect(fixMishearing("HP 100のガブ")).toBe("HP 100のガブ");
+  });
+  it("もうかと言われたらリベロではなく、もうかで計算して、そう言う", () => {
+    const ex = { move: "ダストシュート", intent: "damage", attacker: "エースバーン", defender: "アシレーヌ", conditions: { attacker: { ability: "もうか" } } };
+    const r = answerExtraction(ex, "特性もうかのエースバーンのダストシュートアシレーヌを与える");
+    expect(r.speech).toContain("105から124");
+    expect(r.speech).toContain("もうかで計算");
+  });
+});
