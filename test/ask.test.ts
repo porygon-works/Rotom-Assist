@@ -312,11 +312,22 @@ describe("ask_log #140〜#144（2026-10-12）: イダイトウ・おはかまい
     expect(fixMishearing("偉大 党 の アクア ジェット で メガ リザードンワイ")).toBe("イダイトウのアクアジェットでメガリザードンY");
     expect(fixMishearing("偉大 と の え お 墓参り を メガリザードン 前 は 耐えれる")).toBe("イダイトウのえおはかまいりをメガリザードンYは耐えれる");
   });
-  it("おはかまいりは倒れた味方の数で威力が変わる（言わなければ 0 匹・威力 50 と言う）", () => {
+  it("おはかまいりは倒れた味方の数で威力が変わる（言わなければ 2 匹・威力 150 と言う）", () => {
     const ex = { move: "おはかまいり", intent: "damage", attacker: "イダイトウ", defender: "メガリザードンY" };
-    expect(answerExtraction(ex).speech).toContain("倒れた味方0匹（威力50）");
-    const r = answerExtraction({ ...ex, conditions: { attacker: { allies_fainted: 2 } } });
-    expect(r.speech).toContain("威力150");
-    expect(r.speech).toContain("確定1発");
+    const def = answerExtraction(ex).speech;
+    expect(def).toContain("倒れた味方2匹（威力150）");
+    expect(def).toContain("確定1発");
+    const r0 = answerExtraction({ ...ex, conditions: { attacker: { allies_fainted: 0 } } });
+    expect(r0.speech).toContain("確定3発");
+    expect(r0.speech).not.toContain("倒れた味方2匹");
+  });
+});
+
+describe("ask_log #132: 防御側を言っていないのに AI が攻撃側と同じポケモンを補ったら聞き返す", () => {
+  it("名前が 1 回しか出てこなければ聞き返す。2 回なら同じポケモン同士で計算する", () => {
+    const ex = { move: "10まんボルト", intent: "damage", attacker: "メガカイリュー", defender: "カイリュー" };
+    expect(answerExtraction(ex, "CSメガカイリューの10万ボルトがHブリどれぐらい入る").intent).toBe("clarify");
+    expect(answerExtraction({ move: "じしん", intent: "damage", attacker: "ガブリアス", defender: "ガブリアス" }, "ガブリアスのじしんでガブリアス何発").intent).toBe("damage");
+    expect(answerExtraction({ move: "じしん", intent: "damage", attacker: "ガブリアス", defender: "ガブリアス" }, "ガブのじしんでガブリアス何発").intent).toBe("damage");
   });
 });

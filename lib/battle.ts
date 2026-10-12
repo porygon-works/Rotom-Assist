@@ -35,6 +35,9 @@ export interface SideInput {
   alliesFainted?: number;
 }
 
+/** おはかまいりで、倒れた味方の数を言わなかったときの数 */
+export const LAST_RESPECTS_DEFAULT = 2;
+
 export interface FieldInput {
   weather?: string; // Sun / Rain / Sand / Snow
   terrain?: string; // Electric / Grassy / Psychic / Misty
@@ -193,8 +196,9 @@ function one(a: SideInput, d: SideInput, move: string, f: FieldInput): DamageRes
   }
   const attacker = build(a);
   const defender = build(d);
-  // おはかまいり: 威力は 50 ×（1 + 倒れた味方の数、5 まで）。計算ライブラリは倒れた数を見ないので、威力を上書きする
-  const lastRespects = move === "Last Respects" ? { overrides: { basePower: 50 * (1 + Math.min(5, a.alliesFainted ?? 0)) } } : {};
+  // おはかまいり: 威力は 50 ×（1 + 倒れた味方の数、5 まで）。計算ライブラリは倒れた数を見ないので、威力を上書きする。
+  // 言わなければ 2 匹倒れた状態（威力 150）で計算する（ご本人の要望。撃つのは終盤が多いため）
+  const lastRespects = move === "Last Respects" ? { overrides: { basePower: 50 * (1 + Math.min(5, a.alliesFainted ?? LAST_RESPECTS_DEFAULT)) } } : {};
   const m = new Move(gen, move, { isCrit: !!f.critical, ...lastRespects } as never);
   const r = calculate(gen, attacker, defender, m, field(f, a, d));
   // 連続技（ドラゴンアローなど）は全部当たったときの合計（range() が合計を返す）

@@ -1,6 +1,6 @@
 // 1 往復の処理（構成設計 4.2）: AI 取り出し → 名前の解決 → 計算 → 回答文
 // answerExtraction は通信をしないので、保存済みの AI の出力を流し込んで確かめられる（eval/replay.ts）
-import { abilitiesOf, abilityMatters, abilityOf, defaultAbility, allTypes, damage, effectiveness, hasSpread, isNotableAbility, isNotCalculated, learns, moveInfo, speciesInfo, speedOf, speedThreshold, speedVariants, speciesWithAbility, type FieldInput, type SideInput, type Stat } from "./battle";
+import { abilitiesOf, abilityMatters, abilityOf, defaultAbility, LAST_RESPECTS_DEFAULT, allTypes, damage, effectiveness, hasSpread, isNotableAbility, isNotCalculated, learns, moveInfo, speciesInfo, speedOf, speedThreshold, speedVariants, speciesWithAbility, type FieldInput, type SideInput, type Stat } from "./battle";
 import { CATEGORY_JA, clarifySpeech, damageQuestionOf, damageSpeech, koText } from "./answer";
 import { aiSetup, extract, type AiSetup, type Attempt, type Turn } from "./llm";
 import { resolve, resolveField, toJa, type NameKind } from "./resolve";
@@ -177,6 +177,10 @@ function fieldLabel(f: FieldInput): string {
   return parts.length ? ` ［${parts.join("・")}］` : "";
 }
 
+/** メガシンカ・フォルム違いをそろえた名前（「メガリザードンY」→「リザードン」、「イダイトウ（メス）」→「イダイトウ」） */
+const baseName = (ja: string) => ja.replace(/^メガ/, "").replace(/[XYZ]$/, "").replace(/（.*）$/, "");
+const sameBase = (x: string, y: string) => baseName(x) === baseName(y);
+
 /** HP が 3 分の 1 以下で、そのタイプの技が強くなる特性 */
 const PINCH: Record<string, string> = { Blaze: "Fire", Torrent: "Water", Overgrow: "Grass", Swarm: "Bug" };
 
@@ -191,6 +195,13 @@ function answerDamage(ex: Obj, text?: string): AskResult {
     return fail("clarify", "聞き返し", [...pr.list, clarifySpeech(missing)]);
   }
   if (!a || !d || !m) return fail("damage", "名前の確認", pr.list);
+  // 攻撃側と防御側が同じポケモン（メガシンカ違いを含む）なのに、文にその名前が 1 回しか出てこないなら、AI が防御側を補っている。聞き返す
+  // （ask_log #132「メガカイリューの10万ボルトがHブリどれぐらい入る」→ AI がカイリュー同士で計算していた）
+  if (text && sameBase(a.ja, d.ja)) {
+    const head = baseName(d.ja).slice(0, 2);
+    const t = text.normalize("NFKC").replace(/\s/g, "");
+    if (t.split(head).length - 1 < 2) return fail("clarify", "聞き返し", [...pr.list, clarifySpeech(["defender"])]);
+  }
   // 変化技（つるぎのまいなど）はダメージがない。「効かない」と言うとタイプで無効に聞こえるので、別に答える
   if (moveInfo(m.en).category === "Status") return fail("damage", `${m.ja}は変化技`, [`${m.ja}は変化技だから、ダメージはないロト`]);
   const as = side(a.en, obj(c.attacker), pr);
@@ -206,11 +217,12 @@ function answerDamage(ex: Obj, text?: string): AskResult {
     return `${ja}の${toJa("abilities", ab)}で${own}として計算したロト`;
   });
   pr.notes.push(...autoNotes);
-  // おはかまいり: 倒れた味方の数を言わなければ 0 匹（威力 50）で計算し、そう言う
-  if (m.en === "Last Respects" && as.alliesFainted === undefined) pr.notes.push(`${m.ja}は倒れた味方0匹（威力50）で計算したロト。倒れた数を言ってくれたら変えるロト`);
+  // おはかまいり: 倒れた味方の数を言わなければ 2 匹（威力 150）で計算し、そう言う
+  if (m.en === "Last Respects" && as.alliesFainted === undefined)
+    pr.notes.push(`${m.ja}は倒れた味方${LAST_RESPECTS_DEFAULT}匹（威力${50 * (1 + LAST_RESPECTS_DEFAULT)}）で計算したロト。違ったら倒れた数を言ってロト`);
   // 場でタイプ・威力が変わるわざ（だいちのはどう・ウェザーボール・おはかまいり）は前提を言う
   const mi = moveInfo(m.en);
-  if (result.base.moveType && (result.base.moveType !== mi.type || (result.base.moveBp ?? mi.bp) !== mi.bp)) {
+  if (m.en !== "Last Respects" && result.base.moveType && (result.base.moveType !== mi.type || (result.base.moveBp ?? mi.bp) !== mi.bp)) {
     pr.notes.push(`${m.ja}は${toJa("types", result.base.moveType)}タイプ・威力${result.base.moveBp}で計算したロト`);
   }
   // 言わなかったのに計算に効く特性を使ったら添える（「カイリューはマルチスケイルで計算したロト」）
