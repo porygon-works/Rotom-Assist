@@ -41,4 +41,19 @@ export const CASES_LOG: Case[] = [
   L(32, "スイカ補正のマスカーニャのパワージェムをHB特価メガリザードンワイは買えますか", { intent: "damage", attacker: "マスカーニャ", defender: "メガリザードンY", move: "パワージェム", a: { down: "spa" }, d: { sp: { hp: 32, def: 32 }, up: "def" } }),
   // 2026-10-11: 「大地の波動」が「ドイツの波動」、「メガカメックス」が「メガカミックス」と書き起こされ、AI がはどうだん・メガでないカメックスで計算していた
   L(34, "エレキフィールド化のドイツの波動をメガカミックスが打ったときにメガリザードンワイに何%入る", { intent: "damage", attacker: "メガカメックス", defender: "メガリザードンY", move: "だいちのはどう", terrain: /エレキ/ }),
+  // 2026-10-12: 「じしん」が「受診」「受信」「自身」、「HB振り」が「HBブリ」、「特化」が「トッカ」、「ガブ」が「ガム」と書き起こされ、AI が技を落として「どの技？」になっていた（data/misheard.json で先に直す）
+  L(50, "HBブリエンペルトに特化ガムの受診は", { intent: "damage", attacker: "ガブリアス", defender: "エンペルト", move: "じしん", a: { up: "atk" }, d: { sp: { hp: 32, def: 32 } } }),
+  L(58, "HB振りエンペルトに特化自身ガブリアスの耐える", { intent: "damage", attacker: "ガブリアス", defender: "エンペルト", move: "じしん", a: { up: "atk" }, d: { sp: { hp: 32, def: 32 } } }),
+  L(59, "HBエンペルトに特化ガムの受診は絶えますか", { intent: "damage", attacker: "ガブリアス", defender: "エンペルト", move: "じしん", a: { up: "atk" }, d: { sp: { hp: 32, def: 32 } } }),
+  L(61, "HBトッカエンペルトに特化ガブリアスの受信を打ったら耐える", { intent: "damage", attacker: "ガブリアス", defender: "エンペルト", move: "じしん", a: { up: "atk" }, d: { sp: { hp: 32, def: 32 }, up: "def" } }),
+  L(70, "HB特化エンペルトに特化受診ガブリアス", { intent: "damage", attacker: "ガブリアス", defender: "エンペルト", move: "じしん", d: { sp: { hp: 32, def: 32 }, up: "def" } }),
+  L(71, "HB特化エンペルトに特化ガブリアスの受診", { intent: "damage", attacker: "ガブリアス", defender: "エンペルト", move: "じしん", a: { up: "atk" }, d: { sp: { hp: 32, def: 32 }, up: "def" } }),
+  L(72, "HB特化エンペルトにA特化ガブリアスの受診はどれぐらい入る", { intent: "damage", attacker: "ガブリアス", defender: "エンペルト", move: "じしん", a: { up: "atk" }, d: { sp: { hp: 32, def: 32 }, up: "def" } }),
+  // 2026-10-12: 「ドヒドイデ」が「とひどいレ」「ひどいで」、「イカサマ」が「イカ様」、「メガグソクムシャ」が「メガソ武者」「目がグソクムシ」、「カイリュー」が「海流」、「マフォクシー」が「ヴォクシー」と書き起こされた
+  L(65, "型破りのドリューズの受信がメガヴォクシーにどれぐらい入る", { intent: "damage", attacker: "ドリュウズ", defender: "メガマフォクシー", move: "じしん" }),
+  L(77, "メガボーマンダの地震でHB特化とひどいレにどれぐらい入る", { intent: "damage", attacker: "メガボーマンダ", defender: "ドヒドイデ", move: "じしん", d: { sp: { hp: 32, def: 32 }, up: "def" } }),
+  L(79, "メガヤミラミのイカ様ってひどいでにどれぐらい入る", { intent: "damage", attacker: "メガヤミラミ", defender: "ドヒドイデ", move: "イカサマ" }),
+  L(91, "セグレイヴの氷のつぶてステロ込みでメガ海流倒せる", { intent: "damage", attacker: "セグレイブ", defender: "メガカイリュー", move: "こおりのつぶて" }),
+  L(93, "メガソ武者の不意打ちをドヒドイでどんぐらい耐える", { intent: "damage", attacker: "メガグソクムシャ", defender: "ドヒドイデ", move: "ふいうち" }),
+  L(94, "目がグソクムシの不意打ちをドヒドイでどれぐらいタイル", { intent: "damage", attacker: "メガグソクムシャ", defender: "ドヒドイデ", move: "ふいうち" }),
 ];
