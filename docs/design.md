@@ -37,6 +37,7 @@
 Vercel（Next.js App Router）
  ├─ POST /api/calc     … @smogon/calc で計算
  ├─ POST /api/ask      … 質問 1 回の処理。答えた後に Supabase(roas.ask_log) へ記録（任意）
+ ├─ GET /api/version   … 今動いている版（コミット）。開いたままの画面が新しい版に入れ替わるために使う
  └─ GET/POST /api/history … Supabase(roas.history) へ保存・取得（任意）
         │ service_role キー（サーバ側の環境変数）
         ▼

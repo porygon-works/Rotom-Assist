@@ -265,5 +265,6 @@
 
 ## リリース（本番）
 - 本番は `main` ブランチ（Vercel の Production Branch）
+- **同じ URL（本番のドメイン）を開けば、いつも `main` の最新の版**。`main` に入れると Vercel が自動で作り直して差し替える。開いたままの画面は `app/useAutoUpdate.ts` が 1 分ごとと画面に戻ったときに `GET /api/version` の版を確かめ、変わっていたら読み込み直す。対戦の邪魔をしないよう、聞き取り・考え中・読み上げ中は入れ替えず、最後に話してから 3 分（別のタブ・アプリから戻ったときは 30 秒）静かなときだけ入れ替える。設定は端末に、履歴は Supabase に残るので、入れ替わっても消えない
 - テスト・型チェック・`eval/rules.ts`（即答で誤り 0 件）・`eval/replay.ts` が通った変更は、`main` に直接入れてよい（2026-10-14 にご本人が許可。定期の見直しも同じ）
 - 本番の環境変数（Vercel の Production）: `GEMINI_API_KEY`、`GROQ_API_KEY`、`SUPABASE_URL`、`SUPABASE_SERVICE_ROLE_KEY`

@@ -1,6 +1,7 @@
 "use client";
 // 画面（構成設計 3 章）: 大きな「押して話す」ボタン、結果カード、文字入力、診断
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useAutoUpdate } from "./useAutoUpdate";
 import { usePushToTalk } from "./usePushToTalk";
 import type { DamageCard, SideCard } from "../lib/card";
 import { RotomFace } from "./RotomFace";
@@ -350,6 +351,8 @@ export default function Home() {
   }, [mic]);
 
   const listening = mic.state === "listening";
+  // 新しい版が出ていたら、話していないときに入れ替える（同じ URL でいつも最新の版）
+  useAutoUpdate(!busy && !listening && !speaking, logEvent);
   const label = busy ? "考え中…" : listening ? (tapMode ? "タップで送る" : "離すと送る") : tapMode ? "タップして話す" : "押して話す";
 
   const buttonHandlers = tapMode
