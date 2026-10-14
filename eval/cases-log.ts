@@ -56,4 +56,8 @@ export const CASES_LOG: Case[] = [
   L(91, "セグレイヴの氷のつぶてステロ込みでメガ海流倒せる", { intent: "damage", attacker: "セグレイブ", defender: "メガカイリュー", move: "こおりのつぶて" }),
   L(93, "メガソ武者の不意打ちをドヒドイでどんぐらい耐える", { intent: "damage", attacker: "メガグソクムシャ", defender: "ドヒドイデ", move: "ふいうち" }),
   L(94, "目がグソクムシの不意打ちをドヒドイでどれぐらいタイル", { intent: "damage", attacker: "メガグソクムシャ", defender: "ドヒドイデ", move: "ふいうち" }),
+  // 2026-10-14: 「HB」が「EV」、「ガブ」が「株」と書き起こされた。AI は「EV」を全部の能力に 32 振ったと読んでいた（#156 で HB振りと言い直している）。
+  // 能力の文字のない「特化ガブ」（攻撃側。わざの分類で A か C に決まる）・「振り」のない「HBエンペルト」が読めず AI に回っていた
+  L(155, "EVエンペルトにガブリアスの地震は耐えますか", { intent: "damage", attacker: "ガブリアス", defender: "エンペルト", move: "じしん", d: { sp: { hp: 32, def: 32 } } }),
+  L(156, "HBぶりエンペルトに特化株の受信はどんぐらい入る", { intent: "damage", attacker: "ガブリアス", defender: "エンペルト", move: "じしん", a: { sp: { atk: 32 }, up: "atk" }, d: { sp: { hp: 32, def: 32 } } }),
 ];

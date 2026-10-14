@@ -22,8 +22,14 @@ describe("ルール解析（確実に分かるときだけ答える）", () => {
     expect(def("HB特化C下降補正のサーフゴーにガブリアスのじしん")).toEqual({ sp: { hp: 32, def: 32 }, nature_up: "def", nature_down: "spa" });
     expect(parseRules("A↑C↓のガブリアスのじしんでサーフゴー何発")).toMatchObject({ conditions: { attacker: { nature_up: "atk", nature_down: "spa" } } });
     expect(parseRules("絵特化ガブリアスのじしんでサーフゴー何発")).toMatchObject({ conditions: { attacker: { sp: { atk: 32 }, nature_up: "atk" } } });
-    // 技の後ろの「を」と条件を、技の聞き間違いとして吸わない（条件を黙って捨てない）
-    expect(parseRules("ドラパルトのドラゴンアローをHBメガリザードンワイは買えますか")).toBeNull();
+    // 技の後ろの「を」と条件を、技の聞き間違いとして吸わない（条件を黙って捨てない）。「振り」のない「HB」は HB振り（ask_log #155）
+    expect(parseRules("ドラパルトのドラゴンアローをHBメガリザードンワイは買えますか")).toMatchObject({ move: "ドラゴンアロー", conditions: { defender: { sp: { hp: 32, def: 32 } } } });
+    // 能力の文字のない「特化」: 攻撃側だけ、わざの分類で決める（ask_log #156）。防御側・素早さの質問・分類と使う能力が違うわざは AI に回す
+    expect(parseRules("HBエンペルトに特化ガブのじしんはどれぐらい入る")).toMatchObject({ conditions: { attacker: { sp: { atk: 32 }, nature_up: "atk" }, defender: { sp: { hp: 32, def: 32 } } } });
+    expect(parseRules("特化メガリザードンYのかえんほうしゃでガブリアス何発")).toMatchObject({ conditions: { attacker: { sp: { spa: 32 }, nature_up: "spa" } } });
+    expect(parseRules("ガブリアスのじしんを特化エンペルトは耐える")).toBeNull();
+    expect(parseRules("特化ガブリアスとエンペルトどっちが速い")).toBeNull();
+    expect(parseRules("特化エンペルトのボディプレスでガブリアス何発")).toBeNull();
     // 名前の最後の「シ」は略号にしない
     expect(parseRules("カエンジシのかえんほうしゃでガブリアス何発")).toMatchObject({ attacker: "カエンジシ", conditions: {} });
   });

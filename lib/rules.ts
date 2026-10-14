@@ -4,6 +4,7 @@
 import names from "../data/names.json";
 import aliases from "../data/aliases.json";
 import { resolve } from "./resolve";
+import { moveInfo } from "./battle";
 
 type Obj = Record<string, unknown>;
 type Stat = "hp" | "atk" | "def" | "spa" | "spd" | "spe";
@@ -55,7 +56,7 @@ type Tok =
   | { k: "ability"; ja: string } // 特性（直後のポケモン）
   | { k: "weather"; v: string }
   | { k: "terrain"; v: string }
-  | { k: "spread"; sp: Partial<Record<Stat, number>>; up?: Stat; down?: Stat; both?: boolean } // both: 「準速同士」
+  | { k: "spread"; sp: Partial<Record<Stat, number>>; up?: Stat; down?: Stat; both?: boolean; bare?: "letters" | "boost" } // both: 「準速同士」。bare: 略号だけ（「HBエンペルト」）・能力の文字のない「特化」（直後が名前のときだけ）
   | { k: "boost"; stat: Stat; n: number; conditional?: boolean } // conditional: 「上がったら」の形（付け先が前か後ろか決まらない）
   | { k: "sr" } // ステロ込み（防御側）
   | { k: "flag"; f: "reflect" | "critical" } // 壁・急所（場）
@@ -134,6 +135,9 @@ function pattern(s: string): [number, Tok] | null {
     if (nonH.length !== 1) return null; // 「CS特化」など補正の先が決まらないものは AI に回す
     return [m[0].length, { k: "spread", sp: Object.fromEntries(stats.map((x) => [x, 32])), up: nonH[0] }];
   }
+  // 能力の文字のない「特化」（「特化ガブ」）: 攻撃側なら、わざの分類で A か C に決まる（parseRules で決める）
+  m = s.match(/^特化/);
+  if (m) return [m[0].length, { k: "spread", sp: {}, bare: "boost" }];
   m = s.match(/^([HABCDS]{1,3})(?:振リ|252|極振リ)/);
   if (m) return [m[0].length, { k: "spread", sp: Object.fromEntries([...m[1]].map((c) => [LETTER[c], 32])) }];
   // 性格補正: 「C下降補正」「Cマイナス補正」「C↓」= 性格で特攻が下がる（ようき・いじっぱり など）、「A上昇補正」「A↑」「A補正」= 上がる
@@ -189,7 +193,19 @@ function pattern(s: string): [number, Tok] | null {
   }
   m = s.match(/^([ABCDS])([+\-])([1-6])/);
   if (m) return [m[0].length, { k: "boost", stat: LETTER[m[1]], n: (m[2] === "-" ? -1 : 1) * Number(m[3]) }];
+  // 略号だけ（「HBエンペルト」= HB振り。補正は言っていない）: 2〜3 文字で、直後が名前のときだけ（parseRules で確かめる）
+  m = s.match(/^([HABCDS]{2,3})(?=[ァ-ヴ一-龯])/);
+  if (m && new Set(m[1]).size === m[1].length) return [m[0].length, { k: "spread", sp: Object.fromEntries([...m[1]].map((c) => [LETTER[c], 32])), bare: "letters" }];
   return null;
+}
+
+/** わざの分類で決まる攻撃の能力（「特化ガブのじしん」の特化 = A）。分類と使う能力が違うわざ・変化技は決めない */
+function attackStatOf(moveJa: string): Stat | undefined {
+  const en = (names as unknown as { moves: Record<string, string> }).moves[moveJa];
+  if (!en) return undefined;
+  const m = moveInfo(en);
+  if (["Body Press", "Foul Play", "Photon Geyser", "Shell Side Arm", "Tera Blast"].includes(m.name)) return undefined;
+  return m.category === "Physical" ? "atk" : m.category === "Special" ? "spa" : undefined;
 }
 
 /** 左から最長一致で語に分ける。説明できない文字が残れば null */
@@ -323,6 +339,7 @@ export function parseRules(raw: string): Obj | null {
   const words = toks.filter((t): t is Extract<Tok, { k: "w" }> => t.k === "w").map((t) => t.v);
   let mods: Tok[] = [];
   let sr = false;
+  let bareBoost: Obj | undefined; // 能力の文字のない「特化」が付いた側の条件（攻撃側のダメージの質問でだけ読む）
   const bothSpread: Tok[] = [];
   for (let i = 0; i < toks.length; i++) {
     const t = toks[i];
@@ -357,14 +374,21 @@ export function parseRules(raw: string): Obj | null {
       last.particle = next?.k === "p" ? next.v : undefined;
       continue;
     }
+    // 略号だけ・能力の文字のない「特化」は、直後の名前に付くときだけ読む
+    if (t.k === "spread" && t.bare && next?.k !== "pokemon") return null;
     if (t.k === "spread" || t.k === "item" || t.k === "nature" || t.k === "boost" || t.k === "hp" || t.k === "status" || t.k === "ability" || t.k === "busted") {
       mods.push(t);
       continue;
     }
     if (t.k === "pokemon") {
       const cond: Obj = {};
+      const boostOnly = mods.some((x) => x.k === "spread" && x.bare === "boost");
       applyMods(cond, mods);
       mods = [];
+      if (boostOnly) {
+        if (bareBoost || cond.nature_up || cond.sp) return null; // 「A特化」など他の振り方と一緒なら AI に回す
+        bareBoost = cond;
+      }
       // 「ミミッキュを（倒せる）」の「を」も助詞として見る（防御側の印）
       sides.push({ name: t.heard ?? t.ja, cond, particle: next?.k === "p" ? next.v : next?.k === "w" && next.v === "ヲ" ? "ヲ" : undefined });
       continue;
@@ -382,6 +406,7 @@ export function parseRules(raw: string): Obj | null {
     }
   }
   if (mods.length) return null; // 付け先のない条件が残った
+  if (bareBoost && !(sides.length === 2 && moves.length === 1)) return null;
   const has = (re: RegExp) => words.some((w) => re.test(w));
   const conditions = (o: Obj) => {
     if (Object.keys(field).length) o.field = field;
@@ -455,6 +480,12 @@ export function parseRules(raw: string): Obj | null {
     if (!ra || !rb || ra === rb) return null;
     const atk = ra === "attacker" ? sides[0] : sides[1];
     const def = ra === "attacker" ? sides[1] : sides[0];
+    if (bareBoost) {
+      const stat = attackStatOf(moves[0]);
+      if (bareBoost !== atk.cond || !stat) return null; // 防御側の「特化」は H と B・D のどれか決まらない
+      atk.cond.sp = { [stat]: 32 };
+      atk.cond.nature_up = stat;
+    }
     const c: Obj = {};
     if (sr) def.cond.stealth_rock = true;
     if (Object.keys(atk.cond).length) c.attacker = atk.cond;
