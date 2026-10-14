@@ -30,6 +30,13 @@ describe("ルール解析（確実に分かるときだけ答える）", () => {
     expect(parseRules("ガブリアスのじしんを特化エンペルトは耐える")).toBeNull();
     expect(parseRules("特化ガブリアスとエンペルトどっちが速い")).toBeNull();
     expect(parseRules("特化エンペルトのボディプレスでガブリアス何発")).toBeNull();
+    // 「威力150」はダメージの質問でだけ受ける（値は lib/ask.ts が文から読む。ask_log #150・#151）
+    expect(parseRules("イダイトウのおはかまいり威力150をハラバリーは耐えますか")).toMatchObject({ intent: "damage", attacker: "イダイトウ", defender: "ハラバリー", move: "おはかまいり" });
+    expect(parseRules("威力150のじだんだ")).toBeNull();
+    // 辞書だけで読めるときは聞き間違いの推定をしない（「でハラバリー」を「では」+「ラバリー」と切らない）
+    expect(parseRules("イダイトウのおはかまいりでハラバリー耐える")).toMatchObject({ defender: "ハラバリー" });
+    // 聞き間違いの補正（data/misheard.json）は、直す前の文を渡しても当たる
+    expect(parseRules("シカ補正のマスカーニャのパワージェムをメガリザードンワイは買えますか")).toMatchObject({ conditions: { attacker: { nature_down: "spa" } } });
     // 名前の最後の「シ」は略号にしない
     expect(parseRules("カエンジシのかえんほうしゃでガブリアス何発")).toMatchObject({ attacker: "カエンジシ", conditions: {} });
   });

@@ -3,30 +3,23 @@
 // （試作版のルール解析が「HPに32振った」を黙って落とした反省。eval-plan.md 7.6）
 import names from "../data/names.json";
 import aliases from "../data/aliases.json";
+import ruleWords from "../data/rule-words.json";
 import { resolve } from "./resolve";
 import { moveInfo } from "./battle";
+import { fixMishearing } from "./misheard";
 
 type Obj = Record<string, unknown>;
 type Stat = "hp" | "atk" | "def" | "spa" | "spd" | "spe";
 
-/** NFKC・ひらがな→カタカナ・空白除去（句読点は区切りとして残す） */
+/**
+ * NFKC・ひらがな→カタカナ・空白除去（句読点は区切りとして残す）と、能力の略号の読み・漢字を略号に直す。
+ * 聞き間違いの補正（加工補正→下降補正 など）はここではなく data/misheard.json（AI も同じ補正を受けるように）
+ */
 function norm(s: string): string {
   return s
     .normalize("NFKC")
     .replace(/[ぁ-ゖ]/g, (c) => String.fromCharCode(c.charCodeAt(0) + 0x60))
     .replace(/\s+/g, "")
-    // 「下降補正」の書き起こし違い（加工補正 など。ask_log #10）
-    .replace(/(加工|河口|火口|下向|過去)(?=補正)/g, "下降")
-    // 「C下降補正」の「C」が「良い」になった（良い過去補正。ask_log #25）
-    .replace(/(良イ|ヨイ|イイ)(?=下降補正)/g, "C")
-    // 「C下降補正」（しかこう）が 1 語の漢字になった（資格補正 など）
-    .replace(/(資格|視覚|四角|死角|シカク|シカコウ|シカ|スイカ|西瓜)(?=補正)/g, "C下降")
-    // 「特化」の書き起こし違い（HB特価。ask_log #32）
-    .replace(/([HABCDS]{1,3})特価/g, "$1特化")
-    // 「耐えれる」「耐えますか」の書き起こし違い（買えますか。ask_log #31〜#33）
-    .replace(/買エ(マスカ|レル|ル)/g, "耐エ$1")
-    // 「〇〇フィールド下の」「〇〇下で」の書き起こし違い（エレキフィールド化の。ask_log #34）
-    .replace(/(フィールド|晴レ|雨|砂嵐|雪)化(?=ノ|デ)/g, "$1下")
     // 能力の略号の読み（音声認識がカタカナで書くことがある:「エー特化」「エイチビー振り」「エス二段階」）。
     // 特化・振り・段階・＋−・補正の直前に続くときだけ直す（「エースバーン」などを壊さない）
     .replace(/((?:エイチ|エッチ|エー|エイ|ビー|シー|ディー|デー|エス)+)(?=特化|振リ|段階|[+\-]|補正|252|ガ?[1-6一二三四五六]段階|ニ?(?:下降|上昇|マイナス|プラス|ダウン|アップ)補正|[↑↓])/g, (m) =>
@@ -63,6 +56,7 @@ type Tok =
   | { k: "hp"; percent?: number; value?: number; left?: boolean } // 残り HP（直後のポケモン）。left: 「残り」「残ってる」が付いていた
   | { k: "status"; v: string } // 状態異常（直後のポケモン）
   | { k: "busted" } // ばけのかわが剥がれた（直後のポケモン）
+  | { k: "bp" } // 言われた威力（「威力150」）。値は lib/ask.ts が文から読む。ダメージの質問でだけ受ける
   | { k: "p"; v: string } // 助詞・区切り
   | { k: "w"; v: string }; // 質問の言い回し
 
@@ -100,25 +94,8 @@ function dictionary(): [string, Tok][] {
   for (const [t] of Object.entries(a.terrain)) add(t, { k: "terrain", v: t });
   // 助詞・区切り
   for (const p of ["の", "に", "へ", "で", "が", "と", "から", "、", ",", "って", "は"]) add(p, { k: "p", v: norm(p) });
-  // 質問の言い回し（意味を持たない、または質問の種類を表す語）
-  for (const w of [
-    "何発", "なんぱつ", "確定", "確定数", "耐える", "耐えれる", "耐えられる", "落ちる", "落とせる", "倒せる", "どれくらい", "どのくらい", "減る",
-    "どっちが速い", "どっちがはやい", "どっちが早い", "どっちが先", "抜ける", "抜かれる", "素早さ", "すばやさ", "実数値", "いくつ",
-    "タイプ", "弱点", "相性", "種族値", "威力", "何タイプ", "教えて", "？", "?", "。", "!", "！", "撃ったら", "うったら", "だと", "なら",
-    "んだけど", "だけど", "けど", "何が", "なにが", "何", "なに", "与える", "与えれる", "与え", "あたえる", "耐えますか", "耐えられますか", "耐えるか", "打ったときに", "打ったとき", "撃ったときに", "撃ったとき", "うったとき", "入る", "はいる", "入れる", "通る",
-    "じゃくてん", "しゅぞくち", "いりょく", "なんタイプ", "なんぱつ",
-    "優先度", "ゆうせんど", "どっちが優先度高い", "どっちが威力高い", "高い",
-    "何パーセント", "なんパーセント", "何%", "何割", "なんわり",
-    "一発", "1発", "2発", "3発", "確定1発", "確定一発", "確定2発", "確定二発", "乱数1発",
-    "より速い", "よりはやい", "より早い", "より遅い", "どっち速い", "どっちはやい", "どっち早い", "どっちが速いの", "どっちが先",
-    "てるときの", "てる時の", "てるとき", "ときの", "時の", "ときに", "時に", "のとき", "の時", "中で", "下で", "下の", "どっちが遅い", "どっちがおそい",
-    "持ってたら", "持ってる", "もってたら", "だったら", "の場合は", "の場合", "場合", "じゃあ", "じゃ", "では", "なら", "だと",
-    "覚える", "おぼえる", "覚えた", "を",
-    // ask_log の言い方（2026-10-13）: 「どれぐらい」「どんぐらい」「何ダメージ」「打ったら」「に対して」
-    "どれぐらい", "どんぐらい", "どんくらい", "どのぐらい", "ダメージ", "何ダメージ", "なんダメージ",
-    "打ったら", "打った時", "撃った時", "打った時に", "撃った時に", "に対して", "対して", "耐えれますか",
-    "どこまで", "すばやさ振ってたら", "素早さ振ってたら", "振ってたら", "振ったら", "何振りまで", "何振りなら", "負ける", "抜かれる", "までなら", "まで",
-  ]) add(w, { k: "w", v: norm(w) });
+  // 質問の言い回し（意味を持たない、または質問の種類を表す語。data/rule-words.json）
+  for (const g of ruleWords.groups) for (const w of g.words) add(w, { k: "w", v: norm(w) });
   // 長い語から先に照合する
   const prio = (t: Tok) => (t.k === "weather" || t.k === "terrain" ? 0 : 1);
   list.sort((x, y) => y[0].length - x[0].length || prio(x[1]) - prio(y[1]));
@@ -181,6 +158,8 @@ function pattern(s: string): [number, Tok] | null {
     const n = Number(m[2]) || "一二三四五六".indexOf(m[2]) + 1;
     return [m[0].length, { k: "boost", stat, n: /下|ダウン/.test(m[3]) ? -n : n, conditional: /タラ$/.test(m[3]) }];
   }
+  m = s.match(/^威力(?:ハ|ガ)?\d{2,3}(?:デ|ノ)?/);
+  if (m) return [m[0].length, { k: "bp" }];
   // 残り HP（名前の前に付く形）: 「HP半分の」「残りHP3割の」「HP120の」
   m = s.match(/^(?:残リ)?HP(?:ガ)?(半分|[1-9]割|\d{1,3}(?:%|パーセント)|\d{1,3})(?:残リ|残ッタ|残ッテル)?/);
   if (m) {
@@ -210,7 +189,14 @@ function attackStatOf(moveJa: string): Stat | undefined {
 
 /** 左から最長一致で語に分ける。説明できない文字が残れば null */
 export function tokenize(text: string): Tok[] | null {
-  const s = norm(text);
+  // 聞き間違いの補正は 2 回当てても同じなので、直した文が来ても直す前の文が来ても同じに読める
+  const s = norm(fixMishearing(text));
+  // 辞書だけで読めるならそれを使い、読めないときだけ聞き間違いの推定（読みの近さ・言い直し）を許す
+  // （「〜でハラバリー」を「では」+「ラバリー」→ハラバリー と切らない）
+  return walkFrom(s, false) ?? walkFrom(s, true);
+}
+
+function walkFrom(s: string, guess: boolean): Tok[] | null {
   const failed = new Set<string>();
   // 助詞は文頭や助詞の直後には来ない（「トヒドイデ」を「と」+ヒドイデ、「カラルヤドラン」を「から」+… と切らない）
   // 読点（、）は区切りなので、助詞の後にも来てよく、前の状態を引き継ぐ（「ステロ込みで、」）
@@ -230,6 +216,10 @@ export function tokenize(text: string): Tok[] | null {
     for (const [len, toks] of candidates(s, i)) {
       const r = next(len, toks);
       if (r) return r;
+    }
+    if (!guess) {
+      failed.add(memo);
+      return null;
     }
     // 辞書で読めないときだけ: ポケモン・わざの聞き間違いかを読みの近さで調べる（「ミミックのじゃれつく」→ミミッキュ）
     for (const [len, t] of guessName(s.slice(i))) {
@@ -338,6 +328,7 @@ export function parseRules(raw: string): Obj | null {
   const moves: string[] = [];
   const words = toks.filter((t): t is Extract<Tok, { k: "w" }> => t.k === "w").map((t) => t.v);
   let mods: Tok[] = [];
+  const saidBp = toks.some((t) => t.k === "bp");
   let sr = false;
   let bareBoost: Obj | undefined; // 能力の文字のない「特化」が付いた側の条件（攻撃側のダメージの質問でだけ読む）
   const bothSpread: Tok[] = [];
@@ -406,6 +397,7 @@ export function parseRules(raw: string): Obj | null {
     }
   }
   if (mods.length) return null; // 付け先のない条件が残った
+  if (saidBp && !(sides.length === 2 && moves.length === 1)) return null;
   if (bareBoost && !(sides.length === 2 && moves.length === 1)) return null;
   const has = (re: RegExp) => words.some((w) => re.test(w));
   const conditions = (o: Obj) => {

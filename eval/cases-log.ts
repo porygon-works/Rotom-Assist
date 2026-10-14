@@ -60,4 +60,7 @@ export const CASES_LOG: Case[] = [
   // 能力の文字のない「特化ガブ」（攻撃側。わざの分類で A か C に決まる）・「振り」のない「HBエンペルト」が読めず AI に回っていた
   L(155, "EVエンペルトにガブリアスの地震は耐えますか", { intent: "damage", attacker: "ガブリアス", defender: "エンペルト", move: "じしん", d: { sp: { hp: 32, def: 32 } } }),
   L(156, "HBぶりエンペルトに特化株の受信はどんぐらい入る", { intent: "damage", attacker: "ガブリアス", defender: "エンペルト", move: "じしん", a: { sp: { atk: 32 }, up: "atk" }, d: { sp: { hp: 32, def: 32 } } }),
+  // 2026-10-14: 「威力150」を読めず AI に回っていた（イダイトウ・おはかまいり・ハラバリーの聞き間違いは 10-12 に直した）
+  L(150, "偉大 とう の お 墓参り で 威力 は 150 腹 ばり 耐える", { intent: "damage", attacker: "イダイトウ", defender: "ハラバリー", move: "おはかまいり" }),
+  L(151, "偉大 と の お 墓参り 威力 150 を 腹バリー は 耐え ます か", { intent: "damage", attacker: "イダイトウ", defender: "ハラバリー", move: "おはかまいり" }),
 ];

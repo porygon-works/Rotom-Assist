@@ -357,3 +357,13 @@ describe("ask_log #154: 「最速」で AI が S↑だけ書いたら S の SP 3
     expect(r.speech).toContain("213");
   });
 });
+
+describe("ask_log #150・#151: 「威力150」も AI を待たずに答える。乱数の結論で「乱数」を 2 回言わない", () => {
+  it("偉大とのお墓参り威力150を腹バリーは耐えますか", async () => {
+    const { ask } = await import("../lib/ask");
+    const r = await ask("偉大 と の お 墓参り 威力 150 を 腹バリー は 耐え ます か");
+    expect(r.diagnostics?.provider).toBe("rules");
+    expect(r.speech).toMatch(/^耐える確率は\d+パーセントくらいロト。乱数1発ロト。/);
+    expect(r.speech).toContain("倒れた味方2匹（威力150）");
+  });
+});

@@ -58,10 +58,11 @@ function verdict(ko: Ko, q: DamageQuestion): string {
   const ohko = ko.n === 1;
   if (q === "survive") {
     if (!ohko) return "耐えるロト！";
-    return ko.kind === "guaranteed" ? "耐えられないロト。" : `乱数ロト。耐える確率は${chanceSpeech(1 - ko.chance)}。`;
+    // 乱数のときは確率だけ言う（すぐ後に「乱数1発」と続くので「乱数ロト」は重ねない）
+    return ko.kind === "guaranteed" ? "耐えられないロト。" : `耐える確率は${chanceSpeech(1 - ko.chance)}ロト。`;
   }
   if (!ohko) return "1発では落ちないロト。";
-  return ko.kind === "guaranteed" ? "落ちるロト！" : `乱数ロト。落ちる確率は${chanceSpeech(ko.chance)}。`;
+  return ko.kind === "guaranteed" ? "落ちるロト！" : `落ちる確率は${chanceSpeech(ko.chance)}ロト。`;
 }
 
 export interface DamageOptions {
