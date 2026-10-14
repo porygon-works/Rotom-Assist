@@ -328,6 +328,12 @@ export function parseRules(raw: string): Obj | null {
   const moves: string[] = [];
   const words = toks.filter((t): t is Extract<Tok, { k: "w" }> => t.k === "w").map((t) => t.v);
   let mods: Tok[] = [];
+  let carriedTo: number | undefined; // わざをまたいで条件を渡した側（攻撃側でなければ読まない）
+  // 位置 j から「（の）わざ ポケモン」が続く
+  const moveThenPokemon = (j: number) => {
+    if (toks[j]?.k === "p" && (toks[j] as { v: string }).v === "ノ") j++;
+    return toks[j]?.k === "move" && toks[j + 1]?.k === "pokemon";
+  };
   const saidBp = toks.some((t) => t.k === "bp");
   let sr = false;
   let bareBoost: Obj | undefined; // 能力の文字のない「特化」が付いた側の条件（攻撃側のダメージの質問でだけ読む）
@@ -366,7 +372,7 @@ export function parseRules(raw: string): Obj | null {
       continue;
     }
     // 略号だけ・能力の文字のない「特化」は、直後の名前に付くときだけ読む
-    if (t.k === "spread" && t.bare && next?.k !== "pokemon") return null;
+    if (t.k === "spread" && t.bare && next?.k !== "pokemon" && !moveThenPokemon(i + 1)) return null;
     if (t.k === "spread" || t.k === "item" || t.k === "nature" || t.k === "boost" || t.k === "hp" || t.k === "status" || t.k === "ability" || t.k === "busted") {
       mods.push(t);
       continue;
@@ -391,12 +397,19 @@ export function parseRules(raw: string): Obj | null {
         applyMods(lastSide.cond, mods);
         mods = [];
       }
+      // 「A特化のじしんガブリアスの」: 条件 → わざ → ポケモン の順。条件はわざのすぐ後のポケモン（攻撃側）のもの（ask_log #157）
+      if (mods.length && toks[i + 1]?.k === "pokemon") {
+        carriedTo = sides.length;
+        moves.push(t.heard ?? t.ja);
+        continue;
+      }
       if (mods.length) return null; // わざの前の条件は付け先が分からない
       moves.push(t.heard ?? t.ja);
       continue;
     }
   }
   if (mods.length) return null; // 付け先のない条件が残った
+  if (carriedTo !== undefined && !(sides.length === 2 && moves.length === 1)) return null;
   if (saidBp && !(sides.length === 2 && moves.length === 1)) return null;
   if (bareBoost && !(sides.length === 2 && moves.length === 1)) return null;
   const has = (re: RegExp) => words.some((w) => re.test(w));
@@ -471,6 +484,7 @@ export function parseRules(raw: string): Obj | null {
     if (rb && !ra) ra = rb === "attacker" ? "defender" : "attacker";
     if (!ra || !rb || ra === rb) return null;
     const atk = ra === "attacker" ? sides[0] : sides[1];
+    if (carriedTo !== undefined && sides[carriedTo] !== atk) return null;
     const def = ra === "attacker" ? sides[1] : sides[0];
     if (bareBoost) {
       const stat = attackStatOf(moves[0]);

@@ -33,6 +33,9 @@ describe("ルール解析（確実に分かるときだけ答える）", () => {
     // 「威力150」はダメージの質問でだけ受ける（値は lib/ask.ts が文から読む。ask_log #150・#151）
     expect(parseRules("イダイトウのおはかまいり威力150をハラバリーは耐えますか")).toMatchObject({ intent: "damage", attacker: "イダイトウ", defender: "ハラバリー", move: "おはかまいり" });
     expect(parseRules("威力150のじだんだ")).toBeNull();
+    // 条件 → わざ → ポケモン の順（ask_log #157）: 条件はわざの後のポケモンのもの。そのポケモンが攻撃側のときだけ
+    expect(parseRules("HB振りエンペルトにA特化のじしんガブリアスの")).toMatchObject({ attacker: "ガブリアス", conditions: { attacker: { sp: { atk: 32 }, nature_up: "atk" } } });
+    expect(parseRules("A特化のじしんエンペルトにガブリアスの")).toBeNull();
     // 辞書だけで読めるときは聞き間違いの推定をしない（「でハラバリー」を「では」+「ラバリー」と切らない）
     expect(parseRules("イダイトウのおはかまいりでハラバリー耐える")).toMatchObject({ defender: "ハラバリー" });
     // 聞き間違いの補正（data/misheard.json）は、直す前の文を渡しても当たる
