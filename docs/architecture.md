@@ -264,6 +264,6 @@
 - 動作確認: `npx tsx eval/replay.ts`（保存済みの AI の出力をアプリの処理に流す。AI を呼ばない）
 
 ## リリース（本番）
-- 本番は `main` ブランチ（Vercel の Production Branch）。作業は `claude/optimistic-faraday-mt19f6`（プレビュー）で行い、プレビューで確かめてから `main` に入れる
-- 定期の見直し（docs/ask-log-review.md）は作業ブランチにだけ push し、`main` には入れない
+- 本番は `main` ブランチ（Vercel の Production Branch）
+- テスト・型チェック・`eval/rules.ts`（即答で誤り 0 件）・`eval/replay.ts` が通った変更は、`main` に直接入れてよい（2026-10-14 にご本人が許可。定期の見直しも同じ）
 - 本番の環境変数（Vercel の Production）: `GEMINI_API_KEY`、`GROQ_API_KEY`、`SUPABASE_URL`、`SUPABASE_SERVICE_ROLE_KEY`
